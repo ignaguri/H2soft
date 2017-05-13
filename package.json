@@ -1,10 +1,6 @@
 {
   "name": "h2soft",
-<<<<<<< HEAD
   "version": "0.0.1",
-=======
-  "version": "0.0.0",
->>>>>>> 2ad86e39422dae30eede45fdd724d08b87fd77da
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
