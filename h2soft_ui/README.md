@@ -1,21 +1,26 @@
-# h2soft_ui
+# [Vue Paper Dashboard](https://cristijora.github.io/vue-paper-dashboard/) [![version][version-badge]][CHANGELOG] [![license][license-badge]][LICENSE]
 
-> Front-end proyecto final
+> Admin dashboard based on paper dashboard UI template + vue-router
+
+This project is a vue version of [Paper-dashboard](https://www.creative-tim.com/product/paper-dashboard)
+designed for vue js.The dashboard includes vue-router and vuex
+
+Check the [Live Demo here](https://cristijora.github.io/vue-paper-dashboard).
+
+![](http://i.imgur.com/3iC1hOs.gif)
+
+## Documentation
+Link to [Documentation](https://cristijora.github.io/vue-paper-dashboard-docs/#/)
 
 ## Build Setup
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### install dependencies
+`npm install`
+### serve with hot reload at localhost:8080
+`npm run dev`
+### build for production with minification
+`npm run build`
+### run unit tests
+`npm run unit`
+### run and watch unit tests
+`npm run unit:watch`
