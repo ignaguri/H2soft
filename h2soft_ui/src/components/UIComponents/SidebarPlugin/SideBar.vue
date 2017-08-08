@@ -7,7 +7,7 @@
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
-        <a href="#" class="simple-text">
+        <a href="" class="simple-text">
             <div class="logo-img">
                 <img src="static/img/h2s-logo3.png" alt="">
             </div>

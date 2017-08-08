@@ -26,10 +26,18 @@
                <li><a href="#">Another notification</a></li>
              </drop-down>
           <li>
-            <a href="#" class="btn-rotate">
+            <a href="" class="btn-rotate">
               <i class="ti-settings"></i>
               <p>
                 Ajustes
+              </p>
+            </a>
+          </li>
+          <li>
+            <a href="" @click="logout" class="btn-rotate">
+              <i class="ti-control-eject"></i>
+              <p>
+                Salir
               </p>
             </a>
           </li>
@@ -39,6 +47,7 @@
   </nav>
 </template>
 <script>
+  import auth from 'src/auth'
   export default {
     computed: {
       routeName () {
@@ -66,6 +75,9 @@
       },
       hideSidebar () {
         this.$sidebar.displaySidebar(false)
+      },
+      logout () {
+        auth.logout()
       }
     }
   }

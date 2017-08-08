@@ -1,64 +1,66 @@
 <template>
-  <div class="contact-us full-screen">
-    <nav class="navbar navbar-ct-default" role="navigation-demo">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <router-link :to="{path:'/'}" class="navbar-brand">EcoAgua</router-link>
+  <div class="wrapper">
+    <!--<div class="view">-->
+    <!--<div class="full-bg-img flex-center">-->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <img class="img-responsive logo" alt="h2soft logo" src="../../../static/img/h2s-logo5.png"/>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
- <!--       <div class="collapse navbar-collapse" id="navigation-example-2">
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <router-link :to="{path:'/'}">Home</router-link>
-            </li>
-          </ul>
-        </div>-->
-        <!-- /.navbar-collapse -->
-      </div>
-      <!-- /.container-->
-    </nav>
-    <div class="wrapper wrapper-full-page section content">
-      <div class="">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center">
-              <h2 class="title text-danger">Eco Agua</h2>
-              <h2 class="title">Acá debería ir la landing page.</h2>
-            </div>
-          </div>
+        <div class="col-md-12 text-center">
+          <h3 class="title">Sistema de gestión para empresas repartidoras de agua.</h3>
+        </div>
+        <div class="col-md-12">
+          <br>
+        </div>
+        <div class="col-md-12 text-center">
+          <button v-if="seen" id="btn_login" type="button" class="btn btn-lg btn-success btn-fill" @click="btn_login_click">
+            Iniciar Sesión
+          </button>
+          <login v-if="!seen"></login>
+        </div>
+        <div class="col-md-12">
+          <img class="img-responsive" alt="background" src="../../../static/img/fondo3_cutted.jpg"/>
         </div>
       </div>
     </div>
     <footer class="footer-demo">
       <div class="container">
-        <nav class="pull-left">
-          <ul>
-            <li>
-              <router-link :to="{path:'/admin/overview'}">Home</router-link>
-            </li>
-            <li>
-              <router-link :to="{path:'/register'}">Register</router-link>
-            </li>
-          </ul>
-        </nav>
         <div class="copyright pull-right">
-          &copy; 2017, en proceso, con
-          <i class="fa fa-heart heart"></i> por H2Soft Team
+          &copy; 2017, <i class="fa fa-heart heart"></i> por H2Soft team
         </div>
       </div>
     </footer>
+    <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
+<style>
+  .img-responsive.logo{
+    max-height: 200px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+
 <script>
-  export default {}
+  import Login from '../UIComponents/Inputs/Login.vue'
+  export default {
+    components: {
+      Login
+    },
+    data () {
+      return {
+        seen: true
+      }
+    },
+    methods: {
+      btn_login_click () {
+        this.seen = false
+      }
+    }
+  }
 
 </script>

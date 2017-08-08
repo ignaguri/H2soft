@@ -70,6 +70,7 @@
 <script>
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
+  import auth from 'src/auth'
   export default {
     components: {
       StatsCard,
@@ -162,6 +163,11 @@
           options: {}
         }
 
+      }
+    },
+    route: {
+      canActivate () {
+        return auth.user.authenticated
       }
     }
   }
