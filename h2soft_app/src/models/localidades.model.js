@@ -5,9 +5,23 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const localidades = sequelizeClient.define('localidades', {
-    name: {
-      type: Sequelize.STRING,
+    idLocalidad: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nombre: {
+      type: Sequelize.STRING(45),
       allowNull: false
+    },
+    idProvincia: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'provincias',
+        key: 'idProvincia'
+      }
     }
   }, {
     hooks: {

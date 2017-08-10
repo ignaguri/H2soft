@@ -6,7 +6,7 @@
     "default": 100,
     "max": 50
   },
-  "mysql": "mysql://root:root@localhost:3306/h2softapp",
+  "mysql": "mysql://root@localhost:3306/h2softapp",
   "authentication": {
     "secret": "bcddadb7d4e1b2c339a088415ba8e0db560e30323485321de1fb39f8042fb6d62eb0df2aa5f030d9917d7c1a19a81dcd8bf59fda73b5a7d4d261961b9ffa3e68168b1345a3dac3452ff036da7b5daa9dcbfd1ed470b7a79923c2534a43da2eb194e5b84e8c66d230b6ed2b323d2145bb319034cf2f535b3f6c79f733e087be0e360096ad14fff05694d457ad7d206c8d060f8b2a75ca287f41acf29f0fd1d4d1f01056788f7df32608793392a958593a5cc3645b90ea173fe1a707ef0578fd0b780d6ae23e5b495eaeea3e04d50e728fbd8400e45a5e99d31b48e063fd7a8aefa1ed4b604c7249b3f1fe6f0008c619269668c2887bbbad876dd78f1bb7958c1c",
     "strategies": [

@@ -4,10 +4,20 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const cliente = sequelizeClient.define('cliente', {
-    text: {
-      type: Sequelize.STRING,
+  const dispensers = sequelizeClient.define('dispensers', {
+    idDispensers: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    codigo: {
+      type: Sequelize.STRING(45),
       allowNull: false
+    },
+    descripcion: {
+      type: Sequelize.STRING(45),
+      allowNull: true
     }
   }, {
     hooks: {
@@ -17,10 +27,10 @@ module.exports = function (app) {
     }
   });
 
-  cliente.associate = function (models) { // eslint-disable-line no-unused-vars
+  dispensers.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return cliente;
+  return dispensers;
 };

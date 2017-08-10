@@ -4,9 +4,15 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const contrato = sequelizeClient.define('contrato', {
-    text: {
-      type: Sequelize.STRING,
+  const dias = sequelizeClient.define('dias', {
+    idDias: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nombre: {
+      type: Sequelize.STRING(45),
       allowNull: false
     }
   }, {
@@ -15,13 +21,12 @@ module.exports = function (app) {
         options.raw = true;
       }
     }
-  }
-  );
+  });
 
-  contrato.associate = function (models) { // eslint-disable-line no-unused-vars
+  dias.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return contrato;
+  return dias;
 };

@@ -8,9 +8,23 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const provincias = sequelizeClient.define('provincias', {
-    name: {
-      type: Sequelize.STRING,
+    idProvincia: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nombre: {
+      type: Sequelize.STRING(45),
       allowNull: false
+    },
+    idPais: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'paises',
+        key: 'idPais'
+      }
     }
   }, {
     hooks: {

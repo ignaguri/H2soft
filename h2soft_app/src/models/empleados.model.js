@@ -5,17 +5,39 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const empleados = sequelizeClient.define('empleados', {
-    name: {
-      type: Sequelize.STRING,
+    idEmpleados: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    nombre: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    },
+    apellido: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    },
+    dni: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    },
+    fechaNacimiento: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    domicilio: {
+      type: Sequelize.STRING(45),
       allowNull: true
     },
-    lastname: {
-      type: Sequelize.STRING,
-      allowNull: true
-    },
-    birthdate: {
-      type: Sequelize.STRING,
-      allowNull: true
+    idLocalidad: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'localidades',
+        key: 'idLocalidad'
+      }
     },
   }, {
     hooks: {
