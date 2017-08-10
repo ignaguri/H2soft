@@ -1,28 +1,38 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+  <div :class="{'nav-open': $sidebar.showSidebar}">
+    <router-view></router-view>
+    <!--This sidebar appears only for screens smaller than 992px-->
+    <side-bar type="navbar" :sidebar-links="$sidebar.sidebarLinks">
+      <ul class="nav navbar-nav">
+        <li>
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <i class="ti-panel"></i>
+            <p>Stats</p>
+          </a>
+        </li>
+        <drop-down title="Notificaciones" icon="ti-bell">
+
+          <li><a>Notification 1</a></li>
+          <li><a>Notification 2</a></li>
+          <li><a>Notification 3</a></li>
+          <li><a>Notification 4</a></li>
+          <li><a>Another notification</a></li>
+
+        </drop-down>
+        <li>
+          <a>
+            <i class="ti-settings"></i>
+            <p>Ajustes</p>
+          </a>
+        </li>
+        <li class="divider"></li>
+      </ul>
+    </side-bar>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
-
-export default {
-  name: 'app',
-  components: {
-    Hello
-  }
-}
+  export default {}
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style lang="scss"></style>
