@@ -4,7 +4,7 @@ const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
     {
-      name: 'Estadísticas',
+      name: 'Planificacion',
       icon: 'ti-panel',
       path: '/admin/overview'
     },
@@ -14,17 +14,17 @@ const SidebarStore = {
       path: '/admin/stats'
     },
     {
-      name: 'Tablas',
+      name: 'Clientes',
       icon: 'ti-view-list-alt',
       path: '/admin/table-list'
     },
     {
-      name: 'Fuentes',
+      name: 'Insumos',
       icon: 'ti-text',
       path: '/admin/typography'
     },
     {
-      name: 'Iconos',
+      name: 'Contabilidad',
       icon: 'ti-pencil-alt2',
       path: '/admin/icons'
     },
@@ -34,7 +34,7 @@ const SidebarStore = {
       path: '/admin/maps'
     },
     {
-      name: 'Notificaciones',
+      name: 'Reportes',
       icon: 'ti-bell',
       path: '/admin/notifications'
     }
