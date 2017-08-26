@@ -11,9 +11,9 @@
 <script>
   export default {
     mounted () {
-      var myLatlng = new window.google.maps.LatLng(40.748817, -73.985428)
+      var myLatlng = new window.google.maps.LatLng(-31.442249, -64.192998) // direccion de la UTN
       var mapOptions = {
-        zoom: 13,
+        zoom: 17,
         center: myLatlng,
         scrollwheel: false, // we disable de scroll over the map, it is a really annoing when you scroll through page
         styles: [{
@@ -60,7 +60,7 @@
 
       var marker = new window.google.maps.Marker({
         position: myLatlng,
-        title: 'Hello World!'
+        title: 'Hola, H2Soft!'
       })
 
       // To add the marker to the map, call setMap();

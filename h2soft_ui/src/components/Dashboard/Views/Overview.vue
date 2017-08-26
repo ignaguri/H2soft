@@ -2,7 +2,7 @@
   <div>
 
     <!--Stats cards-->
-    <div class="row">
+<!--    <div class="row">
       <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
         <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
@@ -17,7 +17,7 @@
           </div>
         </stats-card>
       </div>
-    </div>
+    </div>-->
 
     <!--Charts-->
     <div class="row">
@@ -70,7 +70,7 @@
 <script>
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
-  import auth from 'src/auth'
+  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,

@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12 text-center">
-          <img class="img-responsive logo" alt="h2soft logo" src="../../../static/img/h2s-logo5.png"/>
+          <img class="img-responsive logo" alt="h2soft logo" src="../../../static/img/h2s-logo6.png"/>
         </div>
         <div class="col-md-12 text-center">
           <h3 class="title">Sistema de gestión para empresas repartidoras de agua.</h3>
