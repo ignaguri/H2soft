@@ -18,6 +18,7 @@
         class="form-control"
         placeholder="Ingrese su contraseña"
         v-model="credentials.password"
+        @keyup.enter="submit"
       />
     </div>
     <button class="btn btn-info btn-fill" @click="submit()">Entrar</button>
@@ -44,7 +45,7 @@
   }
 </style>-->
 <script>
-  import auth from '../../../auth'
+  import auth from '../../../api/auth'
   export default {
     data () {
       return {
