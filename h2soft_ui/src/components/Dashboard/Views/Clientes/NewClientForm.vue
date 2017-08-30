@@ -4,20 +4,22 @@
       <h3 class="title">Agregar nuevo cliente</h3>
     </div>
     <div class="content">
-      <form>
+      <form @submit.prevent="saveClient">
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
                       label="Empresa"
                       placeholder="Razón social"
-                      v-model="cliente.razonSocial">
+                      v-model="cliente.razonSocial"
+                      required>
             </fg-input>
           </div>
           <div class="col-md-4 col-md-offset-1">
             <fg-input type="text"
                       label="CUIL"
                       placeholder="CUIL"
-                      v-model="cliente.cuil">
+                      v-model="cliente.CUIL"
+                      required>
             </fg-input>
           </div>
           <div class="row">
@@ -38,27 +40,30 @@
             <fg-input type="text"
                       label="Nombre"
                       placeholder="Nombre"
-                      v-model="contacto.nombre">
+                      v-model="contacto.nombre"
+                      required>
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input type="text"
+            <fg-input type="email"
                       label="Mail"
                       placeholder="Dirección de email"
-                      v-model="contacto.mail">
+                      v-model="contacto.mail"
+                      required>
             </fg-input>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <fg-input type="text"
+            <fg-input type="tel"
                       label="Teléfono"
                       placeholder="Teléfono fijo"
-                      v-model="contacto.telefono">
+                      v-model="contacto.telefono"
+            >
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input type="text"
+            <fg-input type="tel"
                       label="Celular"
                       placeholder="Teléfono celular"
                       v-model="contacto.celular">
@@ -84,21 +89,23 @@
             <fg-input type="text"
                       label="Nombre"
                       placeholder="Nombre"
-                      v-model="objetivo.nombre">
+                      v-model="objetivo.nombre"
+                      required>
             </fg-input>
           </div>
           <div class="col-md-6">
             <fg-input type="text"
                       label="Dirección"
                       placeholder="Dirección del lugar"
-                      v-model="objetivo.direccion">
+                      v-model="objetivo.direccion"
+                      required>
             </fg-input>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 col-md-offset-4">
             <label for="localidad">Localidad</label>
-            <select id="localidad" v-model="objetivo.localidad">
+            <select id="localidad" v-model="objetivo.idLocalidad" required>
               <option value="">Seleccione una localidad</option>
               <option v-for="loc in localidades" v-bind:value="loc.idLocalidad">
                 {{ loc.nombre }}
@@ -108,7 +115,7 @@
         </div>
         <hr>
         <div class="text-center">
-          <button type="submit" class="btn btn-success btn-fill btn-wd" @click="saveClient">
+          <button type="submit" class="btn btn-success btn-fill btn-wd">
             Guardar cliente
           </button>
         </div>
@@ -118,13 +125,13 @@
   </div>
 </template>
 <script>
-  import auth from '../../../../api/auth'
+  import api from 'src/api/services'
   export default {
     data () {
       return {
         cliente: {
           razonSocial: '',
-          cuil: '',
+          CUIL: '',
           direccion: ''
         },
         contacto: {
@@ -137,7 +144,7 @@
         objetivo: {
           nombre: '',
           direccion: '',
-          localidad: ''
+          idLocalidad: ''
         },
         localidades: {}
       }
@@ -147,14 +154,23 @@
     },
     methods: {
       saveClient () {
-        alert('Cliente guardado con éxito')
+        api.postClientes(this, this.cliente, this.contacto, this.objetivo).then(res => {
+          console.log('res es ' + res)
+          if (res) {
+            console.log('devolvió true en newclientlist')
+            alert('Cliente guardado con éxito')
+          } else {
+            console.log('devolvio false')
+            alert('Error al guardar el cliente. check consola')
+          }
+        })
         this.$parent.current = 'ClientsList'
         this.$parent.isClientList = true
       },
       getLocalidades () {
-        this.$http.get('http://localhost:3030/localidades', { headers: auth.getAuthHeader() })
+        api.getLocalidades(this)
           .then(res => {
-            this.localidades = res.body.data
+            this.localidades = res
           })
       }
     }

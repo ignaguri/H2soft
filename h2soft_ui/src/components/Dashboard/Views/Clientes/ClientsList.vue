@@ -11,12 +11,13 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTable.vue'
-  // import auth from '../../../../api/auth'
-  import api from '../../../../api/services'
+  import api from 'src/api/services'
   const tableColumns = ['Id', 'Nombre', 'CUIL']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
   // TODO: hacer cada cliente de la tabla linkeable
+  // TODO: guardar lista en localStorage para ahorrar llamados a la api
+  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
     components: {
       PaperTable
@@ -45,7 +46,7 @@
             })
           })
         }, error => {
-          console.log('error ' + error)
+          console.log('error ' + JSON.stringify(error))
         })
       }
     }
