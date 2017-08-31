@@ -11,6 +11,8 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Maps from 'src/components/Dashboard/Views/Maps.vue'
 import Typography from 'src/components/Dashboard/Views/Typography.vue'
 import TableList from 'src/components/Dashboard/Views/TableList.vue'
+import Usuarios from 'src/components/Dashboard/Views/Usuarios/Usuarios.vue'
+import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/EditarUsuarioForm.vue'
 
 const routes = [
   {
@@ -57,6 +59,16 @@ const routes = [
         path: 'table-list',
         name: 'table-list',
         component: TableList
+      },
+      {
+        path: 'usuarios',
+        name: 'Gestion de usuarios',
+        component: Usuarios
+      },
+      {
+        path: 'editusuarios',
+        name: 'Gestion de usuarios',
+        component: EditarUsuarioForm
       }
     ]
   },

@@ -70,7 +70,7 @@
 <script>
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
-  import auth from 'src/auth'
+  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
