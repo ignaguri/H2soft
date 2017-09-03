@@ -47,7 +47,7 @@
   </nav>
 </template>
 <script>
-  import auth from 'src/auth'
+  import auth from 'src/api/auth'
   export default {
     computed: {
       routeName () {

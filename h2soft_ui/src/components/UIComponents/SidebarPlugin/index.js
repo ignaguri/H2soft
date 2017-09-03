@@ -37,6 +37,11 @@ const SidebarStore = {
       name: 'Reportes',
       icon: 'ti-bell',
       path: '/admin/notifications'
+    },
+    {
+      name: 'Contratos',
+      icon: 'ti-panel',
+      path: '/admin/contratos'
     }
   ],
   displaySidebar (value) {
