@@ -42,6 +42,8 @@ const SidebarStore = {
       name: 'Contratos',
       icon: 'ti-panel',
       path: '/admin/contratos'
+    },
+    {
       name: 'Usuarios',
       icon: 'ti-user',
       path: '/admin/overview'

@@ -12,12 +12,14 @@
 
 <script>
   /* eslint-disable indent */
+  // TODO: para el campo cliente hacer que traiga el nombre del cliente y no el ID
+  // TODO: cambiar formato de la fecha
+  // TODO: hacer que al cargar la primera vez la pagina me carge los  datos de la lista y no al actualizarla
+  // TODO: traer el producto del contrato  en los resultado que se muestran en la tabla
 
   import PaperTable from 'components/UIComponents/PaperTable.vue'
   import api from 'src/api/services'
-
   const tableColumns = ['Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
-
   export default{
     components: {
       PaperTable

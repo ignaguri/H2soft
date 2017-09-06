@@ -32,7 +32,18 @@ export default {
   getLocalidades (context) {
     return context.$http.get(API_URL + 'localidades', authHeader)
       .then(res => { return res.body.data })
+  },
   getContratos (context) {
     return context.$http.get('http://localhost:3030/contratos', authHeader)
+  },
+  postContratos (context, contrato) {
+    console.log('llegue a post con: ' + JSON.stringify(contrato))
+    return context.$http.post('http://localhost:3030/contratos', contrato, authHeader)
+      .then(contratoInsertado => {
+        console.log('se inserto el contrato' + JSON.stringify(contratoInsertado))
+      })
+      .catch(error => {
+        console.log('algo falló en el insert' + JSON.stringify(error))
+      })
   }
 }

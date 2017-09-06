@@ -5,12 +5,14 @@ import Landing from '../components/GeneralViews/Landing.vue'
 
 // Admin pages
 import Overview from 'src/components/Dashboard/Views/Overview.vue'
+/*
 import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Maps from 'src/components/Dashboard/Views/Maps.vue'
 import Typography from 'src/components/Dashboard/Views/Typography.vue'
 import TableList from 'src/components/Dashboard/Views/TableList.vue'
+*/
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 import Contratos from 'src/components/Dashboard/Views/Contratos.vue'

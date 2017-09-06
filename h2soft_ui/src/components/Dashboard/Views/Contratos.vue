@@ -6,10 +6,10 @@
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" v-show="isClientList" >
+          <button type="button" class="btn btn-info btn-fill btn-wd" @click="newContrato" v-show="isContratosList" >
             Agregar Contrato
           </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" >
+          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="verLista"  >
             Cancelar
           </button>
         </div>
@@ -24,18 +24,27 @@
   /* eslint-disable indent */
 
   import ContratosLista from './Contratos/ContratosLista.vue'
-
+  import NuevoContrato from './Contratos/NuevoContrato.vue'
   export default {
     components: {
-      ContratosLista
+      ContratosLista,
+      NuevoContrato
     },
     data () {
       return {
         current: 'ContratosLista',
-        isClientList: true
+        isContratosList: true
       }
     },
     methods: {
+      verLista () {
+        this.current = ContratosLista
+        this.isContratosList = true
+      },
+      newContrato () {
+        this.current = NuevoContrato
+        this.isContratosList = false
+      }
     }
   }
 </script>

@@ -165,7 +165,7 @@
           }
         })
         this.$parent.current = 'ClientsList'
-        this.$parent.isClientList = true
+        this.$parent.isContratosList = true
       },
       getLocalidades () {
         api.getLocalidades(this)
