@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3030/'
+const API_URL = process.env.API_URL
 const LOGIN_URL = API_URL + 'authentication/'
 
 export default {

@@ -4,34 +4,34 @@ const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
     {
-      name: 'Planificacion',
-      icon: 'ti-panel',
-      path: '/admin/overview'
+      name: 'Recorridos',
+      icon: 'ti-map-alt',
+      path: '/admin/maps'
     },
     {
-      name: 'Tu Perfil',
-      icon: 'ti-user',
+      name: 'Reportes',
+      icon: 'ti-bar-chart',
       path: '/admin/stats'
+    },
+    {
+      name: 'Insumos',
+      icon: 'ti-package',
+      path: '/admin/table-list'
+    },
+    {
+      name: 'Gastos',
+      icon: 'ti-shopping-cart',
+      path: '/admin/typography'
+    },
+    {
+      name: 'Facturación',
+      icon: 'ti-money',
+      path: '/admin/icons'
     },
     {
       name: 'Clientes',
       icon: 'ti-view-list-alt',
-      path: '/admin/table-list'
-    },
-    {
-      name: 'Insumos',
-      icon: 'ti-text',
-      path: '/admin/typography'
-    },
-    {
-      name: 'Contabilidad',
-      icon: 'ti-pencil-alt2',
-      path: '/admin/icons'
-    },
-    {
-      name: 'Mapas',
-      icon: 'ti-map',
-      path: '/admin/maps'
+      path: '/admin/clientes'
     },
     {
       name: 'Reportes',
@@ -42,6 +42,9 @@ const SidebarStore = {
       name: 'Contratos',
       icon: 'ti-panel',
       path: '/admin/contratos'
+      name: 'Usuarios',
+      icon: 'ti-user',
+      path: '/admin/overview'
     }
   ],
   displaySidebar (value) {

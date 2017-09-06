@@ -17,6 +17,7 @@
       label: String,
       name: String,
       disabled: Boolean,
+      required: Boolean,
       placeholder: String,
       value: [String, Number]
     }

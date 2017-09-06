@@ -11,6 +11,8 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Maps from 'src/components/Dashboard/Views/Maps.vue'
 import Typography from 'src/components/Dashboard/Views/Typography.vue'
 import TableList from 'src/components/Dashboard/Views/TableList.vue'
+import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
+import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
 
 const routes = [
@@ -22,47 +24,52 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: DashboardLayout,
-    redirect: '/admin/overview',
+    redirect: '/admin/clientes',
     children: [
       {
         path: 'overview',
-        name: 'overview',
-        component: Overview
+        name: 'usuarios',
+        component: WorkInProgress
       },
       {
         path: 'stats',
-        name: 'stats',
-        component: UserProfile
+        name: 'Reportes',
+        component: Overview
       },
       {
         path: 'notifications',
-        name: 'notifications',
-        component: Notifications
+        name: 'Work-in-Progress',
+        component: WorkInProgress
       },
       {
         path: 'icons',
-        name: 'icons',
-        component: Icons
+        name: 'Facturación',
+        component: WorkInProgress
       },
       {
         path: 'maps',
-        name: 'maps',
+        name: 'Recorridos',
         component: NotFound
       },
       {
         path: 'typography',
-        name: 'typography',
-        component: Typography
+        name: 'Gastos',
+        component: WorkInProgress
       },
       {
         path: 'table-list',
-        name: 'table-list',
-        component: TableList
+        name: 'Insumos',
+        component: WorkInProgress
       },
       {
         path: 'contratos',
         name: 'contratos',
         component: Contratos
+      },
+      {
+        path: 'clientes',
+        name: 'clientes',
+        component: Clientes
       }
     ]
   },
