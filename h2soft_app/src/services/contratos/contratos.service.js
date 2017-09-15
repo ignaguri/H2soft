@@ -11,7 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'contratos',
-    Model,
+	Model,
     paginate
   };
 

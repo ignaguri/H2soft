@@ -11,8 +11,9 @@ module.exports = function () {
 
   const options = {
     name: 'empleados',
+    raw: false,
     Model,
-    paginate
+	  paginate
   };
 
   // Initialize our service with any options it requires

@@ -3,8 +3,13 @@
     <label v-if="label">
       {{label}}
     </label>
-    <input class="form-control border-input" v-bind="$props" :value="value"
-           @input="$emit('input',$event.target.value)">
+    <select id="rol" v-model="user.idRol" required>
+      <option value="">Seleccione</option>
+      <option v-for="rol in data" v-bind:value="rol.idRoles">
+        {{ rol.nombre }}
+      </option>
+    </select>
+
   </div>
 </template>
 <script>
@@ -19,7 +24,8 @@
       disabled: Boolean,
       required: Boolean,
       placeholder: String,
-      value: [String, Number]
+      value: [String, Number],
+      data: ['1', '2']
     }
   }
 

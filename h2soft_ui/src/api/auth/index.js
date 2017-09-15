@@ -1,5 +1,5 @@
-const API_URL = 'http://localhost:3030/'
-const LOGIN_URL = API_URL + 'authentication/'
+const API_URL = process.env.API_URL
+const LOGIN_URL = 'http://localhost:3030/' + 'authentication'
 
 export default {
   // User object will let us check authentication status

@@ -16,18 +16,18 @@ export default {
         objetivo.idCliente = clienteInsertado.body.idClientes
         return context.$http.post(API_URL + 'contactos-x-cliente', contacto, authHeader)
       })
-      .then(contactoInsertado => {
-        console.log('inserté el contacto \n' + JSON.stringify(contactoInsertado))
-        return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
-      })
-      .then(objetivoInsertado => {
-        console.log('inserté el objetivo \n' + JSON.stringify(objetivoInsertado))
-        console.log('inserte todo bien wa8')
-        return true
-      })
-      .catch(error => {
-        console.log('algo falló en el insert' + JSON.stringify(error))
-      })
+    .then(contactoInsertado => {
+      console.log('inserté el contacto \n' + JSON.stringify(contactoInsertado))
+      return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
+    })
+    .then(objetivoInsertado => {
+      console.log('inserté el objetivo \n' + JSON.stringify(objetivoInsertado))
+      console.log('inserte todo bien wa8')
+      return true
+    })
+    .catch(error => {
+      console.log('algo falló en el insert' + JSON.stringify(error))
+    })
   },
   getLocalidades (context) {
     return context.$http.get(API_URL + 'localidades', authHeader)
