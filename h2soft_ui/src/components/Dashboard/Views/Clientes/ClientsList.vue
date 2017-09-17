@@ -2,7 +2,7 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editar" :erase="borrar" :goButton="true" :go="verCliente">
 
         </paper-table>
       </div>
@@ -10,12 +10,12 @@
   </div>
 </template>
 <script>
-  import PaperTable from 'components/UIComponents/PaperTable.vue'
+  // import PaperTable from 'components/UIComponents/PaperTable.vue'
+  import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services'
   const tableColumns = ['Id', 'Nombre', 'CUIL']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
-  // TODO: hacer cada cliente de la tabla linkeable
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
   // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
@@ -48,6 +48,29 @@
         }, error => {
           console.log('error ' + JSON.stringify(error))
         })
+      },
+      editar (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        console.log('editar id: ' + id)
+        // this.$parent.isClientList = false
+        // this.$router.push('clientes/edit/' + id)
+      },
+      borrar (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        if (!confirm('Desea eliminar a este cliente, sus contactos y todos sus objetivos?')) return
+        api.deleteClientes(this, id).then(res => {
+          if (res) {
+            alert('Borrado con éxito')
+            this.table1.data = []
+            this.cargarClientes()
+          } else {
+            alert('error al borrar')
+          }
+        })
+      },
+      verCliente (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        console.log('ver cliente', id)
       }
     }
   }

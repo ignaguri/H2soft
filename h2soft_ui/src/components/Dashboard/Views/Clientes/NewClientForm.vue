@@ -4,7 +4,7 @@
       <h3 class="title">Agregar nuevo cliente</h3>
     </div>
     <div class="content">
-      <form @submit.prevent="saveClient">
+      <form name="new_client_form" @submit.prevent="saveClient">
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
@@ -58,8 +58,7 @@
             <fg-input type="tel"
                       label="Teléfono"
                       placeholder="Teléfono fijo"
-                      v-model="contacto.telefono"
-            >
+                      v-model="contacto.telefono">
             </fg-input>
           </div>
           <div class="col-md-6">
@@ -81,7 +80,7 @@
             </div>
           </div>
         </div>
-        <div class="header">
+        <!--<div class="header">
           <h4 class="title">Objetivo/Lugar de reparto</h4>
         </div>
         <div class="row">
@@ -112,40 +111,43 @@
               </option>
             </select>
           </div>
+        </div>-->
+        <objetivos-list :objetivos="objetivos" @new_objetivo="captarObjetivo" @delete_objetivo="borrarObjetivo"></objetivos-list>
+        <input type="hidden" :value="objetivos" required />
+        <div class="row">
+          <div class="text-center">
+            <button type="submit" class="btn btn-success btn-fill btn-wd">
+              Guardar cliente
+            </button>
+          </div>
+          <div class="clearfix"></div>
         </div>
-        <hr>
-        <div class="text-center">
-          <button type="submit" class="btn btn-success btn-fill btn-wd">
-            Guardar cliente
-          </button>
-        </div>
-        <div class="clearfix"></div>
       </form>
     </div>
   </div>
 </template>
 <script>
   import api from 'src/api/services'
+  import ObjetivosList from './ObjetivosList.vue'
   export default {
+    components: {
+      ObjetivosList
+    },
     data () {
       return {
         cliente: {
           razonSocial: '',
-          CUIL: '',
+          CUIL: null,
           direccion: ''
         },
         contacto: {
           nombre: '',
-          telefono: '',
-          celular: '',
+          telefono: null,
+          celular: null,
           mail: '',
           observaciones: ''
         },
-        objetivo: {
-          nombre: '',
-          direccion: '',
-          idLocalidad: ''
-        },
+        objetivos: [],
         localidades: {}
       }
     },
@@ -154,13 +156,16 @@
     },
     methods: {
       saveClient () {
-        api.postClientes(this, this.cliente, this.contacto, this.objetivo).then(res => {
-          console.log('res es ' + res)
+        if (this.objetivos.length <= 0) {
+          alert('Debe agregar al menos 1 objetivo')
+          return
+        }
+        api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
           if (res) {
             console.log('devolvió true en newclientlist')
             alert('Cliente guardado con éxito')
           } else {
-            console.log('devolvio false')
+            console.log('saveclient devolvio false')
             alert('Error al guardar el cliente. check consola')
           }
         })
@@ -172,6 +177,12 @@
           .then(res => {
             this.localidades = res
           })
+      },
+      captarObjetivo (ob) {
+        this.objetivos.push(ob)
+      },
+      borrarObjetivo (ob) {
+        this.objetivos = this.objetivos.filter(objs => objs.nombre !== ob)
       }
     }
   }
