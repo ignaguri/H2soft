@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <paper-table :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" >
+          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editarUsuario" :erase="borrarUsuario" :goButton="false" :go="verUsuario" >
 
           </paper-table>
         </div>
@@ -13,7 +13,8 @@
 <script>
   import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
-  import PaperTable from 'components/UIComponents/PaperTable.vue'
+  import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
+  import noti from 'src/notificationsService/notificationsService.js'
   const tableColumns = ['Id', 'Email', 'Empleado', 'Rol']
   const dataColumns = []
 
@@ -41,7 +42,8 @@
         api.getUsuarios(this)
         .then(resUs => {
           resUs.body.data.forEach(us => {
-            this.cargarEmpleado(us.idEmpleado)
+            if (us.activo === 1) {
+              this.cargarEmpleado(us.idEmpleado)
               .then(res => {
                 res = res.body.data[0]
                 this.nombreRol = this.getRol(us.idRol)
@@ -51,7 +53,9 @@
                   empleado: res === undefined ? '' : res.nombre + ' ' + res.apellido,
                   rol: this.nombreRol
                 })
+                console.log(us)
               })
+            }
           })
         }, error => {
           console.log('error al cargar los usuarios ' + error)
@@ -81,15 +85,28 @@
       cargarEmpleado (idEmpleado) {
         return this.$http.get('http://localhost:3030/empleados/?idEmpleados=' + idEmpleado, { headers: auth.getAuthHeader() })
       },
-      deleteUsuario (idUsuario) {
+      editarUsuario (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        this.$parent.userId = id
+        this.$parent.isUserList = false
+      },
+      verUsuario (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        // console.log('ver usuario', id)
+        this.$parent.userId = id
+        this.$parent.isUserList = false
+      },
+      borrarUsuario (e) {
+        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        if (!confirm('¿Desea eliminar a este usuarios?')) return
         this.usuario = {
-          'id': this.id,
+          'id': id,
           'activo': false
         }
         api.editUsuario(this, this.usuario).then(res => {
           if (res) {
             noti.success(this)
-            this.$parent.current = 'UsersList'
+            this.$parent.userId = 0
             this.$parent.isUserList = true
           } else {
             noti.danger(this)
