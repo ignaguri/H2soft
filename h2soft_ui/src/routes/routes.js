@@ -13,6 +13,7 @@ import Maps from 'src/components/Dashboard/Views/Maps.vue'
 // import TableList from 'src/components/Dashboard/Views/TableList.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
+import Recorridos from 'src/components/Dashboard/Views/Recorridos.vue'
 
 const routes = [
   {
@@ -48,7 +49,7 @@ const routes = [
       {
         path: 'maps',
         name: 'Recorridos',
-        component: Maps
+        component: Recorridos
       },
       {
         path: 'typography',
