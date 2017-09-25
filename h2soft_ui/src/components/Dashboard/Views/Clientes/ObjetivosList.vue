@@ -49,7 +49,7 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import api from 'src/api/services'
+  import api from 'src/api/services/clientServices'
   import { modal } from 'vue-strap'
 
   const tableColumns = ['Nombre', 'Direccion', 'Localidad']
