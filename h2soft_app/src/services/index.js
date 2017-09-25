@@ -26,6 +26,8 @@ const tiposMantenimiento = require('./tipos-mantenimiento/tipos-mantenimiento.se
 const contactosXCliente = require('./contactos-x-cliente/contactos-x-cliente.service.js');
 const clientes = require('./clientes/clientes.service.js');
 
+const estadoRecorrido = require('./estado-recorrido/estado-recorrido.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -55,4 +57,5 @@ module.exports = function () {
   app.configure(tiposMantenimiento);
   app.configure(contactosXCliente);
   app.configure(clientes);
+  app.configure(estadoRecorrido);
 };

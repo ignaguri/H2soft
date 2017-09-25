@@ -31,6 +31,14 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(1),
       allowNull: false
     }
+    // idEstado: {
+    //   type: Sequelize.INTEGER(11),
+    //   allowNull: false,
+    //   references: {
+    //     model: 'estados-recorrido',
+    //     key: 'idEstados'
+    //   }
+    // }
   }, {
     hooks: {
       beforeCount(options) {
