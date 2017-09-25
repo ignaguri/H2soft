@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="row">
-      <component :is="current"></component>
+      <clients-list v-if="isClientList" @emitted="capturarEvento"></clients-list>
+      <new-client-form v-if="!isClientList" :edit="edit" :idCliente="idCliente"></new-client-form>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -17,11 +18,12 @@
       </div>
     </div>
   </div>
-
 </template>
 <script>
+  // TODO: poner los botones en cada componente
   import ClientsList from './Clientes/ClientsList.vue'
   import NewClientForm from './Clientes/NewClientForm.vue'
+
   export default {
     components: {
       ClientsList,
@@ -29,18 +31,31 @@
     },
     data () {
       return {
-        current: 'ClientsList',
-        isClientList: true
+        isClientList: true,
+        edit: false,
+        idCliente: -1
       }
     },
     methods: {
       addClient () {
-        this.current = 'NewClientForm'
+        this.edit = false
         this.isClientList = false
       },
       seeList () {
-        this.current = 'ClientsList'
         this.isClientList = true
+      },
+      capturarEvento (e) {
+        switch (e.action) {
+          case 'edit':
+            console.log('editar cliente: ', e.client)
+            this.edit = true
+            this.idCliente = parseInt(e.client)
+            this.isClientList = false
+            break
+          case 'ver':
+            console.log('ver cliente: ', e.client)
+            break
+        }
       }
     }
   }
