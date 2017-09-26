@@ -11,7 +11,7 @@ module.exports = function (app) {
       primaryKey: true,
       autoIncrement: true
     },
-    idFactura: {
+    idFacturas: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
@@ -23,8 +23,8 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'detalle-remito',
-        key: 'idDetalleRemito'
+        model: 'detalles-remito',
+        key: 'idDetallesRemito'
       }
     },
     precio: {

@@ -31,15 +31,7 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true
     },
-    idProducto: {
-      type: Sequelize.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'productos',
-        key: 'idProductos'
-      }
-    },
-    cantidad: {
+    cantidadDispensersSugerida: {
       type: Sequelize.INTEGER(11),
       allowNull: true
     }

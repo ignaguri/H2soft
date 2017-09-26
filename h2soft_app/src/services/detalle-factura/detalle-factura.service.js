@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'detalle-factura',
+    id: 'idDetalleFactura',
     Model,
     paginate
   };
