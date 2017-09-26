@@ -33,12 +33,10 @@
 
   import ContratosLista from './Contratos/ContratosLista.vue'
   import NuevoContrato from './Contratos/NuevoContrato.vue'
-  import ModificarContrato from './Contratos/ModificarContrato.vue'
   export default {
     components: {
       ContratosLista,
-      NuevoContrato,
-      ModificarContrato
+      NuevoContrato
     },
     data () {
       return {

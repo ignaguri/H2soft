@@ -11,7 +11,7 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTable.vue'
-  import api from 'src/api/services'
+  import api from 'src/api/services/clientServices'
   const tableColumns = ['Id', 'Nombre', 'CUIL']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla

@@ -17,7 +17,7 @@
   // TODO: traer el producto del contrato  en los resultado que se muestran en la tabla
 
   import PaperTable from 'components/UIComponents/PaperTable.vue'
-  import api from 'src/api/services'
+  import api from 'src/api/services/contratosServices'
   const tableColumns = ['Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
   export default{
     components: {

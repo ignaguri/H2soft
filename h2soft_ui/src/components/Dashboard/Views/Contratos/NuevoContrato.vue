@@ -77,7 +77,7 @@
   </div>
 </template>
 <script>
-  import api from 'src/api/services'
+  import api from 'src/api/services/contratosServices'
   export default {
     data () {
       return {
