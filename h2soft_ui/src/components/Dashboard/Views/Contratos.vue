@@ -2,7 +2,7 @@
   <div>
     <div class="row">
      <!-- <component :is="current"></component>-->
-      <NuevoContrato v-if="!this.isContratosList" v-bind:id="2"></NuevoContrato>
+      <NuevoContrato v-if="!this.isContratosList" v-bind:id="contratoId"></NuevoContrato>
       <ContratosLista v-if="this.isContratosList" ></ContratosLista>
     </div>
     <div class="row">
@@ -14,18 +14,11 @@
           <button type="button" class="btn btn-danger btn-fill btn-wd" @click="verLista"  v-show="!isContratosList" >
             Cancelar
           </button>
-          <button type="button" class="btn btn-success btn-fill btn-wd" @click="newContrato"  v-show="isContratosList" >
-            Editar contrato
-          </button>
-          <button type="button" class="btn btn-warning btn-fill btn-wd" @click=""  v-show="isContratosList" >
-            Eliminar contrato
-          </button>
         </div>
         <div class="clearfix"></div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -41,13 +34,15 @@
     data () {
       return {
         current: 'ContratosLista',
-        isContratosList: true
+        isContratosList: true,
+        contratoId: 0
       }
     },
     methods: {
       verLista () {
         this.current = ContratosLista
         this.isContratosList = true
+        this.contratoId = 0
       },
       newContrato () {
         this.current = NuevoContrato

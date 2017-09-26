@@ -63,8 +63,6 @@
             </select>
           </div>
         </div>
-        {{ contrato }}
-        {{ contrat }}
           <hr>
            <div class="text-center">
              <button type="submit"  class="btn btn-success btn-fill btn-wd">
@@ -99,11 +97,17 @@
       this.getClientes()
       this.getProductos()
       this.cargarContratos()
+      /*
+      if (this.id !== 0) {
+        this.cargarContratos()
+      }
+      */
     },
     methods: {
       guardarContrato () {
         if (this.id === 0) {
           this.contrat = {
+            idCilente: this.contrato.idCilente,
             fechaFirma: this.contrato.fechaFirma,
             fechaVigencia: this.contrato.fechaVigencia,
             cantidad: this.contrato.cantidad,
@@ -122,6 +126,7 @@
         } else {
           this.contrat = {
             id: this.id,
+            idCilente: this.contrato.idCilente,
             fechaFirma: this.contrato.fechaFirma,
             fechaVigencia: this.contrato.fechaVigencia,
             cantidad: this.contrato.cantidad,
@@ -130,7 +135,6 @@
           }
           api.editarContrato(this, this.contrat).then(res => {
             if (res) {
-              console.log('devolvió true en ModoficarContrato')
               alert('Contrato modificado con exito')
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
@@ -156,16 +160,16 @@
           })
       },
       cargarContratos () {
-        api.getContrato(this, this.id).then(res => {
-          res = res.body.data[0]
-          this.contrato.idCilente = res.idCilente // Cambiar por el nombre del ciente
-          this.contrato.fechaFirma = res.fechaFirma
-          this.contrato.fechaVigencia = res.fechaVigencia
-          this.contrato.cantidad = res.cantidad
-          this.contrato.precioPorUnidad = res.precioPorUnidad
-        }, error => {
-          console.log('error' + JSON.stringify(error))
-        })
+        api.getContrato(this, this.id)
+          .then(res => {
+            res = res.body.data[0]
+            this.contrato.idCilente = res.idCilente // Cambiar por el nombre del ciente
+            this.contrato.fechaFirma = res.fechaFirma
+            this.contrato.fechaVigencia = res.fechaVigencia
+            this.contrato.cantidad = res.cantidad
+            this.contrato.precioPorUnidad = res.precioPorUnidad
+            this.contrato.idProducto = res.idProducto
+          })
       }
     }
   }

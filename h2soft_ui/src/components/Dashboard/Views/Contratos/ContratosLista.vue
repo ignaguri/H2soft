@@ -2,7 +2,7 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editarContrato" :eraseButton="false">
         </paper-table>
       </div>
     </div>
@@ -16,9 +16,9 @@
   // TODO: hacer que al cargar la primera vez la pagina me carge los  datos de la lista y no al actualizarla
   // TODO: traer el producto del contrato  en los resultado que se muestran en la tabla
 
-  import PaperTable from 'components/UIComponents/PaperTable.vue'
+  import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/contratosServices'
-  const tableColumns = ['Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
+  const tableColumns = ['idcontrato', 'Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
   export default{
     components: {
       PaperTable
@@ -41,31 +41,23 @@
       api.getContratos(this).then(res => {
             res.body.data.forEach(contrat => {
               this.table1.data.push({
+                idcontrato: contrat.idContratos,
                 cliente: contrat.idCilente, // Cambiar por el nombre del ciente
                 fechafirma: contrat.fechaFirma,
                 fechavigencia: contrat.fechaVigencia,
                 cantidad: contrat.cantidad,
                 precio: contrat.precioPorUnidad
-
               })
             })
         }, error => {
             console.log('error' + JSON.stringify(error))
         })
-      }
-
-     /* api.getClientes(this).then(rescli => {
-      rescli.body.data.forEach(cli => {
-        if (cli.idClientes === contrat.idCilente) {
-          this.table1.data.push({
-            cliente: cli.razonSocial //
-          })
-        }
-      }, error => {
-        console.log('error' + JSON.stringify(error))
-      })
+      },
+    editarContrato (e) {
+      let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+      this.$parent.contratoId = id
+      this.$parent.isContratosList = false
     }
-    */
   }
 
   }
