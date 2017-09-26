@@ -11,7 +11,7 @@ module.exports = function (app) {
       primaryKey: true,
       autoIncrement: true
     },
-    idCilente: {
+    idCliente: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
@@ -23,26 +23,15 @@ module.exports = function (app) {
       type: Sequelize.DATE,
       allowNull: false
     },
-    fechaVigencia: {
+    fechaVigenciaDesde: {
       type: Sequelize.DATE,
       allowNull: false
     },
-    cantidad: {
-      type: Sequelize.INTEGER(11),
-      allowNull: true
+    fechaVigenciaHasta: {
+      type: Sequelize.DATE,
+      allowNull: false
     },
-    precioPorUnidad: {
-      type: Sequelize.FLOAT,
-      allowNull: true
-    },
-    idProducto: {
-      type: Sequelize.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'productos',
-        key: 'idProductos'
-      }
-    }
+
   }, {
     hooks: {
       beforeCount(options) {

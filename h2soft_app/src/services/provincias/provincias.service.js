@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'provincias',
+    id: 'idProvincias',
     Model,
     paginate
   };

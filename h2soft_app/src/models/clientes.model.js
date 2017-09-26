@@ -20,13 +20,17 @@ module.exports = function (app) {
       allowNull: true
     },
     CUIL: {
-      type: Sequelize.INTEGER(11),
+      type: Sequelize.STRING(45),
       allowNull: false
     },
-    mail: {
-      type: Sequelize.STRING(45),
-      allowNull: true
-    }
+    idTipo: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'tipos-cliente',
+        key: 'idTiposCliente'
+      }
+    },
   }, {
     hooks: {
       beforeCount(options) {

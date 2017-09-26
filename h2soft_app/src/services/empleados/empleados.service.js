@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'empleados',
+    id: 'idEmpleados',
     Model,
     paginate
   };

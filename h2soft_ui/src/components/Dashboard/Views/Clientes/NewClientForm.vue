@@ -4,13 +4,14 @@
       <h3 class="title">Agregar nuevo cliente</h3>
     </div>
     <div class="content">
-      <form @submit.prevent="saveClient">
+      <form name="new_client_form" @submit.prevent="saveClient">
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Empresa"
-                      placeholder="Razón social"
+                      label="Nombre/Razón social"
+                      placeholder="Nombre/Razón social"
                       v-model="cliente.razonSocial"
+                      :disabled="edit"
                       required>
             </fg-input>
           </div>
@@ -25,7 +26,7 @@
           <div class="row">
             <div class="col-md-6 col-md-offset-3">
               <fg-input type="text"
-                        label="Dirección de la oficina central"
+                        label="Domicilio Fiscal"
                         placeholder="Dirección"
                         v-model="cliente.direccion">
               </fg-input>
@@ -58,8 +59,7 @@
             <fg-input type="tel"
                       label="Teléfono"
                       placeholder="Teléfono fijo"
-                      v-model="contacto.telefono"
-            >
+                      v-model="contacto.telefono">
             </fg-input>
           </div>
           <div class="col-md-6">
@@ -81,7 +81,7 @@
             </div>
           </div>
         </div>
-        <div class="header">
+        <!--<div class="header">
           <h4 class="title">Objetivo/Lugar de reparto</h4>
         </div>
         <div class="row">
@@ -112,59 +112,80 @@
               </option>
             </select>
           </div>
+        </div>-->
+        <objetivos-list :objetivos="objetivos" @new_objetivo="captarObjetivo" @delete_objetivo="borrarObjetivo"></objetivos-list>
+        <div class="row">
+          <div class="text-center">
+            <button type="submit" class="btn btn-success btn-fill btn-wd">
+              Guardar cliente
+            </button>
+          </div>
+          <div class="clearfix"></div>
         </div>
-        <hr>
-        <div class="text-center">
-          <button type="submit" class="btn btn-success btn-fill btn-wd">
-            Guardar cliente
-          </button>
-        </div>
-        <div class="clearfix"></div>
       </form>
     </div>
   </div>
 </template>
 <script>
   import api from 'src/api/services/clientServices'
+  import ObjetivosList from './ObjetivosList.vue'
   export default {
+    components: {
+      ObjetivosList
+    },
+    props: {
+      edit: Boolean,
+      idCliente: Number
+    },
     data () {
       return {
         cliente: {
           razonSocial: '',
-          CUIL: '',
+          CUIL: null,
           direccion: ''
         },
         contacto: {
           nombre: '',
-          telefono: '',
-          celular: '',
+          telefono: null,
+          celular: null,
           mail: '',
           observaciones: ''
         },
-        objetivo: {
-          nombre: '',
-          direccion: '',
-          idLocalidad: ''
-        },
+        objetivos: [],
         localidades: {}
       }
     },
     mounted () {
+      this.cargarCliente()
       this.getLocalidades()
     },
     methods: {
       saveClient () {
-        api.postClientes(this, this.cliente, this.contacto, this.objetivo).then(res => {
-          console.log('res es ' + res)
-          if (res) {
-            console.log('devolvió true en newclientlist')
-            alert('Cliente guardado con éxito')
-          } else {
-            console.log('devolvio false')
-            alert('Error al guardar el cliente. check consola')
-          }
-        })
-        this.$parent.current = 'ClientsList'
+        if (this.objetivos.length <= 0) {
+          alert('Debe agregar al menos 1 objetivo')
+          return
+        }
+        if (!this.edit) {
+          api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
+            if (res) {
+              console.log('devolvió true en newclientlist')
+              alert('Cliente guardado con éxito')
+            } else {
+              console.log('saveclient devolvio false')
+              alert('Error al guardar el cliente. check consola')
+            }
+          })
+        } else {
+          api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
+            if (res) {
+              console.log('devolvió true en edit')
+              alert('Cliente editado con éxito')
+            } else {
+              console.log('editar devolvio false')
+              alert('Error al editar el cliente. check consola')
+            }
+          })
+        }
         this.$parent.isClientList = true
       },
       getLocalidades () {
@@ -172,6 +193,34 @@
           .then(res => {
             this.localidades = res
           })
+      },
+      captarObjetivo (ob) {
+        this.objetivos.push(ob)
+      },
+      borrarObjetivo (ob) {
+        this.objetivos = this.objetivos.filter(objs => objs.nombre !== ob)
+      },
+      cargarCliente () {
+        if (this.idCliente !== -1 && this.edit) {
+          api.getClienteFull(this, this.idCliente).then(r => {
+            console.log('me ha iegado', r)
+            this.cliente.razonSocial = r.cliente.razonSocial
+            this.cliente.CUIL = r.cliente.CUIL
+            this.cliente.direccion = r.cliente.direccion
+            this.contacto.nombre = r.contacto.nombre
+            this.contacto.mail = r.contacto.mail
+            this.contacto.celular = r.contacto.celular
+            this.contacto.telefono = r.contacto.telefono
+            this.contacto.observaciones = r.contacto.observaciones
+            r.objetivos.forEach(o => {
+              this.objetivos.push({
+                nombre: o.nombre,
+                direccion: o.direccion,
+                idLocalidad: o.idLocalidad
+              })
+            })
+          })
+        }
       }
     }
   }

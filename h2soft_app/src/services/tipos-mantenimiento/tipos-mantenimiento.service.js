@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'tipos-mantenimiento',
+    id: 'idTiposMantenimiento',
     Model,
     paginate
   };
