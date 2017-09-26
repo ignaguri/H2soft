@@ -6,10 +6,10 @@
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient" v-show="isContratosList">
+          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient" v-show="isClientList">
             Agregar Cliente
           </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList" v-show="!isContratosList">
+          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList" v-show="!isClientList">
             Cancelar
           </button>
         </div>
@@ -30,17 +30,17 @@
     data () {
       return {
         current: 'ClientsList',
-        isContratosList: true
+        isClientList: true
       }
     },
     methods: {
       addClient () {
         this.current = 'NewClientForm'
-        this.isContratosList = false
+        this.isClientList = false
       },
       seeList () {
         this.current = 'ClientsList'
-        this.isContratosList = true
+        this.isClientList = true
       }
     }
   }

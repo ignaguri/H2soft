@@ -3,7 +3,6 @@
     <div class="col-md-12">
       <div class="card">
         <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns">
-
         </paper-table>
       </div>
     </div>
@@ -44,7 +43,7 @@
               this.table1.data.push({
                 cliente: contrat.idCilente, // Cambiar por el nombre del ciente
                 fechafirma: contrat.fechaFirma,
-                fechavigencia: Date(contrat.fechaVigencia),
+                fechavigencia: contrat.fechaVigencia,
                 cantidad: contrat.cantidad,
                 precio: contrat.precioPorUnidad
 
@@ -54,6 +53,19 @@
             console.log('error' + JSON.stringify(error))
         })
       }
+
+     /* api.getClientes(this).then(rescli => {
+      rescli.body.data.forEach(cli => {
+        if (cli.idClientes === contrat.idCilente) {
+          this.table1.data.push({
+            cliente: cli.razonSocial //
+          })
+        }
+      }, error => {
+        console.log('error' + JSON.stringify(error))
+      })
+    }
+    */
   }
 
   }

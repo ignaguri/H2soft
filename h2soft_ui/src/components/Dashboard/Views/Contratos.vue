@@ -1,16 +1,24 @@
 <template>
   <div>
     <div class="row">
-      <component :is="current"></component>
+     <!-- <component :is="current"></component>-->
+      <NuevoContrato v-if="!this.isContratosList" v-bind:id="2"></NuevoContrato>
+      <ContratosLista v-if="this.isContratosList" ></ContratosLista>
     </div>
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="newContrato" v-show="isContratosList" >
-            Agregar Contrato
+            Agregar contrato
           </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="verLista"  >
+          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="verLista"  v-show="!isContratosList" >
             Cancelar
+          </button>
+          <button type="button" class="btn btn-success btn-fill btn-wd" @click="newContrato"  v-show="isContratosList" >
+            Editar contrato
+          </button>
+          <button type="button" class="btn btn-warning btn-fill btn-wd" @click=""  v-show="isContratosList" >
+            Eliminar contrato
           </button>
         </div>
         <div class="clearfix"></div>
@@ -25,10 +33,12 @@
 
   import ContratosLista from './Contratos/ContratosLista.vue'
   import NuevoContrato from './Contratos/NuevoContrato.vue'
+  import ModificarContrato from './Contratos/ModificarContrato.vue'
   export default {
     components: {
       ContratosLista,
-      NuevoContrato
+      NuevoContrato,
+      ModificarContrato
     },
     data () {
       return {
