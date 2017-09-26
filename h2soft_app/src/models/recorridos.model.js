@@ -19,17 +19,34 @@ module.exports = function (app) {
         key: 'idDias'
       }
     },
-    turno: {
-      type: Sequelize.STRING(45),
-      allowNull: false
+    idFrecuencia: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'frecuencias-recorrido',
+        key: 'idFrecuenciasRecorrido'
+      }
     },
-    fecha: {
-      type: Sequelize.DATE,
-      allowNull: false
+    idTurno: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'turnos',
+        key: 'idTurnos'
+      }
     },
-    isTemplate: {
-      type: Sequelize.INTEGER(1),
-      allowNull: false
+    idTemporada: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'temporadas',
+        key: 'idTemporadas'
+      }
+    },
+    activo: {
+      type: Sequelize.BOOLEAN(),
+      allowNull: false,
+      default : 1
     }
   }, {
     hooks: {

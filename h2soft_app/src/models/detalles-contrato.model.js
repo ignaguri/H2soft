@@ -4,27 +4,35 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const empleadoXRecorrido = sequelizeClient.define('empleado-x-recorrido', {
-    idEmpleadoXRecorrido: {
+  const detallesContrato = sequelizeClient.define('detalles-contrato', {
+    idDetallesContrato: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    idEmpleado: {
+    idContrato: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
-        model: 'empleados',
-        key: 'idEmpleados'
+        model: 'contratos',
+        key: 'idContratos'
       }
     },
-    idRecorrido: {
+    cantidadMaxima: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true
+    },
+    precioPorUnidad: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    idProducto: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
       references: {
-        model: 'recorridos',
-        key: 'idRecorridos'
+        model: 'productos',
+        key: 'idProductos'
       }
     }
   }, {
@@ -35,10 +43,10 @@ module.exports = function (app) {
     }
   });
 
-  empleadoXRecorrido.associate = function (models) { // eslint-disable-line no-unused-vars
+  detallesContrato.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return empleadoXRecorrido;
+  return detallesContrato;
 };
