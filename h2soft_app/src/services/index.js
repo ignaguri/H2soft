@@ -17,16 +17,35 @@ const detalleGasto = require('./detalle-gasto/detalle-gasto.service.js');
 const detalleRecorrido = require('./detalle-recorrido/detalle-recorrido.service.js');
 const detalleRemito = require('./detalle-remito/detalle-remito.service.js');
 const dispenserXDetalleRecorrido = require('./dispenser-x-detalle-recorrido/dispenser-x-detalle-recorrido.service.js');
-const empleadoXRecorrido = require('./empleado-x-recorrido/empleado-x-recorrido.service.js');
 const horariosXObjetivo = require('./horarios-x-objetivo/horarios-x-objetivo.service.js');
-const mantenimiento = require('./mantenimiento/mantenimiento.service.js');
+const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
 const objetivosXCliente = require('./objetivos-x-cliente/objetivos-x-cliente.service.js');
 const remitosXFactura = require('./remitos-x-factura/remitos-x-factura.service.js');
 const tiposMantenimiento = require('./tipos-mantenimiento/tipos-mantenimiento.service.js');
 const contactosXCliente = require('./contactos-x-cliente/contactos-x-cliente.service.js');
 const clientes = require('./clientes/clientes.service.js');
 
-const estadoRecorrido = require('./estado-recorrido/estado-recorrido.service.js');
+const tiposCliente = require('./tipos-cliente/tipos-cliente.service.js');
+
+const frecuenciaRecorridos = require('./frecuencia-recorridos/frecuencia-recorridos.service.js');
+
+const turnos = require('./turnos/turnos.service.js');
+
+const estadosRecorrido = require('./estados-recorrido/estados-recorrido.service.js');
+
+const estadosRemito = require('./estados-remito/estados-remito.service.js');
+
+const estadosFactura = require('./estados-factura/estados-factura.service.js');
+
+const temporada = require('./temporada/temporada.service.js');
+
+const recorridoHistorico = require('./recorrido-historico/recorridos-historicos.service.js');
+
+const detalleRecorridoHistorico = require('./detalle-recorrido-historico/detalle-recorrido-historico.service.js');
+
+const detallesContrato = require('./detalles-contrato/detalles-contrato.service.js');
+
+const camiones = require('./camiones/camiones.service.js');
 
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
@@ -49,7 +68,6 @@ module.exports = function () {
   app.configure(detalleRecorrido);
   app.configure(detalleRemito);
   app.configure(dispenserXDetalleRecorrido);
-  app.configure(empleadoXRecorrido);
   app.configure(horariosXObjetivo);
   app.configure(mantenimiento);
   app.configure(objetivosXCliente);
@@ -57,5 +75,15 @@ module.exports = function () {
   app.configure(tiposMantenimiento);
   app.configure(contactosXCliente);
   app.configure(clientes);
-  app.configure(estadoRecorrido);
+  app.configure(tiposCliente);
+  app.configure(frecuenciaRecorridos);
+  app.configure(turnos);
+  app.configure(estadosRecorrido);
+  app.configure(estadosRemito);
+  app.configure(estadosFactura);
+  app.configure(temporada);
+  app.configure(recorridoHistorico);
+  app.configure(detalleRecorridoHistorico);
+  app.configure(detallesContrato);
+  app.configure(camiones);
 };

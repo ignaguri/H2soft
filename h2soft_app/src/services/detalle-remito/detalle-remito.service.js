@@ -1,6 +1,6 @@
 // Initializes the `detalle-remito` service on path `/detalle-remito`
 const createService = require('feathers-sequelize');
-const createModel = require('../../models/detalle-remito.model');
+const createModel = require('../../models/detalles-remito.model');
 const hooks = require('./detalle-remito.hooks');
 const filters = require('./detalle-remito.filters');
 
@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'detalle-remito',
+    id: 'idDetallesRemito',
     Model,
     paginate
   };
