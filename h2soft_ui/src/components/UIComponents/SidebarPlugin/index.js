@@ -36,7 +36,7 @@ const SidebarStore = {
     {
       name: 'Usuarios',
       icon: 'ti-user',
-      path: '/admin/overview'
+      path: '/admin/usuarios'
     }
   ],
   displaySidebar (value) {
