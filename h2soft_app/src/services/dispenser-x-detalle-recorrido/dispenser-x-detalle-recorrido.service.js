@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'dispenser-x-detalle-recorrido',
+    id: 'idDispenserXDetalleRecorrido',
     Model,
     paginate
   };

@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'horarios-x-objetivo',
+    id: 'idHorariosXObjetivo',
     Model,
     paginate
   };

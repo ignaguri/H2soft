@@ -9,17 +9,17 @@
     <div class="content table-responsive table-full-width">
       <table class="table" :class="tableClass">
         <thead>
-        <th v-for="column in columns">{{column}}</th>
+          <th v-for="column in columns">{{column}}</th>
         </thead>
         <tbody>
-        <tr v-for="item in data">
-          <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
-          <td><span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
+          <tr v-for="item in data">
+            <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
+            <td><span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
             &nbsp;
             <span class="ti-trash" @click="erase" v-if="eraseButton"></span>
-            &nbsp;
+              &nbsp;
             <span class="ti-new-window" @click="go" v-if="goButton"></span></td>
-        </tr>
+          </tr>
         </tbody>
       </table>
     </div>
