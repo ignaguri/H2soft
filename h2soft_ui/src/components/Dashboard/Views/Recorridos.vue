@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <recorrido-list v-if="this.isRecorridoList"></recorrido-list>
-      <detalle-recorrido v-if="!this.isRecorridoList" v-bind:id="recorridoAsignadoId"></detalle-recorrido>
+      <detalle-recorrido v-if="!this.isRecorridoList" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" :estado="this.estado"></detalle-recorrido>
     </div>
     <div class="row">
       <div class="col-md-11">
@@ -27,13 +27,23 @@
     data () {
       return {
         isRecorridoList: true,
-        recorridoAsignadoId: 0
+        recorridoAsignadoId: 0,
+        dia: '',
+        turno: '',
+        temporada: '',
+        fecha: '',
+        estado: ''
       }
     },
     methods: {
       seeList () {
         this.isRecorridoList = true
         this.recorridoAsignadoId = 0
+        this.dia = ''
+        this.turno = ''
+        this.temporada = ''
+        this.fecha = ''
+        this.estado = ''
       }
     }
   }

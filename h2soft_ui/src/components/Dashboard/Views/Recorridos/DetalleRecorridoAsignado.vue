@@ -1,27 +1,21 @@
 <template>
 <div>
   <div class="row">
-    <div class="col-md-3 left">
-      <div class="text-left">
-          <h4>Dia: {{this.dia}} </h4>
+    <div class="col-md-2 left">
+      <div class="text-line">
+          <h5>{{temporada}}  -  {{turno}}</h5>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="typo-line">
-        <h4>Turno: {{this.turno}} </h4>
+    <div class="col-md-2 left">
+      <div class="text-line">
+        <h5>{{dia}} {{fecha}} {{estado}}  </h5>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="typo-line">
-        <h4>Fecha: {{this.fecha}} </h4>
-      </div>
-    </div>
-
   </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false"  >
+        <paper-table type="hover" :title="table1.title" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="true" :go="verdetalle" >
 
         </paper-table>
       </div>
@@ -41,10 +35,10 @@
 </div>
 </template>
 <script>
-  import api from 'src/api/services/recorridosServices'
-  import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
+  import api from 'src/api/services/recorridosHistoricosServices'
+  import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import noti from 'src/notificationsService/notificationsService.js'
-  const tableColumns = ['Orden', 'Objetivo', 'Horario', 'Entrega']
+  const tableColumns = ['Orden', 'Objetivo']
   const dataColumns = []
   export default {
     components: {
@@ -52,9 +46,9 @@
     },
     data () {
       return {
-        fecha: '',
-        dia: '',
-        turno: '',
+        // fecha: '',
+        // dia: '',
+        // turno: '',
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -63,39 +57,48 @@
         }
       }
     },
-    props: ['id'],
+    props: {
+      'id': String,
+      dia: String,
+      turno: String,
+      temporada: String,
+      fecha: String,
+      estado: String
+    },
     mounted () {
+      this.cargarRecorrido()
       this.cargarRecorridoAsignado()
     },
     methods: {
       cargarRecorridoAsignado () {
-        api.getRecorridoAsignadoXId(this, this.id)
-          .then(resRxE => {
-            api.getRecorrido(this, resRxE.idRecorrido)
-              .then(resRec => {
-                resRec = resRec.body.data[0]
-                console.log(resRec)
-                this.fecha = resRec.fecha
-                this.turno = resRec.turno
-                this.dia = resRec.dia
-                api.getDetalleRecorrido(this, resRec.idRecorridos)
-                  .then(resDet => {
-                    resDet.body.data.forEach(det => {
-                      api.getObjetivoXId(this, det.idObjetivo)
-                        .then(resObj => {
-                          this.table1.data.push({
-                            orden: det.orden,
-                            objetivo: resObj.nombre,
-                            horario: '',
-                            entrega: det.cantidad
-                          })
-                        })
-                    })
-                  })
+        api.getDetalleRecorridoAsignado(this, this.id)
+          .then(resDet => {
+            // console.log(resDet)
+            resDet.body.data.forEach(det => {
+              api.getObjetivoXId(this, det.idObjetivo)
+              .then(resObj => {
+                resObj = resObj.body.data[0]
+                console.log(det)
+                this.table1.data.push({
+                  orden: det.orden,
+                  objetivo: resObj.nombre,
+                  horario: '',
+                  estado: det.entregado
+                })
               })
+            })
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
           })
+      },
+      cargarRecorrido () {
+        api.getRecorrido(this, this.id)
+        .then(res => {
+
+        })
+      },
+      verdetalle () {
+        alert('ver!')
       }
     }
   }

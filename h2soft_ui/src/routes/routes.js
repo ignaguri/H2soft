@@ -50,7 +50,7 @@ const routes = [
       {
         path: 'maps',
         name: 'Recorridos',
-        component: WorkInProgress
+        component: Recorridos
       },
       {
         path: 'typography',

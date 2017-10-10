@@ -12,13 +12,8 @@
           <th v-for="column in columns">{{column}}</th>
         </thead>
         <tbody>
-          <tr v-for="item in data">
-            <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
-            <td><span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
-            &nbsp;
-            <span class="ti-trash" @click="erase" v-if="eraseButton"></span>
-              &nbsp;
-            <span class="ti-new-window" @click="go" v-if="goButton"></span></td>
+          <tr v-for="item in data" @click="go" >
+            <td v-for="column in columns" v-if="hasValue(item, column)" v-bind:class="{ 'success': item['estado'] === 1, 'info': item['estado'] === 2, 'danger': item['estado'] === 3 }">{{itemValue(item, column)}}</td>
           </tr>
         </tbody>
       </table>
@@ -41,20 +36,6 @@
       subTitle: {
         type: String,
         default: ''
-      },
-      editButton: {
-        type: Boolean,
-        default: true
-      },
-      edit: {
-        type: Function
-      },
-      eraseButton: {
-        type: Boolean,
-        default: true
-      },
-      erase: {
-        type: Function
       },
       goButton: {
         type: Boolean,
