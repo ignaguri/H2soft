@@ -5,6 +5,7 @@
         <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editarContrato" :eraseButton="false">
         </paper-table>
       </div>
+      {{ contrat }}
     </div>
   </div>
 </template>
@@ -18,7 +19,10 @@
 
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/contratosServices'
+  /*
   const tableColumns = ['idcontrato', 'Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
+  */
+  const tableColumns = ['idcontrato', 'Cliente', 'FechaFirma', 'VigenteDesde', 'VigenteHasta']
   export default{
     components: {
       PaperTable
@@ -42,11 +46,10 @@
             res.body.data.forEach(contrat => {
               this.table1.data.push({
                 idcontrato: contrat.idContratos,
-                cliente: contrat.idCilente, // Cambiar por el nombre del ciente
+                cliente: contrat.idCliente, // Cambiar por el nombre del ciente
                 fechafirma: contrat.fechaFirma,
-                fechavigencia: contrat.fechaVigencia,
-                cantidad: contrat.cantidad,
-                precio: contrat.precioPorUnidad
+                vigentedesde: contrat.fechaVigenciaDesde,
+                vigentehasta: contrat.fechaVigenciaHasta
               })
             })
         }, error => {

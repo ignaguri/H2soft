@@ -8,88 +8,72 @@
         <div class="row">
           <div class="col-md-6">
             <label for="clientes">Cliente</label>
-            <select id="clientes" v-model="contrato.idCilente" required>
+            <select id="clientes" v-model="contrato.idCliente" required>
               <option value="">Seleccione un cliente</option>
               <option v-for="cli in clientes" v-bind:value="cli.idClientes">
                 {{ cli.razonSocial }}
               </option>
             </select>
           </div>
-        </div>
-          <div class="row">
-            <div class="col-md-6">
-              <fg-input type="date"
-                        label="Fecha de firma"
-                        placeholder="Fecha"
-                        v-model="contrato.fechaFirma"
-                        required>
-              </fg-input>
-            </div>
-            <div class="col-md-6">
-              <fg-input type="date"
-                        label="Fecha de vigencia"
-                        placeholder="Fecha"
-                        v-model="contrato.fechaVigencia"
-                        required>
-              </fg-input>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <fg-input type="number"
-                        label="Cantidad del producto"
-                        placeholder="Cantidad"
-                        v-model="contrato.cantidad"
-                        required>
-              </fg-input>
-            </div>
-            <div class="col-md-6">
-              <fg-input type="number"
-                        label="Precio por unidad"
-                        placeholder="Precio"
-                        v-model="contrato.precioPorUnidad"
-                        required>
-              </fg-input>
-            </div>
-          </div>
-        <div class="row">
           <div class="col-md-6">
-            <label for="productos">Producto</label>
-            <select id="productos" v-model="contrato.idProducto" required>
-              <option value="">Seleccione un producto</option>
-              <option v-for="pro in productos" v-bind:value="pro.idProductos">
-                {{ pro.nombre }}
-              </option>
-            </select>
+            <fg-input type="date"
+                      label="Fecha de firma"
+                      placeholder="Fecha"
+                      v-model="contrato.fechaFirma"
+                      required>
+            </fg-input>
           </div>
         </div>
+          <div class="row">
+            <div class="col-md-6">
+              <fg-input type="date"
+                        label="Fecha de vigencia desde"
+                        placeholder="Fecha"
+                        v-model="contrato.fechaVigenciaDesde"
+                        required>
+              </fg-input>
+            </div>
+            <div class="col-md-6">
+              <fg-input type="date"
+                        label="Fecha vigencia hasta"
+                        placeholder="Fecha"
+                        v-model="contrato.fechaVigenciaHasta"
+                        required>
+              </fg-input>
+            </div>
+          </div>
           <hr>
-           <div class="text-center">
+        <detalle-contrato :detalles="detalles" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
+        <div class="row">
+        <div class="text-center">
              <button type="submit"  class="btn btn-success btn-fill btn-wd">
               Guardar contrato
              </button>
             </div>
           <div class="clearfix"></div>
+        </div>
       </form>
     </div>
   </div>
 </template>
 <script>
   import api from 'src/api/services/contratosServices'
+  import DetalleContrato from './DetalleContrato.vue'
   export default {
+    components: {
+      DetalleContrato
+    },
     data () {
       return {
         contrato: {
           idCilente: '',
           fechaFirma: '',
-          fechaVigencia: '',
-          cantidad: '',
-          precioPorUnidad: '',
-          idProducto: ''
+          fechaVigenciaDesde: '',
+          fechaVigenciaHasta: ''
         },
         clientes: {},
-        productos: {},
-        contrat: {}
+        contrat: {},
+        detalles: []
       }
     },
     props: ['id'],
@@ -105,16 +89,23 @@
     },
     methods: {
       guardarContrato () {
+        if (this.detalles.length <= 0) {
+          alert('Deve agregar al menos un detalle')
+          return
+        }
         if (this.id === 0) {
           this.contrat = {
-            idCilente: this.contrato.idCilente,
+            idCliente: this.contrato.idCliente,
             fechaFirma: this.contrato.fechaFirma,
-            fechaVigencia: this.contrato.fechaVigencia,
+            fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
+            fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
+            /*
             cantidad: this.contrato.cantidad,
             precioPorUnidad: this.contrato.precioPorUnidad,
             idProducto: this.contrato.idProducto
+            */
           }
-          api.postContratos(this, this.contrat).then(res => {
+          api.postContratos(this, this.contrat, this.detalles).then(res => {
             if (res) {
               console.log('devolvió true en nuevoContrato')
               alert('Contrato guardado con exito')
@@ -126,12 +117,15 @@
         } else {
           this.contrat = {
             id: this.id,
-            idCilente: this.contrato.idCilente,
+            idCliente: this.contrato.idCliente,
             fechaFirma: this.contrato.fechaFirma,
-            fechaVigencia: this.contrato.fechaVigencia,
+            fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
+            fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
+            /*
             cantidad: this.contrato.cantidad,
             precioPorUnidad: this.contrato.precioPorUnidad,
             idProducto: this.contrato.idProducto
+            */
           }
           api.editarContrato(this, this.contrat).then(res => {
             if (res) {
@@ -163,13 +157,22 @@
         api.getContrato(this, this.id)
           .then(res => {
             res = res.body.data[0]
-            this.contrato.idCilente = res.idCilente // Cambiar por el nombre del ciente
+            this.contrato.idCliente = res.idCliente // Cambiar por el nombre del ciente
             this.contrato.fechaFirma = res.fechaFirma
-            this.contrato.fechaVigencia = res.fechaVigencia
+            this.contrato.fechaVigenciaDesde = res.fechaVigenciaDesde
+            this.contrato.fechaVigenciaHasta = res.fechaVigenciaHasta
+            /*
             this.contrato.cantidad = res.cantidad
             this.contrato.precioPorUnidad = res.precioPorUnidad
             this.contrato.idProducto = res.idProducto
+            */
           })
+      },
+      captarDetalle (det) {
+        this.detalles.push(det)
+      },
+      borrarDetalle (det) {
+        this.detalles = this.detalles.filter(dets => dets.idProducto !== det)
       }
     }
   }

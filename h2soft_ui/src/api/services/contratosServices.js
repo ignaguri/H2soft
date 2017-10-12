@@ -11,8 +11,26 @@ export default {
   getContratos (context) {
     return context.$http.get('http://localhost:3030/contratos', authHeader)
   },
-  postContratos (context, contrato) {
+  postContratos (context, contrato, detalle) {
     return context.$http.post('http://localhost:3030/contratos', contrato, authHeader)
+      .then(contratoInsertado => {
+        detalle.forEach(det => {
+          det.idContrato = contratoInsertado.body.idContratos
+        })
+        let promesas = []
+        detalle.forEach(det => {
+          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato', detalle, authHeader))
+        })
+        return promise.all(promesas)
+      })
+      .then(detalleInsertado => {
+        alert('detalle insertado')
+        return true
+      })
+      .catch(error => {
+        alert('algo falló en el insert ' + JSON.stringify(error))
+        return false
+      })
   },
   getClientesContratos (context) {
     return context.$http.get('http://localhost:3030/clientes', authHeader)
@@ -27,5 +45,8 @@ export default {
   },
   getContrato (context, idContrato) {
     return context.$http.get('http://localhost:3030/contratos/?idContratos=' + idContrato, authHeader)
+  },
+  getDetalleContrato (contex, idContrato) {
+    return contex.$http.getDetalleContrato('http://localhost:3030/detalles-contrato/' + idContrato, authHeader)
   }
 }
