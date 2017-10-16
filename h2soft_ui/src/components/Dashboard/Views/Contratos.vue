@@ -2,7 +2,7 @@
   <div>
     <div class="row">
      <!-- <component :is="current"></component>-->
-      <NuevoContrato v-if="!this.isContratosList" v-bind:id="contratoId"></NuevoContrato>
+      <NuevoContrato v-if="!this.isContratosList" v-bind:id="contratoId" :edit="edit"  @emmited="capturarEvento"></NuevoContrato>
       <ContratosLista v-if="this.isContratosList" ></ContratosLista>
     </div>
     <div class="row">
@@ -35,7 +35,8 @@
       return {
         current: 'ContratosLista',
         isContratosList: true,
-        contratoId: 0
+        contratoId: 0,
+        edit: false
       }
     },
     methods: {
@@ -47,6 +48,17 @@
       newContrato () {
         this.current = NuevoContrato
         this.isContratosList = false
+      },
+      capturarEvento (e) {
+        switch (e.action) {
+          case 'edit':
+            this.edit = true
+            this.isContratosList = false
+            break
+          case 'ver':
+            console.log('ver cliente: ', e.client.toString())
+            break
+        }
       }
     }
   }

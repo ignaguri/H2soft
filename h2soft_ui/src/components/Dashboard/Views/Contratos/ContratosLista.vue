@@ -5,7 +5,6 @@
         <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editarContrato" :eraseButton="false">
         </paper-table>
       </div>
-      {{ contrat }}
     </div>
   </div>
 </template>
@@ -60,6 +59,8 @@
       let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
       this.$parent.contratoId = id
       this.$parent.isContratosList = false
+      this.$parent.edit = true
+      // this.$emit('emmited', {action: 'edit'})
     }
   }
 

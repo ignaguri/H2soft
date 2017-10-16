@@ -15,22 +15,20 @@
     </div>
     <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar Restriccion">
       <div class="row">
-        <!--
         <div class="col-md-6">
           <label for="productos">Producto</label>
-          <select id="productos" v-model="detalleContrato.idProductos">
+          <select id="productos" v-model="detalleContrato.idProducto">
             <option value="">Seleccione un producto</option>
             <option v-for="prod in productoss" v-bind:value="prod.idProductos">
               {{ prod.nombre }}
             </option>
           </select>
         </div>
-        -->
         <div class="col-md-6">
           <fg-input type="number"
                     label="idProducto"
                     placeholder="id"
-                    v-model="detalleContrato.idProductos"
+                    v-model="detalleContrato.idProducto"
                     required>
           </fg-input>
         </div>
@@ -52,9 +50,8 @@
                     required>
           </fg-input>
         </div>
-        {{ productoss }}
+        {{ detalleContrato }}
       </div>
-      {{ detalleContrato }}
       <div slot="modal-footer" class="modal-footer">
         <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
         <button type="button" class="btn btn-success" @click="showCustomModal = ok()">Guardar</button>
@@ -67,7 +64,7 @@
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Producto', 'Cantidad', 'Precio']
+  const tableColumns = ['producto', 'Cantidad', 'Precio']
 
   export default {
     components: {
@@ -78,7 +75,7 @@
       return {
         showCustomModal: false,
         detalleContrato: {
-          idProductos: '',
+          idProducto: '',
           cantidadMaxima: '',
           precioPorUnidad: ''
         },
@@ -94,7 +91,7 @@
     props: {
       idContrato: {
         type: Number,
-        default: 0
+        default: 5
       },
       edit: {
         type: Boolean,
@@ -105,7 +102,7 @@
       }
     },
     watch: {
-      detalle: function changer () {
+      detalles: function () {
         this.cargarDetalles()
       }
     },
@@ -115,17 +112,28 @@
     },
     methods: {
       cargarDetalles () {
-        api.getDetalleContrato(this, this.idContrato).then(res => {
-          res.forEach(det => {
+        if (this.edit) {
+          api.getDetalleContrato(this, this.idContrato).then(res => {
+            res.forEach(det => {
+              this.table1.data.push({
+                producto: det.idProducto,
+                cantidad: det.cantidadMaxima,
+                precio: det.precioPorUnidad
+              })
+            })
+          }, error => {
+            alert('error:' + JSON.stringify(error))
+          })
+        } else {
+          this.table1.data = []
+          this.detalles.forEach(det => {
             this.table1.data.push({
-              id: det.idProductos,
-              cant: det.cantidadMaxima,
-              PrecioPorUnid: det.precioPorUnidad
+              producto: det.idProducto,
+              cantidad: det.cantidadMaxima,
+              precio: det.precioPorUnidad
             })
           })
-        }, error => {
-          alert('error:' + JSON.stringify(error))
-        })
+        }
       },
       getProductos () {
         api.getProductosContratos(this)
@@ -135,11 +143,11 @@
       },
       borrar (e) {
         let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        alert('borrar name: ' + toDelete)
+        alert('borrar nro: ' + toDelete)
         this.$emit('delete_detalle', toDelete)
       },
       ok () {
-        if (this.detalleContrato.idProductos === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '') {
+        if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '') {
           alert('Debe completar todos los campos')
           return true
         }
