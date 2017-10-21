@@ -83,8 +83,8 @@ export default {
       .then(res => { return res.body.data })
   },
   getObjetivos (context, id) {
-    return context.$http.get(API_URL + 'objetivos-x-cliente/' + id, authHeader)
-      .then(res => { return res.body })
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+      .then(res => { return res.body.data })
   },
   postObjetivos (context, objetivo) {
     return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
@@ -101,9 +101,13 @@ export default {
         return context.$http.patch(API_URL + 'contactos-x-cliente' + '/?idCliente=' + id, contacto, authHeader)
       })
       .then(contactoUpdated => {
+        return context.$http.delete(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+      })
+      .then(objsBorrados => {
         let promesas = []
         objetivos.forEach(objetivo => {
-          promesas.push(context.$http.patch(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, objetivo, authHeader))
+          objetivo.idCliente = id
+          promesas.push(context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader))
         })
         return Promise.all(promesas)
       })
@@ -115,5 +119,9 @@ export default {
         console.log('algo falló en el update ', error)
         return false
       })
+  },
+  getTiposCliente (context) {
+    return context.$http.get(API_URL + 'tipos-cliente', authHeader)
+      .then(res => { return res.body.data })
   }
 }

@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const users = sequelizeClient.define('users', {
-    idUsuarios: {
+    id: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,

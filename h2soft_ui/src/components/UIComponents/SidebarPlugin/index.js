@@ -6,7 +6,7 @@ const SidebarStore = {
     {
       name: 'Recorridos',
       icon: 'ti-map-alt',
-      path: '/admin/maps'
+      path: '/admin/recorridos'
     },
     {
       name: 'Reportes',

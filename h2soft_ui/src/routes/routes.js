@@ -4,7 +4,7 @@ import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 import Landing from '../components/GeneralViews/Landing.vue'
 
 // Admin pages
-import Overview from 'src/components/Dashboard/Views/Overview.vue'
+// import Overview from 'src/components/Dashboard/Views/Overview.vue'
 // import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 // import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import Icons from 'src/components/Dashboard/Views/Icons.vue'
@@ -14,6 +14,7 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
+import Recorridos from 'src/components/Dashboard/Views/Recorridos.vue'
 
 const routes = [
   {
@@ -24,7 +25,7 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: DashboardLayout,
-    redirect: '/admin/clientes',
+    redirect: '/admin/recorridos',
     children: [
       {
         path: 'overview',
@@ -34,7 +35,7 @@ const routes = [
       {
         path: 'stats',
         name: 'Reportes',
-        component: Overview
+        component: WorkInProgress
       },
       {
         path: 'notifications',
@@ -47,9 +48,9 @@ const routes = [
         component: Icons
       },
       {
-        path: 'maps',
+        path: 'recorridos',
         name: 'Recorridos',
-        component: WorkInProgress
+        component: Recorridos
       },
       {
         path: 'typography',
