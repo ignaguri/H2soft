@@ -11,7 +11,7 @@ export default {
     context.$http.post(LOGIN_URL, creds).then(response => {
       sessionStorage.setItem('id_token', creds.email)
       sessionStorage.setItem('access_token', response.body.accessToken)
-
+      console.log('login', response)
       this.user.authenticated = true
 
       // Redirect to a specified route

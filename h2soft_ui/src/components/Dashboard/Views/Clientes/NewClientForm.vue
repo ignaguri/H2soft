@@ -1,14 +1,15 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title">Agregar nuevo cliente</h3>
+      <h3 class="title" v-if="!edit">Agregar nuevo cliente</h3>
+      <h3 class="title" v-if="edit">Editar cliente</h3>
     </div>
     <div class="content">
       <form name="new_client_form" @submit.prevent="saveClient">
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Nombre/Razón social"
+                      label="Nombre/Razón social*"
                       placeholder="Nombre/Razón social"
                       v-model="cliente.razonSocial"
                       :disabled="edit"
@@ -17,29 +18,43 @@
           </div>
           <div class="col-md-4 col-md-offset-1">
             <fg-input type="text"
-                      label="CUIL"
-                      placeholder="CUIL"
+                      label="CUIL/CUIT*"
+                      placeholder="CUIL/CUIT"
                       v-model="cliente.CUIL"
                       required>
             </fg-input>
           </div>
+        </div>
           <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-              <fg-input type="text"
-                        label="Domicilio Fiscal"
-                        placeholder="Dirección"
-                        v-model="cliente.direccion">
-              </fg-input>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label for="tipoCliente"><h4><span class="label label-default">Tipo de cliente*</span></h4></label>
+                <select id="tipoCliente" v-model="cliente.idTipo" required>
+                  <option :value="null">Seleccione un tipo</option>
+                  <option v-for="tipo in tiposCliente" v-bind:value="tipo.idTiposCliente">
+                    {{ tipo.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label>Domicilio Fiscal</label>
+              <vga ref="address"
+                   id="map"
+                   classname="form-control border-input"
+                   placeholder="Ingrese la dirección"
+                   v-on:placechanged="getAddressData"
+                   country="ar">
+              </vga>
             </div>
           </div>
-        </div>
         <div class="header">
           <h4 class="title">Información de contacto</h4>
         </div>
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Nombre"
+                      label="Nombre*"
                       placeholder="Nombre"
                       v-model="contacto.nombre"
                       required>
@@ -47,7 +62,7 @@
           </div>
           <div class="col-md-6">
             <fg-input type="email"
-                      label="Mail"
+                      label="Mail*"
                       placeholder="Dirección de email"
                       v-model="contacto.mail"
                       required>
@@ -81,39 +96,7 @@
             </div>
           </div>
         </div>
-        <!--<div class="header">
-          <h4 class="title">Objetivo/Lugar de reparto</h4>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <fg-input type="text"
-                      label="Nombre"
-                      placeholder="Nombre"
-                      v-model="objetivo.nombre"
-                      required>
-            </fg-input>
-          </div>
-          <div class="col-md-6">
-            <fg-input type="text"
-                      label="Dirección"
-                      placeholder="Dirección del lugar"
-                      v-model="objetivo.direccion"
-                      required>
-            </fg-input>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-md-offset-4">
-            <label for="localidad">Localidad</label>
-            <select id="localidad" v-model="objetivo.idLocalidad" required>
-              <option value="">Seleccione una localidad</option>
-              <option v-for="loc in localidades" v-bind:value="loc.idLocalidad">
-                {{ loc.nombre }}
-              </option>
-            </select>
-          </div>
-        </div>-->
-        <objetivos-list :objetivos="objetivos" @new_objetivo="captarObjetivo" @delete_objetivo="borrarObjetivo"></objetivos-list>
+        <objetivos-list :objetivos="objetivos" :edit="edit" @new_objetivo="captarObjetivo" @delete_objetivo="borrarObjetivo"></objetivos-list>
         <div class="row">
           <div class="text-center">
             <button type="submit" class="btn btn-success btn-fill btn-wd">
@@ -129,9 +112,12 @@
 <script>
   import api from 'src/api/services/clientServices'
   import ObjetivosList from './ObjetivosList.vue'
+  import VueGoogleAutocomplete from 'vue-google-autocomplete'
+
   export default {
     components: {
-      ObjetivosList
+      ObjetivosList,
+      vga: VueGoogleAutocomplete
     },
     props: {
       edit: Boolean,
@@ -142,7 +128,8 @@
         cliente: {
           razonSocial: '',
           CUIL: null,
-          direccion: ''
+          direccion: '',
+          idTipo: null
         },
         contacto: {
           nombre: '',
@@ -152,12 +139,13 @@
           observaciones: ''
         },
         objetivos: [],
-        localidades: {}
+        tiposCliente: [],
+        address: ''
       }
     },
     mounted () {
+      this.cargarTiposCliente()
       this.cargarCliente()
-      this.getLocalidades()
     },
     methods: {
       saveClient () {
@@ -188,12 +176,6 @@
         }
         this.$parent.isClientList = true
       },
-      getLocalidades () {
-        api.getLocalidades(this)
-          .then(res => {
-            this.localidades = res
-          })
-      },
       captarObjetivo (ob) {
         this.objetivos.push(ob)
       },
@@ -206,7 +188,9 @@
             console.log('me ha iegado', r)
             this.cliente.razonSocial = r.cliente.razonSocial
             this.cliente.CUIL = r.cliente.CUIL
+            this.$refs.address.update(r.cliente.direccion)
             this.cliente.direccion = r.cliente.direccion
+            this.cliente.idTipo = r.cliente.idTipo
             this.contacto.nombre = r.contacto.nombre
             this.contacto.mail = r.contacto.mail
             this.contacto.celular = r.contacto.celular
@@ -216,11 +200,22 @@
               this.objetivos.push({
                 nombre: o.nombre,
                 direccion: o.direccion,
-                idLocalidad: o.idLocalidad
+                localidad: o.localidad
               })
             })
           })
         }
+      },
+      cargarTiposCliente () {
+        api.getTiposCliente(this).then(r => {
+          this.tiposCliente = r
+        })
+      },
+      getAddressData (addressData, placeResultData) {
+        console.log('addressData:', addressData)
+        console.log('placeresultdata:', placeResultData)
+        // let dirAcortada = addressData.route + ', ' + addressData.street_number + ', ' + addressData.locality
+        this.cliente.direccion = placeResultData.formatted_address
       }
     }
   }
