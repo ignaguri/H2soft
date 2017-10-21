@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-  import auth from 'src/api/auth'
+  // import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import noti from 'src/notificationsService/notificationsService.js'
   // import fgdrop from 'components/UIComponents/Inputs/formGroupDropDown.vue'
