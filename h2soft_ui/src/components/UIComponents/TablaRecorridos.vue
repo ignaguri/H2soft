@@ -13,7 +13,7 @@
         </thead>
         <tbody>
           <tr v-for="item in data" @click="go" >
-            <td v-for="column in columns" v-if="hasValue(item, column)" v-bind:class="{ 'success': item['estado'] === 1, 'info': item['estado'] === 2, 'danger': item['estado'] === 3 }">{{itemValue(item, column)}}</td>
+            <td v-for="column in columns" v-if="hasValue(item, column)" v-bind:class="{ 'danger': item['estado'] === 1, 'success': item['estado'] === 2, 'info': item['estado'] === 3 }">{{itemValue(item, column)}}</td>
           </tr>
         </tbody>
       </table>

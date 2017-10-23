@@ -13,7 +13,7 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 // import TableList from 'src/components/Dashboard/Views/TableList.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
-import Recorridos from 'src/components/Dashboard/Views/Recorridos.vue'
+import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
 
 const routes = [
@@ -50,7 +50,7 @@ const routes = [
       {
         path: 'maps',
         name: 'Recorridos',
-        component: Recorridos
+        component: RecorridosAsignados
       },
       {
         path: 'typography',

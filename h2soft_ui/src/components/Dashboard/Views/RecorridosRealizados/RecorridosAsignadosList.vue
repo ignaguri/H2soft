@@ -19,7 +19,7 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import noti from 'src/notificationsService/notificationsService.js'
-  const tableColumns = ['Id', 'Día', 'Turno', 'Fecha', 'Temp']
+  const tableColumns = ['Nro', 'Día', 'Turno', 'Fecha', 'Temp']
   const dataColumns = []
 
   export default {
@@ -49,12 +49,12 @@
           .then(resRxE => {
             resRxE.body.data.forEach(RxE => {
               // console.log(RxE)
-              var d = new Date(RxE.fechaInicio)
+              var d = new Date(RxE.fechaAsignacion)
               this.table1.data.push({
-                id: RxE.idRecorridosHistoricos,
+                nro: RxE.idRecorridosHistoricos,
                 día: this.getDia(RxE.idDia),
                 turno: this.getTurno(RxE.idTurno),
-                fecha: d.getDate() + '/' + d.getUTCMonth() + 1 + '/' + d.getYear(),
+                fecha: d.getUTCDate() + '/' + d.getMonth() + '/' + d.getFullYear(),
                 temp: this.getTemporada(RxE.idTemporada),
                 estado: RxE.idEstado
               })
@@ -64,18 +64,20 @@
           })
       },
       verRecorridoAsignado (e) {
-        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
         this.$parent.recorridoAsignadoId = id
-        this.$parent.isRecorridoList = false
+        this.$parent.verLista = false
+        this.$parent.verDetalle = true
         api.getRecorridoAsignadoXId(this, id)
           .then(res => {
             res = res.body.data[0]
             this.$parent.dia = this.getDia(res.idDia)
             this.$parent.turno = this.getTurno(res.idTurno)
-            var d = new Date(res.fechaInicio)
-            this.$parent.fecha = d.getDate() + '/' + d.getUTCMonth() + 1 + '/' + d.getYear()
+            var d = new Date(res.fechaAsignacion)
+            this.$parent.fecha = d.getUTCDate() + '/' + d.getMonth() + '/' + d.getFullYear()
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
+            // this.$parent.idEstado = res.idEstado
           })
       },
       getDia (idDia) {

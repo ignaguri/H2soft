@@ -2,13 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff2cbecc-9079-49b7-a9a9-4dcc7b3e5586" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/models/users.model.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/models/users.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/routes/routes.js" afterPath="$PROJECT_DIR$/src/routes/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/models/recorridos.model.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/models/recorridos.model.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/package.json" afterPath="$PROJECT_DIR$/../h2soft_app/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/services/index.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/services/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/config/default.json" afterPath="$PROJECT_DIR$/../h2soft_app/config/default.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/services/index.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/services/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/models/users.model.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/models/users.model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/src/models/recorridos.model.js" afterPath="$PROJECT_DIR$/../h2soft_app/src/models/recorridos.model.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/routes/routes.js" afterPath="$PROJECT_DIR$/src/routes/routes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../h2soft_app/package.json" afterPath="$PROJECT_DIR$/../h2soft_app/package.json" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,21 +23,45 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Recorridos.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos.vue">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/UIComponents/SidebarPlugin/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="903">
-              <caret line="44" column="23" lean-forward="false" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
+            <state relative-caret-position="168">
+              <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RecorridosAsignadosList.vue" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/RecorridosAsignadosList.vue">
+      <file leaf-file-name="routes.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/routes/routes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="77" column="34" lean-forward="false" selection-start-line="77" selection-start-column="34" selection-end-line="77" selection-end-column="34" />
+            <state relative-caret-position="756">
+              <caret line="52" column="38" lean-forward="false" selection-start-line="52" selection-start-column="38" selection-end-line="52" selection-end-column="38" />
+              <folding>
+                <element signature="e#733#799#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecorridosAsignados.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosAsignados.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="32" column="14" lean-forward="false" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+              <folding>
+                <element signature="e#731#809#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RecorridosAsignadosList.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/RecorridosAsignadosList.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1470">
+              <caret line="76" column="92" lean-forward="false" selection-start-line="76" selection-start-column="92" selection-end-line="76" selection-end-column="92" />
               <folding>
                 <element signature="e#383#414#0" expanded="true" />
               </folding>
@@ -46,23 +70,35 @@
         </entry>
       </file>
       <file leaf-file-name="DetalleRecorridoAsignado.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/DetalleRecorridoAsignado.vue">
+        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/DetalleRecorridoAsignado.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1344">
-              <caret line="65" column="12" lean-forward="false" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="12" />
+            <state relative-caret-position="21">
+              <caret line="5" column="42" lean-forward="false" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
               <folding>
-                <element signature="e#894#957#0" expanded="true" />
+                <element signature="e#1665#1728#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="diasServices.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/api/services/diasServices.js">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="6" column="21" lean-forward="false" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+            <state relative-caret-position="168">
+              <caret line="8" column="15" lean-forward="false" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Remito.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/Remito.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="8" column="10" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="8" selection-end-column="10" />
+              <folding>
+                <element signature="e#1726#1789#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -71,7 +107,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/UIComponents/TablaRecorridos.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
-              <caret line="15" column="181" lean-forward="false" selection-start-line="15" selection-start-column="181" selection-end-line="15" selection-end-column="181" />
+              <caret line="15" column="158" lean-forward="false" selection-start-line="15" selection-start-column="158" selection-end-line="15" selection-end-column="158" />
               <folding />
             </state>
           </provider>
@@ -80,8 +116,18 @@
       <file leaf-file-name="estadosDeRecorridosServices.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/api/services/estadosDeRecorridosServices.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="8" column="44" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="44" />
+            <state relative-caret-position="483">
+              <caret line="23" column="15" lean-forward="false" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="recorridosHistoricosServices.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/api/services/recorridosHistoricosServices.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="10" column="107" lean-forward="false" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="107" />
               <folding />
             </state>
           </provider>
@@ -118,6 +164,10 @@
       <find>new-us</find>
       <find>new-use</find>
       <find>new-user</find>
+      <find>estado</find>
+      <find>RecorridosRealizados</find>
+      <find>U</find>
+      <find>Usuario</find>
     </findStrings>
     <replaceStrings>
       <replace>sessionStorage</replace>
@@ -145,7 +195,6 @@
         <option value="$PROJECT_DIR$/src/components/Dashboard/Layout/TopNavbar.vue" />
         <option value="$PROJECT_DIR$/src/auth/index.js" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Maps.vue" />
-        <option value="$PROJECT_DIR$/src/components/UIComponents/SidebarPlugin/index.js" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/TableList.vue" />
         <option value="$PROJECT_DIR$/src/components/GeneralViews/WorkInProgress.vue" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Overview.vue" />
@@ -161,17 +210,21 @@
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/RecorridosList.vue" />
         <option value="$PROJECT_DIR$/src/api/services/diasServices.js" />
         <option value="$PROJECT_DIR$/src/components/UIComponents/PaperTablePlus.vue" />
-        <option value="$PROJECT_DIR$/src/routes/routes.js" />
         <option value="$PROJECT_DIR$/src/api/services/recorridosServices.js" />
         <option value="$PROJECT_DIR$/src/api/services/turnosServices.js" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Layout/ContentFooter.vue" />
-        <option value="$PROJECT_DIR$/src/api/services/recorridosHistoricosServices.js" />
         <option value="$PROJECT_DIR$/src/api/services/temporadasServices.js" />
-        <option value="$PROJECT_DIR$/src/components/UIComponents/TablaRecorridos.vue" />
+        <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/RecorridosAsignadosList.vue" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/DetalleRecorridoAsignado.vue" />
+        <option value="$PROJECT_DIR$/src/api/services/recorridosHistoricosServices.js" />
         <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos.vue" />
         <option value="$PROJECT_DIR$/src/api/services/estadosDeRecorridosServices.js" />
-        <option value="$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/RecorridosAsignadosList.vue" />
+        <option value="$PROJECT_DIR$/src/components/UIComponents/TablaRecorridos.vue" />
+        <option value="$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/RecorridosAsignadosList.vue" />
+        <option value="$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/Remito.vue" />
+        <option value="$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/DetalleRecorridoAsignado.vue" />
+        <option value="$PROJECT_DIR$/src/routes/routes.js" />
+        <option value="$PROJECT_DIR$/src/components/UIComponents/SidebarPlugin/index.js" />
       </list>
     </option>
   </component>
@@ -294,6 +347,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="UIComponents" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SidebarPlugin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="h2soft_ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="h2soft_ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="GeneralViews" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -350,7 +429,37 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Recorridos" />
+              <option name="myItemId" value="RecorridosRealizados" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="h2soft_ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="h2soft_ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Dashboard" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clientes" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -415,6 +524,10 @@
               <option name="myItemId" value="api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="auth" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -435,13 +548,13 @@
     <property name="node.js.selected.package.standard" value="D:\Emanuel\H2Soft - Producto\H2soft\h2soft_ui\node_modules\eslint" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FACULTAD\TESIS\H2soft\h2soft_ui\src\api" />
+      <recent name="D:\FACULTAD\TESIS\H2soft\h2soft_ui\static\img" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Emanuel\H2Soft - Producto\H2soft\h2soft_ui\src\api\services" />
       <recent name="D:\Emanuel\H2Soft - Producto\H2soft\h2soft_ui\src\components\UIComponents" />
-      <recent name="D:\FACULTAD\TESIS\H2soft\h2soft_ui\static\img" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\FACULTAD\TESIS\H2soft\h2soft_ui\src\api" />
       <recent name="D:\FACULTAD\TESIS\H2soft\h2soft_ui\static\img" />
     </key>
   </component>
@@ -568,19 +681,22 @@
       <workItem from="1506734381958" duration="64000" />
       <workItem from="1506787601705" duration="25775000" />
       <workItem from="1507675609390" duration="20000" />
+      <workItem from="1507844708167" duration="28290000" />
+      <workItem from="1508772284126" duration="688000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="128557000" />
+    <option name="totallyTimeSpent" value="157535000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19777896" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19936542" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32807216" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32807216" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -593,7 +709,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -624,32 +739,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="8" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dist/static/js/app.63bfca5823dc39392c2b.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="0" column="32708" lean-forward="false" selection-start-line="0" selection-start-column="32708" selection-end-line="0" selection-end-column="32708" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/static/js/0.a7f0317b42ad015dfcf3.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="0" column="25890" lean-forward="false" selection-start-line="0" selection-start-column="25890" selection-end-line="0" selection-end-column="25890" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/globalComponents.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="18" lean-forward="false" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/img/favicon.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -697,13 +791,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
           <caret line="56" column="13" lean-forward="true" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/UserProfile.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" column="37" lean-forward="true" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -778,20 +865,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Clientes/NewClientForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2646">
-          <caret line="126" column="8" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/UIComponents/SidebarPlugin/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="33" column="28" lean-forward="false" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/UIComponents/Inputs/Login.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="987">
@@ -803,13 +876,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="7" column="4" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Clientes/ClientsList.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="36" column="6" lean-forward="true" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -862,34 +928,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="15" lean-forward="false" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/routes/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="52" column="29" lean-forward="false" selection-start-line="52" selection-start-column="29" selection-end-line="52" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-230">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Layout/ContentFooter.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
@@ -901,7 +939,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
           <caret line="1" column="35" lean-forward="true" selection-start-line="1" selection-start-column="35" selection-end-line="1" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -919,35 +956,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/services/recorridosHistoricosServices.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="83" lean-forward="false" selection-start-line="10" selection-start-column="83" selection-end-line="10" selection-end-column="83" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/api/services/temporadasServices.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="11" column="49" lean-forward="false" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/UIComponents/TablaRecorridos.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" column="181" lean-forward="false" selection-start-line="15" selection-start-column="181" selection-end-line="15" selection-end-column="181" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/services/estadosDeRecorridosServices.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="44" lean-forward="false" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -959,30 +971,144 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos.vue">
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/UserProfile.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="903">
-          <caret line="44" column="23" lean-forward="false" selection-start-line="44" selection-start-column="23" selection-end-line="44" selection-end-column="23" />
+        <state relative-caret-position="210">
+          <caret line="10" column="37" lean-forward="true" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Clientes/ClientsList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="36" column="6" lean-forward="true" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Clientes/ObjetivosList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Clientes/NewClientForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="141" column="8" lean-forward="false" selection-start-line="141" selection-start-column="8" selection-end-line="145" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/services/empleadoServices.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/DetalleRecorridoAsignado.vue">
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosAsignados.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1344">
-          <caret line="65" column="12" lean-forward="false" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="12" />
+        <state relative-caret-position="630">
+          <caret line="32" column="14" lean-forward="false" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
           <folding>
-            <element signature="e#894#957#0" expanded="true" />
+            <element signature="e#731#809#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/Recorridos/RecorridosAsignadosList.vue">
+    <entry file="file://$PROJECT_DIR$/src/api/services/recorridosHistoricosServices.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="77" column="34" lean-forward="false" selection-start-line="77" selection-start-column="34" selection-end-line="77" selection-end-column="34" />
+        <state relative-caret-position="210">
+          <caret line="10" column="107" lean-forward="false" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="107" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/services/estadosDeRecorridosServices.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="23" column="15" lean-forward="false" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/UIComponents/TablaRecorridos.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" column="158" lean-forward="false" selection-start-line="15" selection-start-column="158" selection-end-line="15" selection-end-column="158" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/RecorridosAsignadosList.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1470">
+          <caret line="76" column="92" lean-forward="false" selection-start-line="76" selection-start-column="92" selection-end-line="76" selection-end-column="92" />
           <folding>
             <element signature="e#383#414#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/Remito.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="10" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="8" selection-end-column="10" />
+          <folding>
+            <element signature="e#1726#1789#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Dashboard/Views/RecorridosRealizados/DetalleRecorridoAsignado.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="5" column="42" lean-forward="false" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
+          <folding>
+            <element signature="e#1665#1728#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-104">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="15" lean-forward="false" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/UIComponents/SidebarPlugin/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/routes/routes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="52" column="38" lean-forward="false" selection-start-line="52" selection-start-column="38" selection-end-line="52" selection-end-column="38" />
+          <folding>
+            <element signature="e#733#799#0" expanded="true" />
           </folding>
         </state>
       </provider>
