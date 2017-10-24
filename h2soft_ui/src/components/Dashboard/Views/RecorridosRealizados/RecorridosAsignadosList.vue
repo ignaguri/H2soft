@@ -11,7 +11,6 @@
 
 </template>
 <script>
-  import auth from 'src/api/auth'
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiDias from 'src/api/services/DiasServices'
   import apiTurnos from 'src/api/services/TurnosServices'
