@@ -13,6 +13,7 @@
           <h2><span class="label label-default">Cliente</span></h2>
           <h3><span class="label label-primary">Nombre/Razón social:</span> {{ modalData.nombre }}</h3>
           <h3><span class="label label-primary">CUIL:</span> {{ modalData.CUIL }}</h3>
+          <h3><span class="label label-primary">Tipo cliente:</span> {{ modalData.tipoCliente }}</h3>
           <h3><span class="label label-primary">Domicilio fiscal:</span> {{ modalData.direccion }}</h3>
         </div>
         <div class="col-md-12">
@@ -63,6 +64,7 @@
           nombre: 'nombre',
           CUIL: 0,
           direccion: 'domicilio',
+          tipoCliente: null,
           contacto: {
             nombre: 'nombre contacto',
             telefono: 0,
@@ -119,6 +121,17 @@
           this.modalData.nombre = r.cliente.razonSocial
           this.modalData.CUIL = r.cliente.CUIL !== undefined ? r.cliente.CUIL : ''
           this.modalData.direccion = r.cliente.direccion !== undefined ? r.cliente.direccion : ''
+          switch (r.cliente.idTipo) {
+            case 1:
+              this.modalData.tipoCliente = 'Empresa'
+              break
+            case 2:
+              this.modalData.tipoCliente = 'Particular'
+              break
+            default:
+              this.modalData.tipoCliente = ''
+              break
+          }
           this.modalData.contacto.nombre = r.contacto !== undefined ? r.contacto.nombre : ''
           this.modalData.contacto.mail = r.contacto !== undefined ? r.contacto.mail : ''
           this.modalData.contacto.celular = r.contacto !== undefined ? r.contacto.celular : ''

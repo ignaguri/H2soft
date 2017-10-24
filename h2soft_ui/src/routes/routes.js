@@ -4,17 +4,20 @@ import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 import Landing from '../components/GeneralViews/Landing.vue'
 
 // Admin pages
-import Overview from 'src/components/Dashboard/Views/Overview.vue'
+// import Overview from 'src/components/Dashboard/Views/Overview.vue'
 // import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 // import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import Icons from 'src/components/Dashboard/Views/Icons.vue'
 // import Maps from 'src/components/Dashboard/Views/Maps.vue'
 // import Typography from 'src/components/Dashboard/Views/Typography.vue'
 // import TableList from 'src/components/Dashboard/Views/TableList.vue'
+import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
+// import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
+import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 
 const routes = [
   {
@@ -25,7 +28,7 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: DashboardLayout,
-    redirect: '/admin/clientes',
+    redirect: '/admin/planificacion',
     children: [
       {
         path: 'overview',
@@ -35,7 +38,7 @@ const routes = [
       {
         path: 'stats',
         name: 'Reportes',
-        component: Overview
+        component: WorkInProgress
       },
       {
         path: 'notifications',
@@ -48,9 +51,14 @@ const routes = [
         component: Icons
       },
       {
-        path: 'maps',
+        path: 'recorridos',
         name: 'Recorridos',
         component: RecorridosAsignados
+      },
+      {
+        path: 'planificacion',
+        name: 'Planificacion',
+        component: Planificacion
       },
       {
         path: 'typography',
@@ -66,6 +74,11 @@ const routes = [
         path: 'clientes',
         name: 'clientes',
         component: Clientes
+      },
+      {
+        path: 'usuarios',
+        name: 'Gestion de usuarios',
+        component: Usuarios
       }
     ]
   },

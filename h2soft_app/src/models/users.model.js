@@ -20,6 +20,11 @@ module.exports = function (app) {
       type: Sequelize.CHAR(255),
       allowNull: true
     },
+    activo: {
+      type: Sequelize.BOOLEAN(),
+      allowNull: false,
+      default : 1
+    },
     idRol: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
@@ -41,7 +46,7 @@ module.exports = function (app) {
   }, {
     hooks: {
       beforeCount(options) {
-        options.raw = true;
+        options.raw = false;
       }
     }
   });

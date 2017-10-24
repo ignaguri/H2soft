@@ -4,14 +4,14 @@ const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
     {
-      name: 'Planificación',
-      icon: 'ti-map-alt',
-      path: '/admin/overview'
-    },
-    {
       name: 'Recorridos',
       icon: 'ti-map-alt',
-      path: '/admin/maps'
+      path: '/admin/recorridos'
+    },
+    {
+      name: 'Planificacion',
+      icon: 'ti-map-alt',
+      path: '/admin/planificacion'
     },
     {
       name: 'Reportes',
@@ -41,7 +41,7 @@ const SidebarStore = {
     {
       name: 'Usuarios',
       icon: 'ti-user',
-      path: '/admin/overview'
+      path: '/admin/usuarios'
     }
   ],
   displaySidebar (value) {

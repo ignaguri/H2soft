@@ -1,5 +1,5 @@
-const API_URL = process.env.API_URL
-const LOGIN_URL = API_URL + 'authentication/'
+// const API_URL = process.env.API_URL
+const LOGIN_URL = 'http://localhost:3030/' + 'authentication'
 
 export default {
   // User object will let us check authentication status
@@ -11,7 +11,7 @@ export default {
     context.$http.post(LOGIN_URL, creds).then(response => {
       sessionStorage.setItem('id_token', creds.email)
       sessionStorage.setItem('access_token', response.body.accessToken)
-
+      console.log('login', response)
       this.user.authenticated = true
 
       // Redirect to a specified route
