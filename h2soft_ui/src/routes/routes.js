@@ -15,6 +15,7 @@ import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
 // import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
+import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 
@@ -48,6 +49,11 @@ const routes = [
         path: 'icons',
         name: 'Facturación',
         component: Icons
+      },
+      {
+        path: 'recorridos',
+        name: 'Recorridos',
+        component: RecorridosAsignados
       },
       {
         path: 'planificacion',

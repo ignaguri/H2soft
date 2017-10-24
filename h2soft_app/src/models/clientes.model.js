@@ -31,6 +31,10 @@ module.exports = function (app) {
         key: 'idTiposCliente'
       }
     },
+    horarioVisita: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    }
   }, {
     hooks: {
       beforeCount(options) {
