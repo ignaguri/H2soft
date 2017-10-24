@@ -23,7 +23,7 @@ export default {
         detalle.forEach(detalle => {
           promesas.push(context.$http.post('http://localhost:3030/detalles-contrato', detalle, authHeader))
         })
-        return promise.all(promesas)
+        return Promise.all(promesas)
         alert('llegue al detalle con:' + JSON.stringify(promesas))
       })
       .then(detalleInsertado => {
@@ -78,8 +78,9 @@ export default {
           det.idContrato = contratoModificado.body.idContratos
         })
         let promesas = []
+        console.log('El detalle es: ' + detalle + ' *** ' + JSON.stringify(detalle))
         detalle.forEach(det => {
-          promesas.push('http://localhost:3030/detalles-contrato/?idContrato=' + contrato.id, det, authHeader)
+          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato/?idContrato=' + contrato.id, det, authHeader))
         })
         return Promise.all(promesas)
       })

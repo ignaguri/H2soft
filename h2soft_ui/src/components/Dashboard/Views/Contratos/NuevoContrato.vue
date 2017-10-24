@@ -42,6 +42,7 @@
               </fg-input>
             </div>
           </div>
+        {{ detalles }}
           <hr>
         <detalle-contrato :detalles="detalles" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
         <div class="row">
@@ -58,8 +59,6 @@
 </template>
 <script>
   // TODO: agregar columna de idDetalleContrato para poder borra solo un detalle
-  // TODO: corregir error en  postContratos porque siepre termina con el .error la promesa
-  // TODO: corregir en el modificar el contrato la parte de los detalles de contrato que da error el detalle.forEach
   // TODO: agrefar el nombre de producto en vez del idProducto
   import api from 'src/api/services/contratosServices'
   import DetalleContrato from './DetalleContrato.vue'
@@ -123,13 +122,8 @@
             fechaFirma: this.contrato.fechaFirma,
             fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
             fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
-            /*
-            cantidad: this.contrato.cantidad,
-            precioPorUnidad: this.contrato.precioPorUnidad,
-            idProducto: this.contrato.idProducto
-            */
           }
-          api.editarContratoFull(this, this.contrat, this.detalle).then(res => {
+          api.editarContratoFull(this, this.contrat, this.detalles).then(res => {
             if (res) {
               alert('Contrato modificado con exito')
               this.$parent.current = 'UsersList'
