@@ -16,7 +16,7 @@ import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
-import Recorridos from 'src/components/Dashboard/Views/Recorridos.vue'
+import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 
 const routes = [
   {
@@ -27,7 +27,7 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: DashboardLayout,
-    redirect: '/admin/recorridos',
+    redirect: '/admin/planificacion',
     children: [
       {
         path: 'overview',
@@ -50,9 +50,9 @@ const routes = [
         component: Icons
       },
       {
-        path: 'recorridos',
-        name: 'Recorridos',
-        component: Recorridos
+        path: 'planificacion',
+        name: 'Planificacion',
+        component: Planificacion
       },
       {
         path: 'typography',

@@ -4,9 +4,9 @@ const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
     {
-      name: 'Recorridos',
+      name: 'Planificacion',
       icon: 'ti-map-alt',
-      path: '/admin/recorridos'
+      path: '/admin/planificacion'
     },
     {
       name: 'Reportes',

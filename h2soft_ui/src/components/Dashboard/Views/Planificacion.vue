@@ -21,8 +21,8 @@
 </template>
 <script>
   // TODO: poner los botones en cada componente
-  import RecorridosList from './Recorridos/RecorridosList.vue'
-  import NewRecorridoForm from './Recorridos/NewRecorridoForm.vue'
+  import RecorridosList from './Planificacion/RecorridosList.vue'
+  import NewRecorridoForm from './Planificacion/NewRecorridoForm.vue'
 
   export default {
     components: {

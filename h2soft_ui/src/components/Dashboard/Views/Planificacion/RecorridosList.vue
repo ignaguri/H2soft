@@ -39,7 +39,7 @@
     data () {
       return {
         table1: {
-          title: 'Recorridos',
+          title: 'Planificacion',
           subTitle: 'Lista de recorridos programados',
           columns: [...table1Columns],
           data: []
