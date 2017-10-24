@@ -5,7 +5,7 @@ const SidebarStore = {
   sidebarLinks: [
     {
       name: 'Recorridos',
-      icon: 'ti-map-alt',
+      icon: 'ti-direction-alt',
       path: '/admin/recorridos'
     },
     {
@@ -19,8 +19,8 @@ const SidebarStore = {
       path: '/admin/stats'
     },
     {
-      name: 'Insumos',
-      icon: 'ti-package',
+      name: 'Bidones y Dispensers',
+      icon: 'ti-paint-bucket',
       path: '/admin/table-list'
     },
     {
@@ -29,7 +29,7 @@ const SidebarStore = {
       path: '/admin/typography'
     },
     {
-      name: 'Facturación',
+      name: 'Ingresos',
       icon: 'ti-money',
       path: '/admin/icons'
     },

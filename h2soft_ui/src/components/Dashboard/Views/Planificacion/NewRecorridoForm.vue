@@ -140,7 +140,7 @@
         recorridos: {},
         idRecorrido: null,
         table1: {
-          title: 'Planificacion planificados',
+          title: 'Recorridos planificados',
           columns: [],
           data: []
         }
@@ -236,7 +236,7 @@
       },
       cargarRecorridos () {
         if (this.radioValue === 'planificados') {
-          this.table1.title = 'Planificacion planificados'
+          this.table1.title = 'Recorridos planificados'
           this.table1.columns = ['Recorrido', 'Objetivo', 'Cliente', 'Día', 'Turno', 'Frecuencia', 'Temporada']
           this.table1.data = []
           api.getRecorridosFull(this).then(rec => {

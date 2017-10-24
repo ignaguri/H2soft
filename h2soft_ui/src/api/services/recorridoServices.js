@@ -146,6 +146,7 @@ export default {
     let res = {}
     res.detalleRecorrido = info.detalleRecorrido
     res.recorrido = info.recorrido
+    res.orden = info.orden
     return context.$http.get(API_URL + 'objetivos-x-cliente/' + info.objetivo, authHeader)
       .then(objetivo => {
         res.objetivo = objetivo.body.nombre
@@ -198,7 +199,7 @@ export default {
       .then(obj => {
         let idObjetivo = obj.body.data[0].idObjetivosXCliente
         if (idObjetivo !== undefined) {
-          return context.$http.delete(API_URL + 'detalle-recorrido' + '/?idObjetivo=' + idObjetivo + '?idRecorrido=' + recorrido, authHeader)
+          return context.$http.delete(API_URL + 'detalle-recorrido' + '/?idObjetivo=' + idObjetivo + '&idRecorrido=' + recorrido, authHeader)
         } else {
           console.log('No se encontró el id del objetivo buscado')
           return false
