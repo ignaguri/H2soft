@@ -12,10 +12,10 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 // import Typography from 'src/components/Dashboard/Views/Typography.vue'
 // import TableList from 'src/components/Dashboard/Views/TableList.vue'
 import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
-import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
+import Firma from 'src/components/Dashboard/Views/Firma.vue'
 
 const routes = [
   {
@@ -72,6 +72,11 @@ const routes = [
         path: 'usuarios',
         name: 'Gestion de usuarios',
         component: Usuarios
+      },
+      {
+        path: 'firma',
+        name: 'firma remito',
+        component: Firma
       }
     ]
   },
