@@ -176,6 +176,7 @@
             if (resp) {
               alert('recorrido insertado con éxito')
               this.cargarRecorridos()
+              this.cargarComboRecorridos()
               this.limpiarCampos()
             //  this.$parent.isRecorridoList = true
             } else {
@@ -221,6 +222,9 @@
         api.getClientes(this).then(r => {
           this.clientes = r
         })
+        this.cargarComboRecorridos()
+      },
+      cargarComboRecorridos () {
         api.getRecorridosFull(this).then(r => {
           this.recorridos = r
         })
@@ -259,7 +263,7 @@
           })
         } else {
           this.table1.title = 'Objetivos sin planificar'
-          this.table1.columns = ['Objetivo', 'Direccion', 'Localidad', 'Cliente']
+          this.table1.columns = ['Cliente', 'Objetivo', 'Direccion', 'Localidad']
           this.table1.data = []
           api.getObjetivosSinPlanificar(this)
             .then(det => {

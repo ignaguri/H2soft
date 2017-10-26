@@ -24,12 +24,12 @@ const SidebarStore = {
       path: '/admin/table-list'
     },
     {
-      name: 'Gastos',
+      name: 'Ingresos y Gastos',
       icon: 'ti-shopping-cart',
       path: '/admin/typography'
     },
     {
-      name: 'Ingresos',
+      name: 'Facturación',
       icon: 'ti-money',
       path: '/admin/icons'
     },

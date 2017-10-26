@@ -1,5 +1,6 @@
 const { authenticate } = require('feathers-authentication').hooks;
 const ordenarObjetivos = require('../../hooks/ordenar-objetivos');
+const verificarExistencia = require('../../hooks/verificarExistencia');
 
 module.exports = {
   before: {
@@ -9,7 +10,7 @@ module.exports = {
     create: [],
     update: [],
     patch: [],
-    remove: []
+    remove: [verificarExistencia()]
   },
 
   after: {

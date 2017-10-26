@@ -7,7 +7,7 @@
         </paper-table>
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient">
-            Nuevo Recorrido
+            Planificar Recorrido
           </button>
         </div>
         <br>

@@ -71,7 +71,7 @@
       return {
         verBotonIniciar: true,
         verBotonSuspender: false,
-        botonEstado: 'Iniciarr',
+        botonEstado: 'Iniciar',
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',

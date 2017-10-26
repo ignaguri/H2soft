@@ -47,7 +47,7 @@ const routes = [
       },
       {
         path: 'icons',
-        name: 'Ingresos',
+        name: 'Ingresos y Gastos',
         component: WorkInProgress
       },
       {
@@ -62,7 +62,7 @@ const routes = [
       },
       {
         path: 'typography',
-        name: 'Gastos',
+        name: 'Facturación',
         component: WorkInProgress
       },
       {

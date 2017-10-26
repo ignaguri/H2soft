@@ -73,6 +73,7 @@ export default {
       .then(r => { return r.body })
   },
   getRecorridosFull (context) {
+    // TODO: guardar dia, freq, turno y temp en una variable y comparar con eso
     let info = {}
     let total = []
     let promesas = []

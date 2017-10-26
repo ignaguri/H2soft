@@ -9,7 +9,7 @@
       <div class="col-md-11">
         <div class="text-center">
           <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeLista" v-if="verDetalle">
-            Atrás
+            Volver
           </button>
         </div>
         <div class="clearfix"></div>
