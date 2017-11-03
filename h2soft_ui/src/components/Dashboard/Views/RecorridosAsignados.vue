@@ -3,7 +3,7 @@
     <div class="row">
       <recorrido-list v-if="this.verLista"></recorrido-list>
       <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" v-bind:estado="estado"></detalle-recorrido>
-      <remito v-if="this.verRemito" v-bind:id="objetivoId" ></remito>
+      <remito v-if="this.verRemito" v-bind:idObjetivo="objetivoId" ></remito>
     </div>
     <div class="row">
       <div class="col-md-11">

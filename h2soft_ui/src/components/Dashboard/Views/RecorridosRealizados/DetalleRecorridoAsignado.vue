@@ -132,7 +132,7 @@
       },
       recorridoCambioEstado () {
         console.log('llego al cambio de estado', this.estado)
-        if (this.estado === 'Asignado') {
+        if (this.estado === 'Nuevo') {
           apiEstados.iniciarRecorrido(this, this.id)
             .then(resObj => {
               this.botonEstado = 'Finalizar'

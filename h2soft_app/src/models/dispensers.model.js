@@ -19,12 +19,12 @@ module.exports = function (app) {
       type: Sequelize.STRING(45),
       allowNull: true
     },
-    idCliente: {
+    idObjetivo: {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'clientes',
-        key: 'idClientes'
+        model: 'objetivos-x-cliente',
+        key: 'idObjetivosXCliente'
       }
     }
   }, {
