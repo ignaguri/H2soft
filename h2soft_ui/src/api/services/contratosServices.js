@@ -12,7 +12,7 @@ export default {
     return context.$http.get('http://localhost:3030/contratos', authHeader)
   },
   postContratos (context, contrato, detalle) {
-   // alert('llegue al post contratos con:' + JSON.stringify(contrato) + '\n' + JSON.stringify(detalle))
+    // console.log('llegue al post contratos con:' + JSON.stringify(contrato) + '\n' + JSON.stringify(detalle))
     return context.$http.post('http://localhost:3030/contratos', contrato, authHeader)
       .then(contratoInsertado => {
         // alert('inserte el cliente')
@@ -24,10 +24,10 @@ export default {
           promesas.push(context.$http.post('http://localhost:3030/detalles-contrato', detalle, authHeader))
         })
         return Promise.all(promesas)
-        alert('llegue al detalle con:' + JSON.stringify(promesas))
+        // alert('llegue al detalle con:' + JSON.stringify(promesas))
       })
       .then(detalleInsertado => {
-        alert('detalle insertado:' + JSON.stringify(detalleInsertado))
+        // alert('Se guardo el nuevo Contratp insertado:' + JSON.stringify(detalleInsertado))
         return true
       })
       .catch(error => {
@@ -50,8 +50,8 @@ export default {
     return context.$http.get('http://localhost:3030/contratos/?idContratos=' + idContrato, authHeader)
   },
   getDetalleContrato (context, idContrato) {
-    return context.$http.get('http://localhost:3030/detalles-contrato/?idContrato=' + idContrato, authHeader)
-      .then(res => { return res.body.data })
+    return context.$http.get('http://localhost:3030/detalles-contrato/' + idContrato, authHeader)
+      .then(res => { return res.body })
   },
   getContratoFull (context, id) {
     let info = {}
@@ -69,27 +69,31 @@ export default {
         return false
       })
   },
-  editarContratoFull (context, contrato, detalle) {
+  editarContratoFull3 (context, contrato, detalle, id) {
     console.log('llegue a patch con: \n' + JSON.stringify(contrato) + '\n' + JSON.stringify(detalle))
-    return context.$http.patch('http://localhost:3030/contratos/' + contrato.id, contrato, authHeader)
+    return context.$http.delete('http://localhost:3030/detalles-contrato/?idContrato=' + contrato.id, authHeader)
+      .then(contElim => {
+        return context.$http.patch('http://localhost:3030/contratos/' + contrato.id, contrato, authHeader)
+      })
       .then(contratoModificado => {
-        alert('cpntrato solo modificado')
         detalle.forEach(det => {
           det.idContrato = contratoModificado.body.idContratos
+          det.id = ''
         })
         let promesas = []
         console.log('El detalle es: ' + detalle + ' *** ' + JSON.stringify(detalle))
         detalle.forEach(det => {
-          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato/?idContrato=' + contrato.id, det, authHeader))
+          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato/', det, authHeader))
         })
         return Promise.all(promesas)
       })
       .then(detalle => {
-        alert('update (con detalle) ok' + '\n' + JSON.stringify(detalle))
+        // alert('update (con detalle) ok' + '\n' + JSON.stringify(detalle))
         return true
       })
       .catch(error => {
-        alert(JSON.stringify(error) + '\n' + error)
+        alert('error: ' + JSON.stringify(error) + '\n' + error)
+        console.log('error: ' + JSON.stringify(error) + '\n' + error)
         return false
       })
   }

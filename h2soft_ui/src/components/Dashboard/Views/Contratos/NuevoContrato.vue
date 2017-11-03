@@ -27,7 +27,7 @@
           <div class="row">
             <div class="col-md-6">
               <fg-input type="date"
-                        label="Fecha de vigencia desde"
+                        label="Fecha vigencia desde"
                         placeholder="Fecha"
                         v-model="contrato.fechaVigenciaDesde"
                         required>
@@ -42,9 +42,8 @@
               </fg-input>
             </div>
           </div>
-        {{ detalles }}
           <hr>
-        <detalle-contrato :detalles="detalles" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
+        <detalle-contrato :detalles="detalles" :edit="edit" :idContrato="id" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
         <div class="row">
         <div class="text-center">
              <button type="submit"  class="btn btn-success btn-fill btn-wd">
@@ -55,6 +54,8 @@
         </div>
       </form>
     </div>
+    {{ edit }}
+    {{ id }}
   </div>
 </template>
 <script>
@@ -99,7 +100,7 @@
           alert('Debe agregar al menos un detalle')
           return
         }
-        if (this.id === 0 && this.edit === false) {
+        if (this.id === 0 && !this.edit) {
           this.contrat = {
             idCliente: this.contrato.idCliente,
             fechaFirma: this.contrato.fechaFirma,
@@ -123,7 +124,7 @@
             fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
             fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
           }
-          api.editarContratoFull(this, this.contrat, this.detalles).then(res => {
+          api.editarContratoFull3(this, this.contrat, this.detalles, this.id).then(res => {
             if (res) {
               alert('Contrato modificado con exito')
               this.$parent.current = 'UsersList'
@@ -134,7 +135,6 @@
             }
           })
         }
-        this.$parent.current = 'ContratosLista'
         this.$parent.isContratosList = true
       },
       getClientes () {
@@ -149,35 +149,24 @@
             this.productos = res
           })
       },
-      /*
-      cargarContratos () {
-        api.getContrato(this, this.id)
-          .then(res => {
-            res = res.body.data[0]
-            this.contrato.idCliente = res.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = res.fechaFirma
-            this.contrato.fechaVigenciaDesde = res.fechaVigenciaDesde
-            this.contrato.fechaVigenciaHasta = res.fechaVigenciaHasta
-          })
-      },
-      */
       captarDetalle (det) {
         this.detalles.push(det)
-        alert('captar detale' + JSON.stringify(det))
+       // alert('captar detale' + JSON.stringify(det))
       },
       borrarDetalle (det) {
-        this.detalles = this.detalles.filter(dets => dets.idProducto !== parseInt(det))
+        this.detalles = this.detalles.filter(dets => dets.idDetallesContrato !== parseInt(det))
       },
       cargarContratos2 () {
         if (this.id !== 0 && this.edit) {
           api.getContratoFull(this, this.id).then(c => {
            // alert('llegue el full con: ' + JSON.stringify(c))
             this.contrato.idCliente = c.contrato.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = c.contrato.fechaFirma
-            this.contrato.fechaVigenciaDesde = c.contrato.fechaVigenciaDesde
-            this.contrato.fechaVigenciaHasta = c.contrato.fechaVigenciaHasta
+            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString()
+            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString()
+            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString()
             c.detalle.forEach(dc => {
               this.detalles.push({
+                idDetallesContrato: dc.idDetallesContrato,
                 idProducto: dc.idProducto,
                 cantidadMaxima: dc.cantidadMaxima,
                 precioPorUnidad: dc.precioPorUnidad

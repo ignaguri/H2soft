@@ -24,14 +24,6 @@
             </option>
           </select>
         </div>
-        <div class="col-md-6">
-          <fg-input type="number"
-                    label="idProducto"
-                    placeholder="id"
-                    v-model="detalleContrato.idProducto"
-                    required>
-          </fg-input>
-        </div>
       </div>
       <div class="row">
         <div class="col-md-6">
@@ -50,13 +42,13 @@
                     required>
           </fg-input>
         </div>
-        {{ detalleContrato }}
       </div>
       <div slot="modal-footer" class="modal-footer">
         <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
         <button type="button" class="btn btn-success" @click="showCustomModal = ok()">Guardar</button>
       </div>
     </modal>
+    {{ idContrato }}
     </div>
 </template>
 <script>
@@ -64,7 +56,7 @@
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['producto', 'Cantidad', 'Precio']
+  const tableColumns = ['Nro', 'producto', 'Cantidad', 'Precio']
 
   export default {
     components: {
@@ -75,6 +67,7 @@
       return {
         showCustomModal: false,
         detalleContrato: {
+          idDetallesContrato: '',
           idProducto: '',
           cantidadMaxima: '',
           precioPorUnidad: ''
@@ -82,7 +75,7 @@
         productoss: {},
         table1: {
           title: 'Detalle de Contrato',
-          subTitle: 'Lista de restricciones por contrato',
+          subTitle: 'Lista de clausulas por contrato',
           columns: [...tableColumns],
           data: []
         }
@@ -91,7 +84,7 @@
     props: {
       idContrato: {
         type: Number,
-        default: 5
+        default: 0
       },
       edit: {
         type: Boolean,
@@ -102,7 +95,7 @@
       }
     },
     watch: {
-      detalles: function () {
+      detalles: function changer () {
         this.cargarDetalles()
       }
     },
@@ -111,12 +104,16 @@
       this.getProductos()
     },
     methods: {
+      /*
       cargarDetalles () {
         if (this.edit) {
+          alert('1')
           api.getDetalleContrato(this, this.idContrato).then(res => {
             res.forEach(det => {
               this.table1.data.push({
-                producto: det.idProducto,
+                id: det.idDetallesContrato,
+                producto: this.cargarProducto(det.idProducto),
+                // producto: det.idProducto,
                 cantidad: det.cantidadMaxima,
                 precio: det.precioPorUnidad
               })
@@ -125,15 +122,29 @@
             alert('error:' + JSON.stringify(error))
           })
         } else {
+          alert('2')
           this.table1.data = []
           this.detalles.forEach(det => {
             this.table1.data.push({
+              id: det.idDetallesContrato,
               producto: det.idProducto,
               cantidad: det.cantidadMaxima,
               precio: det.precioPorUnidad
             })
           })
         }
+      }
+      */
+      cargarDetalles () {
+        this.table1.data = []
+        this.detalles.forEach(det => {
+          this.table1.data.push({
+            nro: det.idDetallesContrato,
+            producto: this.cargarProducto(det.idProducto),
+            cantidad: det.cantidadMaxima,
+            precio: det.precioPorUnidad
+          })
+        })
       },
       getProductos () {
         api.getProductosContratos(this)
@@ -151,9 +162,17 @@
           alert('Debe completar todos los campos')
           return true
         }
-        this.$emit('nuevo_detalle', { idProducto: this.detalleContrato.idProducto, cantidadMaxima: this.detalleContrato.cantidadMaxima, precioPorUnidad: this.detalleContrato.precioPorUnidad })
-        alert('se agrego un nuevo detalle')
+        this.$emit('nuevo_detalle', { id: this.detalleContrato.idDetallesContrato, idProducto: this.detalleContrato.idProducto, cantidadMaxima: this.detalleContrato.cantidadMaxima, precioPorUnidad: this.detalleContrato.precioPorUnidad })
+        alert('Se agrego un nuevo detalle')
         return false
+      },
+      cargarProducto (idProd) {
+        for (let p = 0, len = this.productoss
+          .length; p < len; p++) {
+          if (this.productoss[p].idProductos === idProd) {
+            return this.productoss[p].nombre
+          }
+        }
       }
     }
   }
