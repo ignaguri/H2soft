@@ -94,7 +94,7 @@
     },
     methods: {
       cargarRecorridoAsignado () {
-        api.getDetalleRecorridoAsignado(this, this.id)
+        api.getDetallesRecorridoAsignado(this, this.id)
           .then(resDet => {
             // console.log(resDet)
             resDet.body.data.forEach(det => {
@@ -103,7 +103,8 @@
                 resObj = resObj.body.data[0]
                 // console.log(det)
                 this.table1.data.push({
-                  nro: det.idObjetivo,
+                  // nro: det.idObjetivo,
+                  nro: det.idDetalleRecorridoHistorico,
                   orden: det.orden,
                   objetivo: resObj.nombre,
                   horario: '',
@@ -125,7 +126,8 @@
       },
       verdetalle (e) {
         let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
-        this.$parent.objetivoId = id
+        // this.$parent.objetivoId = id
+        this.$parent.detalleRecorridoAsignadoId = id
         this.$parent.verRemito = true
         this.$parent.verDetalle = false
         this.$parent.verLista = false
@@ -149,7 +151,7 @@
       },
       setearEstadoActual () {
         switch (this.estado) {
-          case 'Asignado':
+          case 'Nuevo':
             this.botonEstado = 'Iniciar'
             break
           case 'En proceso':

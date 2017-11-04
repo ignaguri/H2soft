@@ -53,9 +53,9 @@
       <div class="col-md-3">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="">
-            Firma
+            Firmar
           </button>
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="guardarRemito">
+          <button type="button" class="btn btn-success btn-fill btn-wd" @click="guardarRemito">
             Guardar
           </button>
         </div>
@@ -64,8 +64,8 @@
     <div class="row">
       <div class="col-md-3">
         <div class="text-center">
-          <button type="button" class="btn btn-danger btn-fill btn-wd" v-if="this.$parent.verRemito" @click="seeDetalle">
-            Atras
+          <button type="button" class="btn btn-fill btn-wd" v-if="this.$parent.verRemito" @click="seeDetalle">
+            Volver
           </button>
         </div>
       </div>
@@ -75,6 +75,7 @@
 <script>
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiDispensers from 'src/api/services/dispensersServices'
+  import apiRemito from 'src/api/services/remitoServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import noti from 'src/notificationsService/notificationsService.js'
   import sele from 'vue-strap/src/Select.vue'
@@ -93,7 +94,8 @@
         },
         dispensers: [],
         dispensersDelObjetivo: [],
-        objetivo: 'Objetivo 111 ',
+        idObjetivo: '',
+        objetivo: '',
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -103,43 +105,71 @@
       }
     },
     props: {
-      idObjetivo: String
+      IdDetalleRecorridoAsignado: String
     },
     mounted () {
-      this.cargarDispensersDelObjetivo()
-      this.cargarDispensers()
+      this.cargarDetalleRecorridoHistorico()
     },
     methods: {
-      cargarRecorridoAsignado () {
-        api.getDetalleRecorridoAsignado(this, this.id)
+      cargarDetalleRecorridoHistorico () {
+        api.getDetalleRecorridoAsignado(this, this.IdDetalleRecorridoAsignado)
           .then(resDet => {
-            // console.log(resDet)
-            resDet.body.data.forEach(det => {
-              api.getObjetivoXId(this, det.idObjetivo)
-                .then(resObj => {
-                  resObj = resObj.body.data[0]
-                  console.log(det)
-                  this.table1.data.push({
-                    nro: det.idObjetivo,
-                    orden: det.orden,
-                    objetivo: resObj.nombre,
-                    horario: '',
-                    estado: det.entregado
-                  })
-                })
-            })
+            resDet = resDet.body.data[0]
+            api.getObjetivoXId(this, resDet.idObjetivo)
+              .then(obj => {
+                obj = obj.body.data[0]
+                this.idObjetivo = resDet.idObjetivo
+                this.objetivo = obj.nombre
+              })
+            this.cargarDispensers()
+            this.cargarDispensersDelObjetivo(resDet.idObjetivo)
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
           })
       },
       guardarRemito () {
-        console.log(this.dispensersColocados, this.dispensersRetirados)
-        this.dispensersColocados.forEach(disC => {
-          apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
-        })
-        this.dispensersRetirados.forEach(disR => {
-          apiDispensers.borrarObjetivoDeDispenser(this, disR)
-        })
+        // guardar Remito
+        var remito = {
+          'fecha': Date.now(),
+          'idEmpleado': 1,
+          'firma': 'firma',
+          'firmaConforme': true
+        }
+        apiRemito.nuevoRemito(this, remito)
+          .then(rem => {
+            console.log(rem)
+            rem = rem.body
+            // inserto el detalle del remito para los bidones
+            var detalleRemitoBidones = {
+              'idRemito': rem.idRemito,
+              'producto': 1, // bidones
+              'cantidad': this.remito.bidonesDejo
+            }
+            apiRemito.nuevoDetalleDeRemito(this, detalleRemitoBidones)
+            // actualizo el detalle del recorrido historico
+            var detalle = {
+              'idDetalleRecorridoHistorico': this.IdDetalleRecorridoAsignado,
+              'idRemito': rem.idRemito,
+              'entregado': true
+            }
+            api.editarDetalleRecorridoHistorico(this, detalle)
+            // acualizo los dispensers e inserto el detalle del remito para los dispensers dejados
+            // Guardo los dispensers colocados
+            this.dispensersColocados.forEach(disC => {
+              console.log(disC)
+              var detalleRemitoDispenser = {
+                'idRemito': rem.idRemito,
+                'idDispensers': disC
+              }
+              apiRemito.nuevoDetalleDeRemito(this, detalleRemitoDispenser)
+              apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
+            })
+            // Guardo los dispensers retirados
+            this.dispensersRetirados.forEach(disR => {
+              apiDispensers.borrarObjetivoDeDispenser(this, disR)
+            })
+          })
+        // Guardar firma
       },
       cargarRecorrido () {
         api.getRecorrido(this, this.id)
@@ -147,8 +177,8 @@
 
           })
       },
-      cargarDispensersDelObjetivo () {
-        apiDispensers.getDispensersXObjetivo(this, this.idObjetivo)
+      cargarDispensersDelObjetivo (idObjetivo) {
+        apiDispensers.getDispensersXObjetivo(this, idObjetivo)
           .then(res => {
             console.log(res)
             this.dispensersDelObjetivo = res

@@ -3,12 +3,12 @@
     <div class="row">
       <recorrido-list v-if="this.verLista"></recorrido-list>
       <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" v-bind:estado="estado"></detalle-recorrido>
-      <remito v-if="this.verRemito" v-bind:idObjetivo="objetivoId" ></remito>
+      <remito v-if="this.verRemito" v-bind:IdDetalleRecorridoAsignado="detalleRecorridoAsignadoId" ></remito>
     </div>
     <div class="row">
       <div class="col-md-11">
         <div class="text-center">
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeLista" v-if="verDetalle">
+          <button type="button" class="btn btn-fill btn-wd" @click="seeLista" v-if="verDetalle">
             Volver
           </button>
         </div>
@@ -33,7 +33,8 @@
         verDetalle: false,
         verRemito: false,
         recorridoAsignadoId: 0,
-        objetivoId: 0,
+        detalleRecorridoAsignadoId: 0,
+        // objetivoId: 0,
         dia: '',
         turno: '',
         temporada: '',
@@ -46,7 +47,8 @@
         this.verLista = true
         this.verDetalle = false
         this.recorridoAsignadoId = 0
-        this.objetivoId = 0
+        this.detalleRecorridoAsignadoId = 0
+        // this.objetivoId = 0
         this.dia = ''
         this.turno = ''
         this.temporada = ''

@@ -5,13 +5,13 @@
       <users-list v-if="this.isUserList"></users-list>
     </div>
     <div class="row">
-      <div class="col-md-11">
+      <div class="col-md-12">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="addUser" v-show="isUserList">
             Agregar Usuario
           </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList" v-show="!isUserList">
-            Cancelar
+          <button type="button" class="btn btn-fill btn-wd" @click="seeList" v-show="!isUserList">
+            Volver
           </button>
         </div>
         <div class="clearfix"></div>
