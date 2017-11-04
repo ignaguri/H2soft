@@ -47,8 +47,6 @@
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
   const tableColumns = ['Nombre', 'Direccion', 'Localidad']
-  // TODO: guardar lista en localStorage para ahorrar llamados a la api
-  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
     components: {
       PaperTable,

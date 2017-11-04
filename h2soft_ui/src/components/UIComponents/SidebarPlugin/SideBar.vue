@@ -7,11 +7,11 @@
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
-        <a href="" class="simple-text">
+        <a href="#" class="simple-text">
             <div class="logo-img">
                 <img src="static/img/h2s-logo3.png" alt="">
             </div>
-          H2Soft Dashboard
+          {{ user }}
         </a>
       </div>
       <slot>
@@ -91,6 +91,13 @@
        */
       arrowMovePx () {
         return this.linkHeight * this.activeLinkIndex
+      },
+      user () {
+        if (JSON.parse(sessionStorage.getItem('user')).nombre) {
+          return JSON.parse(sessionStorage.getItem('user')).nombre + ' ' + JSON.parse(sessionStorage.getItem('user')).apellido
+        } else {
+          return JSON.parse(sessionStorage.getItem('user')).email
+        }
       }
     },
     data () {

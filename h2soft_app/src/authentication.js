@@ -23,6 +23,18 @@ module.exports = function () {
       remove: [
         authentication.hooks.authenticate('jwt')
       ]
+    },
+    after: {
+      create: [
+        hook => {
+          hook.result.user = {
+            id: hook.params.users.id,
+            email: hook.params.users.email,
+            idEmpleado: hook.params.users.idEmpleado,
+            idRol: hook.params.users.idRol
+          }
+        }
+      ]
     }
   });
 };

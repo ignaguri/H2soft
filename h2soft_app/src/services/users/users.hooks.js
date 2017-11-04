@@ -19,7 +19,7 @@ function includePoster() {
       switch (hook.type) {
         case 'before':
           hook.params.sequelize = Object.assign(association, { raw: false });
-          return Promise.resolve(hook);          
+          return Promise.resolve(hook);
           break;
 
       }

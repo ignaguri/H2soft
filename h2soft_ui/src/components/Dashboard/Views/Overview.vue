@@ -2,7 +2,7 @@
   <div>
 
     <!--Stats cards-->
-<!--    <div class="row">
+    <div class="row">
       <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
         <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
@@ -17,12 +17,12 @@
           </div>
         </stats-card>
       </div>
-    </div>-->
+    </div>
 
     <!--Charts-->
     <div class="row">
 
-      <div class="col-xs-12">
+<!--      <div class="col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options">
           <h4 class="title" slot="title">Users behavior</h4>
           <span slot="subTitle"> 24 Hours performance</span>
@@ -34,14 +34,14 @@
             <i class="fa fa-circle text-warning"></i> Click Second Time
           </div>
         </chart-card>
-      </div>
+      </div>-->
 
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="preferencesChart.data"  chart-type="Pie">
-          <h4 class="title" slot="title">Email Statistics</h4>
-          <span slot="subTitle"> Last campaign performance</span>
+          <h4 class="title" slot="title"> Estado de los Repartos</h4>
+          <span slot="subTitle">Último mes</span>
           <span slot="footer">
-            <i class="ti-timer"></i> Campaign set 2 days ago</span>
+            <i class="ti-timer"></i> Desde {{ fechaLie }}</span>
           <div slot="legend">
             <i class="fa fa-circle text-info"></i> Open
             <i class="fa fa-circle text-danger"></i> Bounce
@@ -81,37 +81,38 @@
      */
     data () {
       return {
+        fechaLie: Date(),
         statsCards: [
           {
             type: 'warning',
             icon: 'ti-server',
-            title: 'Capacity',
+            title: 'Base de datos',
             value: '105GB',
-            footerText: 'Updated now',
+            footerText: 'Actualizado recién',
             footerIcon: 'ti-reload'
           },
           {
             type: 'success',
             icon: 'ti-wallet',
-            title: 'Revenue',
+            title: 'Gastos',
             value: '$1,345',
-            footerText: 'Last day',
+            footerText: 'Ayer',
             footerIcon: 'ti-calendar'
           },
           {
             type: 'danger',
             icon: 'ti-pulse',
-            title: 'Errors',
+            title: 'Errores',
             value: '23',
-            footerText: 'In the last hour',
+            footerText: 'En la última hora',
             footerIcon: 'ti-timer'
           },
           {
             type: 'info',
-            icon: 'ti-twitter-alt',
-            title: 'Followers',
-            value: '+45',
-            footerText: 'Updated now',
+            icon: 'ti-location-arrow',
+            title: 'Repartos',
+            value: '4',
+            footerText: 'Actualizado recién',
             footerIcon: 'ti-reload'
           }
         ],
