@@ -13,7 +13,6 @@ export default {
   newUsuario (context, usuario) {
     return context.$http.post(API_URL + 'users', usuario, authHeader)
       .then(user => {
-        console.log('inserté el user \n' + JSON.stringify(user))
         return true
       })
       .catch(error => {
@@ -31,7 +30,6 @@ export default {
   editUsuario (context, usuario) {
     return context.$http.patch(API_URL + 'users/' + usuario.id, usuario, authHeader)
       .then(user => {
-        console.log('edité el user \n' + JSON.stringify(user))
         return true
       })
       .catch(error => {

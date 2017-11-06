@@ -36,27 +36,53 @@
       }
     },
     mounted () {
-      this.cargarDias()
-      this.cargarTurnos()
-      this.cargarTemporadas()
-      this.cargarEstadosRecorrido()
-      this.cargarRecorridosAsignados()
+      apiDias.getDias(this).then(res => {
+        this.dias = res
+        apiTurnos.getTurnos(this).then(res => {
+          this.turnos = res
+          apiTemporadas.getTemporadas(this).then(res => {
+            this.temporadas = res
+            apiEstados.getEstados(this).then(res => {
+              this.estados = res
+              this.cargarRecorridosAsignados()
+            })
+          })
+        })
+      }, error => {
+        console.log('error al cargar los dias' + error)
+      })
+//      this.cargarDias()
+//      this.cargarTurnos()
+//      this.cargarTemporadas()
+//      this.cargarEstadosRecorrido()
+//      this.cargarRecorridosAsignados()
     },
     methods: {
       cargarRecorridosAsignados () {
-        api.getRecorridosAsignadosXEmpleado(this, 1) // TODO: sacar el hardcode del empleado 1
+        var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
+        if (idEmpleado === null) {
+          this.table1.subTitle = 'Empleado no asignado al usuario logueado'
+          return
+        }
+        api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
           .then(resRxE => {
             resRxE.body.data.forEach(RxE => {
               // console.log(RxE)
               var d = new Date(RxE.fechaAsignacion)
-              this.table1.data.push({
-                nro: RxE.idRecorridosHistoricos,
-                día: this.getDia(RxE.idDia),
-                turno: this.getTurno(RxE.idTurno),
-                fecha: d.getUTCDate() + '/' + d.getMonth() + '/' + d.getFullYear(),
-                temp: this.getTemporada(RxE.idTemporada),
-                estado: RxE.idEstado
-              })
+              if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
+                this.table1.data.push({
+                  nro: RxE.idRecorridosHistoricos,
+                  día: this.getDia(RxE.idDia),
+                  turno: this.getTurno(RxE.idTurno),
+                  fecha: d.toLocaleDateString(), // d.getDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear(),
+                  temp: this.getTemporada(RxE.idTemporada),
+                  estado: RxE.idEstado
+                })
+              }
+              if (this.table1.data[0] === undefined) {
+                this.table1.subTitle = 'No hay recorridos asignados para el día de hoy'
+                // alert('No hay recorridos asignados para el día de hoy')
+              }
             })
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
@@ -73,7 +99,7 @@
             this.$parent.dia = this.getDia(res.idDia)
             this.$parent.turno = this.getTurno(res.idTurno)
             var d = new Date(res.fechaAsignacion)
-            this.$parent.fecha = d.getUTCDate() + '/' + d.getMonth() + '/' + d.getFullYear()
+            this.$parent.fecha = d.toLocaleDateString() // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
             // this.$parent.idEstado = res.idEstado

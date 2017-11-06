@@ -4,7 +4,7 @@ import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 import Landing from '../components/GeneralViews/Landing.vue'
 
 // Admin pages
-import Overview from 'src/components/Dashboard/Views/Overview.vue'
+// import Overview from 'src/components/Dashboard/Views/Overview.vue'
 // import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 // import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 // import Icons from 'src/components/Dashboard/Views/Icons.vue'
@@ -18,6 +18,7 @@ import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
+import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
 
 const routes = [
   {
@@ -38,7 +39,7 @@ const routes = [
       {
         path: 'reportes',
         name: 'Reportes',
-        component: Overview
+        component: Reporte
       },
       {
         path: 'notifications',
