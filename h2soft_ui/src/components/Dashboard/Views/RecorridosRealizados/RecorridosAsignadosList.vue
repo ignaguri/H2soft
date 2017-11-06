@@ -59,7 +59,12 @@
     },
     methods: {
       cargarRecorridosAsignados () {
-        api.getRecorridosAsignadosXEmpleado(this, 1) // TODO: sacar el hardcode del empleado 1
+        var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
+        if (idEmpleado === null) {
+          this.table1.subTitle = 'Empleado no asignado al usuario logueado'
+          return
+        }
+        api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
           .then(resRxE => {
             resRxE.body.data.forEach(RxE => {
               // console.log(RxE)

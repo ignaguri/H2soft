@@ -1,5 +1,5 @@
-// const API_URL = process.env.API_URL
-const LOGIN_URL = 'http://localhost:3030/' + 'authentication'
+const API_URL = process.env.API_URL
+const LOGIN_URL = API_URL + 'authentication'
 
 export default {
   // User object will let us check authentication status
@@ -9,10 +9,17 @@ export default {
   // Send a request to the login URL and save the returned JWT
   login (context, creds, redirect) {
     context.$http.post(LOGIN_URL, creds).then(response => {
-      sessionStorage.setItem('id_token', creds.email)
+      sessionStorage.setItem('user', JSON.stringify(response.body.user))
       sessionStorage.setItem('access_token', response.body.accessToken)
-      console.log('login', response)
       this.user.authenticated = true
+      if (response.body.user.idEmpleado) {
+        context.$http.get(API_URL + 'empleados/' + response.body.user.idEmpleado, { headers: {'Authorization': response.body.accessToken} })
+          .then(r => {
+            response.body.user.nombre = r.body.nombre
+            response.body.user.apellido = r.body.apellido
+            sessionStorage.setItem('user', JSON.stringify(response.body.user))
+          })
+      }
 
       // Redirect to a specified route
       if (redirect) {

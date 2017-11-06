@@ -62,7 +62,6 @@
         </div>
       </div>
     </div>
-
     <div class="row">
       <div class="col-md-3">
         <div class="text-center">
@@ -146,9 +145,10 @@
       },
       guardarRemito () {
         // guardar Remito
+        var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
         var remito = {
           'fecha': Date.now(),
-          'idEmpleado': 1,
+          'idEmpleado': idEmpleado,
           'firma': this.firma,
           'firmaConforme': true
         }
