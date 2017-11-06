@@ -59,8 +59,8 @@
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
+  import noti from 'src/notificationsService/notificationsService.js'
   // import Remito from './RecorridosRealizados/Remito.vue'
-  // import noti from 'src/notificationsService/notificationsService.js'
   const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Bidones']
   const dataColumns = []
   export default {
@@ -72,6 +72,7 @@
         verBotonIniciar: true,
         verBotonSuspender: false,
         botonEstado: 'Iniciar',
+        puedeFinalizar: true,
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -111,6 +112,9 @@
                   estado: det.entregado === 0 ? 1 : 4,
                   bidones: det.cantidadSugerida
                 })
+                if (det.entregado === 0) {
+                  this.puedeFinalizar = false
+                }
               })
             })
             this.setearEstadoActual()
@@ -139,14 +143,23 @@
             .then(resObj => {
               this.botonEstado = 'Finalizar'
               this.$parent.estado = 'En proceso'
+              noti.success(this)
             })
         }
         if (this.estado === 'En proceso') {
+          this.finalizarRecorrido()
+        }
+      },
+      finalizarRecorrido () {
+        if (this.puedeFinalizar === false) {
+          alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
+        } else {
           apiEstados.finalizarRecorrido(this, this.id)
-            .then(resObj => {
-              this.verBotonIniciar = false
-              this.$parent.estado = 'Finalizado'
-            })
+          .then(resObj => {
+            this.verBotonIniciar = false
+            this.$parent.estado = 'Finalizado'
+            noti.success(this)
+          })
         }
       },
       setearEstadoActual () {
@@ -167,7 +180,7 @@
         }
       },
       verRecorridoEnMapa () {
-        alert('soy el mapa')
+        alert('Ver objetivos en el mapa')
       }
     }
   }

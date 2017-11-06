@@ -14,22 +14,27 @@
         </div>
       </div>
     </div>
+    <div class="content">
+      <form name="nuevo-remito" @submit.prevent="guardarRemito">
     <div class="row">
       <div class="col-md-4 left">
         <h5>Bidones</h5>
       </div>
       <div class="col-md-4 left">
-        <fg-input type="text"
-                  label="Traidos"
-                  placeholder="Cant. de bidones"
-                  v-model="remito.bidonesDejo">
+        <fg-input type="number"
+                  min="0"
+                  label="Traidos llenos"
+                  placeholder="Cantidad de llenos"
+                  v-model="remito.bidonesDejo"
+                  required>
         </fg-input>
       </div>
       <div class="col-md-4 left">
-        <fg-input type="text"
-                  label="Retirados"
-                  placeholder="Cant. de bidones"
-                  v-model="remito.bidonesLlevo">
+        <fg-input type="number"
+                  label="Retirados vacios"
+                  placeholder="Cantidad de vacios"
+                  v-model="remito.bidonesLlevo"
+                  required>
         </fg-input>
       </div>
     </div>
@@ -50,12 +55,18 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-md-3 left">
+        <h5>Firma</h5>
+        <div class="text-center">
+          <firma></firma>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="col-md-3">
         <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="">
-            Firmar
-          </button>
-          <button type="button" class="btn btn-success btn-fill btn-wd" @click="guardarRemito">
+          <button type="submit" class="btn btn-success btn-fill btn-wd">
             Guardar
           </button>
         </div>
@@ -70,6 +81,8 @@
         </div>
       </div>
     </div>
+    </form>
+    </div>
   </div>
 </template>
 <script>
@@ -77,14 +90,17 @@
   import apiDispensers from 'src/api/services/dispensersServices'
   import apiRemito from 'src/api/services/remitoServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
-  // import noti from 'src/notificationsService/notificationsService.js'
+  // import firma from 'components/Dashboard/Views/Firma.vue'
+  import firma from '../Firma.vue'
+  import noti from 'src/notificationsService/notificationsService.js'
   import sele from 'vue-strap/src/Select.vue'
   const tableColumns = ['Nro', 'Orden', 'Objetivo']
   const dataColumns = []
   export default {
     components: {
       PaperTable,
-      sele
+      sele,
+      firma
     },
     data () {
       return {
@@ -96,6 +112,7 @@
         dispensersDelObjetivo: [],
         idObjetivo: '',
         objetivo: '',
+        firma: '',
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -132,49 +149,53 @@
         var remito = {
           'fecha': Date.now(),
           'idEmpleado': 1,
-          'firma': 'firma',
+          'firma': this.firma,
           'firmaConforme': true
         }
         apiRemito.nuevoRemito(this, remito)
           .then(rem => {
             console.log(rem)
             rem = rem.body
-            // inserto el detalle del remito para los bidones
             var detalleRemitoBidones = {
               'idRemito': rem.idRemito,
               'producto': 1, // bidones
               'cantidad': this.remito.bidonesDejo
             }
+            // inserto el detalle del remito para los bidones
             apiRemito.nuevoDetalleDeRemito(this, detalleRemitoBidones)
-            // actualizo el detalle del recorrido historico
-            var detalle = {
-              'idDetalleRecorridoHistorico': this.IdDetalleRecorridoAsignado,
-              'idRemito': rem.idRemito,
-              'entregado': true
-            }
-            api.editarDetalleRecorridoHistorico(this, detalle)
-            // acualizo los dispensers e inserto el detalle del remito para los dispensers dejados
-            // Guardo los dispensers colocados
-            this.dispensersColocados.forEach(disC => {
-              console.log(disC)
-              var detalleRemitoDispenser = {
-                'idRemito': rem.idRemito,
-                'idDispensers': disC
-              }
-              apiRemito.nuevoDetalleDeRemito(this, detalleRemitoDispenser)
-              apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
-            })
-            // Guardo los dispensers retirados
-            this.dispensersRetirados.forEach(disR => {
-              apiDispensers.borrarObjetivoDeDispenser(this, disR)
-            })
-          })
-        // Guardar firma
-      },
-      cargarRecorrido () {
-        api.getRecorrido(this, this.id)
-          .then(res => {
-
+              .then(res => {
+                var detalle = {
+                  'idDetalleRecorridoHistorico': this.IdDetalleRecorridoAsignado,
+                  'idRemito': rem.idRemito,
+                  'entregado': true
+                }
+                // actualizo el detalle del recorrido historico
+                api.editarDetalleRecorridoHistorico(this, detalle)
+                  .then(res => {
+                    // acualizo los dispensers e inserto el detalle del remito para los dispensers dejados
+                    // Guardo los dispensers colocados
+                    this.dispensersColocados.forEach(disC => {
+                      console.log(disC)
+                      var detalleRemitoDispenser = {
+                        'idRemito': rem.idRemito,
+                        'idDispensers': disC
+                      }
+                      apiRemito.nuevoDetalleDeRemito(this, detalleRemitoDispenser)
+                      apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
+                    })
+                    // Guardo los dispensers retirados
+                    this.dispensersRetirados.forEach(disR => {
+                      apiDispensers.borrarObjetivoDeDispenser(this, disR)
+                    })
+                    noti.success(this)
+                    this.$parent.current = 'DetalleRecorrido'
+                    this.$parent.verRemito = false
+                    this.$parent.verDetalle = true
+                  })
+              })
+          }, error => {
+            console.log('error ' + JSON.stringify(error))
+            noti.danger()
           })
       },
       cargarDispensersDelObjetivo (idObjetivo) {
