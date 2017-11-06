@@ -16,7 +16,7 @@ const SidebarStore = {
     {
       name: 'Reportes',
       icon: 'ti-bar-chart',
-      path: '/admin/stats'
+      path: '/admin/reportes'
     },
     {
       name: 'Bidones y Dispensers',
