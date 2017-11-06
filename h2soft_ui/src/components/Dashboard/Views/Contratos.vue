@@ -3,7 +3,7 @@
     <div class="row">
      <!-- <component :is="current"></component>-->
       <ContratosLista v-if="this.isContratosList" @emmited="capturarEvento"></ContratosLista>
-      <NuevoContrato v-if="!this.isContratosList" v-bind:id="contratoId" :edit="edit"></NuevoContrato>
+      <NuevoContrato v-if="!this.isContratosList" :id="contratoId" :edit="edit"></NuevoContrato>
     </div>
     <div class="row">
       <div class="col-md-12">

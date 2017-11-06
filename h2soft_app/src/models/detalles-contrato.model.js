@@ -23,6 +23,10 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true
     },
+    cantidadMinima: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true
+    },
     precioPorUnidad: {
       type: Sequelize.FLOAT,
       allowNull: true

@@ -9,14 +9,14 @@
     <div class="col-md-4 col-md-offset-8">
       <div class="text-center">
         <button type="button" class="btn btn-info btn-fill btn-wd" @click="showCustomModal = true">
-          Agregar Restriccion
+          Agregar cláusula
         </button>
       </div>
     </div>
-    <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar Restriccion">
+    <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar cláusula">
       <div class="row">
         <div class="col-md-6">
-          <label for="productos">Producto</label>
+          <label for="productos"><h4><span class="label label-default">Producto:</span></h4></label>
           <select id="productos" v-model="detalleContrato.idProducto">
             <option value="">Seleccione un producto</option>
             <option v-for="prod in productoss" v-bind:value="prod.idProductos">
@@ -24,22 +24,34 @@
             </option>
           </select>
         </div>
+        <div class="col-md-6">
+          <label for="precio"><h4><span class="label label-default">Precio por unidad:</span></h4></label>
+          <fg-input id="precio"
+                    type="number"
+                    placeholder="Precio"
+                    v-model="detalleContrato.precioPorUnidad"
+                    pattern="[0-9]+">
+          </fg-input>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <fg-input type="number"
-                    label="Precio por unidad"
-                    placeholder="Precio"
-                    v-model="detalleContrato.precioPorUnidad"
-                    required>
+          <label for="cantmin"><h4><span class="label label-default">Cant mínima de unidades:</span></h4></label>
+          <fg-input id="cantmin"
+                    type="number"
+                    placeholder="Cantidad Minima"
+                    v-model="detalleContrato.cantidadMinima"
+                    pattern="[0-9]+"
+                    min="1">
           </fg-input>
         </div>
         <div class="col-md-6">
-          <fg-input type="number"
-                    label="Cantidad del producto"
-                    placeholder="Cantidad"
+          <label for="cantmax"><h4><span class="label label-default">Cant máxima de unidades:</span></h4></label>
+          <fg-input id="cantmax"
+                    type="number"
+                    placeholder="Cantidad Maxima"
                     v-model="detalleContrato.cantidadMaxima"
-                    required>
+                    pattern="[0-9]+">
           </fg-input>
         </div>
       </div>
@@ -48,7 +60,6 @@
         <button type="button" class="btn btn-success" @click="showCustomModal = ok()">Guardar</button>
       </div>
     </modal>
-    {{ idContrato }}
     </div>
 </template>
 <script>
@@ -56,7 +67,7 @@
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Nro', 'producto', 'Cantidad', 'Precio']
+  const tableColumns = ['Producto', 'Cantidad desde', 'Cantidad hasta', 'Precio']
 
   export default {
     components: {
@@ -67,9 +78,10 @@
       return {
         showCustomModal: false,
         detalleContrato: {
-          idDetallesContrato: '',
+          // idDetallesContrato: '',
           idProducto: '',
           cantidadMaxima: '',
+          cantidadMinima: '',
           precioPorUnidad: ''
         },
         productoss: {},
@@ -104,44 +116,14 @@
       this.getProductos()
     },
     methods: {
-      /*
-      cargarDetalles () {
-        if (this.edit) {
-          alert('1')
-          api.getDetalleContrato(this, this.idContrato).then(res => {
-            res.forEach(det => {
-              this.table1.data.push({
-                id: det.idDetallesContrato,
-                producto: this.cargarProducto(det.idProducto),
-                // producto: det.idProducto,
-                cantidad: det.cantidadMaxima,
-                precio: det.precioPorUnidad
-              })
-            })
-          }, error => {
-            alert('error:' + JSON.stringify(error))
-          })
-        } else {
-          alert('2')
-          this.table1.data = []
-          this.detalles.forEach(det => {
-            this.table1.data.push({
-              id: det.idDetallesContrato,
-              producto: det.idProducto,
-              cantidad: det.cantidadMaxima,
-              precio: det.precioPorUnidad
-            })
-          })
-        }
-      }
-      */
       cargarDetalles () {
         this.table1.data = []
         this.detalles.forEach(det => {
           this.table1.data.push({
-            nro: det.idDetallesContrato,
+            // nro: det.idDetallesContrato,
             producto: this.cargarProducto(det.idProducto),
-            cantidad: det.cantidadMaxima,
+            cantidaddesde: det.cantidadMinima,
+            cantidadhasta: det.cantidadMaxima,
             precio: det.precioPorUnidad
           })
         })
@@ -153,17 +135,36 @@
           })
       },
       borrar (e) {
-        let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        alert('borrar nro: ' + toDelete)
-        this.$emit('delete_detalle', toDelete)
+        // let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        let DeleteProducto = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        let toDeleteProducto = this.buscarIdProducto(DeleteProducto)
+        let toDeleteCantidad = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
+        // alert('prod: ' + toDeleteProducto + ', cant: ' + toDeleteCantidad)
+        this.$emit('delete_detalle', toDeleteProducto, toDeleteCantidad)
       },
       ok () {
-        if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '') {
+        if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '' || this.detalleContrato.cantidadMinima === '') {
           alert('Debe completar todos los campos')
           return true
         }
-        this.$emit('nuevo_detalle', { id: this.detalleContrato.idDetallesContrato, idProducto: this.detalleContrato.idProducto, cantidadMaxima: this.detalleContrato.cantidadMaxima, precioPorUnidad: this.detalleContrato.precioPorUnidad })
-        alert('Se agrego un nuevo detalle')
+        if (this.detalleContrato.cantidadMinima > this.detalleContrato.cantidadMaxima) {
+          alert('La cantidad mínima no puede ser mayor a la cantidad máxima')
+          return true
+        }
+        /*
+        if (parseInt(this.detalles.precioPorUnidad) < 0) {
+          alert('No puede ingresar valores negativos')
+          return true
+        }
+        */
+        // this.$emit('nuevo_detalle', { id: this.detalleContrato.idDetallesContrato, idProducto: this.detalleContrato.idProducto, cantidadMaxima: this.detalleContrato.cantidadMaxima, cantidadMinima: this.detalleContrato.cantidadMinima, precioPorUnidad: this.detalleContrato.precioPorUnidad })
+        this.$emit('nuevo_detalle', {
+          idProducto: this.detalleContrato.idProducto,
+          cantidadMinima: this.detalleContrato.cantidadMinima,
+          cantidadMaxima: this.detalleContrato.cantidadMaxima,
+          precioPorUnidad: this.detalleContrato.precioPorUnidad
+        })
+        alert('Se agregó un nuevo detalle')
         return false
       },
       cargarProducto (idProd) {
@@ -173,10 +174,23 @@
             return this.productoss[p].nombre
           }
         }
+      },
+      buscarIdProducto (nombreProdu) {
+        for (let p = 0, len = this.productoss
+          .length; p < len; p++) {
+          if (this.productoss[p].nombre === nombreProdu) {
+            return this.productoss[p].idProductos
+          }
+        }
       }
     }
   }
 </script>
 <style>
-
+  valid {
+    border: 3px solid green;
+  }
+  invalid {
+    border: 3px solid red;
+  }
 </style>

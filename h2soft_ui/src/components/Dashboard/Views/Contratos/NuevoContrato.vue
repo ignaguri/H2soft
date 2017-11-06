@@ -1,13 +1,14 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title">Agregar nuevo contrato</h3>
+      <h3 class="title" v-if="!edit">Agregar nuevo contrato</h3>
+      <h3 class="title" v-if="edit">Editar contrato</h3>
     </div>
     <div class="content">
-      <form @submit.prevent="guardarContrato" novalidate>
+      <form name="nuevo_contrato_form" @submit.prevent="guardarContrato">
         <div class="row">
           <div class="col-md-6">
-            <label for="clientes">Cliente</label>
+            <label for="clientes"><h4><span class="label label-default">Cliente:</span></h4></label>
             <select id="clientes" v-model="contrato.idCliente" required>
               <option value="">Seleccione un cliente</option>
               <option v-for="cli in clientes" v-bind:value="cli.idClientes">
@@ -16,46 +17,32 @@
             </select>
           </div>
           <div class="col-md-6">
-            <fg-input type="date"
-                      label="Fecha de firma"
-                      placeholder="Fecha"
-                      v-model="contrato.fechaFirma"
-                      required>
-            </fg-input>
+            <label for="fechaFirma"><h4><span class="label label-default">Firmado:</span></h4></label>
+            <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
           </div>
         </div>
           <div class="row">
             <div class="col-md-6">
-              <fg-input type="date"
-                        label="Fecha vigencia desde"
-                        placeholder="Fecha"
-                        v-model="contrato.fechaVigenciaDesde"
-                        required>
-              </fg-input>
+              <label for="fechaDesde"><h4><span class="label label-default">Vigente desde:</span></h4></label>
+              <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
             </div>
             <div class="col-md-6">
-              <fg-input type="date"
-                        label="Fecha vigencia hasta"
-                        placeholder="Fecha"
-                        v-model="contrato.fechaVigenciaHasta"
-                        required>
-              </fg-input>
+              <label for="fechaHasta"><h4><span class="label label-default">Vigente hasta:</span></h4></label>
+              <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
             </div>
           </div>
           <hr>
         <detalle-contrato :detalles="detalles" :edit="edit" :idContrato="id" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
         <div class="row">
-        <div class="text-center">
-             <button type="submit"  class="btn btn-success btn-fill btn-wd">
+          <div class="text-center">
+            <button type="submit"  class="btn btn-success btn-fill btn-wd">
               Guardar contrato
-             </button>
-            </div>
+            </button>
+          </div>
           <div class="clearfix"></div>
         </div>
       </form>
     </div>
-    {{ edit }}
-    {{ id }}
   </div>
 </template>
 <script>
@@ -63,9 +50,12 @@
   // TODO: agrefar el nombre de producto en vez del idProducto
   import api from 'src/api/services/contratosServices'
   import DetalleContrato from './DetalleContrato.vue'
+  import { datepicker, select } from 'vue-strap'
   export default {
     components: {
-      DetalleContrato
+      DetalleContrato,
+      datepicker,
+      select
     },
     data () {
       return {
@@ -82,7 +72,7 @@
     },
     props: {
       edit: Boolean,
-      id: String
+      id: Number
     },
     mounted () {
       this.getClientes()
@@ -96,42 +86,47 @@
     },
     methods: {
       guardarContrato () {
-        if (this.detalles.length <= 0) {
-          alert('Debe agregar al menos un detalle')
+        if (this.validarCampos()) {
           return
         }
         if (this.id === 0 && !this.edit) {
+          let firmado = this.contrato.fechaFirma.split('/')
+          let fechaDesde = this.contrato.fechaVigenciaDesde.split('/')
+          let fechaHasta = this.contrato.fechaVigenciaHasta.split('/')
           this.contrat = {
             idCliente: this.contrato.idCliente,
-            fechaFirma: this.contrato.fechaFirma,
-            fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
-            fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
+            fechaFirma: firmado[1] + '/' + firmado[0] + '/' + firmado[2],
+            fechaVigenciaDesde: fechaDesde[1] + '/' + fechaDesde[0] + '/' + fechaDesde[2],
+            fechaVigenciaHasta: fechaHasta[1] + '/' + fechaHasta[0] + '/' + fechaHasta[2]
           }
           api.postContratos(this, this.contrat, this.detalles).then(res => {
             if (res) {
               console.log('devolvió true en nuevoContrato')
-              alert('Contrato guardado con exito')
+              alert('Contrato guardado con éxito.')
             } else {
               console.log('devolvio false')
-              alert('Error al guardar el contrato. check consola')
+              alert('Error al guardar el contrato.')
             }
           })
         } else {
+          let firmado = this.contrato.fechaFirma.split('/')
+          let fechaDesde = this.contrato.fechaVigenciaDesde.split('/')
+          let fechaHasta = this.contrato.fechaVigenciaHasta.split('/')
           this.contrat = {
             id: this.id,
             idCliente: this.contrato.idCliente,
-            fechaFirma: this.contrato.fechaFirma,
-            fechaVigenciaDesde: this.contrato.fechaVigenciaDesde,
-            fechaVigenciaHasta: this.contrato.fechaVigenciaHasta
+            fechaFirma: firmado[1] + '/' + firmado[0] + '/' + firmado[2],
+            fechaVigenciaDesde: fechaDesde[1] + '/' + fechaDesde[0] + '/' + fechaDesde[2],
+            fechaVigenciaHasta: fechaHasta[1] + '/' + fechaHasta[0] + '/' + fechaHasta[2]
           }
           api.editarContratoFull3(this, this.contrat, this.detalles, this.id).then(res => {
             if (res) {
-              alert('Contrato modificado con exito')
+              alert('Contrato modificado con éxito')
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
               console.log('omdificar contrato devolvio false')
-              alert('Error al modificar el contrato. check consola')
+              alert('Error al modificar el contrato.')
             }
           })
         }
@@ -153,8 +148,18 @@
         this.detalles.push(det)
        // alert('captar detale' + JSON.stringify(det))
       },
-      borrarDetalle (det) {
-        this.detalles = this.detalles.filter(dets => dets.idDetallesContrato !== parseInt(det))
+      borrarDetalle (prod, cant) {
+        // this.detalles = this.detalles.filter(dets => dets.idDetallesContrato !== parseInt(det))
+        // this.detalles = this.detalles.filter(dets => (dets.idProducto !== prod && dets.cantidadMinima !== parseInt(cant)))
+        // alert(JSON.stringify(this.detalles))
+        // alert('prod: ' + prod)
+        // this.detalles = this.detalles.filter(dets => dets.cantidadMinima === parseInt(cant))
+        // this.detalles = this.detalles.filter(dets => dets.cantidadMinima !== parseInt(cant) && dets.idProducto !== parseInt(prod))
+        for (let i = 0; i < this.detalles.length; i++) {
+          if (this.detalles[i].idProducto === parseInt(prod) && this.detalles[i].cantidadMinima === parseInt(cant)) {
+            this.$delete(this.detalles, i)
+          }
+        }
       },
       cargarContratos2 () {
         if (this.id !== 0 && this.edit) {
@@ -166,18 +171,34 @@
             this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString()
             c.detalle.forEach(dc => {
               this.detalles.push({
-                idDetallesContrato: dc.idDetallesContrato,
+                // idDetallesContrato: dc.idDetallesContrato,
                 idProducto: dc.idProducto,
+                cantidadMinima: dc.cantidadMinima,
                 cantidadMaxima: dc.cantidadMaxima,
                 precioPorUnidad: dc.precioPorUnidad
               })
             })
           })
         }
+      },
+      validarCampos () {
+        if (this.detalles.length <= 0) {
+          alert('Debe agregar al menos un detalle')
+          return true
+        }
+        if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
+          alert('La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+          return true
+        }
       }
     }
   }
 </script>
 <style>
-
+valid {
+   border: 3px solid green;
+  }
+invalid {
+   border: 3px solid red;
+ }
 </style>

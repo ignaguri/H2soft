@@ -22,7 +22,7 @@
   /*
   const tableColumns = ['idcontrato', 'Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
   */
-  const tableColumns = ['Nro', 'Cliente', 'FechaFirma', 'VigenteDesde', 'VigenteHasta']
+  const tableColumns = ['Nro', 'Cliente', 'Firmado', 'Vigente desde', 'Vigente hasta']
   export default{
     components: {
       PaperTable
@@ -50,7 +50,7 @@
                // cliente: contrat.idCliente, // Cambiar por el nombre del ciente
                 cliente: this.cargarCliente(contrat.idCliente),
               //  fechafirma: new Date(contrat.fechaFirma).getFullYear() + '/' + new Date(contrat.fechaFirma).getMonth() + '/' + new Date(contrat.fechaFirma).getDate(), // arreglar
-                fechafirma: new Date(contrat.fechaFirma).toLocaleDateString(),
+                firmado: new Date(contrat.fechaFirma).toLocaleDateString(),
                 vigentedesde: new Date(contrat.fechaVigenciaDesde).toLocaleDateString(),
                 vigentehasta: new Date(contrat.fechaVigenciaHasta).toLocaleDateString()
               })
@@ -60,7 +60,7 @@
         })
       },
       editarContrato (e) {
-      let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+      let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
       this.$parent.contratoId = id
       this.$parent.isContratosList = false
       this.$parent.edit = true
