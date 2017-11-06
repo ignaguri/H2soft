@@ -6,7 +6,7 @@
 
         </paper-table>
         <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient">
+          <button type="button" class="btn btn-info btn-fill btn-wd" @click="planificar">
             Planificar Recorrido
           </button>
         </div>
@@ -17,29 +17,66 @@
 
         </paper-table>
         <div class="text-center">
-        <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList">
-          Cancelar
-        </button>
+          <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
+            Volver
+          </button>
+          <button ref="btn_asignar" type="button" class="btn btn-info btn-fill btn-wd" @click="asignar">
+            Asignar recorrido
+          </button>
         </div>
         <br>
       </div>
+      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Asignar recorrido">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="Empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
+              <select id="Empleado" v-model="idEmpleadoAsignado">
+                <option value="null">Seleccione un repartidor</option>
+                <option v-for="emp in empleados" v-bind:value="emp.idEmpleados">
+                  {{ emp.nombre + ' ' + emp.apellido }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="fechaInicio"><h4><span class="label label-default">Inicio período de asignación</span></h4></label>
+              <datepicker v-model="fechaInicio" id="fechaInicio" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha inicio'" width="100%" :clear-button="true"></datepicker>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="fechaFin"><h4><span class="label label-default">Fin período de asignación</span></h4></label>
+              <datepicker v-model="fechaFin" id="fechaFin" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha fin'" width="100%" :clear-button="true"></datepicker>
+            </div>
+          </div>
+        </div>
+        <div slot="modal-footer" class="modal-footer">
+          <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
+          <button type="button" class="btn btn-success" @click="showCustomModal = ok()">Guardar</button>
+        </div>
+      </modal>
     </div>
   </div>
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
+  import { modal, datepicker } from 'vue-strap'
 
-  const table1Columns = ['Id', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
+  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
-      PaperTable
+      PaperTable,
+      modal,
+      datepicker
     },
     data () {
       return {
         table1: {
-          title: 'Planificacion',
+          title: 'Planificación',
           subTitle: 'Lista de recorridos programados',
           columns: [...table1Columns],
           data: []
@@ -49,7 +86,21 @@
           columns: [...table2Columns],
           data: []
         },
-        recorrido: this.idRecorrido
+        recorrido: this.idRecorrido,
+        showCustomModal: false,
+        idEmpleadoAsignado: null,
+        empleados: {},
+        fechaInicio: new Date().toLocaleString(undefined, {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }),
+        fechaFin: new Date().toLocaleString(undefined, {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }),
+        asignado: false
       }
     },
     props: {
@@ -57,10 +108,14 @@
     },
     mounted () {
       this.cargarRecorridos()
+      this.cargarEmpleados()
     },
     watch: {
       recorrido: function () {
         this.verEspecifico()
+      },
+      asignado: function () {
+        this.cambioAsignacion()
       }
     },
     methods: {
@@ -70,7 +125,7 @@
           .then(r => {
             r.forEach(recs => {
               this.table1.data.push({
-                id: recs.recorrido,
+                nro: recs.recorrido,
                 temporada: recs.temporada,
                 dia: recs.dia,
                 turno: recs.turno,
@@ -79,22 +134,39 @@
             })
           })
       },
+      cargarEmpleados () {
+        api.getEmpleados(this)
+          .then(e => {
+            this.empleados = e
+          })
+      },
       verEspecifico () {
-        this.table2.data = []
-        api.getDetalleRecorridosFull(this, this.recorrido)
-          .then(r => {
-            r.forEach(recs => {
-              this.table2.data.push({
-                id: recs.detalleRecorrido,
-                recorrido: recs.recorrido,
-                objetivo: recs.objetivo,
-                orden: recs.orden,
-                direccion: recs.direccion,
-                localidad: recs.localidad,
-                cliente: recs.cliente
+        if (this.recorrido !== 0) {
+          this.table2.data = []
+          api.getDetalleRecorridosFull(this, this.recorrido)
+            .then(r => {
+              r.forEach(recs => {
+                this.table2.data.push({
+                  id: recs.detalleRecorrido,
+                  recorrido: recs.recorrido,
+                  objetivo: recs.objetivo,
+                  orden: recs.orden,
+                  direccion: recs.direccion,
+                  localidad: recs.localidad,
+                  cliente: recs.cliente
+                })
               })
             })
-          })
+          api.checkIfAsignado(this, this.recorrido)
+            .then(r => {
+              if (r) {
+                this.asignado = r
+                this.table2.title = this.table2.title + ' asignado a ' + r.nombre + ' ' + r.apellido
+              } else {
+                this.asignado = false
+              }
+            })
+        }
       },
       editar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
@@ -126,9 +198,8 @@
       },
       ver (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        console.log('ver', id)
         this.recorrido = id
-        this.table2.title = 'Recorrido n°: ' + id
+        this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
         if (this.recorrido === 0) {
@@ -140,9 +211,41 @@
       seeList () {
         this.recorrido = 0
       },
-      addClient () {
+      planificar () {
         this.$parent.edit = false
         this.$parent.isRecorridoList = false
+      },
+      asignar () {
+        this.showCustomModal = true
+      },
+      ok () {
+        // return !confirm('Ok event.\nClose Modal?')
+        if (this.idEmpleadoAsignado === null || this.fechaInicio === '' || this.fechaFin === '') {
+          alert('Debe completar todos los campos')
+          return true
+        }
+        this.postAsignacion({
+          recorrido: Number(this.recorrido),
+          empleado: this.idEmpleadoAsignado,
+          fechaInicio: this.fechaInicio,
+          fechaFin: this.fechaFin
+        })
+        return false
+      },
+      postAsignacion (asignacion) {
+        api.postAsignacion(this, asignacion)
+          .then(r => {
+            if (r) {
+              alert('Recorrido asignado!')
+            } else {
+              alert('Error asignando recorrido. check consola')
+            }
+          })
+      },
+      cambioAsignacion () {
+        if (this.asignado) {
+          this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+        }
       }
     }
   }

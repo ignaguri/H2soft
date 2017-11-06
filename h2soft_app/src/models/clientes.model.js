@@ -30,10 +30,6 @@ module.exports = function (app) {
         model: 'tipos-cliente',
         key: 'idTiposCliente'
       }
-    },
-    horarioVisita: {
-      type: Sequelize.STRING(45),
-      allowNull: false
     }
   }, {
     hooks: {

@@ -4,7 +4,7 @@
       <nav class="pull-left">
         <ul>
           <li>
-            <router-link :to="{path:'/admin'}">Usuario</router-link>
+            <router-link :to="{path:'/admin/usuarios'}">{{user}}</router-link>
           </li>
         </ul>
       </nav>
@@ -17,7 +17,17 @@
   </footer>
 </template>
 <script>
-  export default {}
+  export default {
+    computed: {
+      user () {
+        if (JSON.parse(sessionStorage.getItem('user')).nombre) {
+          return JSON.parse(sessionStorage.getItem('user')).nombre + ' ' + JSON.parse(sessionStorage.getItem('user')).apellido
+        } else {
+          return JSON.parse(sessionStorage.getItem('user')).email
+        }
+      }
+    }
+  }
 
 </script>
 <style>

@@ -66,6 +66,9 @@
         type: Function
       }
     },
+    mounted () {
+      this.sort(this.columns[0])
+    },
     data () {
       return {
         sortedAsc: false
@@ -87,6 +90,7 @@
         console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
       },
       sort (col) {
+        if (col === undefined) return
         if (!this.sortedAsc) {
           this.data = this.data.sort((item1, item2) => {
             if (isNaN(item1[col.toLowerCase()])) {

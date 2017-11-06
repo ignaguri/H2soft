@@ -38,6 +38,10 @@ module.exports = function (app) {
     longitud: {
       type: Sequelize.FLOAT,
       allowNull: true
+    },
+    observaciones: {
+      type: Sequelize.STRING(100),
+      allowNull: true
     }
   }, {
     hooks: {
