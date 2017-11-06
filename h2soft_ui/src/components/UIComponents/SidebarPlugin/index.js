@@ -37,6 +37,11 @@ const SidebarStore = {
       name: 'Usuarios',
       icon: 'ti-user',
       path: '/admin/usuarios'
+    },
+    {
+      name: 'ListadoRemitos',
+      icon: 'ti-pencil',
+      path: '/admin/listadoRemitos'
     }
   ],
   displaySidebar (value) {
