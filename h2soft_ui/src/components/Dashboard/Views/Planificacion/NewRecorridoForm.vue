@@ -76,7 +76,7 @@
         </div>
         <div class="row">
           <div class="text-center">
-            <button type="button" class="btn btn-primary btn-fill btn-wd" @click="seeList">
+            <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
               Volver
             </button>
             <button type="submit" class="btn btn-success btn-fill btn-wd">

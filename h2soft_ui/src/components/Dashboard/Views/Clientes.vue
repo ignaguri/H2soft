@@ -10,8 +10,8 @@
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient" v-show="isClientList">
             Agregar Cliente
           </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList" v-show="!isClientList">
-            Cancelar
+          <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList" v-show="!isClientList">
+            Volver
           </button>
         </div>
         <div class="clearfix"></div>

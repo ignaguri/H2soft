@@ -46,9 +46,7 @@
   import { modal } from 'vue-strap'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
-  const tableColumns = ['Nombre', 'Direccion', 'Localidad']
-  // TODO: guardar lista en localStorage para ahorrar llamados a la api
-  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
+  const tableColumns = ['Nombre', 'Dirección', 'Localidad']
   export default {
     components: {
       PaperTable,
@@ -59,7 +57,7 @@
       return {
         showCustomModal: false,
         nombre: '',
-        direccion: '',
+        dirección: '',
         localidad: '',
         obAddress: '',
         table1: {
@@ -98,7 +96,7 @@
           this.table1.data.push({
             id: ob.idObjetivosXCliente,
             nombre: ob.nombre,
-            direccion: ob.direccion,
+            dirección: ob.direccion,
             localidad: ob.localidad
           })
         })
@@ -110,23 +108,23 @@
       },
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
-        if (this.nombre === '' || this.direccion === '') {
+        if (this.nombre === '' || this.dirección === '') {
           alert('Debe completar todos los campos')
           return true
         }
-        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.direccion, localidad: this.localidad})
+        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.dirección, localidad: this.localidad})
         return false
       },
       getAddressData (addressData, placeResultData) {
         console.log('addressData:', addressData)
         console.log('placeresultdata:', placeResultData)
         let direc = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
-        this.direccion = direc
+        this.dirección = direc
         this.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
       },
       btn_agregar () {
         this.nombre = ''
-        this.direccion = ''
+        this.dirección = ''
         this.localidad = ''
         this.$refs.obAddress.clear()
         this.showCustomModal = true

@@ -4,7 +4,7 @@ import NotFound from '../components/GeneralViews/NotFoundPage.vue'
 import Landing from '../components/GeneralViews/Landing.vue'
 
 // Admin pages
-import Overview from 'src/components/Dashboard/Views/Overview.vue'
+// import Overview from 'src/components/Dashboard/Views/Overview.vue'
 // import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
 // import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 // import Icons from 'src/components/Dashboard/Views/Icons.vue'
@@ -33,7 +33,7 @@ const routes = [
     children: [
       {
         path: 'overview',
-        name: 'usuarios',
+        name: 'overview',
         component: WorkInProgress
       },
       {

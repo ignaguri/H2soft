@@ -14,7 +14,7 @@
   import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import noti from 'src/notificationsService/notificationsService.js'
+  import noti from 'src/api/notificationsService'
   const tableColumns = ['Id', 'Email', 'Empleado', 'Rol']
   const dataColumns = []
 
