@@ -60,7 +60,7 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import Remito from './RecorridosRealizados/Remito.vue'
-  // import noti from 'src/notificationsService/notificationsService.js'
+  // import noti from 'src/notificationsService/index.js'
   const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Bidones']
   const dataColumns = []
   export default {

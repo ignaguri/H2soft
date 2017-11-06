@@ -60,7 +60,7 @@
 <script>
   // import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
-  import noti from 'src/notificationsService/notificationsService.js'
+  import noti from 'src/api/notificationsService'
   // import fgdrop from 'components/UIComponents/Inputs/formGroupDropDown.vue'
 
   export default {

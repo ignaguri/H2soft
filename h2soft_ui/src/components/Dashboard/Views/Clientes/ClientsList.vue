@@ -41,7 +41,7 @@
   import api from 'src/api/services/clientServices'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Nombre', 'CUIL', 'Domicilio']
+  const tableColumns = ['Nro', 'Nombre', 'CUIL', 'Domicilio']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
@@ -84,7 +84,7 @@
         api.getClientes(this).then(res => {
           res.body.data.forEach(cl => {
             this.table1.data.push({
-              id: cl.idClientes,
+              nro: cl.idClientes,
               nombre: cl.razonSocial,
               cuil: cl.CUIL,
               domicilio: cl.direccion

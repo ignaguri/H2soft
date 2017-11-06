@@ -20,7 +20,7 @@
           <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
             Volver
           </button>
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="asignar">
+          <button ref="btn_asignar" type="button" class="btn btn-info btn-fill btn-wd" @click="asignar">
             Asignar recorrido
           </button>
         </div>
@@ -41,13 +41,13 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="fechaInicio"><h4><span class="label label-default">Fecha de inicio asignación</span></h4></label>
+              <label for="fechaInicio"><h4><span class="label label-default">Inicio período de asignación</span></h4></label>
               <datepicker v-model="fechaInicio" id="fechaInicio" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha inicio'" width="100%" :clear-button="true"></datepicker>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label for="fechaFin"><h4><span class="label label-default">Fecha fin de asignación</span></h4></label>
+              <label for="fechaFin"><h4><span class="label label-default">Fin período de asignación</span></h4></label>
               <datepicker v-model="fechaFin" id="fechaFin" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha fin'" width="100%" :clear-button="true"></datepicker>
             </div>
           </div>
@@ -65,7 +65,7 @@
   import api from 'src/api/services/recorridoServices'
   import { modal, datepicker } from 'vue-strap'
 
-  const table1Columns = ['Id', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
+  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
@@ -76,7 +76,7 @@
     data () {
       return {
         table1: {
-          title: 'Planificacion',
+          title: 'Planificación',
           subTitle: 'Lista de recorridos programados',
           columns: [...table1Columns],
           data: []
@@ -99,7 +99,8 @@
           day: '2-digit',
           month: '2-digit',
           year: 'numeric'
-        })
+        }),
+        asignado: false
       }
     },
     props: {
@@ -112,6 +113,9 @@
     watch: {
       recorrido: function () {
         this.verEspecifico()
+      },
+      asignado: function () {
+        this.cambioAsignacion()
       }
     },
     methods: {
@@ -121,7 +125,7 @@
           .then(r => {
             r.forEach(recs => {
               this.table1.data.push({
-                id: recs.recorrido,
+                nro: recs.recorrido,
                 temporada: recs.temporada,
                 dia: recs.dia,
                 turno: recs.turno,
@@ -137,21 +141,32 @@
           })
       },
       verEspecifico () {
-        this.table2.data = []
-        api.getDetalleRecorridosFull(this, this.recorrido)
-          .then(r => {
-            r.forEach(recs => {
-              this.table2.data.push({
-                id: recs.detalleRecorrido,
-                recorrido: recs.recorrido,
-                objetivo: recs.objetivo,
-                orden: recs.orden,
-                direccion: recs.direccion,
-                localidad: recs.localidad,
-                cliente: recs.cliente
+        if (this.recorrido !== 0) {
+          this.table2.data = []
+          api.getDetalleRecorridosFull(this, this.recorrido)
+            .then(r => {
+              r.forEach(recs => {
+                this.table2.data.push({
+                  id: recs.detalleRecorrido,
+                  recorrido: recs.recorrido,
+                  objetivo: recs.objetivo,
+                  orden: recs.orden,
+                  direccion: recs.direccion,
+                  localidad: recs.localidad,
+                  cliente: recs.cliente
+                })
               })
             })
-          })
+          api.checkIfAsignado(this, this.recorrido)
+            .then(r => {
+              if (r) {
+                this.asignado = r
+                this.table2.title = this.table2.title + ' asignado a ' + r.nombre + ' ' + r.apellido
+              } else {
+                this.asignado = false
+              }
+            })
+        }
       },
       editar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
@@ -226,6 +241,11 @@
               alert('Error asignando recorrido. check consola')
             }
           })
+      },
+      cambioAsignacion () {
+        if (this.asignado) {
+          this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+        }
       }
     }
   }

@@ -282,5 +282,20 @@ export default {
         console.log('error asignando el recorrido', error)
         return false
       })
+  },
+  checkIfAsignado (context, id) {
+    const hoy = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+    const tomorrow = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1)
+    return context.$http.get(API_URL + 'recorrido-historico/' + id + '/?fechaAsignacion[$gte]=' + hoy + '&fechaAsignacion[$lt]=' + tomorrow, authHeader)
+      .then(r => {
+        return context.$http.get(API_URL + 'empleados/' + r.body.idEmpleadoAsignado, authHeader)
+      })
+      .then(emple => {
+        return { nombre: emple.body.nombre, apellido: emple.body.apellido }
+      })
+      .catch(error => {
+        console.log('no hay recorrido asignado', error)
+        return false
+      })
   }
 }
