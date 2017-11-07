@@ -250,7 +250,8 @@ export default {
           idEmpleadoAsignado: asignacion.empleado,
           fechaAsignacion: new Date(),
           fechaInicio: new Date(fechaInicioParsed[2], fechaInicioParsed[1] - 1, fechaInicioParsed[0], 0, 0, 0, 0),
-          fechaFin: new Date(fechaFinParsed[2], fechaFinParsed[1] - 1, fechaFinParsed[0], 0, 0, 0, 0)
+          fechaFin: new Date(fechaFinParsed[2], fechaFinParsed[1] - 1, fechaFinParsed[0], 0, 0, 0, 0),
+          idRecorrido: asignacion.recorrido
         }
         console.log('new recorrido', newRecorrido)
         return context.$http.post(API_URL + 'recorrido-historico', newRecorrido, authHeader)
@@ -286,9 +287,9 @@ export default {
   checkIfAsignado (context, id) {
     const hoy = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
     const tomorrow = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1)
-    return context.$http.get(API_URL + 'recorrido-historico/' + id + '/?fechaAsignacion[$gte]=' + hoy + '&fechaAsignacion[$lt]=' + tomorrow, authHeader)
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy + '&fechaAsignacion[$lt]=' + tomorrow, authHeader)
       .then(r => {
-        return context.$http.get(API_URL + 'empleados/' + r.body.idEmpleadoAsignado, authHeader)
+        return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
       })
       .then(emple => {
         return { nombre: emple.body.nombre, apellido: emple.body.apellido }

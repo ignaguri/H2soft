@@ -56,7 +56,7 @@
               <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
             <i class="fa fa-circle text-info"></i> Temporada baja
-            <i class="fa fa-circle text-warning"></i> Temporada alta
+            <i class="fa fa-circle text-danger"></i> Temporada alta
           </div>
         </chart-card>
       </div>

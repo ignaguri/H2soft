@@ -23,7 +23,7 @@
       <div class="col-md-4 left">
         <fg-input type="number"
                   min="0"
-                  label="Traidos llenos"
+                  label="Dejados llenos"
                   placeholder="Cantidad de llenos"
                   v-model="remito.bidonesDejo"
                   required>
@@ -91,7 +91,7 @@
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import firma from 'components/Dashboard/Views/Firma.vue'
   import firma from '../Firma.vue'
-  import noti from 'src/notificationsService/notificationsService.js'
+  import noti from 'src/api/notificationsService'
   import sele from 'vue-strap/src/Select.vue'
   const tableColumns = ['Nro', 'Orden', 'Objetivo']
   const dataColumns = []

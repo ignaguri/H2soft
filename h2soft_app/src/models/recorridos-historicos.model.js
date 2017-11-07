@@ -78,6 +78,14 @@ module.exports = function (app) {
     fechaFin: {
       type: Sequelize.DATE,
       allowNull: true
+    },
+    idRecorrido: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'recorridos',
+        key: 'idRecorridos'
+      }
     }
   }, {
     hooks: {
