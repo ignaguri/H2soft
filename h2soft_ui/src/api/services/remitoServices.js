@@ -8,5 +8,11 @@ const authHeader = { headers: auth.getAuthHeader() }
 export default {
   getRemitos (context) {
     return context.$http.get(API_URL + 'remitos', authHeader)
+  },
+  getEmpleados (context) {
+    return context.$http.get(API_URL + 'empleados', authHeader)
+  },
+  getDetallesRemito (context, id) {
+    return context.$http.get(API_URL + 'detalle-remito/?idRemito=' + id, authHeader)
   }
 }
