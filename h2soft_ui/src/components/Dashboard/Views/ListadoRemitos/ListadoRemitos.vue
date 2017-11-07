@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns"  :goButton="false" :eraseButton="false"  >
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns"  :goButton="false" :eraseButton="false" :edit="editar" >
         </paper-table>
       </div>
     </div>
@@ -61,6 +61,12 @@
             return this.empleados[i].nombre + ' ' + this.empleados[i].apellido
           }
         }
+      },
+      editar (e) {
+        let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        // this.$emit('emitted', {action: 'edit', client: id})
+        this.$parent.isRemitosList = false
+        this.$parent.idRemito = id
       }
     }
   }

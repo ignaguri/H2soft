@@ -27,14 +27,15 @@
           columns: [...tableColumns],
           data: [...dataColumns]
         },
-        productos: []
+        productoss: {}
       }
     },
     props: {
       idRemito: Number
     },
     mounted () {
-      this.cargarDetalles(17)
+      this.getProductos()
+      this.cargarDetalles(this.idRemito)
     },
     methods: {
       cargarDetalles (id) {
@@ -42,7 +43,7 @@
             .then(resUs => {
               resUs.body.data.forEach(rem => {
                 this.table1.data.push({
-                  producto: rem.producto,
+                  producto: this.cargarProducto(rem.producto),
                   cantidad: rem.cantidad,
                   dispenser: rem.dispenser
                 })
@@ -50,6 +51,19 @@
             }, error => {
               console.log('error al cargar los remitos ' + error)
             })
+      },
+      cargarProducto (idProd) {
+        for (let p = 0, len = this.productoss.length; p < len; p++) {
+          if (this.productoss[p].idProductos === idProd) {
+            return this.productoss[p].nombre
+          }
+        }
+      },
+      getProductos () {
+        api.getProductosRemitos(this)
+          .then(res => {
+            this.productoss = res
+          })
       }
     }
   }

@@ -14,5 +14,9 @@ export default {
   },
   getDetallesRemito (context, id) {
     return context.$http.get(API_URL + 'detalle-remito/?idRemito=' + id, authHeader)
+  },
+  getProductosRemitos (context) {
+    return context.$http.get('http://localhost:3030/productos', authHeader)
+        .then(res => { return res.body.data })
   }
 }
