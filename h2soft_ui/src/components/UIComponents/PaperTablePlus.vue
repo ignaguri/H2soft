@@ -81,10 +81,12 @@
     },
     methods: {
       hasValue (item, column) {
-        return item[column.toLowerCase()] !== 'undefined'
+        // column = column.replace(' ', '')
+        // alert(JSON.stringify(column)) // console.log('item: ' + JSON.stringify(item) + 'columna: ' + JSON.stringify(item))
+        return item[column.toLowerCase().replace(' ', '')] !== 'undefined'
       },
       itemValue (item, column) {
-        return item[column.toLowerCase()]
+        return item[column.toLowerCase().replace(' ', '')]
       },
       prueba (elem) {
         console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)

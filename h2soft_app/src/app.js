@@ -42,10 +42,10 @@ app.configure(sequelize);
 app.configure(rest());
 
 
-// Configure other middleware (see `middleware/index.js`)
+// Configure other middleware (see `middleware/contratosServices.js`)
 app.configure(middleware);
 app.configure(authentication);
-// Set up our services (see `services/index.js`)
+// Set up our services (see `services/contratosServices.js`)
 app.configure(services);
 // Configure a middleware for 404s and the error handler
 app.use(notFound());
