@@ -39,13 +39,8 @@ const SidebarStore = {
       path: '/admin/clientes'
     },
     {
-      name: 'Reportes',
-      icon: 'ti-bell',
-      path: '/admin/notifications'
-    },
-    {
       name: 'Contratos',
-      icon: 'ti-panel',
+      icon: 'ti-pencil-alt',
       path: '/admin/contratos'
     },
     {

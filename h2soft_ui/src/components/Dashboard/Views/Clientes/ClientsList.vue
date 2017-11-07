@@ -2,7 +2,7 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editar" :erase="borrar" :goButton="true" :go="ver">
 
         </paper-table>
       </div>
@@ -44,15 +44,16 @@
   const tableColumns = ['Nro', 'Nombre', 'CUIL', 'Domicilio']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
-  // TODO: hacer cada cliente de la tabla linkeable
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
   // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
     components: {
-      PaperTable
+      PaperTable,
+      modal
     },
     data () {
       return {
+        showCustomModal: false,
         table1: {
           title: 'Clientes',
           subTitle: 'Lista de clientes con los que actualmente tenemos contrato',

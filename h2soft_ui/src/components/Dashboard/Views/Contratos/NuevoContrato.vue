@@ -10,7 +10,7 @@
           <div class="col-md-6">
             <label for="clientes"><h4><span class="label label-default">Cliente:</span></h4></label>
             <select id="clientes" v-model="contrato.idCliente" required>
-              <option value="">Seleccione un cliente</option>
+              <option :value="null">Seleccione un cliente</option>
               <option v-for="cli in clientes" v-bind:value="cli.idClientes">
                 {{ cli.razonSocial }}
               </option>
@@ -50,17 +50,16 @@
   // TODO: agrefar el nombre de producto en vez del idProducto
   import api from 'src/api/services/contratosServices'
   import DetalleContrato from './DetalleContrato.vue'
-  import { datepicker, select } from 'vue-strap'
+  import { datepicker } from 'vue-strap'
   export default {
     components: {
       DetalleContrato,
-      datepicker,
-      select
+      datepicker
     },
     data () {
       return {
         contrato: {
-          idCilente: '',
+          idCliente: null,
           fechaFirma: '',
           fechaVigenciaDesde: '',
           fechaVigenciaHasta: ''
@@ -86,7 +85,16 @@
     },
     methods: {
       guardarContrato () {
-        if (this.validarCampos()) {
+        if (this.detalles.length <= 0) {
+          alert('Debe agregar al menos un detalle')
+          return
+        }
+        if (this.contrato.fechaFirma === '' || this.contrato.fechaVigenciaDesde === '' || this.contrato.fechaVigenciaHasta === '') {
+          alert('Debe completar todos los campos')
+          return
+        }
+        if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
+          alert('La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
         if (this.id === 0 && !this.edit) {
