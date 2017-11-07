@@ -31,7 +31,7 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true
     },
-    dispenser: {
+    idDispensers: {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {

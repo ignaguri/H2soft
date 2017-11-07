@@ -21,7 +21,7 @@ module.exports = function (app) {
     },
     idFrecuencia: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'frecuencias-recorrido',
         key: 'idFrecuenciasRecorrido'
@@ -45,7 +45,7 @@ module.exports = function (app) {
     },
     idEstado: {
       type: Sequelize.INTEGER(11),
-      allowNull: true,
+      allowNull: false,
       references: {
         model: 'estados-recorrido',
         key: 'idEstadosRecorrido'
@@ -53,7 +53,7 @@ module.exports = function (app) {
     },
     idEmpleadoAsignado: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'empleados',
         key: 'idEmpleados'
@@ -61,19 +61,31 @@ module.exports = function (app) {
     },
     idCamionAsignado: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'camiones',
         key: 'idCamiones'
       }
     },
+    fechaAsignacion: {
+      type: Sequelize.DATE,
+      allowNull: true
+    },
     fechaInicio: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: true
     },
     fechaFin: {
       type: Sequelize.DATE,
-      allowNull: false
+      allowNull: true
+    },
+    idRecorrido: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'recorridos',
+        key: 'idRecorridos'
+      }
     }
   }, {
     hooks: {

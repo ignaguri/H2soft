@@ -10,6 +10,7 @@
         class="form-control"
         placeholder="Ingrese su email"
         v-model="credentials.email"
+        v-focus
       />
     </div>
     <div class="form-group">
@@ -66,7 +67,14 @@
         auth.login(this, credentials, 'admin')
         // alert(JSON.stringify(credentials))
       }
+    },
+    directives: {
+      focus: {
+        // directive definition
+        inserted: function (el) {
+          el.focus()
+        }
+      }
     }
-
   }
 </script>

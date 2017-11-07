@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const users = sequelizeClient.define('users', {
-    idUsuarios: {
+    id: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
@@ -19,6 +19,11 @@ module.exports = function (app) {
     password: {
       type: Sequelize.CHAR(255),
       allowNull: true
+    },
+    activo: {
+      type: Sequelize.BOOLEAN(),
+      allowNull: false,
+      default : 1
     },
     idRol: {
       type: Sequelize.INTEGER(11),
@@ -41,7 +46,7 @@ module.exports = function (app) {
   }, {
     hooks: {
       beforeCount(options) {
-        options.raw = true;
+        options.raw = false;
       }
     }
   });

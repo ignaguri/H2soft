@@ -16,7 +16,7 @@ module.exports = function (app) {
       allowNull: false
     },
     direccion: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(100),
       allowNull: true
     },
     CUIL: {
@@ -30,7 +30,7 @@ module.exports = function (app) {
         model: 'tipos-cliente',
         key: 'idTiposCliente'
       }
-    },
+    }
   }, {
     hooks: {
       beforeCount(options) {

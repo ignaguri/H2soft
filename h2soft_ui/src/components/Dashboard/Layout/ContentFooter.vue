@@ -4,12 +4,12 @@
       <nav class="pull-left">
         <ul>
           <li>
-            <router-link :to="{path:'/admin'}">Usuario</router-link>
+            <router-link :to="{path:'/admin/usuarios'}">{{user}}</router-link>
           </li>
         </ul>
       </nav>
       <div class="copyright pull-right">
-        &copy; Plagiado con
+        &copy; Hecho con
         <i class="fa fa-heart heart"></i> por
         <a href="https://github.com/ignaguri/H2soft" target="_blank">H2Soft team</a>.
       </div>
@@ -17,7 +17,17 @@
   </footer>
 </template>
 <script>
-  export default {}
+  export default {
+    computed: {
+      user () {
+        if (JSON.parse(sessionStorage.getItem('user')).nombre) {
+          return JSON.parse(sessionStorage.getItem('user')).nombre + ' ' + JSON.parse(sessionStorage.getItem('user')).apellido
+        } else {
+          return JSON.parse(sessionStorage.getItem('user')).email
+        }
+      }
+    }
+  }
 
 </script>
 <style>

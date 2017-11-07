@@ -33,7 +33,7 @@ module.exports = function (app) {
     },
     idRemito: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'remitos',
         key: 'idRemito'
@@ -45,13 +45,13 @@ module.exports = function (app) {
     },
     idProducto: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'productos',
         key: 'idProductos'
       }
     },
-    cantidad: {
+    cantidadSugerida: {
       type: Sequelize.INTEGER(11),
       allowNull: true
     },

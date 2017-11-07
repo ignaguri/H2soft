@@ -5,21 +5,26 @@ const SidebarStore = {
   sidebarLinks: [
     {
       name: 'Recorridos',
+      icon: 'ti-direction-alt',
+      path: '/admin/recorridos'
+    },
+    {
+      name: 'Planificacion',
       icon: 'ti-map-alt',
-      path: '/admin/maps'
+      path: '/admin/planificacion'
     },
     {
       name: 'Reportes',
       icon: 'ti-bar-chart',
-      path: '/admin/stats'
+      path: '/admin/reportes'
     },
     {
-      name: 'Insumos',
-      icon: 'ti-package',
+      name: 'Bidones y Dispensers',
+      icon: 'ti-paint-bucket',
       path: '/admin/table-list'
     },
     {
-      name: 'Gastos',
+      name: 'Ingresos y Gastos',
       icon: 'ti-shopping-cart',
       path: '/admin/typography'
     },
@@ -46,7 +51,7 @@ const SidebarStore = {
     {
       name: 'Usuarios',
       icon: 'ti-user',
-      path: '/admin/overview'
+      path: '/admin/usuarios'
     }
   ],
   displaySidebar (value) {

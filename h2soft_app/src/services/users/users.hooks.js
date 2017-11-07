@@ -11,14 +11,29 @@ const restrict = [
   })
 ];
 
+function includePoster() {
+    return function (hook) {
+      const model = hook.app.service('users').Model;
+      const association = { include: [{ model: model, as: 'empleados' }] };
+
+      switch (hook.type) {
+        case 'before':
+          hook.params.sequelize = Object.assign(association, { raw: false });
+          return Promise.resolve(hook);
+          break;
+
+      }
+    }
+}
+
 module.exports = {
   before: {
     all: [],
     find: [ authenticate('jwt') ],
     get: [ ...restrict ],
     create: [ hashPassword() ],
-    update: [ ...restrict, hashPassword() ],
-    patch: [ ...restrict, hashPassword() ],
+    update: [ hashPassword() ],
+    patch: [ hashPassword() ],
     remove: [ ...restrict ]
   },
 

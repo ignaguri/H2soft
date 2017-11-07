@@ -27,13 +27,9 @@ module.exports = function (app) {
       type: Sequelize.STRING(45),
       allowNull: false
     },
-    idLocalidad: {
-      type: Sequelize.INTEGER(11),
+    localidad: {
+      type: Sequelize.STRING(45),
       allowNull: false,
-      references: {
-        model: 'localidades',
-        key: 'idLocalidad'
-      }
     },
     latitud: {
       type: Sequelize.FLOAT,
@@ -41,6 +37,10 @@ module.exports = function (app) {
     },
     longitud: {
       type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    observaciones: {
+      type: Sequelize.STRING(100),
       allowNull: true
     }
   }, {

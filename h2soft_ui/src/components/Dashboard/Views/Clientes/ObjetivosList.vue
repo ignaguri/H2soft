@@ -9,7 +9,7 @@
     </div>
     <div class="col-md-4 col-md-offset-8">
       <div class="text-center">
-        <button type="button" class="btn btn-info btn-fill btn-wd" @click="showCustomModal = true">
+        <button type="button" class="btn btn-info btn-fill btn-wd" @click="btn_agregar">
           Agregar Objetivo
         </button>
       </div>
@@ -24,20 +24,14 @@
           </fg-input>
         </div>
         <div class="col-md-6">
-          <fg-input type="text"
-                    label="Dirección"
-                    placeholder="Dirección del lugar"
-                    v-model="direccion">
-          </fg-input>
-        </div>
-        <div class="col-md-6 col-md-offset-3">
-          <label for="localidad">Localidad</label>
-          <select id="localidad" v-model="idLocalidad">
-            <option value="none">Seleccione una localidad</option>
-            <option v-for="loc in localidades" v-bind:value="loc.idLocalidad">
-              {{ loc.nombre }}
-            </option>
-          </select>
+          <label>Dirección</label>
+          <vga ref="obAddress"
+               id="objetiv"
+               classname="form-control border-input"
+               placeholder="Ingrese la dirección"
+               v-on:placechanged="getAddressData"
+               country="ar">
+          </vga>
         </div>
       </div>
       <div slot="modal-footer" class="modal-footer">
@@ -49,24 +43,23 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import api from 'src/api/services/clientServices'
   import { modal } from 'vue-strap'
+  import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
-  const tableColumns = ['Nombre', 'Direccion', 'Localidad']
-  // TODO: guardar lista en localStorage para ahorrar llamados a la api
-  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
+  const tableColumns = ['Nombre', 'Dirección', 'Localidad']
   export default {
     components: {
       PaperTable,
-      modal
+      modal,
+      vga: VueGoogleAutocomplete
     },
     data () {
       return {
         showCustomModal: false,
-        localidades: {},
         nombre: '',
-        direccion: '',
-        idLocalidad: -1,
+        dirección: '',
+        localidad: '',
+        obAddress: '',
         table1: {
           title: 'Objetivos',
           subTitle: 'Lista de objetivos donde entregar pedidos',
@@ -89,48 +82,24 @@
       }
     },
     watch: {
-      objetivos: function changer () {
+      objetivos: function () {
         this.cargarObjetivos()
       }
     },
     mounted () {
       this.cargarObjetivos()
-      this.getLocalidades()
     },
     methods: {
       cargarObjetivos () {
-        if (this.edit) {
-          api.getObjetivos(this, this.idCliente).then(res => {
-            res.forEach(ob => {
-              this.table1.data.push({
-                id: ob.idObjetivosXCliente,
-                nombre: ob.nombre,
-                direccion: ob.direccion,
-                localidad: ob.idLocalidad
-              })
-            })
-          }, error => {
-            console.log('error ' + JSON.stringify(error))
+        this.table1.data = []
+        this.objetivos.forEach(ob => {
+          this.table1.data.push({
+            id: ob.idObjetivosXCliente,
+            nombre: ob.nombre,
+            dirección: ob.direccion,
+            localidad: ob.localidad
           })
-        } else {
-          this.table1.data = []
-          this.objetivos.forEach(ob => {
-            this.table1.data.push({
-              nombre: ob.nombre,
-              direccion: ob.direccion,
-              localidad: ob.idLocalidad
-            })
-          })
-        }
-      },
-      getLocalidades () {
-        api.getLocalidades(this)
-          .then(res => {
-            this.localidades = res
-          })
-      },
-      editar (e) {
-        console.log('editar id: ' + e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        })
       },
       borrar (e) {
         let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
@@ -139,12 +108,26 @@
       },
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
-        if (this.nombre === '' || this.direccion === '' || isNaN(this.idLocalidad)) {
+        if (this.nombre === '' || this.dirección === '') {
           alert('Debe completar todos los campos')
           return true
         }
-        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.direccion, idLocalidad: this.idLocalidad})
+        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.dirección, localidad: this.localidad})
         return false
+      },
+      getAddressData (addressData, placeResultData) {
+        console.log('addressData:', addressData)
+        console.log('placeresultdata:', placeResultData)
+        let direc = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
+        this.dirección = direc
+        this.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
+      },
+      btn_agregar () {
+        this.nombre = ''
+        this.dirección = ''
+        this.localidad = ''
+        this.$refs.obAddress.clear()
+        this.showCustomModal = true
       }
     }
   }

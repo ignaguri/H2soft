@@ -24,11 +24,11 @@ module.exports = function (app) {
       allowNull: false
     },
     telefono: {
-      type: Sequelize.INTEGER(11),
+      type: Sequelize.STRING(45),
       allowNull: true
     },
     celular: {
-      type: Sequelize.INTEGER(11),
+      type: Sequelize.STRING(45),
       allowNull: true
     },
     mail: {

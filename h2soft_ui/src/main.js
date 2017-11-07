@@ -31,7 +31,7 @@ const router = new VueRouter({
   routes, // short for routes: routes
   linkActiveClass: 'active'
 })
-
+// Vue.http.headers.common['Authorization'] = auth.getAuthHeader()
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {
   get () {

@@ -18,6 +18,14 @@ module.exports = function (app) {
     descripcion: {
       type: Sequelize.STRING(45),
       allowNull: true
+    },
+    idObjetivo: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'objetivos-x-cliente',
+        key: 'idObjetivosXCliente'
+      }
     }
   }, {
     hooks: {

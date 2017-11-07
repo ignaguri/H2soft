@@ -26,11 +26,9 @@ module.exports = function (app) {
       }
     }
   });
-
   estadosRecorrido.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
-
   return estadosRecorrido;
 };

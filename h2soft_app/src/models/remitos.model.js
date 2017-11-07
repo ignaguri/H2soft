@@ -36,7 +36,7 @@ module.exports = function (app) {
       allowNull: true
     },
     firma: {
-      type: Sequelize.STRING(30),
+      type: Sequelize.TEXT('medium'),
       allowNull: true
     }
   }, {
