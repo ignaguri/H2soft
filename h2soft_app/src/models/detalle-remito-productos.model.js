@@ -4,37 +4,36 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const detalleFactura = sequelizeClient.define('detalle-factura', {
-    idDetalleFactura: {
+  const detalleRemito = sequelizeClient.define('detalle-remito-productos', {
+    idDetalleRemitoProductos: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    idFacturas: {
+    idRemito: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
-        model: 'facturas',
-        key: 'idFacturas'
+        model: 'remitos',
+        key: 'idRemito'
       }
     },
-    idDetalleRemitoProducto: {
+    idProducto: {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'detalle-remito-productos',
-        key: 'idDetalleRemitoProductos'
+        model: 'productos',
+        key: 'idProductos'
       }
     },
-    precio: {
-      type: Sequelize.DOUBLE,
+    cantidad: {
+      type: Sequelize.INTEGER(11),
       allowNull: true
     },
-    subtotal: {
-      type: Sequelize.FLOAT,
-      allowNull: false,
-      defaultValue: '0'
+    DejadoEnCliente: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true
     }
   }, {
     hooks: {
@@ -44,10 +43,10 @@ module.exports = function (app) {
     }
   });
 
-  detalleFactura.associate = function (models) { // eslint-disable-line no-unused-vars
+  detalleRemito.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return detalleFactura;
+  return detalleRemito;
 };

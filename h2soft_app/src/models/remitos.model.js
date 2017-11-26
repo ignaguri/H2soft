@@ -10,7 +10,7 @@ module.exports = function (app) {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
-    }/*,
+    },
     idObjetivo: {
       type: Sequelize.INTEGER(11),
       allowNull: true,
@@ -18,7 +18,7 @@ module.exports = function (app) {
         model: 'objetivosxcliente',
         key: 'idObjetivosXCliente'
       }
-    }*/,
+    },
     fecha: {
       type: Sequelize.DATE,
       allowNull: true
