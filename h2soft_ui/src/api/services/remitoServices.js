@@ -17,16 +17,25 @@ export default {
         return rem
       })
       .catch(error => {
-        console.log('algo falló en el insert' + JSON.stringify(error))
+        console.log('algo falló en el insert del remito' + JSON.stringify(error))
       })
   },
-  nuevoDetalleDeRemito (context, detalleRemito) {
-    return context.$http.post(API_URL + 'detalle-remito', detalleRemito, authHeader)
+  nuevoDetalleRemitoProducto (context, detalleRemitoProductos) {
+    return context.$http.post(API_URL + 'detalle-remito-productos', detalleRemitoProductos, authHeader)
       .then(rem => {
         return true
       })
       .catch(error => {
-        console.log('algo falló en el insert' + JSON.stringify(error))
+        console.log('algo falló en el insert del detalle del remito' + JSON.stringify(error))
+      })
+  },
+  nuevoDetalleRemitoDispensers (context, detalleRemitoDispensers) {
+    return context.$http.post(API_URL + 'detalle-remito-dispensers', detalleRemitoDispensers, authHeader)
+      .then(rem => {
+        return true
+      })
+      .catch(error => {
+        console.log('algo falló en el insert del detalle del remito' + JSON.stringify(error))
       })
   }
 }

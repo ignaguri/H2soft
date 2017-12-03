@@ -20,18 +20,21 @@
     </div>
   </div>
   <div class="row">
-    <div v-if="verBotonSuspender" class="col-md-4 left">
+    <div v-if="false" class="col-md-4 left">
       <h5>Camion asignado: </h5>
     </div>
     <div class="col-md-4 left">
       <h5>Estado del recorrido: <a>{{estado}}</a> </h5>
     </div>
     <div class="col-md-4 left">
-      <button type="button" class="btn btn-info btn-fill btn-wd" v-if="verBotonIniciar"  @click="recorridoCambioEstado">
-        {{botonEstado}}
+      <button type="button" class="btn btn-info btn-fill btn-wd" v-if="verBtIniciarFinalizar" @click="recorridoIniciarFinalizar">
+        {{txBtIniciarFinalizar}}
       </button>
-      <button type="button" class="btn btn-info btn-fill btn-wd"  v-if="verBotonSuspender" @click="recorridoCambioEstado">
-        Suspender
+      <button type="button" class="btn btn-info btn-fill btn-wd" v-if="verBtSuspReanudar" @click="recorridoSuspenderReanudar">
+        {{txBtSuspReanudar}}
+      </button>
+      <button type="button" class="btn btn-info btn-fill btn-wd" v-if="verBtAnular" @click="recorridoAnular">
+        Anular
       </button>
     </div>
   </div>
@@ -69,10 +72,13 @@
     },
     data () {
       return {
-        verBotonIniciar: true,
-        verBotonSuspender: false,
-        botonEstado: 'Iniciar',
+        verBtIniciarFinalizar: true,
+        verBtSuspReanudar: false,
+        verBtAnular: false,
+        txBtIniciarFinalizar: 'Iniciar',
+        txBtSuspReanudar: 'Suspender',
         puedeFinalizar: true,
+        // idEstado: 0,
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -87,7 +93,8 @@
       turno: String,
       temporada: String,
       fecha: String,
-      'estado': String
+      'estado': String,
+      idEstado: Number
     },
     mounted () {
       // this.cargarRecorrido()
@@ -112,6 +119,7 @@
                   estado: det.entregado === 0 ? 1 : 4,
                   bidones: det.cantidadSugerida
                 })
+                // this.idEstado = det.entregado
                 if (det.entregado === 0) {
                   this.puedeFinalizar = false
                 }
@@ -122,58 +130,150 @@
             console.log('error al cargar los recorridos asignados ' + error)
           })
       },
-      cargarRecorrido () {
-        api.getRecorrido(this, this.id)
-        .then(res => {
-          this.setearBotones()
-        })
-      },
       verdetalle (e) {
         let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
-        // this.$parent.objetivoId = id
         this.$parent.detalleRecorridoAsignadoId = id
         this.$parent.verRemito = true
         this.$parent.verDetalle = false
         this.$parent.verLista = false
       },
-      recorridoCambioEstado () {
-        console.log('llego al cambio de estado', this.estado)
-        if (this.estado === 'Nuevo') {
-          apiEstados.iniciarRecorrido(this, this.id)
-            .then(resObj => {
-              this.botonEstado = 'Finalizar'
-              this.$parent.estado = 'En proceso'
-              noti.success(this)
-            })
-        }
-        if (this.estado === 'En proceso') {
-          this.finalizarRecorrido()
+      recorridoIniciarFinalizar () {
+        switch (this.idEstado) {
+          case 1: // nuevo
+            console.log('entro a iniciar. Estado: ' + this.idEstado)
+            apiEstados.iniciarRecorrido(this, this.id)
+              .then(resObj => {
+                this.verBtSuspReanudar = true
+                this.verBtAnular = true
+                this.txBtIniciarFinalizar = 'Finalizar'
+                this.txBtSuspReanudar = 'Suspender'
+                this.$parent.estado = 'En proceso'
+                this.$parent.idEstado = 2
+                noti.success(this)
+              },
+              error => {
+                alert('Error al iniciar el recorrido')
+                console.log('error al cambiar el estado ' + error)
+              })
+            break
+          case 2: // en proceso
+            if (this.puedeFinalizar === false) {
+              alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
+            } else {
+              console.log('entro a finalizar. Estado: ' + this.idEstado)
+              apiEstados.finalizarRecorrido(this, this.id)
+                .then(resObj => {
+                  this.verBtSuspReanudar = false
+                  this.verBtAnular = false
+                  this.verBtIniciarFinalizar = false
+                  this.$parent.estado = 'Finalizado'
+                  noti.success(this)
+                },
+                error => {
+                  alert('Error al finalizar el recorrido')
+                  console.log('error al cambiar el estado ' + error)
+                })
+            }
+            break
+          default:
+            alert('No se puede realizar el cambio de estado')
         }
       },
-      finalizarRecorrido () {
-        if (this.puedeFinalizar === false) {
-          alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
+      recorridoSuspenderReanudar () {
+        switch (this.idEstado) {
+          case 2: // en proceso
+            console.log('entro a suspender. Estado: ' + this.idEstado)
+            apiEstados.suspenderRecorrido(this, this.id)
+              .then(resObj => {
+                this.verBtIniciarFinalizar = false
+                this.verBtAnular = false
+                this.txBtSuspReanudar = 'Reanudar'
+                this.$parent.estado = 'Suspendido'
+                this.$parent.idEstado = 3
+                noti.success(this)
+              },
+                error => {
+                  alert('Error al suspender el recorrido')
+                  console.log('error al cambiar el estado ' + error)
+                })
+            break
+          case 3: // suspendido
+            console.log('entro a reanudar. Estado: ' + this.idEstado)
+            apiEstados.reanudarRecorrido(this, this.id)
+              .then(resObj => {
+                this.verBtIniciarFinalizar = true
+                this.txBtIniciarFinalizar = 'Finalizar'
+                this.verBtAnular = true
+                this.txBtSuspReanudar = 'Suspender'
+                this.$parent.estado = 'En Proceso'
+                this.$parent.idEstado = 2
+                noti.success(this)
+              },
+              error => {
+                alert('Error al suspender el recorrido')
+                console.log('error al cambiar el estado ' + error)
+              })
+            break
+          default:
+            alert('No se puede realizar el cambio de estado')
+        }
+      },
+      recorridoAnular () {
+        if (this.idEstado === 1 || this.idEstado === 2) {
+          console.log('entro a anular. Estado: ' + this.idEstado)
+          apiEstados.anularRecorrido(this, this.id)
+            .then(resObj => {
+              this.$parent.estado = 'Anulado'
+              this.verBtIniciarFinalizar = false
+              this.verBtAnular = false
+              this.verBtSuspReanudar = false
+              this.$parent.idEstado = 5
+              noti.success(this)
+            },
+            error => {
+              alert('Error al anular el recorrido')
+              console.log('error al cambiar el estado ' + error)
+            })
         } else {
-          apiEstados.finalizarRecorrido(this, this.id)
-          .then(resObj => {
-            this.verBotonIniciar = false
-            this.$parent.estado = 'Finalizado'
-            noti.success(this)
-          })
+          alert('No se puede realizar el cambio de estado')
         }
       },
       setearEstadoActual () {
-        switch (this.estado) {
-          case 'Nuevo':
-            this.botonEstado = 'Iniciar'
+        console.log('estado ' + this.idEstado)
+        switch (this.idEstado) {
+          case 1:
+            this.$parent.estado = 'Nuevo'
+            this.verBtIniciarFinalizar = true
+            this.txBtIniciarFinalizar = 'Iniciar'
+            this.verBtAnular = true
+            this.verBtSuspReanudar = false
             break
-          case 'En proceso':
-            this.botonEstado = 'Finalizar'
+          case 2:
+            this.$parent.estado = 'En Proceso'
+            this.verBtIniciarFinalizar = true
+            this.txBtIniciarFinalizar = 'Finalizar'
+            this.verBtAnular = true
+            this.verBtSuspReanudar = true
+            this.txBtSuspReanudar = 'Suspender'
             break
-          case 'Suspendido':
+          case 3:
+            this.$parent.estado = 'Suspendido'
+            this.verBtIniciarFinalizar = false
+            this.verBtAnular = false
+            this.verBtSuspReanudar = true
+            this.txBtSuspReanudar = 'Reanudar'
             break
-          case 'Finalizado':
-            this.verBotonIniciar = false
+          case 4:
+            this.$parent.estado = 'Finalizado'
+            this.verBtIniciarFinalizar = false
+            this.verBtAnular = false
+            this.verBtSuspReanudar = false
+            break
+          case 5:
+            this.$parent.estado = 'Anulado'
+            this.verBtIniciarFinalizar = false
+            this.verBtAnular = false
+            this.verBtSuspReanudar = false
             break
           default:
             break

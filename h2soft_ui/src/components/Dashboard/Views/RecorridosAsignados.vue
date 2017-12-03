@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <recorrido-list v-if="this.verLista"></recorrido-list>
-      <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" v-bind:estado="estado"></detalle-recorrido>
+      <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" :idEstado="this.idEstado"  :estado="estado"></detalle-recorrido>
       <remito v-if="this.verRemito" v-bind:IdDetalleRecorridoAsignado="detalleRecorridoAsignadoId" ></remito>
     </div>
     <div class="row">
@@ -34,12 +34,13 @@
         verRemito: false,
         recorridoAsignadoId: 0,
         detalleRecorridoAsignadoId: 0,
-        // objetivoId: 0,
         dia: '',
         turno: '',
         temporada: '',
         fecha: '',
-        estado: ''
+        estado: '',
+        idEstado: 0
+
       }
     },
     methods: {

@@ -111,6 +111,8 @@
         dispensersDelObjetivo: [],
         idObjetivo: '',
         objetivo: '',
+        idRemito: 0,
+        edicion: false,
         firma: '',
         table1: {
           title: 'Objetivos del recorrido',
@@ -131,6 +133,7 @@
         api.getDetalleRecorridoAsignado(this, this.IdDetalleRecorridoAsignado)
           .then(resDet => {
             resDet = resDet.body.data[0]
+            this.idRemito = resDet.idRemito
             api.getObjetivoXId(this, resDet.idObjetivo)
               .then(obj => {
                 obj = obj.body.data[0]
@@ -139,6 +142,16 @@
               })
             this.cargarDispensers()
             this.cargarDispensersDelObjetivo(resDet.idObjetivo)
+//            if (this.idRemito !== 0) {
+//              apiRemito.getRemito(this, this.idRemito)
+//                .then(res => {
+//                  res = res.body.data[0]
+//                  console.log(res)
+//                  this.edicion = true
+//                })
+//            } else {
+//              // alert('esto es edicion de un remito ' + this.idRemito)
+//            }
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
           })
@@ -150,44 +163,62 @@
           'fecha': Date.now(),
           'idEmpleado': idEmpleado,
           'firma': this.firma,
-          'firmaConforme': true
+          'firmaConforme': true,
+          'idObjetivo': this.idObjetivo
         }
         apiRemito.nuevoRemito(this, remito)
           .then(rem => {
             console.log(rem)
+            // inserto el detalle del remito para los bidones vacios que me llevo
             rem = rem.body
-            var detalleRemitoBidones = {
+            var detalleRemitoBidonesLlevo = { // cantidad de bidones vacios que me llevo del cliente
               'idRemito': rem.idRemito,
-              'producto': 1, // bidones
-              'cantidad': this.remito.bidonesDejo
+              'idProducto': 1, // bidones
+              'cantidad': this.remito.bidonesLlevo,
+              'dejadoEnCliente': false
             }
-            // inserto el detalle del remito para los bidones
-            apiRemito.nuevoDetalleDeRemito(this, detalleRemitoBidones)
+            apiRemito.nuevoDetalleRemitoProducto(this, detalleRemitoBidonesLlevo)
+            // inserto el detalle del remito para los bidones llenos que dejo
+            var detalleRemitoBidonesDejo = { // cantidad de bidones llenos que dejo en el cliente
+              'idRemito': rem.idRemito,
+              'idProducto': 1, // bidones
+              'cantidad': this.remito.bidonesDejo,
+              'dejadoEnCliente': true
+            }
+            apiRemito.nuevoDetalleRemitoProducto(this, detalleRemitoBidonesDejo)
               .then(res => {
+                // actualizo el detalle del recorrido historico
                 var detalle = {
                   'idDetalleRecorridoHistorico': this.IdDetalleRecorridoAsignado,
                   'idRemito': rem.idRemito,
                   'entregado': true
                 }
-                // actualizo el detalle del recorrido historico
                 api.editarDetalleRecorridoHistorico(this, detalle)
                   .then(res => {
-                    // acualizo los dispensers e inserto el detalle del remito para los dispensers dejados
-                    // Guardo los dispensers colocados
+                    // acualizo los dispensers e inserto el detalle del remito para los dispensers
+                    // Guardo los dispensers dejados
                     this.dispensersColocados.forEach(disC => {
-                      console.log(disC)
-                      var detalleRemitoDispenser = {
+                      var detalleRemitoDispensersDejados = {
                         'idRemito': rem.idRemito,
-                        'idDispensers': disC
+                        'idDispenser': disC,
+                        'dejadoEnCliente': true
                       }
-                      apiRemito.nuevoDetalleDeRemito(this, detalleRemitoDispenser)
+                      apiRemito.nuevoDetalleRemitoDispensers(this, detalleRemitoDispensersDejados)
                       apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
                     })
-                    // Guardo los dispensers retirados
+                    // Guardo los dispensers llevados
                     this.dispensersRetirados.forEach(disR => {
+                      var detalleRemitoDispensersLlevado = {
+                        'idRemito': rem.idRemito,
+                        'idDispenser': disR,
+                        'dejadoEnCliente': false
+                      }
+                      apiRemito.nuevoDetalleRemitoDispensers(this, detalleRemitoDispensersLlevado)
                       apiDispensers.borrarObjetivoDeDispenser(this, disR)
                     })
+                    // muestro la notificacion de ok
                     noti.success(this)
+                    // vuelvo atrás
                     this.$parent.current = 'DetalleRecorrido'
                     this.$parent.verRemito = false
                     this.$parent.verDetalle = true
@@ -216,7 +247,7 @@
         alert('ver!')
       },
       recorridoCambioEstado () {
-        this.botonEstado = 'Finalizar'
+        this.txBtIniciarFinalizar = 'Finalizar'
         this.estado = 'En proceso'
       },
       seeDetalle () {

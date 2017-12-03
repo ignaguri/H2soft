@@ -27,7 +27,7 @@ module.exports = function (app) {
         key: 'idDispensers'
       }
     },
-    DejadoEnCliente: {
+    dejadoEnCliente: {
       type: Sequelize.BOOLEAN,
       allowNull: true
     }
