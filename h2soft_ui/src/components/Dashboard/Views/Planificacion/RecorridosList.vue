@@ -39,16 +39,14 @@
               </select>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="form-group">
-              <label for="fechaInicio"><h4><span class="label label-default">Inicio período de asignación</span></h4></label>
-              <datepicker v-model="fechaInicio" id="fechaInicio" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha inicio'" width="100%" :clear-button="true"></datepicker>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="fechaFin"><h4><span class="label label-default">Fin período de asignación</span></h4></label>
-              <datepicker v-model="fechaFin" id="fechaFin" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'" :placeholder="'Fecha fin'" width="100%" :clear-button="true"></datepicker>
+              <fg-input type="number"
+                        label="Cantidad de días de asignación"
+                        placeholder="Ingrese un número"
+                        v-model="diasAsignacion"
+                        disabled>
+              </fg-input>
             </div>
           </div>
         </div>
@@ -63,15 +61,14 @@
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
-  import { modal, datepicker } from 'vue-strap'
+  import { modal } from 'vue-strap'
 
   const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
       PaperTable,
-      modal,
-      datepicker
+      modal
     },
     data () {
       return {
@@ -90,17 +87,8 @@
         showCustomModal: false,
         idEmpleadoAsignado: null,
         empleados: {},
-        fechaInicio: new Date().toLocaleString(undefined, {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        }),
-        fechaFin: new Date().toLocaleString(undefined, {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric'
-        }),
-        asignado: false
+        asignado: false,
+        diasAsignacion: 30
       }
     },
     props: {
@@ -220,15 +208,14 @@
       },
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
-        if (this.idEmpleadoAsignado === null || this.fechaInicio === '' || this.fechaFin === '') {
+        if (this.idEmpleadoAsignado === null) {
           alert('Debe completar todos los campos')
           return true
         }
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
-          fechaInicio: this.fechaInicio,
-          fechaFin: this.fechaFin
+          diasAsignacion: this.diasAsignacion
         })
         return false
       },

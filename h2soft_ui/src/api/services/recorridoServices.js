@@ -235,7 +235,16 @@ export default {
   },
   postAsignacion (context, asignacion) {
     console.log('somehow asignar', asignacion)
-    let idRecorridoHist
+    return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
+      .then(asignado => {
+        console.log('asigné', asignado)
+        return true
+      })
+      .catch(error => {
+        console.log('error asignando el recorrido', error)
+        return false
+      })
+    /* let idRecorridoHist
     return context.$http.get(API_URL + 'recorridos/' + asignacion.recorrido, authHeader)
       .then(rec => {
         console.log('recorrido a copiar', rec.body)
@@ -248,7 +257,7 @@ export default {
           idTemporada: rec.body.idTemporada,
           idEstado: 1,
           idEmpleadoAsignado: asignacion.empleado,
-          fechaAsignacion: new Date(),
+          fechaAsignacion: new Date(fechaInicioParsed[2], fechaInicioParsed[1] - 1, fechaInicioParsed[0], 0, 0, 0, 0),
           fechaInicio: new Date(fechaInicioParsed[2], fechaInicioParsed[1] - 1, fechaInicioParsed[0], 0, 0, 0, 0),
           fechaFin: new Date(fechaFinParsed[2], fechaFinParsed[1] - 1, fechaFinParsed[0], 0, 0, 0, 0),
           idRecorrido: asignacion.recorrido
@@ -277,12 +286,17 @@ export default {
       })
       .then(detallesPosted => {
         console.log('inserté los detalles hitoricos', detallesPosted)
+        // return context.$http.get(API_URL + 'recorrido-historico/' + idRecorridoHist, {params: {finAsignacion: true}, headers: auth.getAuthHeader()})
+        return context.$http.get(API_URL + 'recorrido-historico/prueba/' + idRecorridoHist, authHeader)
+      })
+      .then(flagEnviado => {
+        console.log('envie el flag', flagEnviado)
         return true
       })
       .catch(error => {
         console.log('error asignando el recorrido', error)
         return false
-      })
+      }) */
   },
   checkIfAsignado (context, id) {
     const hoy = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
