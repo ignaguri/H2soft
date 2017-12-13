@@ -15,7 +15,7 @@ const contratos = require('./contratos/contratos.service.js');
 const detalleFactura = require('./detalle-factura/detalle-factura.service.js');
 const detalleGasto = require('./detalle-gasto/detalle-gasto.service.js');
 const detalleRecorrido = require('./detalle-recorrido/detalle-recorrido.service.js');
-const detalleRemito = require('./detalle-remito/detalle-remito.service.js');
+const detalleRemito = require('./detalle-remito-productos/detalle-remito-productos.service.js');
 const dispenserXDetalleRecorrido = require('./dispenser-x-detalle-recorrido/dispenser-x-detalle-recorrido.service.js');
 const horariosXObjetivo = require('./horarios-x-objetivo/horarios-x-objetivo.service.js');
 const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
@@ -46,6 +46,8 @@ const detalleRecorridoHistorico = require('./detalle-recorrido-historico/detalle
 const detallesContrato = require('./detalles-contrato/detalles-contrato.service.js');
 
 const camiones = require('./camiones/camiones.service.js');
+
+const detalleRemitoDispensers = require('./detalle-remito-dispensers/detalle-remito-dispensers.service.js');
 
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
@@ -86,4 +88,5 @@ module.exports = function () {
   app.configure(detalleRecorridoHistorico);
   app.configure(detallesContrato);
   app.configure(camiones);
+  app.configure(detalleRemitoDispensers);
 };

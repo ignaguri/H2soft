@@ -61,7 +61,7 @@
       cargarRecorridosAsignados () {
         var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
         if (idEmpleado === null) {
-          this.table1.subTitle = 'Empleado no asignado al usuario logueado'
+          this.table1.subTitle = 'Empleado no asignado al usuario logueado. No se podrán mostrar recorridos'
           return
         }
         api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
@@ -102,7 +102,7 @@
             this.$parent.fecha = d.toLocaleDateString() // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
-            // this.$parent.idEstado = res.idEstado
+            this.$parent.idEstado = res.idEstado
           })
       },
       getDia (idDia) {
