@@ -38,5 +38,17 @@ export default {
       .catch(error => {
         console.log('algo falló en el edit' + JSON.stringify(error))
       })
+  },
+  mostrarRecorridoEnMapa (context, data) {
+    console.log('mapa', data)
+    let url = 'https://www.google.com/maps/dir/?api=1&'
+    url += 'origin='// San+Luis+188%2C+Cordoba%2C+Cordoba'
+    url += '&'
+    url += 'destination='// San+Luis+188%2C+Cordoba%2C+Cordoba'
+    url += '&'
+    url += 'travelmode=driving'
+    url += '&'
+    url += 'waypoints='// Buenos+Aires+750%2C+Cordoba%2C+Cordoba%7CObispo+Trejo+332%2C+Cordoba%2C+Cordoba'
+    return url
   }
 }
