@@ -1,10 +1,15 @@
 <template>
-  <div class="content">
-    <div class="row">
-      <canvas  id="signature-pad" class="signature-pad" width=400 height=200 @touchend="save" ></canvas>
+  <div class="content" >
+    <div class="row" >
+      <canvas id="signature-pad" class="signature-pad" width=400 height=200 @touchend="save" ></canvas>
     </div>
-    <div class="row">
-      <button  type="button" class="btn btn-danger btn-fill btn-wd" @click="clear" >Limpiar</button>
+    <!--
+    <div class="row" >
+      <button type="button" class="btn btn-danger btn-fill btn-wd" @click="save" >registrar</button>
+    </div>
+    -->
+    <div class="row" >
+      <button type="button" class="btn btn-danger btn-fill btn-wd" @click="clear" >Limpiar</button>
     </div>
   </div>
   <!--
@@ -29,7 +34,7 @@
       return {
         imagenFirma: '',
         signaturePad: '',
-        activado: true
+        esEdicion: false
       }
     },
     mounted () {
@@ -39,11 +44,11 @@
     methods: {
       save () {
         let data = this.signaturePad.toDataURL('image/png')
-        console.log('data: ' + data)
-        // window.open(data)
+        console.log('save: ')
         this.$parent.firma = data
       },
       clear () {
+        console.log('borrar')
         this.signaturePad.clear()
       },
       obtenerSiganturePad () {

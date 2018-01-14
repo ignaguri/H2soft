@@ -9,7 +9,8 @@ export default {
       .then(res => { return res.body.data })
   },
   getRemito (context, idRemito) {
-    return context.$http.get(API_URL + 'remitos/?idremito=' + idRemito, authHeader)
+    return context.$http.get(API_URL + 'remitos/?idRemito=' + idRemito, authHeader)
+      .then(res => { return res })
   },
   nuevoRemito (context, remito) {
     return context.$http.post(API_URL + 'remitos', remito, authHeader)
@@ -36,6 +37,24 @@ export default {
       })
       .catch(error => {
         console.log('algo falló en el insert del detalle del remito' + JSON.stringify(error))
+      })
+  },
+  getDetalleRemitoProducto (context, idRemito) {
+    return context.$http.get(API_URL + 'detalle-remito-productos/?idRemito=' + idRemito, authHeader)
+      .then(rem => {
+        return rem
+      })
+      .catch(error => {
+        console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))
+      })
+  },
+  getDetalleRemitoDispensers (context, idRemito) {
+    return context.$http.get(API_URL + 'detalle-remito-dispensers/?idRemito=' + idRemito, authHeader)
+      .then(rem => {
+        return rem
+      })
+      .catch(error => {
+        console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))
       })
   }
 }
