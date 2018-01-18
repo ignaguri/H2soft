@@ -281,8 +281,10 @@
       },
       verRecorridoEnMapa () {
         // alert('Ver objetivos en el mapa')
-        let url = api.mostrarRecorridoEnMapa(this, this.table1.data)
-        window.open(url)
+        api.mostrarRecorridoEnMapa(this, this.table1.data)
+          .then(url => {
+            window.open(url)
+          })
       }
     }
   }
