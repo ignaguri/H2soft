@@ -15,7 +15,7 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'objetivosxcliente',
+        model: 'objetivos-x-cliente',
         key: 'idObjetivosXCliente'
       }
     },

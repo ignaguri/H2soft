@@ -280,7 +280,11 @@
         }
       },
       verRecorridoEnMapa () {
-        alert('Ver objetivos en el mapa')
+        // alert('Ver objetivos en el mapa')
+        api.mostrarRecorridoEnMapa(this, this.table1.data)
+          .then(url => {
+            window.open(url)
+          })
       }
     }
   }
