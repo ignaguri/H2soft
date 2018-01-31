@@ -42,7 +42,7 @@
           <div class="col-md-4 left">
             <h5>Dispensers colocados</h5>
             <div class="btn-group btn-group-justified">
-              <sele @change="cambioDispensersColocados" :options="dispensersSinObjetivo" options-value="idDispensers" search-text="Buscar" placeholder="Seleccione" options-label="codigo" :multiple="true" :search="true" :justified="true" ></sele>
+              <sele @change="cambioDispensersColocados" :options="dispensersSinObjetivo" options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersSinObjetivo_placeholder" options-label="codigo" :multiple="true" :search="true" :justified="true" ></sele>
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
           <div class="col-md-4 left">
             <h5>Dispensers retirados</h5>
             <div class="btn-group btn-group-justified">
-              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo" options-value="idDispensers" search-text="Buscar" placeholder="Seleccione" options-label="codigo" :multiple="true" name=""  :search="true" :justified="true"></sele>
+              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo" options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersDelObjetivo_placeholder" options-label="codigo" :multiple="true" name=""  :search="true" :justified="true"></sele>
             </div>
           </div>
         </div>
@@ -150,6 +150,8 @@
         dispensers: [],
         dispensersSinObjetivo: [],
         dispensersDelObjetivo: [],
+        dispensersSinObjetivo_placeholder: 'Seleccione',
+        dispensersDelObjetivo_placeholder: 'Seleccione',
         idObjetivo: '',
         objetivo: '',
         idRemito: 0,
@@ -217,19 +219,27 @@
           .then(res => {
             res = res.body.data
             var dispenserCodigo = ''
+            var huboDispensersLlevados = false // variable de control utilizada luego para mostrar "No hubo"
+            var huboDispensersDejados = false // variable de control utilizada luego para mostrar "No hubo"
             if (res !== null) {
               for (var i = 0, len = res.length; i < len; i++) {
                 if (res[i].dejadoEnCliente === 0) {
                   dispenserCodigo = this.dispensers.filter(x => { return x.idDispensers === res[i].idDispensers })
-                  console.log(dispenserCodigo)
+                  huboDispensersLlevados = true
                   this.remito.txdispensersLlevo = this.remito.txdispensersLlevo + ' - ' + dispenserCodigo[0].codigo
                 }
                 if (res[i].dejadoEnCliente === 1) {
                   dispenserCodigo = this.dispensers.filter(x => { return x.idDispensers === res[i].idDispenser })
-                  console.log(dispenserCodigo)
+                  huboDispensersDejados = true
                   this.remito.txdispensersDejo = this.remito.txdispensersDejo + ' - ' + dispenserCodigo[0].codigo
                 }
                 dispenserCodigo = '' // limpio la variable aux para el proximo ciclo del FOR
+              }
+              if (huboDispensersLlevados === false) {
+                this.remito.txdispensersLlevo = 'No hubo'
+              }
+              if (huboDispensersDejados === false) {
+                this.remito.txdispensersDejo = 'No hubo'
               }
               // this.dispensersDelObjetivo = res.filter(x => { return x.dejadoEnCliente === 0 })
             }
@@ -316,8 +326,19 @@
         apiDispensers.getDispensers(this)
           .then(res => {
             this.dispensers = res
-            this.dispensersDelObjetivo = res.filter(x => { return x.idObjetivo === idObjetivo })
-            this.dispensersSinObjetivo = res.filter(x => { return x.idObjetivo == null })
+            console.log(res.filter(x => { return x.idObjetivo === idObjetivo }))
+            if (res.filter(x => { return x.idObjetivo === idObjetivo }).length > 0) {
+              this.dispensersDelObjetivo = res.filter(x => { return x.idObjetivo === idObjetivo })
+              this.dispensersDelObjetivo_placeholder = 'Seleccione'
+            } else {
+              this.dispensersDelObjetivo_placeholder = 'No hay'
+            }
+            if (res.filter(x => { return x.idObjetivo == null }).length > 0) {
+              this.dispensersSinObjetivo = res.filter(x => { return x.idObjetivo == null })
+              this.dispensersSinObjetivo_placeholder = 'Seleccione'
+            } else {
+              this.dispensersSinObjetivo_placeholder = 'No hay'
+            }
           })
       },
       verdetalle () {

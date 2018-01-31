@@ -17,7 +17,7 @@
   import apiTemporadas from 'src/api/services/TemporadasServices'
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
-  // import noti from 'src/api/notificationsService'
+  import noti from 'src/api/notificationsService'
   const tableColumns = ['Nro', 'Día', 'Turno', 'Fecha', 'Temp']
   const dataColumns = []
 
