@@ -24,9 +24,9 @@ const SidebarStore = {
       path: '/admin/table-list'
     },
     {
-      name: 'Ingresos y Gastos',
+      name: 'Ingresos y Egresos',
       icon: 'ti-shopping-cart',
-      path: '/admin/typography'
+      path: '/admin/ingresosEgresos'
     },
     {
       name: 'Facturación',
@@ -47,6 +47,11 @@ const SidebarStore = {
       name: 'Usuarios',
       icon: 'ti-user',
       path: '/admin/usuarios'
+    },
+    {
+      name: 'ListadoRemitos',
+      icon: 'ti-pencil',
+      path: '/admin/listadoRemitos'
     }
   ],
   displaySidebar (value) {

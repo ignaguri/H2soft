@@ -49,6 +49,8 @@ const camiones = require('./camiones/camiones.service.js');
 
 const detalleRemitoDispensers = require('./detalle-remito-dispensers/detalle-remito-dispensers.service.js');
 
+const mediosDePagoCobro = require('./medios-de-pago-cobro/medios-de-pago-cobro.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -89,4 +91,5 @@ module.exports = function () {
   app.configure(detallesContrato);
   app.configure(camiones);
   app.configure(detalleRemitoDispensers);
+  app.configure(mediosDePagoCobro);
 };

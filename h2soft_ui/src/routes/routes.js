@@ -20,6 +20,8 @@ import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsigna
 // import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
+import ListadoRemitos from 'src/components/Dashboard/Views/Remitos.vue'
+import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos.vue'
 
 const routes = [
   {
@@ -48,9 +50,9 @@ const routes = [
         component: WorkInProgress
       },
       {
-        path: 'icons',
-        name: 'Ingresos y Gastos',
-        component: WorkInProgress
+        path: 'ingresosEgresos',
+        name: 'Ingresos y Egresos',
+        component: IngresosEgresos
       },
       {
         path: 'recorridos',
@@ -86,6 +88,11 @@ const routes = [
         path: 'usuarios',
         name: 'Gestion de usuarios',
         component: Usuarios
+      },
+      {
+        path: 'listadoRemitos',
+        name: 'listado de Remitos',
+        component: ListadoRemitos
       }
     ]
   },

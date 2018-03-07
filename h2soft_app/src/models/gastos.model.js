@@ -22,8 +22,25 @@ module.exports = function (app) {
         model: 'empleados',
         key: 'idEmpleados'
       }
+    },
+    descripcion: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    },
+    monto: {
+      type: Sequelize.DOUBLE,
+      allowNull: false
+    },
+    idMedioDePagoCobro: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'medios-de-pago-cobro',
+        key: 'idMediosDePagoCobro'
+      }
     }
-  }, {
+  },
+    {
     hooks: {
       beforeCount(options) {
         options.raw = true;
