@@ -62,8 +62,24 @@
                       required>
             </fg-input>
           </div>
-        </div>
-        <hr>
+          <div class="row">
+            <input type="file"  ref="image" accept="image/*" capture="camera" @change="onFileChange">
+              <picture-input
+                ref="pictureInput"
+                @change="onChange"
+                width="600"
+                height="600"
+                margin="16"
+                accept="image/jpeg,image/png"
+                size="10"
+                buttonClass="btn"
+                :customStrings="{
+                upload: '<h1>Bummer!</h1>',
+                drag: 'Drag r GTFO'}">
+              </picture-input>
+            </div>
+          </div>
+         <hr>
         <div class="row">
           <div class="text-center">
             <button type="submit"  class="btn btn-success btn-fill btn-wd">
