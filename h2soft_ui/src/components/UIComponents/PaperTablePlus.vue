@@ -7,28 +7,48 @@
       </slot>
     </div>
     <div class="content table-responsive table-full-width">
+      <div class="row">
+        <div class="col-md-5 col-md-offset-7">
+        <bs-input v-if="filter" :label="'Filtrar por:'" type="text" :placeholder="'Escriba algo'" v-model="filterText">
+          <dropdown slot="before" type="info" :text="filterOption">
+            <li><a @click="changeFilter('Sin filtro')">Sin filtro</a></li>
+            <li v-for="column in columns"><a @click="changeFilter(column)">{{column}}</a></li>
+          </dropdown>
+          <span slot="after" class="input-group-btn">
+            <button type="button" class="btn btn-success" @click="filterButton">Actualizar</button>
+          </span>
+        </bs-input>
+      </div>
+      </div>
       <table class="table" :class="tableClass">
         <thead>
         <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
         </thead>
         <tbody>
-          <tr v-for="item in data">
-            <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
-            <td v-if="editButton|eraseButton|goButton">
-              <span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
-              &nbsp;
-              <span class="ti-trash" @click="erase" v-if="eraseButton"></span>
-              &nbsp;
-              <span class="ti-new-window" @click="go" v-if="goButton"></span>
-            </td>
-          </tr>
+        <tr v-for="item in this.tableData">
+          <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
+          <td v-if="editButton|eraseButton|goButton">
+            <span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
+            &nbsp;
+            <span class="ti-trash" @click="erase" v-if="eraseButton"></span>
+            &nbsp;
+            <span class="ti-new-window" @click="go" v-if="goButton"></span>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
   </div>
 </template>
 <script>
+  import bsInput from '../UIComponents/Inputs/InputPlus'
+  import Dropdown from 'vue-strap/src/Dropdown'
+
   export default {
+    components: {
+      bsInput,
+      Dropdown
+    },
     props: {
       columns: Array,
       data: Array,
@@ -64,14 +84,26 @@
       },
       go: {
         type: Function
+      },
+      filter: {
+        type: Boolean,
+        default: true
       }
     },
     mounted () {
       this.sort(this.columns[0])
     },
+    watch: {
+      data: function () {
+        this.tableData = this.data
+      }
+    },
     data () {
       return {
-        sortedAsc: false
+        sortedAsc: false,
+        filterText: '',
+        filterOption: 'Sin filtro',
+        tableData: this.data
       }
     },
     computed: {
@@ -118,6 +150,30 @@
           })
           this.sortedAsc = false
         }
+      },
+      filterButton () {
+        this.tableData = this.data.filter(item => {
+          if (item[this.filterOption.toLowerCase()]) {
+            if (isNaN(item[this.filterOption.toLowerCase()])) {
+              const itemAux = item[this.filterOption.toLowerCase()].toLowerCase()
+              const filterAux = this.filterText.toLowerCase()
+              return itemAux.includes(filterAux)
+            } else {
+              const itemAux = Number(item[this.filterOption.toLowerCase()])
+              const filterAux = Number(this.filterText)
+              return itemAux === filterAux
+            }
+          } else {
+            return true
+          }
+        })
+      },
+      changeFilter (filter) {
+        if (filter === 'Sin filtro') {
+          // No anda ¯\_(ツ)_/¯
+          // this.filterText = ''
+        }
+        this.filterOption = filter
       }
     }
   }
