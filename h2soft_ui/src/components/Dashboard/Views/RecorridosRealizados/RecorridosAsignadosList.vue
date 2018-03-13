@@ -17,7 +17,7 @@
   import apiTemporadas from 'src/api/services/TemporadasServices'
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
-  import noti from 'src/api/notificationsService'
+  // import noti from 'src/api/notificationsService'
   const tableColumns = ['Nro', 'Día', 'Turno', 'Fecha', 'Temp']
   const dataColumns = []
 
@@ -67,7 +67,6 @@
         api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
           .then(resRxE => {
             resRxE.body.data.forEach(RxE => {
-              // console.log(RxE)
               var d = new Date(RxE.fechaAsignacion)
               if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
                 this.table1.data.push({
