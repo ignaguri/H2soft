@@ -93,10 +93,15 @@
         return this.linkHeight * this.activeLinkIndex
       },
       user () {
-        if (JSON.parse(sessionStorage.getItem('user')).nombre) {
-          return JSON.parse(sessionStorage.getItem('user')).nombre + ' ' + JSON.parse(sessionStorage.getItem('user')).apellido
+        const user = JSON.parse(sessionStorage.getItem('user'))
+        if (user) {
+          if (user.nombre) {
+            return user.nombre + ' ' + user.apellido
+          } else {
+            return user.email
+          }
         } else {
-          return JSON.parse(sessionStorage.getItem('user')).email
+          return 'Not logged in'
         }
       }
     },

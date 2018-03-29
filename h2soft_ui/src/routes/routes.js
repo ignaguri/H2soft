@@ -23,69 +23,80 @@ import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     component: Landing
   },
   {
-    path: '/admin',
-    name: 'admin',
+    path: '/',
+    name: 'app',
     component: DashboardLayout,
-    redirect: '/admin/planificacion',
+    redirect: 'planificacion',
     children: [
       {
         path: 'overview',
         name: 'overview',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'reportes',
         name: 'Reportes',
-        component: Reporte
+        component: Reporte,
+        meta: {requiresAuth: true}
       },
       {
         path: 'notifications',
         name: 'Work-in-Progress',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'icons',
         name: 'Ingresos y Gastos',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'recorridos',
         name: 'Recorridos',
-        component: RecorridosAsignados
+        component: RecorridosAsignados,
+        meta: {requiresAuth: true}
       },
       {
         path: 'planificacion',
         name: 'Planificación',
-        component: Planificacion
+        component: Planificacion,
+        meta: {requiresAuth: true}
       },
       {
         path: 'typography',
         name: 'Facturación',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'table-list',
         name: 'Bidones y Dispensers',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'contratos',
         name: 'contratos',
-        component: Contratos
+        component: Contratos,
+        meta: {requiresAuth: true}
       },
       {
         path: 'clientes',
         name: 'clientes',
-        component: Clientes
+        component: Clientes,
+        meta: {requiresAuth: true}
       },
       {
         path: 'usuarios',
         name: 'Gestion de usuarios',
-        component: Usuarios
+        component: Usuarios,
+        meta: {requiresAuth: true}
       }
     ]
   },
