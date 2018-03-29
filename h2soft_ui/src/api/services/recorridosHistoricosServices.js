@@ -1,25 +1,30 @@
 import auth from '../auth'
 const API_URL = process.env.API_URL
-const authHeader = { headers: auth.getAuthHeader() }
 
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR PARA RECORRIDOS
 export default {
   getRecorridosAsignados (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorrido-historico', authHeader)
   },
   getRecorridoAsignadoXId (context, idRecorridoAsignado) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorrido-historico/?idRecorridosHistoricos=' + idRecorridoAsignado, authHeader)
   },
   getRecorridosAsignadosXEmpleado (context, idEmpleado) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorrido-historico/?idEmpleadoAsignado=' + idEmpleado, authHeader)
   },
   getDetallesRecorridoAsignado (context, idRecorridoAsignado) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRecorridoHistorico=' + idRecorridoAsignado, authHeader)
   },
   getDetalleRecorridoAsignado (context, idDetalleRecorridoHistorico) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idDetalleRecorridoHistorico=' + idDetalleRecorridoHistorico, authHeader)
   },
   getRecorrido (context, idRecorrido) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorridos/?idRecorridos=' + idRecorrido, authHeader)
   },
   /*
@@ -28,15 +33,18 @@ export default {
    },
    */
   getObjetivoXId (context, idObjetivo) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'objetivos-x-cliente/?idObjetivosXCliente=' + idObjetivo, authHeader)
   },
   getDireccionXNombre (context, nombre) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'objetivos-x-cliente/?nombre=' + nombre, authHeader)
       .then(ob => {
         return (ob.body.data[0].direccion)
       })
   },
   editarDetalleRecorridoHistorico (context, detalleRecorridoHistorico) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.patch(API_URL + 'detalle-recorrido-historico/' + detalleRecorridoHistorico.idDetalleRecorridoHistorico, detalleRecorridoHistorico, authHeader)
       .then(det => {
         return true

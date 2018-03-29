@@ -26,7 +26,7 @@
                <li><a href="#">Another notification</a></li>
              </drop-down>
           <li>
-            <a href="" class="btn-rotate">
+            <a href="#" @click.prevent="settings" class="btn-rotate">
               <i class="ti-settings"></i>
               <p>
                 Ajustes
@@ -34,7 +34,7 @@
             </a>
           </li>
           <li>
-            <a href="" @click="logout" class="btn-rotate">
+            <a href="#" @click.prevent="logout" class="btn-rotate">
               <i class="ti-control-eject"></i>
               <p>
                 Salir
@@ -77,7 +77,10 @@
         this.$sidebar.displaySidebar(false)
       },
       logout () {
-        auth.logout()
+        auth.logout(this)
+      },
+      settings () {
+        alert('Implementar')
       }
     }
   }

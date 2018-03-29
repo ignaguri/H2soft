@@ -64,7 +64,7 @@
           email: this.credentials.email,
           password: this.credentials.password
         }
-        auth.login(this, credentials, 'admin')
+        auth.login(this, credentials, 'planificacion')
         // alert(JSON.stringify(credentials))
       }
     },

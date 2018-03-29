@@ -1,37 +1,44 @@
 import auth from '../auth'
 const API_URL = process.env.API_URL
-const authHeader = { headers: auth.getAuthHeader() }
 
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR
 export default {
   test () {
+    const authHeader = { headers: auth.getAuthHeader() }
     console.log('api de recorridos', API_URL, authHeader)
   },
   getTemporadas (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'temporada', authHeader)
       .then(res => { return res.body.data })
   },
   getDias (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'dias', authHeader)
       .then(res => { return res.body.data })
   },
   getTurnos (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'turnos', authHeader)
       .then(res => { return res.body.data })
   },
   getFrecuencias (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'frecuencia-recorridos', authHeader)
       .then(res => { return res.body.data })
   },
   getClientes (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'clientes', authHeader)
       .then(res => { return res.body.data })
   },
   getObjetivos (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
       .then(res => { return res.body.data })
   },
   postRecorrido (context, recorrido, detalle) {
+    const authHeader = { headers: auth.getAuthHeader() }
     if (recorrido.idRecorridos === null) {
       delete recorrido.idRecorridos
       recorrido.activo = true
@@ -65,14 +72,17 @@ export default {
     }
   },
   getRecorridos (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorridos', authHeader)
       .then(r => { return r.body.data })
   },
   getRecorrido (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorridos/' + id, authHeader)
       .then(r => { return r.body })
   },
   getRecorridosFull (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     // TODO: guardar dia, freq, turno y temp en una variable y comparar con eso
     let info = {}
     let total = []
@@ -95,6 +105,7 @@ export default {
       })
   },
   populateCamposRecorrido (context, info) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let res = {}
     res.recorrido = info.recorrido
     return context.$http.get(API_URL + 'dias/' + info.dia, authHeader)
@@ -120,10 +131,12 @@ export default {
       })
   },
   getDetalleRecorrido (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + id, authHeader)
       .then(r => { return r.body.data })
   },
   getDetalleRecorridosFull (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
     let total = []
     let promesas = []
@@ -144,6 +157,7 @@ export default {
       })
   },
   populateCamposDetalleRecorrido (context, info) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let res = {}
     res.detalleRecorrido = info.detalleRecorrido
     res.recorrido = info.recorrido
@@ -165,6 +179,7 @@ export default {
       })
   },
   getObjetivosSinPlanificar (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let objetivos = {}
     let planificados = {}
     let filtrados = {}
@@ -195,6 +210,7 @@ export default {
       })
   },
   deleteObjetivoFromRecorrido (context, objetivo, recorrido) {
+    const authHeader = { headers: auth.getAuthHeader() }
     // TODO: agregar el nombre del cliente como parametro por si 2 objetivos se llaman igual
     return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?nombre=' + objetivo, authHeader)
       .then(obj => {
@@ -215,6 +231,7 @@ export default {
       })
   },
   deleteRecorrido (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.delete(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + id, authHeader)
       .then(noDetails => {
         console.log('se borraron los detalles', noDetails)
@@ -230,10 +247,12 @@ export default {
       })
   },
   getEmpleados (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'empleados', authHeader)
       .then(res => { return res.body.data })
   },
   postAsignacion (context, asignacion) {
+    const authHeader = { headers: auth.getAuthHeader() }
     console.log('somehow asignar', asignacion)
     return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
@@ -299,6 +318,7 @@ export default {
       }) */
   },
   checkIfAsignado (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     const hoy = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
     const tomorrow = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1)
     return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy + '&fechaAsignacion[$lt]=' + tomorrow, authHeader)

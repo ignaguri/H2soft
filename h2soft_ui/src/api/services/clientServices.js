@@ -1,17 +1,19 @@
 import auth from '../auth'
 const API_URL = process.env.API_URL
-const authHeader = { headers: auth.getAuthHeader() }
 
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR
 export default {
   getClientes (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'clientes', authHeader)
   },
   getCliente (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'clientes' + '/?idClientes=' + id, authHeader)
       .then(res => { return res.body.data })
   },
   getClienteFull (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
     return context.$http.get(API_URL + 'clientes/' + id, authHeader)
       .then(cl => {
@@ -32,6 +34,7 @@ export default {
       })
   },
   postClientes (context, cliente, contacto, objetivos) {
+    const authHeader = { headers: auth.getAuthHeader() }
     console.log('llegue a post con: \n' + JSON.stringify(cliente) + '\n' + JSON.stringify(contacto) + '\n' + JSON.stringify(objetivos))
     return context.$http.post(API_URL + 'clientes', cliente, authHeader)
       .then(clienteInsertado => {
@@ -62,6 +65,7 @@ export default {
     })
   },
   deleteClientes (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.delete(API_URL + 'contactos-x-cliente/?idCliente=' + id, authHeader)
       .then(() => {
         return context.$http.delete(API_URL + 'objetivos-x-cliente/?idCliente=' + id, authHeader)
@@ -79,14 +83,17 @@ export default {
       })
   },
   getLocalidades (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'localidades', authHeader)
       .then(res => { return res.body.data })
   },
   getObjetivos (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
       .then(res => { return res.body.data })
   },
   postObjetivos (context, objetivo) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
       .then(res => { return true })
       .catch(error => {
@@ -95,6 +102,7 @@ export default {
       })
   },
   editClientes (context, id, cliente, contacto, objetivos) {
+    const authHeader = { headers: auth.getAuthHeader() }
     console.log('llegue a edit con: \n' + JSON.stringify(cliente) + '\n' + JSON.stringify(contacto) + '\n' + JSON.stringify(objetivos))
     return context.$http.patch(API_URL + 'clientes/' + id, cliente, authHeader)
       .then(clienteUpdated => {
@@ -121,6 +129,7 @@ export default {
       })
   },
   getTiposCliente (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'tipos-cliente', authHeader)
       .then(res => { return res.body.data })
   }
