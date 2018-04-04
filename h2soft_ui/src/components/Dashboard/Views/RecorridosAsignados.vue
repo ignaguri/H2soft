@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <recorrido-list v-if="this.verLista"></recorrido-list>
-      <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" :idEstado="this.idEstado"  :estado="estado"></detalle-recorrido>
+      <detalle-recorrido v-if="this.verDetalle" v-bind:id="recorridoAsignadoId" :dia="this.dia" :turno="this.turno" :fecha="this.fecha" :temporada="this.temporada" :idEstado="this.idEstado"  :estado="estado" :camionid="this.camionid"></detalle-recorrido>
       <remito v-if="this.verRemito" v-bind:IdDetalleRecorridoAsignado="detalleRecorridoAsignadoId" ></remito>
     </div>
     <div class="row">
@@ -39,7 +39,8 @@
         temporada: '',
         fecha: '',
         estado: '',
-        idEstado: 0
+        idEstado: 0,
+        camionid: 0
 
       }
     },
