@@ -55,6 +55,11 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-md-6 left" @click="cambioNecesita">
+            <check :value.sync="this.necesita" >Dispenser/s retirado/s requiere/n mantenimiento</check>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-3 left">
             <h5>Firma</h5>
             <div class="text-center">
@@ -126,18 +131,21 @@
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiDispensers from 'src/api/services/dispensersServices'
   import apiRemito from 'src/api/services/remitoServices'
+  import apiMantenimiento from 'src/api/services/mantenimientoServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import firma from 'components/Dashboard/Views/Firma.vue'
   import firma from '../Firma.vue'
   import noti from 'src/api/notificationsService'
   import sele from 'vue-strap/src/Select.vue'
+  import check from 'vue-strap/src/Checkbox.vue'
   const tableColumns = ['Nro', 'Orden', 'Objetivo']
   const dataColumns = []
   export default {
     components: {
       PaperTable,
       sele,
-      firma
+      firma,
+      check
     },
     data () {
       return {
@@ -147,6 +155,7 @@
           txdispensersDejo: '',
           txdispensersLlevo: ''
         },
+        necesita: false,
         dispensers: [],
         dispensersSinObjetivo: [],
         dispensersDelObjetivo: [],
@@ -173,6 +182,7 @@
     },
     methods: {
       cargarDetalleRecorridoHistorico () {
+        console.log('necesita ' + this.necesita)
         api.getDetalleRecorridoAsignado(this, this.IdDetalleRecorridoAsignado)
           .then(resDet => {
             resDet = resDet.body.data[0]
@@ -308,6 +318,24 @@
                         apiRemito.nuevoDetalleRemitoDispensers(this, detalleRemitoDispensersLlevado)
                         apiDispensers.borrarObjetivoDeDispenser(this, disR)
                       })
+                      if (this.necesita && this.dispensersRetirados[0] !== undefined) { // Alguno de los dispensers retirados necesita mantenimiento
+                        var mantenimiento = {
+                          'idObjetivo': this.idObjetivo,
+                          'idDispenser': this.dispensersRetirados[0],
+                          'idEstadoMantenimiento': 1, // se crea en estado Pendiente
+                          'idTipoMantenimiento': 1 // por defecto, se crea de tipo Preventivo
+                        }
+                        apiMantenimiento.nuevoMantenimiento(this, mantenimiento)
+                          .then(mant => {
+                            console.log('se creó el manteniemiento' + mant)
+                          }, error => {
+                            console.log('error al crear el mantenimiento' + JSON.stringify(error))
+                            noti.danger()
+                          }
+                          )
+                      } else {
+                        console.log('no se puede guardar el mantenimiento porq no esta el check o porq no hay dispensers seleccionados' + this.necesita + this.dispensersRetirados)
+                      }
                       // muestro la notificacion de ok
                       noti.success(this)
                       // vuelvo atrás
@@ -358,6 +386,9 @@
       },
       cambioDispensersRetirados (value) {
         this.dispensersRetirados = value
+      },
+      cambioNecesita () {
+        this.necesita = !this.necesita
       }
     }
   }

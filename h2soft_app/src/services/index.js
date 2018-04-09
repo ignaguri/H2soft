@@ -49,6 +49,10 @@ const camiones = require('./camiones/camiones.service.js');
 
 const detalleRemitoDispensers = require('./detalle-remito-dispensers/detalle-remito-dispensers.service.js');
 
+const mantenimientos = require('./mantenimientos/mantenimientos.service.js');
+
+const estadosMantenimiento = require('./estados-mantenimiento/estados-mantenimiento.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -89,4 +93,6 @@ module.exports = function () {
   app.configure(detallesContrato);
   app.configure(camiones);
   app.configure(detalleRemitoDispensers);
+  app.configure(mantenimientos);
+  app.configure(estadosMantenimiento);
 };
