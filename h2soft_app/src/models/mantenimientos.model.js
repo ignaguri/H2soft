@@ -4,14 +4,22 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const mantenimiento = sequelizeClient.define('mantenimientos', {
+  const mantenimientos = sequelizeClient.define('mantenimientos', {
     idMantenimientos: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    idDispenser: {
+	idObjetivo: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'objetivos-x-cliente',
+        key: 'idObjetivosXCliente'
+      }
+    },
+	idDispenser: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
@@ -19,7 +27,15 @@ module.exports = function (app) {
         key: 'idDispensers'
       }
     },
-    idTipoMantenimiento: {
+	idEstadoMantenimiento: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'estados-mantenimiento',
+        key: 'idEstadosMantenimiento'
+      }
+    },
+	idTipoMantenimiento: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
@@ -27,22 +43,6 @@ module.exports = function (app) {
         key: 'idTiposMantenimiento'
       }
     },
-    fechaProgramado: {
-      type: Sequelize.DATE,
-      allowNull: true
-    },
-    fechaRealizado: {
-      type: Sequelize.DATE,
-      allowNull: true
-    },
-    idEmpleado: {
-      type: Sequelize.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'empleados',
-        key: 'idEmpleados'
-      }
-    }
   }, {
     hooks: {
       beforeCount(options) {
@@ -51,10 +51,10 @@ module.exports = function (app) {
     }
   });
 
-  mantenimiento.associate = function (models) { // eslint-disable-line no-unused-vars
+  mantenimientos.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return mantenimiento;
+  return mantenimientos;
 };
