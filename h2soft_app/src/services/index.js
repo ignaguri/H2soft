@@ -53,6 +53,8 @@ const mantenimientos = require('./mantenimientos/mantenimientos.service.js');
 
 const estadosMantenimiento = require('./estados-mantenimiento/estados-mantenimiento.service.js');
 
+const estadosDispenser = require('./estados-dispenser/estados-dispenser.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -95,4 +97,5 @@ module.exports = function () {
   app.configure(detalleRemitoDispensers);
   app.configure(mantenimientos);
   app.configure(estadosMantenimiento);
+  app.configure(estadosDispenser);
 };

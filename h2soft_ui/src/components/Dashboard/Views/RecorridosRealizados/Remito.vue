@@ -330,14 +330,14 @@
                             console.log('se creó el manteniemiento' + mant)
                           }, error => {
                             console.log('error al crear el mantenimiento' + JSON.stringify(error))
-                            noti.danger()
+                            noti.errorConTexto(this, 'Error', 'No se pudo crear un mantenimiento para el dispenser')
                           }
                           )
                       } else {
                         console.log('no se puede guardar el mantenimiento porq no esta el check o porq no hay dispensers seleccionados' + this.necesita + this.dispensersRetirados)
                       }
                       // muestro la notificacion de ok
-                      noti.success(this)
+                      noti.exito(this)
                       // vuelvo atrás
                       this.$parent.current = 'DetalleRecorrido'
                       this.$parent.verRemito = false
@@ -346,7 +346,7 @@
                 })
             }, error => {
               console.log('error ' + JSON.stringify(error))
-              noti.danger()
+              noti.errorConTexto(this, 'Error', 'No se pudo crear el remito')
             })
         }
       },
