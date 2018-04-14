@@ -45,7 +45,6 @@
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
-  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
     components: {
       PaperTable,

@@ -28,13 +28,16 @@
           <div class="row">
             <div class="col-md-5">
               <div class="form-group">
-                <label for="tipoCliente"><h4><span class="label label-default">Tipo de cliente*</span></h4></label>
-                <select id="tipoCliente" v-model="cliente.idTipo" required>
-                  <option :value="null">Seleccione un tipo</option>
-                  <option v-for="tipo in tiposCliente" v-bind:value="tipo.idTiposCliente">
-                    {{ tipo.nombre }}
-                  </option>
-                </select>
+                <label for="tipoCliente">
+                  <h4><span class="label label-default">Tipo de cliente*</span></h4>
+                </label>
+                <dds id="tipoCliente" v-model="cliente.idTipo"
+                     :options="tiposCliente"
+                     options-value="idTiposCliente" search-text="Buscar"
+                     :placeholder="'Nada seleccionado'"
+                     options-label="nombre"
+                     :search="true" :justified="true">
+                </dds>
               </div>
             </div>
             <div class="col-md-6">
@@ -113,11 +116,13 @@
   import api from 'src/api/services/clientServices'
   import ObjetivosList from './ObjetivosList.vue'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
+  import { select } from 'vue-strap'
 
   export default {
     components: {
       ObjetivosList,
-      vga: VueGoogleAutocomplete
+      vga: VueGoogleAutocomplete,
+      dds: select
     },
     props: {
       edit: Boolean,
