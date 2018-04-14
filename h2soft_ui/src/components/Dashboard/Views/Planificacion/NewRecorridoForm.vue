@@ -6,71 +6,94 @@
     <div class="content">
       <form @submit.prevent="guardarRecorrido" class="form-inline">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-12">
             <div class="form-group">
               <label for="recorrido"><h4><span class="label label-default">Recorrido</span></h4></label>
-              <select id="recorrido" v-model="idRecorrido" @change="cambiarRecorrido">
-                <option :value="null">Nuevo recorrido</option>
-                <option v-for="rec in recorridos" v-bind:value="rec.recorrido">
-                  {{ rec.recorrido }} ({{rec.dia}}, {{rec.turno}}, {{rec.frecuencia}}, {{rec.temporada}})
-                </option>
-              </select>
-            </div>
+              <dds id="recorrido" v-model="idRecorrido"
+              :options="recorridos"
+              options-value="recorrido" search-text="Buscar"
+              :placeholder="'Recorrido nuevo'"
+              options-label="datos" clear-button
+              :search="true" :justified="true">
+              </dds>
           </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-12">
             <div class="form-group">
               <label for="temporada"><h4><span class="label label-default">Temporada</span></h4></label>
-            <select id="temporada" v-model="idTemporada" :disabled="idRecorrido !== null" required>
-              <option :value="null">Seleccione una temporada</option>
-              <option v-for="temp in temporadas" v-bind:value="temp.idTemporadas">
-                {{ temp.nombre }}
-              </option>
-            </select>
+              <dds id="temporada" v-model="idTemporada"
+                   :options="temporadas"
+                   options-value="idTemporadas"
+                   options-label="nombre"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true"
+                   :disabled="idRecorrido !== null" required>
+              </dds>
             </div>
             <div class="form-group">
               <label for="frecuencia"><h4><span class="label label-default">Frecuencia</span></h4></label>
-              <select id="frecuencia" v-model="idFrecuencia" :disabled="idRecorrido !== null" required>
-                <option :value="null">Seleccione una frecuencia</option>
-                <option v-for="freq in frecuencias" v-bind:value="freq.idFrecuenciasRecorrido">
-                  {{ freq.nombre }}
-                </option>
-              </select>
+              <dds id="frecuencia" v-model="idFrecuencia"
+                   :options="frecuencias"
+                   options-value="idFrecuenciasRecorrido"
+                   options-label="nombre"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true"
+                   :disabled="idRecorrido !== null" required>
+              </dds>
             </div>
             <div class="form-group">
               <label for="dia"><h4><span class="label label-default">Día</span></h4></label>
-              <select id="dia" v-model="idDia" :disabled="idRecorrido !== null" required>
-                <option :value="null">Seleccione un día</option>
-                <option v-for="dia in dias" v-bind:value="dia.idDias">
-                  {{ dia.nombre }}
-                </option>
-              </select>
+              <dds id="dia" v-model="idDia"
+                   :options="dias"
+                   options-value="idDias"
+                   options-label="nombre"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true"
+                   :disabled="idRecorrido !== null" required>
+              </dds>
             </div>
             <div class="form-group">
               <label for="turno"><h4><span class="label label-default">Turno</span></h4></label>
-              <select id="turno" v-model="idTurno" :disabled="idRecorrido !== null" required>
-                <option :value="null">Seleccione un turno</option>
-                <option v-for="turno in turnos" v-bind:value="turno.idTurnos">
-                  {{ turno.nombre }}
-                </option>
-              </select>
+              <dds id="turno" v-model="idTurno"
+                   :options="turnos"
+                   options-value="idTurnos"
+                   options-label="nombre"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true"
+                   :disabled="idRecorrido !== null" required>
+              </dds>
             </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
             <div class="form-group">
               <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
-              <select id="cliente" v-model="idClientes" required>
-                <option :value="null">Seleccione un cliente</option>
-                <option v-for="cl in clientes" v-bind:value="cl.idClientes">
-                  {{ cl.razonSocial }}
-                </option>
-              </select>
+              <dds id="cliente" v-model="idClientes"
+                   :options="clientes"
+                   options-value="idClientes"
+                   options-label="razonSocial"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true" required>
+              </dds>
             </div>
             <div class="form-group">
               <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
-              <select id="objetivo" v-model="idObjetivo" required>
-                <option :value="null">Seleccione un objetivo</option>
-                <option v-for="ob in objetivos" v-bind:value="ob.idObjetivosXCliente">
-                  {{ ob.nombre }}
-                </option>
-              </select>
+              <dds id="objetivo" v-model="idObjetivo"
+                   :options="objetivos"
+                   options-value="idObjetivosXCliente"
+                   options-label="nombre"
+                   search-text="Buscar"
+                   :placeholder="'Nada seleccionado'"
+                   :search="true" :justified="true" required>
+              </dds>
             </div>
           </div>
         </div>
@@ -93,15 +116,9 @@
               <radio selected-value="planificados">Planificados</radio>
               <radio selected-value="sin_planificar">Sin planificar</radio>
             </button-group>
-            <!--<div class="form-group">-->
-              <!--<label for="filtro"><h4><span class="label label-default">Ver Objetivos:</span></h4></label>-->
-              <!--<select id="filtro" v-model="radioValue" required>-->
-                <!--<option value="planificados">Planificados</option>-->
-                <!--<option value="sin-planificar">Sin planificar</option>-->
-              <!--</select>-->
-            <!--</div>-->
           </div>
-          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false">
+          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                       :columns="table1.columns" :editButton="false" :eraseButton="false">
           </paper-table>
         </div>
       </form>
@@ -111,13 +128,14 @@
 <script>
   import api from 'src/api/services/recorridoServices'
   import PaperTable from '../../../UIComponents/PaperTablePlus.vue'
-  import { buttonGroup, radio } from 'vue-strap'
+  import { buttonGroup, radio, select } from 'vue-strap'
 
   export default {
     components: {
       PaperTable,
       buttonGroup,
-      radio
+      radio,
+      dds: select
     },
     props: {
       edit: Boolean
@@ -125,19 +143,19 @@
     data () {
       return {
         radioValue: 'planificados',
-        temporadas: {},
+        temporadas: [],
         idTemporada: null,
-        dias: {},
+        dias: [],
         idDia: null,
-        turnos: {},
+        turnos: [],
         idTurno: null,
-        frecuencias: {},
+        frecuencias: [],
         idFrecuencia: null,
-        clientes: {},
+        clientes: [],
         idClientes: null,
-        objetivos: {},
+        objetivos: [],
         idObjetivo: null,
-        recorridos: {},
+        recorridos: [],
         idRecorrido: null,
         table1: {
           title: 'Recorridos planificados',
@@ -222,11 +240,11 @@
         api.getClientes(this).then(r => {
           this.clientes = r
         })
-        this.cargarComboRecorridos()
-      },
-      cargarComboRecorridos () {
-        api.getRecorridosFull(this).then(r => {
-          this.recorridos = r
+        api.getRecorridosFull(this).then(recs => {
+          recs.forEach(r => {
+            r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia}, ${r.temporada})`
+          })
+          this.recorridos = recs
         })
       },
       cargarObjetivos () {
