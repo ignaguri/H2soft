@@ -4,36 +4,20 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const dispensers = sequelizeClient.define('dispensers', {
-    idDispensers: {
+  const estadosMantenimiento = sequelizeClient.define('estados-mantenimiento', {
+    idEstadosMantenimiento: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    codigo: {
+    nombre: {
       type: Sequelize.STRING(45),
       allowNull: false
     },
     descripcion: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(100),
       allowNull: true
-    },
-    idObjetivo: {
-      type: Sequelize.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'objetivos-x-cliente',
-        key: 'idObjetivosXCliente'
-      }
-    },
-	idEstadoDispenser: {
-      type: Sequelize.INTEGER(11),
-      allowNull: false,
-      references: {
-        model: 'estados-dispenser',
-        key: 'idEstadosDispenser'
-      }
     }
   }, {
     hooks: {
@@ -43,10 +27,10 @@ module.exports = function (app) {
     }
   });
 
-  dispensers.associate = function (models) { // eslint-disable-line no-unused-vars
+  estadosMantenimiento.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return dispensers;
+  return estadosMantenimiento;
 };

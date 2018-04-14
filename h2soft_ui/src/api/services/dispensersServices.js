@@ -16,7 +16,8 @@ export default {
   setObjetivoADispenser (context, idDispenser, IdObjetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
     var dispenser = {
-      'idObjetivo': IdObjetivo
+      'idObjetivo': IdObjetivo,
+      'idEstadoDispenser': 2 // seteo el estado "En objetivo y limpio"
     }
     return context.$http.patch(API_URL + 'dispensers/' + idDispenser, dispenser, authHeader)
       .then(res => { return res.body.data })
@@ -24,7 +25,8 @@ export default {
   borrarObjetivoDeDispenser (context, idDispenser) {
     const authHeader = { headers: auth.getAuthHeader() }
     var dispenser = {
-      'idObjetivo': null
+      'idObjetivo': null,
+      'idEstadoDispenser': 4 // al retirar el dispenser del objetivo seteo el estado "En mantenimiento"
     }
     return context.$http.patch(API_URL + 'dispensers/' + idDispenser, dispenser, authHeader)
       .then(res => { return res.body.data })
