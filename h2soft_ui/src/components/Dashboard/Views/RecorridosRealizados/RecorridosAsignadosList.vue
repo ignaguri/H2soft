@@ -105,6 +105,7 @@
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
             this.$parent.idEstado = res.idEstado
+            this.$parent.camionid = res.idCamionAsignado
           })
       },
       getDia (idDia) {
