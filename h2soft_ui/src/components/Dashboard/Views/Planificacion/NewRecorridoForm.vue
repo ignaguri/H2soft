@@ -14,6 +14,7 @@
               options-value="recorrido" search-text="Buscar"
               :placeholder="'Recorrido nuevo'"
               options-label="datos" clear-button
+              @change="cambiarRecorrido"
               :search="true" :justified="true">
               </dds>
           </div>
@@ -301,7 +302,7 @@
       },
       cambiarRecorrido (e) {
         // TODO: que en la grilla de abajo sólo se vean los datos correspondientes a este recorrido
-        let id = e.target.value
+        let id = e // e.target.value
         if (id !== '') {
           api.getRecorrido(this, id)
             .then(r => {
