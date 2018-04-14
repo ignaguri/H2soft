@@ -319,9 +319,10 @@ export default {
   },
   checkIfAsignado (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    const hoy = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
-    const tomorrow = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1)
-    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy + '&fechaAsignacion[$lt]=' + tomorrow, authHeader)
+    const hoy = new Date()
+    const tomorrow = new Date(hoy)
+    tomorrow.setDate(hoy.getDate() + 1)
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + tomorrow.toISOString(), authHeader)
       .then(r => {
         return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
       })

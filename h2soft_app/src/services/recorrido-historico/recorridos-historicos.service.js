@@ -22,7 +22,7 @@ module.exports = function () {
   // Get our initialized service so that we can register hooks and filters
   const service = app.service('recorrido-historico');
   app.service('recorrido-historico/asignar', {
-    create(data, params, callback){
+    create: function (data, params, callback){
       return replicarAsignacion(app, data);
     }
   });

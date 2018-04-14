@@ -13,7 +13,10 @@ export default {
   },
   getRecorridosAsignadosXEmpleado (context, idEmpleado) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'recorrido-historico/?idEmpleadoAsignado=' + idEmpleado, authHeader)
+    let hoy = new Date()
+    let ayer = new Date(hoy)
+    ayer.setDate(hoy.getDate() - 1)
+    return context.$http.get(API_URL + 'recorrido-historico/?idEmpleadoAsignado=' + idEmpleado + '&fechaAsignacion[$gte]=' + ayer.toISOString(), authHeader)
   },
   getDetallesRecorridoAsignado (context, idRecorridoAsignado) {
     const authHeader = { headers: auth.getAuthHeader() }
