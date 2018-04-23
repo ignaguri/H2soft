@@ -8,6 +8,11 @@ export default {
     return context.$http.get(API_URL + 'dispensers', authHeader)
       .then(res => { return res.body.data })
   },
+  getEstadosDispensers (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'estados-dispenser', authHeader)
+      .then(res => { return res.body.data })
+  },
   getDispensersXObjetivo (context, idObjetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'dispensers/?idObjetivo=' + idObjetivo, authHeader)

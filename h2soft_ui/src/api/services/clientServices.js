@@ -92,6 +92,10 @@ export default {
     return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
       .then(res => { return res.body.data })
   },
+  getObjetivo (context, idObjetivo) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idObjetivosXCliente=' + idObjetivo, authHeader) //     .then(res => { return res })
+  },
   postObjetivos (context, objetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
