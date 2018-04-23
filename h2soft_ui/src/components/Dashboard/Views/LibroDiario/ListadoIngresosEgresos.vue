@@ -2,7 +2,7 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="true" :erase="borrarIngresoEgreso">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true" :erase="borrarIngresoEgreso">
         </paper-table>
       </div>
     </div>
@@ -89,6 +89,13 @@
         let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
         apiIE.deleteIngresoEgreso(this, id)
         alert('Ingreso/Egreso eliminado:' + id)
+      },
+      editarIngresoEgreso (e) {
+        let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        this.$parent.idIngresoEgreso = id
+        this.$parent.isIngresoEgresoList = false
+        this.$parent.edit = true
+        this.$emit('emmited', {action: 'edit2'})
       }
     }
   }

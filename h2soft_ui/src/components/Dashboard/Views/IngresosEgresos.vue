@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <listado-ingresos-egresos v-if="this.isIngresoEgresoList"></listado-ingresos-egresos>
-      <nuevo-ingreso-egreso v-if="!this.isIngresoEgresoList"></nuevo-ingreso-egreso>
+      <nuevo-ingreso-egreso v-if="!this.isIngresoEgresoList" :idGasto="idIngresoEgreso" :edit="edit"></nuevo-ingreso-egreso>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -30,7 +30,8 @@
     data () {
       return {
         isIngresoEgresoList: false,
-        idIngresoEgreso: -1
+        idIngresoEgreso: -1,
+        edit: false
       }
     },
     methods: {
@@ -40,6 +41,16 @@
       newGasto () {
         this.isIngresoEgresoList = false
         this.idIngresoEgreso = -1
+        this.edit = false
+      },
+      capturarEvento (e) {
+        switch (e.action) {
+          case 'edit2':
+            this.edit = true
+            this.isIngresoEgresoList = false
+            console.log('Pase x captuar evento')
+            break
+        }
       }
     }
   }

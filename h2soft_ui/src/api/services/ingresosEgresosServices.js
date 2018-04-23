@@ -18,5 +18,17 @@ export default {
   },
   deleteIngresoEgreso (context, idIngresoEgreso) {
     return context.$http.delete('http://localhost:3030/gastos/' + idIngresoEgreso, authHeader)
+  },
+  getIngresoEgresoById (context, id) {
+    return context.$http.get('http://localhost:3030/gastos/' + id, authHeader)
+        .then(res => { return res })
+  },
+  pathcIngresosEgresos (context, idIE, ingresoEgreso) {
+    return context.$http.patch('http://localhost:3030/gastos/' + idIE, ingresoEgreso, authHeader)
+        .then(res => { return res })
+  },
+  getIngresoEgreso2 (context, idGasto) {
+    return context.$http.get('http://localhost:3030/gastos/' + idGasto, authHeader)
+        .then(res => { return res.body })
   }
 }
