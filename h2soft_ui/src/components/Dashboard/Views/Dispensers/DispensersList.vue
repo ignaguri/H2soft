@@ -1,19 +1,33 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="true" :go="ver" >
-
-        </paper-table>
+  <div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="true" :go="ver" >
+          </paper-table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="text-center">
+          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addDispenser" v-show="isDispensersList">
+            Agregar Dispenser
+          </button>
+          <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList" v-show="!isDispensersList">
+            Volver
+          </button>
+        </div>
+        <div class="clearfix"></div>
       </div>
     </div>
   </div>
-
 </template>
 <script>
   // import PaperTable from 'components/UIComponents/PaperTable.vue'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/dispensersServices'
+  import apiCliente from 'src/api/services/clientServices'
 
   const tableColumns = ['Nro', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
   //  let tableData = []
@@ -25,7 +39,8 @@
     },
     data () {
       return {
-        showCustomModal: false,
+        isDispensersList: true,
+        estados: [],
         table1: {
           title: 'Dispensers',
           subTitle: 'Listado de dispensers de la empresa',
@@ -35,19 +50,21 @@
       }
     },
     mounted () {
-      this.cargarDispensers()
+      api.getEstadosDispensers(this).then(res => {
+        this.estados = res
+        this.cargarDispensers()
+      })
     },
     methods: {
       cargarDispensers () {
         api.getDispensers(this).then(res => {
-          console.log(res)
           res.forEach(dis => {
             this.table1.data.push({
               nro: dis.idDispensers,
               código: dis.codigo,
-              ubicación: dis.idObjetivo,
-              estado: dis.idEstadoDispenser,
-              próxmantenimiento: 'prox man'
+              ubicación: dis.idObjetivo === null ? 'En fabrica' : 'En Objetivo', // this.getObjetivo(dis.idObjetivo).then(res1 => { return res1.body.data[0].nombre }),
+              estado: this.getEstadoDispenser(dis.idEstadoDispenser),
+              próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString()
             })
           })
         }, error => {
@@ -101,6 +118,27 @@
         })
         this.showCustomModal = true
         this.$emit('emitted', {action: 'ver', client: id})
+      },
+      getEstadoDispenser (idEstado) {
+        for (var i = 0, len = this.estados.length; i < len; i++) {
+          if (this.estados[i].idEstadosDispenser === idEstado) {
+            return this.estados[i].nombre
+          }
+        }
+      },
+      getObjetivo (idObjetivo) {
+        return apiCliente.getObjetivo(this, idObjetivo)
+//          .then(res => {
+//          return res
+//        }, error => {
+//          console.log('error al cargar las temporadas' + error)
+//        })
+      },
+      addDispenser () {
+        this.isDispensersList = false
+      },
+      seeList () {
+        this.isDispensersList = true
       }
     }
   }
