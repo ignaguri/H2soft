@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <listado-ingresos-egresos v-if="this.isIngresoEgresoList"></listado-ingresos-egresos>
-      <nuevo-ingreso-egreso v-if="!this.isIngresoEgresoList" :idGasto="idIngresoEgreso" :edit="edit"></nuevo-ingreso-egreso>
+      <nuevo-ingreso-egreso v-if="!this.isIngresoEgresoList" :idGasto="idIngresoEgreso" :edit="edit" :cambiarImagen="cambImagen" ></nuevo-ingreso-egreso>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -31,7 +31,8 @@
       return {
         isIngresoEgresoList: false,
         idIngresoEgreso: -1,
-        edit: false
+        edit: false,
+        cambImagen: true
       }
     },
     methods: {
@@ -48,6 +49,7 @@
           case 'edit2':
             this.edit = true
             this.isIngresoEgresoList = false
+            this.cambImagen = false
             console.log('Pase x captuar evento')
             break
         }

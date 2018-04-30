@@ -113,6 +113,7 @@
         this.$parent.idIngresoEgreso = id
         this.$parent.isIngresoEgresoList = false
         this.$parent.edit = true
+        this.$parent.cambImagen = false
         this.$emit('emmited', {action: 'edit2'})
       },
       verImagenComprobante (e) {

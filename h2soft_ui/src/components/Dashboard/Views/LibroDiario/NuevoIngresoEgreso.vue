@@ -55,7 +55,13 @@
             </fg-input>
           </div>
         </div>
-        <div class="row" v-if="!edit">
+        <div class="row" v-if="!cambiarImagen">
+          <div class="col-md-12">
+            <img v-bind:src="this.ingresosEgresos.imagen" width="50%"/>
+            <button type="button" class="btn btn-default" @click="cambiarImagen = true">Cambiar imagen</button>
+          </div>
+        </div>
+        <div class="row" v-if="idGasto == -1 || (idGasto !== -1 && cambiarImagen)">
           <div class="col-md-3">
           <h5>Imagen Comprobante</h5>
           <picture-input
@@ -119,7 +125,7 @@
     props: {
       edit: Boolean,
       idGasto: Number,
-      modificarImagen: false
+      cambiarImagen: Boolean
     },
     mounted () {
       this.cargarMedioDePagoCobro()
