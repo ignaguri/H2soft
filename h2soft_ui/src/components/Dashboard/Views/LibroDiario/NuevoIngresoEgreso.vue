@@ -78,8 +78,6 @@
         drag: 'Seleccionar una imagen' }">
 
           </picture-input>
-          {{ ingresosEgresos }}
-          {{ idGasto }}
         </div>
         <hr>
         <div class="row">

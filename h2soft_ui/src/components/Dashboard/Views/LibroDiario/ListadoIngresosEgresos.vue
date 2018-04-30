@@ -2,9 +2,19 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true" :erase="borrarIngresoEgreso">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true" :erase="borrarIngresoEgreso" :goButton="true"  :go="verImagenComprobante" >
         </paper-table>
       </div>
+      <modal effect="fade" width="50%" :value="showCustomModal" title="Comprobante">
+         <div class="row">
+           <div class="col-md-12">
+             <img v-bind:src="this.modalData.imagen" width="100%"/>
+           </div>
+         </div>
+          <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
+          </div>
+      </modal>
     </div>
   </div>
 </template>
@@ -13,16 +23,16 @@
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
+  import { modal } from 'vue-strap'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Monto', 'MediodePago', 'Descripcion']
 
   export default{
-      // TODO: hacer que el ID del empleado se tome solo de la sesion
-      // TODO: mover todos las fnc que cargan los datos de otras tablas a una misma funcion.
-      // TODO: cargar foto
-      // TODO: Eliminar registro
+    // TODO: hacer que el ID del empleado se tome solo de la sesion
+    // TODO: mover todos las fnc que cargan los datos de otras tablas a una misma funcion.
     components: {
-      PaperTable
+      PaperTable,
+      modal
     },
     data () {
       return {
@@ -33,8 +43,16 @@
           data: []
         },
         empleados: [],
-        tipoDePago: []
+        tipoDePago: [],
+        modalData: {
+          imagen: ''
+        },
+        showCustomModal: false
       }
+    },
+    props: {
+      verImagen: false,
+      imagen: ''
     },
     mounted () {
       this.cargarIngresosEgresos()
@@ -57,7 +75,7 @@
         }, error => {
           console.log('error' + JSON.stringify(error))
         }
-        )
+      )
       },
       getEmpleadoss () {
         apiEmpleados.getEmpleados(this)
@@ -96,9 +114,18 @@
         this.$parent.isIngresoEgresoList = false
         this.$parent.edit = true
         this.$emit('emmited', {action: 'edit2'})
+      },
+      verImagenComprobante (e) {
+        let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        apiIE.getIngresoEgreso2(this, id).then(res => {
+          this.modalData.imagen = res.imagen
+        }
+       )
+        this.showCustomModal = true
       }
     }
   }
+
 </script>
 <style>
 
