@@ -40,9 +40,9 @@
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="IdEmpleado"
-                      placeholder="IdEmplado"
-                      v-model="ingresosEgresos.idEmpleado"
+                      label="Descripcion"
+                      placeholder="Descripcion"
+                      v-model="ingresosEgresos.descripcion"
                       required>
             </fg-input>
           </div>
@@ -55,29 +55,26 @@
             </fg-input>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <fg-input type="text"
-                      label="Descripcion"
-                      placeholder="Descripcion"
-                      v-model="ingresosEgresos.descripcion"
-                      required>
-            </fg-input>
-          </div>
+        <div class="row" v-if="!edit">
+          <div class="col-md-3">
+          <h5>Imagen Comprobante</h5>
           <picture-input
             ref="pictureInput"
             @change="onChange"
             width="200"
             height="200"
-            margin="16"
+            margin="10"
             accept="image/jpeg,image/png"
-            size="10"
+            size="1000"
             buttonClass="btn"
+            removable="true"
             :customStrings="{
         upload: '<h1>Bummer!</h1>',
-        drag: 'Seleccionar una imagen' }">
-
+        drag: 'Seleccionar una imagen',
+        change: 'Cambiar imagen',
+        remove: 'Eliminar imagen' }">
           </picture-input>
+          </div>
         </div>
         <hr>
         <div class="row">
@@ -109,7 +106,7 @@
         ingresosEgresos: {
           idGastos: '',
           fecha: '',
-          idEmpleado: '',
+          idEmpleado: '1',
           descripcion: '',
           monto: '',
           idMedioDePagoCobro: '',
@@ -121,7 +118,8 @@
     },
     props: {
       edit: Boolean,
-      idGasto: Number
+      idGasto: Number,
+      modificarImagen: false
     },
     mounted () {
       this.cargarMedioDePagoCobro()
