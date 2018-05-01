@@ -46,11 +46,12 @@
                       required>
             </fg-input>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" disabled="edit">
             <fg-input label="Monto"
                       type="number"
                       placeholder="Monto"
                       v-model="ingresosEgresos.monto"
+                      disabled="edit"
                       required>
             </fg-input>
           </div>
@@ -73,7 +74,7 @@
             accept="image/jpeg,image/png"
             size="1000"
             buttonClass="btn"
-            removable="true"
+            :removable= true
             :customStrings="{
         upload: '<h1>Bummer!</h1>',
         drag: 'Seleccionar una imagen',
@@ -130,6 +131,7 @@
     mounted () {
       this.cargarMedioDePagoCobro()
       this.cargaIngresosEgresos2()
+      this.checkMonto()
     },
     methods: {
       cargarMedioDePagoCobro () {
@@ -194,6 +196,11 @@
             this.ingresosEgresos.imagen = ie.imagen
           })
         }
+      },
+      checkMonto () {
+        let ref = this.$refs.txt_monto
+        console.log('chequeando cambio en edit', this.edit)
+        console.log('el ref es', ref)
       }
     }
   }
