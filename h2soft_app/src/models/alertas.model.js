@@ -2,42 +2,51 @@
 // for more of what you can do here.
 const Sequelize = require('sequelize');
 
+
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const dispensers = sequelizeClient.define('dispensers', {
-    idDispensers: {
+  const alertas = sequelizeClient.define('alertas', {
+    idAlertas: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    codigo: {
-      type: Sequelize.STRING(45),
-      allowNull: false
-    },
-    descripcion: {
-      type: Sequelize.STRING(45),
-      allowNull: true
-    },
     idObjetivo: {
-      type: Sequelize.INTEGER(11),
-      allowNull: true,
-      references: {
-        model: 'objetivos-x-cliente',
-        key: 'idObjetivosXCliente'
-      }
-    },
-	idEstadoDispenser: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       references: {
-        model: 'estados-dispenser',
-        key: 'idEstadosDispenser'
+      	model: 'objetivos-x-cliente',
+      	key: 'idObjetivosXCliente'
       }
     },
-    fechaProxMantenimiento: {
-      type: Sequelize.DATE,
-      allowNull: true
+    idTipo: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+      	model: 'tipos-alerta',
+      	key: 'idTipoAlerta'
+      }	
+    },
+    idEstado: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+      	model: 'estados-alerta',
+      	key: 'idEstadoAlerta'
+      }
+    },
+    notificacion: {
+ 	  type: Sequelize.STRING(50),
+ 	  allowNull: false
+    },
+     idDispenser: {
+    type: Sequelize.INTEGER(11),
+    allowNull: true,
+    references: {
+        model: 'dispensers',
+        key: 'idDispensers'
+      }
     },
   }, {
     hooks: {
@@ -47,10 +56,10 @@ module.exports = function (app) {
     }
   });
 
-  dispensers.associate = function (models) { // eslint-disable-line no-unused-vars
+  alertas.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return dispensers;
+  return alertas;
 };
