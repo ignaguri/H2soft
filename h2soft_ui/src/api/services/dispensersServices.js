@@ -8,6 +8,11 @@ export default {
     return context.$http.get(API_URL + 'dispensers', authHeader)
       .then(res => { return res.body.data })
   },
+  getDispenser (context, idDispenser) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'dispensers/?iddispensers=' + idDispenser, authHeader)
+      .then(res => { return res.body.data[0] })
+  },
   getEstadosDispensers (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'estados-dispenser', authHeader)
@@ -27,6 +32,28 @@ export default {
     return context.$http.patch(API_URL + 'dispensers/' + idDispenser, dispenser, authHeader)
       .then(res => { return res.body.data })
   },
+  postDispenser (context, dispenser) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.post(API_URL + 'dispensers', dispenser, authHeader)
+      .then(dispenserInsertado => {
+        console.log(dispenserInsertado)
+        return dispenserInsertado
+      })
+      .catch(error => {
+        console.log('error insertando dispenser', error)
+        return false
+      })
+  },
+  editDispenser (context, dispenser) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.patch(API_URL + 'dispensers/' + dispenser.id, dispenser, authHeader)
+      .then(res => {
+        return true
+      })
+      .catch(error => {
+        console.log('algo falló en el edit' + JSON.stringify(error))
+      })
+  },
   borrarObjetivoDeDispenser (context, idDispenser) {
     const authHeader = { headers: auth.getAuthHeader() }
     var dispenser = {
@@ -35,5 +62,23 @@ export default {
     }
     return context.$http.patch(API_URL + 'dispensers/' + idDispenser, dispenser, authHeader)
       .then(res => { return res.body.data })
+  },
+  getCodigosDispensers (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'dispensers/', authHeader)
+      .then(res => {
+        if (res) {
+          let codigos = []
+          let disp = ''
+          res.body.data.forEach(d => {
+            disp = {
+              id: d.idDispensers,
+              codigo: d.codigo
+            }
+            codigos.push(disp)
+          })
+          return codigos
+        }
+      })
   }
 }

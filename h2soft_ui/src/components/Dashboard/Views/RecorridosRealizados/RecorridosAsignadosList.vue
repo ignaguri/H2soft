@@ -36,6 +36,7 @@
       }
     },
     mounted () {
+      // Promise.a
       apiDias.getDias(this).then(res => {
         this.dias = res
         apiTurnos.getTurnos(this).then(res => {
