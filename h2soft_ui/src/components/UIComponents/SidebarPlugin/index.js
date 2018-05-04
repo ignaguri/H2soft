@@ -21,7 +21,7 @@ const SidebarStore = {
     {
       name: 'Bidones y Dispensers',
       icon: 'ti-paint-bucket',
-      path: '/table-list'
+      path: '/bidonesdispensers'
     },
     {
       name: 'Ingresos y Gastos',

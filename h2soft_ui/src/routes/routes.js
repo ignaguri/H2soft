@@ -11,15 +11,16 @@ import Landing from '../components/GeneralViews/Landing.vue'
 // import Maps from 'src/components/Dashboard/Views/Maps.vue'
 // import Typography from 'src/components/Dashboard/Views/Typography.vue'
 // import TableList from 'src/components/Dashboard/Views/TableList.vue'
-import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
 // import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
+// import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
+import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
 import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
-// import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
+import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers.vue'
 
 const routes = [
   {
@@ -75,9 +76,9 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'table-list',
+        path: 'bidonesdispensers',
         name: 'Bidones y Dispensers',
-        component: WorkInProgress,
+        component: BidonesDispensers,
         meta: {requiresAuth: true}
       },
       {
