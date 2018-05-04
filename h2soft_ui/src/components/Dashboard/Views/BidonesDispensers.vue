@@ -5,6 +5,7 @@
         <tab header="Clientes">
         </tab>
         <tab header="Alertas" >
+          <alertas></alertas>
         </tab>
         <tab header="Mantenimientos">
         </tab>
@@ -27,13 +28,15 @@
 <script>
   import tabs from 'vue-strap/src/Tabs.vue'
   import tab from 'vue-strap/src/Tab.vue'
-  import dispensers from './Dispensers/Dispensers.vue'
+  import dispensers from './Dispensers/DispensersList.vue'
+  import alertas from './Dispensers/AlertasList.vue'
 
   export default {
     components: {
       tabs,
       tab,
-      dispensers
+      dispensers,
+      alertas
     }
   }
 </script>
