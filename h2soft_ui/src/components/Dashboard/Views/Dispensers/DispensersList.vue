@@ -1,24 +1,13 @@
 <template>
   <div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="true" :go="ver" >
-          </paper-table>
+    <div v-if="isDispensersList" >
+      <div class="row" >
+        <div class="col-md-12">
+          <div class="card">
+            <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :eraseButton="false" :goButton="false" :edit="editar"  >
+            </paper-table>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addDispenser" v-show="isDispensersList">
-            Agregar Dispenser
-          </button>
-          <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList" v-show="!isDispensersList">
-            Volver
-          </button>
-        </div>
-        <div class="clearfix"></div>
       </div>
     </div>
   </div>
@@ -31,8 +20,7 @@
 
   const tableColumns = ['Nro', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
   //  let tableData = []
-  // TODO: agregar cantidad de objetivos a la tabla
-  // TODO: guardar lista en localStorage para ahorrar llamados a la api
+
   export default {
     components: {
       PaperTable
@@ -59,13 +47,22 @@
       cargarDispensers () {
         api.getDispensers(this).then(res => {
           res.forEach(dis => {
-            this.table1.data.push({
+            var disp = {
               nro: dis.idDispensers,
               código: dis.codigo,
-              ubicación: dis.idObjetivo === null ? 'En fabrica' : 'En Objetivo', // this.getObjetivo(dis.idObjetivo).then(res1 => { return res1.body.data[0].nombre }),
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),
               próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString()
-            })
+            }
+            if (dis.idObjetivo === null) {
+              disp.ubicación = 'En fabrica'
+              this.table1.data.push(disp)
+            } else {
+              this.getObjetivo(dis.idObjetivo)
+                .then(res1 => {
+                  disp.ubicación = res1.body.data[0].nombre
+                  this.table1.data.push(disp)
+                })
+            }
           })
         }, error => {
           console.log('error ' + JSON.stringify(error))
@@ -133,12 +130,6 @@
 //        }, error => {
 //          console.log('error al cargar las temporadas' + error)
 //        })
-      },
-      addDispenser () {
-        this.isDispensersList = false
-      },
-      seeList () {
-        this.isDispensersList = true
       }
     }
   }
