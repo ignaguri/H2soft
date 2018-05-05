@@ -55,6 +55,14 @@ const estadosMantenimiento = require('./estados-mantenimiento/estados-mantenimie
 
 const estadosDispenser = require('./estados-dispenser/estados-dispenser.service.js');
 
+const alertas = require('./alertas/alertas.service.js');
+
+const estadosAlerta = require('./estados-alerta/estados-alerta.service.js');
+
+const tiposAlerta = require('./tipos-alerta/tipos-alerta.service.js');
+
+const historialXDispenser = require('./historial-x-dispenser/historial-x-dispenser.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -98,4 +106,8 @@ module.exports = function () {
   app.configure(mantenimientos);
   app.configure(estadosMantenimiento);
   app.configure(estadosDispenser);
+  app.configure(alertas);
+  app.configure(estadosAlerta);
+  app.configure(tiposAlerta);
+  app.configure(historialXDispenser);
 };
