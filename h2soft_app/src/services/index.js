@@ -61,6 +61,8 @@ const estadosAlerta = require('./estados-alerta/estados-alerta.service.js');
 
 const tiposAlerta = require('./tipos-alerta/tipos-alerta.service.js');
 
+const historialXDispenser = require('./historial-x-dispenser/historial-x-dispenser.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -107,4 +109,5 @@ module.exports = function () {
   app.configure(alertas);
   app.configure(estadosAlerta);
   app.configure(tiposAlerta);
+  app.configure(historialXDispenser);
 };
