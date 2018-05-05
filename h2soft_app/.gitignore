@@ -60,9 +60,11 @@ node_modules
 
 ### OSX ###
 *.DS_Store
+.DS_Store
 .AppleDouble
 .LSOverride
 *.npm-debug.log
+.npm-debug.log
 # Icon must end with two \r
 Icon
 

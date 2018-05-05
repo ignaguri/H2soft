@@ -5,10 +5,10 @@
         <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true" :erase="borrarIngresoEgreso" :goButton="true"  :go="verImagenComprobante" >
         </paper-table>
       </div>
-      <modal effect="fade" width="50%" :value="showCustomModal" title="Comprobante">
+      <modal effect="fade"   width="50%" height="50%" :value="showCustomModal" title="Comprobante">
          <div class="row">
            <div class="col-md-12">
-             <img v-bind:src="this.modalData.imagen" width="100%"/>
+             <img class="img-responsive" v-bind:src="this.modalData.imagen" width="100%" height="100%"/>
            </div>
          </div>
           <div slot="modal-footer" class="modal-footer">

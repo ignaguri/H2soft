@@ -46,19 +46,19 @@
                       required>
             </fg-input>
           </div>
-          <div class="col-md-6" disabled="edit">
+          <div class="col-md-6">
             <fg-input label="Monto"
                       type="number"
                       placeholder="Monto"
                       v-model="ingresosEgresos.monto"
-                      disabled="edit"
+                      :disabled="edit"
                       required>
             </fg-input>
           </div>
         </div>
-        <div class="row" v-if="!cambiarImagen">
+        <div class="row" v-if="!cambiarImagen && idGasto != -1">
           <div class="col-md-12">
-            <img v-bind:src="this.ingresosEgresos.imagen" width="50%"/>
+            <img v-bind:src="this.ingresosEgresos.imagen"  width="200" height="200"/>
             <button type="button" class="btn btn-default" @click="cambiarImagen = true">Cambiar imagen</button>
           </div>
         </div>
@@ -72,14 +72,15 @@
             height="200"
             margin="10"
             accept="image/jpeg,image/png"
-            size="1000"
+            size="5"
             buttonClass="btn"
             :removable= true
             :customStrings="{
         upload: '<h1>Bummer!</h1>',
         drag: 'Seleccionar una imagen',
         change: 'Cambiar imagen',
-        remove: 'Eliminar imagen' }">
+        remove: 'Eliminar imagen',
+        fileSize: 'La imagen excede el límite permitido',}">
           </picture-input>
           </div>
         </div>
@@ -112,7 +113,7 @@
         // se idGastos seria el ID de ingresoEgreso
         ingresosEgresos: {
           idGastos: '',
-          fecha: '',
+          fecha: new Date().toLocaleDateString(),
           idEmpleado: '1',
           descripcion: '',
           monto: '',
