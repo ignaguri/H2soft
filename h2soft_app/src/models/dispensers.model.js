@@ -35,7 +35,7 @@ module.exports = function (app) {
         key: 'idEstadosDispenser'
       }
     },
-    fechaProxMantenimiento: {
+	fechaProxMantenimiento: {
       type: Sequelize.DATE,
       allowNull: true
     },
