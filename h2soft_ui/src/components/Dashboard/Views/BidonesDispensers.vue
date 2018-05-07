@@ -8,6 +8,7 @@
           <alertas></alertas>
         </tab>
         <tab header="Mantenimientos">
+          <mantenimientos></mantenimientos>
         </tab>
         <tab header="Dispensers" >
           <dispensers></dispensers>
@@ -30,13 +31,15 @@
   import tab from 'vue-strap/src/Tab.vue'
   import dispensers from './Dispensers/DispensersList.vue'
   import alertas from './Dispensers/AlertasList.vue'
+  import mantenimientos from './Mantenimiento/MantenimientosList.vue'
 
   export default {
     components: {
       tabs,
       tab,
       dispensers,
-      alertas
+      alertas,
+      mantenimientos
     }
   }
 </script>

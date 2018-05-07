@@ -43,6 +43,10 @@ module.exports = function (app) {
         key: 'idTiposMantenimiento'
       }
     },
+	fechaRealizado: {
+      type: Sequelize.DATE,
+      allowNull: true
+    }
   }, {
     hooks: {
       beforeCount(options) {
