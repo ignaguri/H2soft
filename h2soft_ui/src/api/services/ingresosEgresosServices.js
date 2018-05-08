@@ -30,5 +30,9 @@ export default {
   getIngresoEgreso2 (context, idGasto) {
     return context.$http.get('http://localhost:3030/gastos/' + idGasto, authHeader)
         .then(res => { return res.body })
+  },
+  getIngresoEgresoSinImagen (context, id) {
+    return context.$http.get('http://localhost:3030/gastos?$select[]=monto&$select[]=idEmpleado&$select[]=idMedioDePagoCobro&$select[]=fecha&$select[]=descripcion&$select[]=idGastos', authHeader)
+      .then(res => { return res })
   }
 }

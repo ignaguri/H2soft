@@ -22,7 +22,7 @@
         @keyup.enter="submit"
       />
     </div>
-    <button class="btn btn-info btn-fill" @click="submit()">Entrar</button>
+    <button class="btn btn-info btn-fill" @click="submit">Entrar</button>
   </div>
 </template>
 
