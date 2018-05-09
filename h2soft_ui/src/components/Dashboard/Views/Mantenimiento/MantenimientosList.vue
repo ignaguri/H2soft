@@ -1,36 +1,63 @@
 <template>
   <div>
-      <div class="row" >
+    <div class="row" >
+      <div class="card">
+        <div class="text-right" style="padding:10px">
+          Ver mantenimientos
+          <button-group v-model="radioValue" type="info">
+            <radio selected-value="pendientes">Solo pendientes</radio>
+            <radio selected-value="todos">Todos</radio>
+          </button-group>
+        </div>
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="true" :go="ver" >
+        </paper-table>
+      </div>
+    </div>
+
+    <modal effect="fade" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = recorridoAsignarCamion()" title="Realizar mantenimiento">
+      <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
-            </paper-table>
-          </div>
+          <h5>¿Deseas registrar como realizado el mantenimiento seleccionado?</h5>
         </div>
       </div>
+      <div slot="modal-footer" class="modal-footer">
+        <button type="button" class="btn btn-default" @click="showCustomModal = false">Cancelar</button>
+        <button type="button" class="btn btn-success" @click="btn_registrarMantenimiento()">Aceptar</button>
+      </div>
+    </modal>
   </div>
+
+
 </template>
 <script>
   // import PaperTable from 'components/UIComponents/PaperTable.vue'
-  import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
+  import PaperTable from 'src/components/Dashboard/Views/Mantenimiento/PaperTablePlusMatenimientos.vue'// 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/mantenimientoServices'
   import apiCliente from 'src/api/services/clientServices'
   import apiDispenser from 'src/api/services/dispensersServices'
+  import { modal, buttonGroup, radio } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Dispenser', 'Tipo', 'Estado', 'Creado', 'Realizado']
   //  let tableData = []
 
   export default {
     components: {
-      PaperTable
+      PaperTable,
+      modal,
+      buttonGroup,
+      radio
     },
     data () {
       return {
+        radioValue: 'pendientes',
+        showCustomModal: false,
         estados: [],
         tipos: [],
+        idMantenimiento: 0,
         table1: {
           title: 'Mantenimientos',
-          subTitle: 'Listado de mantenimientos solicitados',
+          subTitle: 'Listado de mantenimientos para dispensers',
           columns: [...tableColumns],
           data: []
         }
@@ -45,16 +72,63 @@
         })
       })
     },
+    watch: {
+      radioValue: function () {
+        this.cargarMantenimientos()
+      }
+    },
     methods: {
       cargarMantenimientos () {
-        api.getMantenimientos(this).then(res => {
+        this.table1.data = []
+        if (this.radioValue === 'pendientes') {
+          this.getMantenimientosPendientes()
+        } else {
+          this.getMantenimientosTodos()
+        }
+      },
+      getMantenimientosTodos () {
+        api.getMantenimientos(this)
+          .then(res => {
+            res.forEach(mant => {
+              var mantenimiento = {
+                nro: mant.idMantenimientos,
+                cliente: '',
+                objetivo: '',
+                dispenser: '',
+                creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString(),
+                realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString(),
+                estado: this.getEstado(mant.idEstadoMantenimiento),
+                tipo: this.getTipo(mant.idTipoMantenimiento)
+              }
+              apiCliente.getObjetivo(this, mant.idObjetivo)
+                .then(res1 => {
+                  res1 = res1.body.data[0]
+                  mantenimiento.objetivo = res1.nombre
+                  apiCliente.getCliente(this, res1.idCliente)
+                    .then(res2 => {
+                      res2 = res2[0]
+                      mantenimiento.cliente = res2.razonSocial
+                      apiDispenser.getDispenser(this, mant.idDispenser)
+                        .then(disp => {
+                          mantenimiento.dispenser = disp.codigo
+                          this.table1.data.push(mantenimiento)
+                        })
+                    })
+                })
+            })
+          }, error => {
+            console.log('error ' + JSON.stringify(error))
+          })
+      },
+      getMantenimientosPendientes () {
+        api.getMantenimientosPendientes(this).then(res => {
           res.forEach(mant => {
             var mantenimiento = {
               nro: mant.idMantenimientos,
               cliente: '',
               objetivo: '',
               dispenser: '',
-              creado: mant.cratedAt === null ? '-' : new Date(mant.cratedAt).toLocaleDateString(),
+              creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString(),
               realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString(),
               estado: this.getEstado(mant.idEstadoMantenimiento),
               tipo: this.getTipo(mant.idTipoMantenimiento)
@@ -79,53 +153,49 @@
           console.log('error ' + JSON.stringify(error))
         })
       },
-      editar (e) {
-        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        // console.log('editar id: ' + id)
-        this.$emit('emitted', {action: 'edit', client: id})
-        // this.$parent.isClientList = false
-        // this.$router.push('clientes/edit/' + id)
-      },
-      borrar (e) {
-        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        if (!confirm('Desea eliminar a este cliente, sus contactos y todos sus objetivos?')) return
-        api.deleteClientes(this, id).then(res => {
-          if (res) {
-            alert('Borrado con éxito')
-            this.table1.data = []
-            this.cargarClientes()
-          } else {
-            alert('error al borrar')
-          }
-        })
-      },
       ver (e) {
-        let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        api.getClienteFull(this, id).then(r => {
-          console.log('me ha iegado', r)
-          this.modalData.nombre = r.cliente.razonSocial
-          this.modalData.CUIL = r.cliente.CUIL !== undefined ? r.cliente.CUIL : ''
-          this.modalData.direccion = r.cliente.direccion !== undefined ? r.cliente.direccion : ''
-          switch (r.cliente.idTipo) {
-            case 1:
-              this.modalData.tipoCliente = 'Empresa'
-              break
-            case 2:
-              this.modalData.tipoCliente = 'Particular'
-              break
-            default:
-              this.modalData.tipoCliente = ''
-              break
-          }
-          this.modalData.contacto.nombre = r.contacto !== undefined ? r.contacto.nombre : ''
-          this.modalData.contacto.mail = r.contacto !== undefined ? r.contacto.mail : ''
-          this.modalData.contacto.celular = r.contacto !== undefined ? r.contacto.celular : ''
-          this.modalData.contacto.telefono = r.contacto !== undefined ? r.contacto.telefono : ''
-          this.modalData.contacto.observaciones = r.contacto !== undefined ? r.contacto.observaciones : ''
-          this.modalData.objetivos = r.objetivos.length
-        })
+        this.idMantenimiento = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         this.showCustomModal = true
-        this.$emit('emitted', {action: 'ver', client: id})
+        console.log('id mant selecconado: ' + this.idMantenimiento)
+        // this.$emit('emitted', {action: 'ver', client: id})
+      },
+      btn_registrarMantenimiento () {
+        this.mantenimiento = {
+          'id': this.idMantenimiento,
+          'fechaRealizado': Date.now(),
+          'idEstadoMantenimiento': 2
+        }
+        api.editMantenimiento(this, this.mantenimiento)
+          .then(res => {
+            api.getMantenimiento(this, this.idMantenimiento)
+              .then(m => {
+                m = m[0]
+                var dt = new Date()
+                dt.setMonth(dt.getMonth() + 6)
+                let dispenser = {
+                  'id': m.idDispenser,
+                  'idEstadoDispenser': 1,
+                  'fechaProxMantenimiento': dt
+                }
+                apiDispenser.editDispenser(this, dispenser)
+                  .then(dis => {
+                    if (dis) {
+                      noti.exito(this)
+                      this.showCustomModal = false
+                      this.table1.data = []
+                      this.cargarMantenimientos()
+                    } else {
+                      console.log('error al editar el dispenser')
+                      noti.error(this)
+                      this.showCustomModal = true
+                    }
+                  }, error => {
+                    console.log('error ' + JSON.stringify(error))
+                  })
+              })
+          }, error => {
+            console.log('error ' + JSON.stringify(error))
+          })
       },
       getEstado (idEstado) {
         for (var i = 0, len = this.estados.length; i < len; i++) {

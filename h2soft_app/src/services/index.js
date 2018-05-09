@@ -18,7 +18,7 @@ const detalleRecorrido = require('./detalle-recorrido/detalle-recorrido.service.
 const detalleRemito = require('./detalle-remito-productos/detalle-remito-productos.service.js');
 const dispenserXDetalleRecorrido = require('./dispenser-x-detalle-recorrido/dispenser-x-detalle-recorrido.service.js');
 const horariosXObjetivo = require('./horarios-x-objetivo/horarios-x-objetivo.service.js');
-const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
+// const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
 const objetivosXCliente = require('./objetivos-x-cliente/objetivos-x-cliente.service.js');
 const remitosXFactura = require('./remitos-x-factura/remitos-x-factura.service.js');
 const tiposMantenimiento = require('./tipos-mantenimiento/tipos-mantenimiento.service.js');
@@ -77,7 +77,7 @@ module.exports = function () {
   app.configure(detalleRemito);
   app.configure(dispenserXDetalleRecorrido);
   app.configure(horariosXObjetivo);
-  app.configure(mantenimiento);
+  // app.configure(mantenimiento);
   app.configure(objetivosXCliente);
   app.configure(remitosXFactura);
   app.configure(tiposMantenimiento);

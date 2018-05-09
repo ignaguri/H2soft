@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="row">
-      <tabs>
+      <tabs id="pestañas" v-model="this.pestañaActiva" @active="cambio" nav-style="tabs" justified>
         <tab header="Clientes">
         </tab>
         <tab header="Alertas" >
-          <alertas></alertas>
+          <alertas v-if="this.pestañaActiva === 1"></alertas>
         </tab>
         <tab header="Mantenimientos">
-          <mantenimientos></mantenimientos>
+          <mantenimientos v-if="this.pestañaActiva === 2"></mantenimientos>
         </tab>
         <tab header="Dispensers" >
-          <dispensers></dispensers>
+          <dispensers v-if="this.pestañaActiva === 3"></dispensers>
         </tab>
       </tabs>
 
@@ -29,7 +29,7 @@
 <script>
   import tabs from 'vue-strap/src/Tabs.vue'
   import tab from 'vue-strap/src/Tab.vue'
-  import dispensers from './Dispensers/DispensersList.vue'
+  import dispensers from './Dispensers/Dispensers.vue'
   import alertas from './Dispensers/AlertasList.vue'
   import mantenimientos from './Mantenimiento/MantenimientosList.vue'
 
@@ -40,6 +40,16 @@
       dispensers,
       alertas,
       mantenimientos
+    },
+    data () {
+      return {
+        pestañaActiva: 2
+      }
+    },
+    methods: {
+      cambio (index) {
+        this.pestañaActiva = index
+      }
     }
   }
 </script>
