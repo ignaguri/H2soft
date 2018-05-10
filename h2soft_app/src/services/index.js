@@ -18,7 +18,7 @@ const detalleRecorrido = require('./detalle-recorrido/detalle-recorrido.service.
 const detalleRemito = require('./detalle-remito-productos/detalle-remito-productos.service.js');
 const dispenserXDetalleRecorrido = require('./dispenser-x-detalle-recorrido/dispenser-x-detalle-recorrido.service.js');
 const horariosXObjetivo = require('./horarios-x-objetivo/horarios-x-objetivo.service.js');
-const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
+// const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
 const objetivosXCliente = require('./objetivos-x-cliente/objetivos-x-cliente.service.js');
 const remitosXFactura = require('./remitos-x-factura/remitos-x-factura.service.js');
 const tiposMantenimiento = require('./tipos-mantenimiento/tipos-mantenimiento.service.js');
@@ -55,14 +55,6 @@ const estadosMantenimiento = require('./estados-mantenimiento/estados-mantenimie
 
 const estadosDispenser = require('./estados-dispenser/estados-dispenser.service.js');
 
-const alertas = require('./alertas/alertas.service.js');
-
-const estadosAlerta = require('./estados-alerta/estados-alerta.service.js');
-
-const tiposAlerta = require('./tipos-alerta/tipos-alerta.service.js');
-
-const historialXDispenser = require('./historial-x-dispenser/historial-x-dispenser.service.js');
-
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -85,7 +77,7 @@ module.exports = function () {
   app.configure(detalleRemito);
   app.configure(dispenserXDetalleRecorrido);
   app.configure(horariosXObjetivo);
-  app.configure(mantenimiento);
+  // app.configure(mantenimiento);
   app.configure(objetivosXCliente);
   app.configure(remitosXFactura);
   app.configure(tiposMantenimiento);
@@ -106,8 +98,4 @@ module.exports = function () {
   app.configure(mantenimientos);
   app.configure(estadosMantenimiento);
   app.configure(estadosDispenser);
-  app.configure(alertas);
-  app.configure(estadosAlerta);
-  app.configure(tiposAlerta);
-  app.configure(historialXDispenser);
 };
