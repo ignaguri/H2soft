@@ -23,6 +23,22 @@ export default {
     return context.$http.get(API_URL + 'dispensers/?idObjetivo=' + idObjetivo, authHeader)
       .then(res => { return res.body.data })
   },
+  getDispensersXCliente (context, idCliente) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    let dispensers = []
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + idCliente, authHeader)
+      .then(res => {
+        res = res.body.data
+        res.forEach(o => {
+          context.$http.get(API_URL + 'dispensers/?idObjetivo=' + res[0].idObjetivosXCliente, authHeader)
+          .then(dis => {
+            dispensers = dispensers + dis
+            console.log(dispensers)
+            return dispensers
+          })
+        })
+      })
+  },
   setObjetivoADispenser (context, idDispenser, IdObjetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
     var dispenser = {

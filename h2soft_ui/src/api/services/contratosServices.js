@@ -105,5 +105,10 @@ export default {
         console.log('error: ' + JSON.stringify(error) + '\n' + error)
         return false
       })
+  },
+  getContratoXCliente (context, idCliente) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'contratos/?idCliente=' + idCliente, authHeader)
+      .then(cont => { return cont.body.data })
   }
 }
