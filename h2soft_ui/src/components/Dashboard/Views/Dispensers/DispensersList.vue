@@ -125,11 +125,6 @@
       },
       getObjetivo (idObjetivo) {
         return apiCliente.getObjetivo(this, idObjetivo)
-//          .then(res => {
-//          return res
-//        }, error => {
-//          console.log('error al cargar las temporadas' + error)
-//        })
       }
     }
   }
