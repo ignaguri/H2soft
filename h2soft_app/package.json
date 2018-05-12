@@ -44,7 +44,6 @@
     "feathers-rest": "^1.8.0",
     "feathers-sequelize": "^2.4.0",
     "helmet": "^3.6.1",
-    "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
     "sequelize": "^4.37.6",
     "serve-favicon": "^2.4.3",
