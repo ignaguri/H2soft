@@ -61,6 +61,7 @@
   // import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import noti from 'src/api/notificationsService'
+
   // import fgdrop from 'components/UIComponents/Inputs/formGroupDropDown.vue'
 
   export default {
@@ -104,13 +105,15 @@
           api.newUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              noti.success(this)
+              // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
               noti.danger(this)
             }
           })
+          noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+         // noti.exito(this)
         } else {
           console.log(this.id)
           this.usuario = {
@@ -122,7 +125,8 @@
           api.editUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              noti.success(this)
+              noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+             // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {

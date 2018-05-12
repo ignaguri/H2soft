@@ -105,9 +105,9 @@
         }
         api.editUsuario(this, this.usuario).then(res => {
           if (res) {
-            noti.success(this)
-            this.$parent.userId = 0
-            this.$parent.isUserList = true
+            noti.exitoConTexto(this, 'Éxito', 'El usuario se borró exitosamente')
+            this.table1.data = []
+            this.cargarUsuarios()
           } else {
             noti.danger(this)
           }
