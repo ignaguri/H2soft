@@ -8,10 +8,10 @@
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Email"
+                      label="Usuario"
                       :disabled="false"
-                      placeholder="Email"
-                      v-model="user.email"
+                      placeholder="Usuario"
+                      v-model="user.usuario"
                       required>
             </fg-input>
           </div>
@@ -71,7 +71,7 @@
         // edit: true,
         user: {
           idUsuarios: '',
-          email: '',
+          usuario: '',
           password: '',
           repassword: '',
           idEmpleado: '',
@@ -95,7 +95,7 @@
       guardarUsuario () { // metodo para gurdar usuaria, tanto nuevos como edición
         if (this.id === 0) {
           this.usuario = {
-            'email': this.user.email,
+            'email': this.user.usuario,
             'idEmpleado': this.user.idEmpleado,
             'idRol': this.user.idRol,
             'password': this.user.password,
@@ -115,7 +115,7 @@
           console.log(this.id)
           this.usuario = {
             'id': this.user.id,
-            'email': this.user.email,
+            'email': this.user.usuario,
             'idEmpleado': this.user.idEmpleado,
             'idRol': this.user.idRol
           }
@@ -149,7 +149,7 @@
         api.getUsuario(this, this.id).then(res => {
           res = res.body.data[0]
           this.user.id = res.id
-          this.user.email = res.email
+          this.user.usuario = res.email
           this.user.idEmpleado = res.idEmpleado
           this.user.idRol = res.idRol
         }, error => {

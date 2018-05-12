@@ -8,7 +8,7 @@
       <input
         type="text"
         class="form-control"
-        placeholder="Ingrese su email"
+        placeholder="Ingrese su usuario"
         v-model="credentials.email"
         v-focus
       />
