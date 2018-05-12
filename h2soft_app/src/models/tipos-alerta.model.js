@@ -13,7 +13,7 @@ module.exports = function (app) {
       autoIncrement: true
     },
     nombre: {
-      type: Sequelize.STRING(10),
+      type: Sequelize.STRING(50),
       allowNull: false
     },
   }, {

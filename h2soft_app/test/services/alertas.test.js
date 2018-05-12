@@ -5,6 +5,7 @@ describe('\'alertas\' service', () => {
   it('registered the service', () => {
     const service = app.service('alertas');
 
+    console.log('alertas serv', service);
     assert.ok(service, 'Registered the service');
   });
 });
