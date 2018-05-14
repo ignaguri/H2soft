@@ -9,10 +9,10 @@
       <div class="col-md-12">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="newContrato" v-show="isContratosList" >
-            Agregar contrato
+            Agregar Contrato
           </button>
           <button type="button" class="btn btn-default btn-fill btn-wd" @click="verLista"  v-show="!isContratosList" >
-            Cancelar
+            Volver
           </button>
         </div>
         <div class="clearfix"></div>

@@ -66,6 +66,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Producto', 'Cantidad desde', 'Cantidad hasta', 'Precio']
 
@@ -86,8 +87,8 @@
         },
         productoss: {},
         table1: {
-          title: 'Detalle de Contrato',
-          subTitle: 'Lista de clausulas por contrato',
+          title: 'Detalle de contrato',
+          subTitle: 'Lista de cláusulas por contrato',
           columns: [...tableColumns],
           data: []
         }
@@ -144,11 +145,13 @@
       },
       ok () {
         if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '' || this.detalleContrato.cantidadMinima === '') {
-          alert('Debe completar todos los campos')
+         // alert('Debe completar todos los campos')
+          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
           return true
         }
         if (this.detalleContrato.cantidadMinima > this.detalleContrato.cantidadMaxima) {
-          alert('La cantidad mínima no puede ser mayor a la cantidad máxima')
+          // alert('La cantidad mínima no puede ser mayor a la cantidad máxima')
+          noti.errorConTexto(this, 'Error', 'La cantidad mínima no puede ser mayor a la cantidad máxima')
           return true
         }
         /*
@@ -164,7 +167,7 @@
           cantidadMaxima: this.detalleContrato.cantidadMaxima,
           precioPorUnidad: this.detalleContrato.precioPorUnidad
         })
-        alert('Se agregó un nuevo detalle')
+        noti.exitoConTexto(this, 'Éxito', 'Se agregó un nuevo detalle')
         return false
       },
       cargarProducto (idProd) {
