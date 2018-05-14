@@ -8,10 +8,10 @@
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Email"
+                      label="Usuario"
                       :disabled="false"
-                      placeholder="Email"
-                      v-model="user.email"
+                      placeholder="Usuario"
+                      v-model="user.usuario"
                       required>
             </fg-input>
           </div>
@@ -61,6 +61,7 @@
   // import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import noti from 'src/api/notificationsService'
+
   // import fgdrop from 'components/UIComponents/Inputs/formGroupDropDown.vue'
 
   export default {
@@ -71,7 +72,7 @@
         // edit: true,
         user: {
           idUsuarios: '',
-          email: '',
+          usuario: '',
           password: '',
           repassword: '',
           idEmpleado: '',
@@ -95,7 +96,7 @@
       guardarUsuario () { // metodo para gurdar usuaria, tanto nuevos como edición
         if (this.id === 0) {
           this.usuario = {
-            'email': this.user.email,
+            'email': this.user.usuario,
             'idEmpleado': this.user.idEmpleado,
             'idRol': this.user.idRol,
             'password': this.user.password,
@@ -104,25 +105,28 @@
           api.newUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              noti.success(this)
+              // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
               noti.danger(this)
             }
           })
+          noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+         // noti.exito(this)
         } else {
           console.log(this.id)
           this.usuario = {
             'id': this.user.id,
-            'email': this.user.email,
+            'email': this.user.usuario,
             'idEmpleado': this.user.idEmpleado,
             'idRol': this.user.idRol
           }
           api.editUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              noti.success(this)
+              noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+             // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
@@ -149,7 +153,7 @@
         api.getUsuario(this, this.id).then(res => {
           res = res.body.data[0]
           this.user.id = res.id
-          this.user.email = res.email
+          this.user.usuario = res.email
           this.user.idEmpleado = res.idEmpleado
           this.user.idRol = res.idRol
         }, error => {
