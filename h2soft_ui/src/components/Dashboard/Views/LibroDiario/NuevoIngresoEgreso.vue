@@ -95,12 +95,15 @@
         </div>
       </form>
     </div>
+    {{ cajaTotal }}
+    {{ ingresosEgresos }}
   </div>
 </template>
 <script>
   import {datepicker} from 'vue-strap'
   import apiMPC from 'src/api/services/medioDePagoCobroService'
   import apiIE from 'src/api/services/ingresosEgresosServices'
+  import apiCT from 'src/api/services/cajaTotalServices'
   import pictureInput from 'vue-picture-input'
 
   export default {
@@ -119,6 +122,11 @@
           monto: '',
           idMedioDePagoCobro: '',
           imagen: ''
+        },
+        cajaTotal: {
+          fecha: '',
+          idMedioDePago: '',
+          monto: ''
         },
         mediosDePagoCobro: {},
         radioValue: 'ingreso'
@@ -161,6 +169,19 @@
             } else {
               console.log('devolvio false')
               alert('Error al guardar el ingresosEgresos.')
+            }
+          })
+          this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
+          this.cajaTotal.monto = this.ingresosEgresos.monto
+          this.cajaTotal.fecha = this.ingresosEgresos.fecha
+          apiCT.postCajaTotal(this, this.cajaTotal).then(res => {
+            if (res) {
+              console.log('devolvió true en cajaTotal')
+              alert('ingresosEgresos guardado con éxito.')
+            } else {
+              console.log('devolvio false')
+              alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
+              alert('JSONN: ' + JSON.stringify(this.cajaTotal))
             }
           })
         } else {

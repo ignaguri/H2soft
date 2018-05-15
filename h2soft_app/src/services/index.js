@@ -51,6 +51,8 @@ const detalleRemitoDispensers = require('./detalle-remito-dispensers/detalle-rem
 
 const mediosDePagoCobro = require('./medios-de-pago-cobro/medios-de-pago-cobro.service.js');
 
+const cajaTotal = require('./caja-total/caja-total.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -92,4 +94,5 @@ module.exports = function () {
   app.configure(camiones);
   app.configure(detalleRemitoDispensers);
   app.configure(mediosDePagoCobro);
+  app.configure(cajaTotal);
 };
