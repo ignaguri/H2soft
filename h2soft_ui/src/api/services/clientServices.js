@@ -136,5 +136,31 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'tipos-cliente', authHeader)
       .then(res => { return res.body.data })
+  },
+  getClienteConContrato (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    let info = {}
+    return context.$http.get(API_URL + 'clientes/' + id, authHeader)
+      .then(cl => {
+        info['cliente'] = cl.body
+        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+      })
+      .then(oxc => {
+        info['objetivos'] = oxc.body.data
+        return context.$http.get(API_URL + 'contratos' + '/?idCliente=' + id, authHeader)
+      })
+      .then(con => {
+        // console.log(con.body.data[0])
+        info['contrato'] = con.body.data[0]
+        return context.$http.get(API_URL + 'detalles-contrato' + '/?idContrato=' + con.body.data[0].idContratos, authHeader)
+      })
+      .then(det => {
+        info['detalle'] = det.body.data
+        return info
+      })
+      .catch(error => {
+        console.log('algo falló en el get ', error)
+        return false
+      })
   }
 }

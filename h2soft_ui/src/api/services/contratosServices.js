@@ -60,6 +60,11 @@ export default {
     return context.$http.get(API_URL + 'detalles-contrato/' + idContrato, authHeader)
       .then(res => { return res.body })
   },
+  getDetallesContrato (context, idContrato) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + idContrato, authHeader)
+      .then(res => { return res.body.data })
+  },
   getContratoFull (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
@@ -109,6 +114,5 @@ export default {
   getContratoXCliente (context, idCliente) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'contratos/?idCliente=' + idCliente, authHeader)
-      .then(cont => { return cont.body.data })
   }
 }
