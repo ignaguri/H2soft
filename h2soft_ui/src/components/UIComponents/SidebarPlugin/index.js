@@ -31,7 +31,7 @@ const SidebarStore = {
     {
       name: 'Facturación',
       icon: 'ti-money',
-      path: '/icons'
+      path: '/facturacion'
     },
     {
       name: 'Clientes',

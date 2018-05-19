@@ -21,6 +21,7 @@ import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsigna
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
 import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers.vue'
+import Contabilidad from 'src/components/Dashboard/Views/Contabilidad.vue'
 
 const routes = [
   {
@@ -70,9 +71,9 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'typography',
+        path: 'facturacion',
         name: 'Facturación',
-        component: WorkInProgress,
+        component: Contabilidad,
         meta: {requiresAuth: true}
       },
       {
