@@ -166,7 +166,7 @@
         // this.detalles = this.detalles.filter(dets => dets.cantidadMinima === parseInt(cant))
         // this.detalles = this.detalles.filter(dets => dets.cantidadMinima !== parseInt(cant) && dets.idProducto !== parseInt(prod))
         for (let i = 0; i < this.detalles.length; i++) {
-          if (this.detalles[i].idProducto === parseInt(prod) && this.detalles[i].cantidadMinima === parseInt(cant)) {
+          if (parseInt(this.detalles[i].idProducto) === parseInt(prod) && parseInt(this.detalles[i].cantidadMinima) === parseInt(cant)) {
             this.$delete(this.detalles, i)
           }
         }
