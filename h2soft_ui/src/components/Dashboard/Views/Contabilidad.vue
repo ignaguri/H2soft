@@ -36,7 +36,7 @@
           <div class="row">
                   <div class="col-md-4 text-center">
                     <h5>Precio por unidad</h5>
-                    <h4 style="margin-top: 0px;" class="">{{this.precioPorUnidad}} $ / bidón</h4>
+                    <h4 style="margin-top: 0px;" class="">$ {{this.precioPorUnidad}} / bidón</h4>
                   </div>
                   <div class="col-md-4 text-center">
                     <h5>Cantidad vendida</h5>

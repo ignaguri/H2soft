@@ -4,27 +4,26 @@
       <div class="row">
         <div class="col-md-3">
           <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
-          
             <dds id="cliente" v-model="idClientes"
                 :options="clientes"
                 options-value="idClientes"
                 options-label="razonSocial"
                 search-text="Buscar"
                 :placeholder="'Cliente'"
-                :search="true" :justified="true" style="width: 200PX;" >
+                :search="true" :justified="true" style="width: 200PX;"
+                :required="true" >
             </dds>
-          
         </div> 
           <div class="col-md-3">
             <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
-            
             <dds id="objetivo" v-model="idObjetivo"
                 :options="objetivos"
                 options-value="idObjetivosXCliente"
                 options-label="nombre"
                 search-text="Buscar"
                 :placeholder="this.objetivo_placeholder"
-                :search="true" :justified="true"  style="width: 200PX;" >
+                :search="true" :justified="true"  style="width: 200PX;"
+                :required="true" >
             </dds>
           
           </div>
@@ -94,13 +93,20 @@
     },
     watch: {
       idClientes: function () {
-        this.objetivo_placeholder = 'Objetivo'
-        this.cargarObjetivos()
-        this.cargarDispensers()
-        this.cargarContrato()
+        if (this.idClientes !== null) {
+          this.objetivo_placeholder = 'Objetivo'
+          this.cargarObjetivos()
+          this.cargarDispensers()
+          this.cargarContrato()
+        }
       },
       idObjetivo: function () {
-        this.cargarDispensersDelObjetivo()
+        if (this.idObjetivo !== null) {
+          this.cargarDispensersDelObjetivo()
+        } else {
+          this.cargarDispensers()
+          this.cargarContrato()
+        }
       }
     },
     methods: {
@@ -165,20 +171,18 @@
         this.table2.data = []
         apiContratos.getContratoXCliente(this, this.idClientes)
           .then(res => {
-            console.log(res)
-            var contrato = res[res.length - 1]
-            apiContratos.getDetalleContrato(this, contrato.idContratos)
-              .then(det => {
-                console.log(det)
-                var detalle = {
+            if (res) {
+              const contrato = res.contrato
+              res.detalle.forEach(det => {
+                let detalle = {
                   'cantidadminima': det.cantidadMinima,
                   'cantidadmaxima': det.cantidadMaxima,
                   'precio': det.precioPorUnidad,
                   'vigentehasta': contrato.fechaVigenciaHasta === null ? '-' : new Date(contrato.fechaVigenciaHasta).toLocaleDateString()
                 }
                 this.table2.data.push(detalle)
-                console.log(detalle)
               })
+            }
           })
       },
       getEstadoDispenser (idEstado) {
