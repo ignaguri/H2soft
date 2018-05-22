@@ -19,7 +19,12 @@
       </div>
     </div>
 
-    <!--Charts-->
+    <! -- Charts-->
+    <div class="row">
+      <div class="col-md-12">
+        <repartos :rep="reparts"></repartos>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="estadosChart.data" chart-type="Bar">
@@ -76,19 +81,38 @@
   </div>
 </template>
 <script>
+  import api from 'src/api/services/recorridosHistoricosServices'
+  import apiCliente from 'src/api/services/clientServices'
+  import apiUsuario from 'src/api/services/userServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
+  import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
   import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
-      ChartCard
+      ChartCard,
+      repartos
     },
     /**
      * Chart data used to render stats, charts. Should be replaced with server data
      */
     data () {
       return {
+        /* reparts: {
+          reps: [
+            { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
+              repartidor: 'ema'
+            },
+            { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
+              repartidor: 'cami'
+            },
+            { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
+              repartidor: 'nico'
+            }
+          ]}, */
+        reparts: {
+          reps: [] },
         statsCards: [
           {
             type: 'warning',
@@ -198,13 +222,49 @@
 
       }
     },
-    route: {
-      canActivate () {
-        return auth.user.authenticated
+    mounted () {
+      this.cargarRecorridos()
+    },
+    methods: {
+      cargarRecorridos () {
+        api.getRecorridosAsignados(this)
+          .then(res => {
+            if (res) {
+              res.forEach(rec => {
+                apiUsuario.getEmpleado(this, rec.idEmpleadoAsignado)
+                .then(emps => {
+                  let reparto = {
+                    repartidor: emps[0].nombre,
+                    objetivos: []
+                  }
+                  api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
+                  .then(dets => {
+                    dets.forEach(det => {
+                      apiCliente.getObjetivo(this, det.idObjetivo)
+                      .then(obj => {
+                        obj = obj.body.data[0]
+                        let objetivo = {
+                          nombre: obj.nombre,
+                          idestado: det.entregado,
+                          orden: det.orden
+                        }
+                        reparto.objetivos.push(objetivo)
+                      })
+                    })
+                  })
+                  this.reparts.reps.push(reparto)
+                })
+              })
+            }
+          })
+      },
+      route: {
+        canActivate () {
+          return auth.user.authenticated
+        }
       }
     }
   }
-
 </script>
 <style>
 

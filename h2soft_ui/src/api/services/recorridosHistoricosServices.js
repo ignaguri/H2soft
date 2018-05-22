@@ -6,6 +6,12 @@ export default {
   getRecorridosAsignados (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorrido-historico', authHeader)
+    .then(res => {
+      return res.body.data
+    })
+    .catch(error => {
+      console.log('algo falló en el get' + JSON.stringify(error))
+    })
   },
   getRecorridoAsignadoXId (context, idRecorridoAsignado) {
     const authHeader = { headers: auth.getAuthHeader() }
@@ -21,6 +27,12 @@ export default {
   getDetallesRecorridoAsignado (context, idRecorridoAsignado) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRecorridoHistorico=' + idRecorridoAsignado, authHeader)
+    .then(res => {
+      return res.body.data
+    })
+    .catch(error => {
+      console.log('algo falló en el get de detalle' + JSON.stringify(error))
+    })
   },
   getDetalleRecorridoAsignado (context, idDetalleRecorridoHistorico) {
     const authHeader = { headers: auth.getAuthHeader() }

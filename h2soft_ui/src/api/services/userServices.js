@@ -31,6 +31,11 @@ export default {
     return context.$http.get(API_URL + 'empleados', authHeader)
       .then(res => { return res.body.data })
   },
+  getEmpleado (context, idEmpleado) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'empleados/?idEmpleados=' + idEmpleado, authHeader)
+      .then(res => { return res.body.data })
+  },
   editUsuario (context, usuario) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.patch(API_URL + 'users/' + usuario.id, usuario, authHeader)
