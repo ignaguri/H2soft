@@ -4,33 +4,33 @@
       <div class="row">
         <div class="col-md-3">
           <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
-          
+
             <dds id="cliente" v-model="idClientes"
                 :options="clientes"
                 options-value="idClientes"
                 options-label="razonSocial"
                 search-text="Buscar"
                 :placeholder="'Cliente'"
-                :search="true" :justified="true" style="width: 200PX;" >
+                :search="true" :justified="true">
             </dds>
-          
-        </div> 
-          <div class="col-md-3">
+
+        </div>
+          <div class="col-md-4">
             <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
-            
+
             <dds id="objetivo" v-model="idObjetivo"
                 :options="objetivos"
                 options-value="idObjetivosXCliente"
                 options-label="nombre"
                 search-text="Buscar"
                 :placeholder="this.objetivo_placeholder"
-                :search="true" :justified="true"  style="width: 200PX;" >
+                :search="true" :justified="true">
             </dds>
-          
+
           </div>
       </div>
     </form>
-    
+
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    
+
   </div>
 </template>
 <script>
