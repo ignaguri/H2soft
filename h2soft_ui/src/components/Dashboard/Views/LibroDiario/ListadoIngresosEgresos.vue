@@ -2,18 +2,20 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true" :erase="borrarIngresoEgreso" :goButton="true"  :go="verImagenComprobante" >
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                     :columns="table1.columns" :editButton="true" :edit="editarIngresoEgreso" :eraseButton="true"
+                     :erase="borrarIngresoEgreso" :goButton="true" :go="verImagenComprobante">
         </paper-table>
       </div>
-      <modal effect="fade"   width="50%" height="50%" :value="showCustomModal" title="Comprobante">
-         <div class="row">
-           <div class="col-md-12">
-             <img class="img-responsive" v-bind:src="this.modalData.imagen" width="100%" height="100%"/>
-           </div>
-         </div>
-          <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
+      <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
+        <div class="row">
+          <div class="col-md-12">
+            <img class="img-responsive" v-bind:src="this.modalData.imagen" width="100%" height="100%"/>
           </div>
+        </div>
+        <div slot="modal-footer" class="modal-footer">
+          <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
+        </div>
       </modal>
     </div>
   </div>
@@ -23,7 +25,7 @@
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
-  import { modal } from 'vue-strap'
+  import {modal} from 'vue-strap'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Monto', 'MediodePago', 'Descripcion']
 
@@ -75,7 +77,7 @@
         }, error => {
           console.log('error' + JSON.stringify(error))
         }
-      )
+        )
       },
       getEmpleadoss () {
         apiEmpleados.getEmpleados(this)
@@ -106,7 +108,15 @@
       borrarIngresoEgreso (e) {
         let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
         apiIE.deleteIngresoEgreso(this, id)
-        alert('Ingreso/Egreso eliminado:' + id)
+          .then(res => {
+            if (res) {
+              alert('Ingreso/Egreso eliminado:' + id)
+            }
+          })
+          .catch(err => {
+            console.log('errorrrrrr', err)
+            alert('Algo salio mal!')
+          })
       },
       editarIngresoEgreso (e) {
         let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
@@ -120,8 +130,7 @@
         let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
         apiIE.getIngresoEgreso2(this, id).then(res => {
           this.modalData.imagen = res.imagen
-        }
-       )
+        })
         this.showCustomModal = true
       }
     }

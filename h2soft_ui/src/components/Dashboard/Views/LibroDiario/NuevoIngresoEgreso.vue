@@ -58,30 +58,30 @@
         </div>
         <div class="row" v-if="!cambiarImagen && idGasto != -1">
           <div class="col-md-12">
-            <img v-bind:src="this.ingresosEgresos.imagen"  width="200" height="200"/>
+            <img v-bind:src="this.ingresosEgresos.imagen" width="200" height="200"/>
             <button type="button" class="btn btn-default" @click="cambiarImagen = true">Cambiar imagen</button>
           </div>
         </div>
         <div class="row" v-if="idGasto == -1 || (idGasto !== -1 && cambiarImagen)">
           <div class="col-md-3">
-          <h5>Imagen Comprobante</h5>
-          <picture-input
-            ref="pictureInput"
-            @change="onChange"
-            width="200"
-            height="200"
-            margin="10"
-            accept="image/jpeg,image/png"
-            size="5"
-            buttonClass="btn"
-            :removable= true
-            :customStrings="{
+            <h5>Imagen Comprobante</h5>
+            <picture-input
+              ref="pictureInput"
+              @change="onChange"
+              width="200"
+              height="200"
+              margin="10"
+              accept="image/jpeg,image/png"
+              size="5"
+              buttonClass="btn"
+              :removable=true
+              :customStrings="{
         upload: '<h1>Bummer!</h1>',
         drag: 'Seleccionar una imagen',
         change: 'Cambiar imagen',
         remove: 'Eliminar imagen',
         fileSize: 'La imagen excede el límite permitido',}">
-          </picture-input>
+            </picture-input>
           </div>
         </div>
         <hr>
@@ -95,8 +95,6 @@
         </div>
       </form>
     </div>
-    {{ cajaTotal }}
-    {{ ingresosEgresos }}
   </div>
 </template>
 <script>
@@ -117,7 +115,6 @@
         ingresosEgresos: {
           idGastos: '',
           fecha: new Date().toLocaleDateString(),
-          idEmpleado: '1',
           descripcion: '',
           monto: '',
           idMedioDePagoCobro: '',
@@ -166,22 +163,22 @@
             if (res) {
               console.log('devolvió true en ingresosEgresos')
               alert('ingresosEgresos guardado con éxito.')
+              this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
+              this.cajaTotal.monto = this.ingresosEgresos.monto
+              this.cajaTotal.fecha = this.ingresosEgresos.fecha
+              apiCT.postCajaTotal(this, this.cajaTotal).then(res => {
+                if (res) {
+                  console.log('devolvió true en cajaTotal')
+                } else {
+                  console.log('devolvio false')
+                  alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
+                  alert('JSONN: ' + JSON.stringify(this.cajaTotal))
+                }
+              })
+              this.limpiarCampos()
             } else {
               console.log('devolvio false')
               alert('Error al guardar el ingresosEgresos.')
-            }
-          })
-          this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
-          this.cajaTotal.monto = this.ingresosEgresos.monto
-          this.cajaTotal.fecha = this.ingresosEgresos.fecha
-          apiCT.postCajaTotal(this, this.cajaTotal).then(res => {
-            if (res) {
-              console.log('devolvió true en cajaTotal')
-              alert('ingresosEgresos guardado con éxito.')
-            } else {
-              console.log('devolvio false')
-              alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-              alert('JSONN: ' + JSON.stringify(this.cajaTotal))
             }
           })
         } else {
@@ -192,6 +189,7 @@
             if (res) {
               console.log('devolvió true en modificar ingresosEgresos')
               alert('ingresosEgresos modificado con éxito.')
+              this.limpiarCampos()
             } else {
               console.log('devolvio false')
               alert('Error al modificar el ingresosEgresos.')
@@ -223,6 +221,13 @@
         let ref = this.$refs.txt_monto
         console.log('chequeando cambio en edit', this.edit)
         console.log('el ref es', ref)
+      },
+      limpiarCampos () {
+        this.ingresosEgresos.monto = null
+        this.ingresosEgresos.fecha = null
+        this.ingresosEgresos.idMedioDePagoCobro = null
+        this.ingresosEgresos.descripcion = null
+        this.ingresosEgresos.imagen = null
       }
     }
   }
