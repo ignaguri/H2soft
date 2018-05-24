@@ -17,6 +17,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/dispensersServices'
   import apiCliente from 'src/api/services/clientServices'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nro', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
   //  let tableData = []
@@ -80,11 +81,11 @@
         if (!confirm('Desea eliminar a este cliente, sus contactos y todos sus objetivos?')) return
         api.deleteClientes(this, id).then(res => {
           if (res) {
-            alert('Borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'Dispenser borrado con éxito')
             this.table1.data = []
             this.cargarClientes()
           } else {
-            alert('error al borrar')
+            noti.errorConTexto(this, 'Error', 'Error al borrar dispenser')
           }
         })
       },
