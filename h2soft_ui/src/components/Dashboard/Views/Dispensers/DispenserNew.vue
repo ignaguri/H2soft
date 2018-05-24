@@ -138,8 +138,10 @@
       },
       newDisp () {
         if (this.fechaInstalacion !== '') {
-          let proxMant = this.fechaInstalacion.split('/')
-          this.dispenser.fechaProxMantenimiento = proxMant[1] + '/' + proxMant[0] + '/' + proxMant[2]
+          const proxMant = this.fechaInstalacion.split('/')
+          const date = new Date(proxMant[2], proxMant[1] - 1, proxMant[0])
+          date.setMonth(date.getMonth() + 6)
+          this.dispenser.fechaProxMantenimiento = date
         }
         api.postDispenser(this, this.dispenser).then(res => {
           if (res) {

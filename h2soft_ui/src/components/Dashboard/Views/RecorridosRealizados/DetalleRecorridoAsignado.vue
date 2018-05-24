@@ -133,8 +133,7 @@
         this.getCamiones()
         api.getDetallesRecorridoAsignado(this, this.id)
           .then(resDet => {
-            // console.log(resDet)
-            resDet.body.data.forEach(det => {
+            resDet.forEach(det => {
               api.getObjetivoXId(this, det.idObjetivo)
               .then(resObj => {
                 resObj = resObj.body.data[0]

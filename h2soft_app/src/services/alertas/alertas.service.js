@@ -11,6 +11,7 @@ module.exports = function () {
 
   const options = {
     name: 'alertas',
+	id: 'idAlertas',
     Model,
     paginate
   };

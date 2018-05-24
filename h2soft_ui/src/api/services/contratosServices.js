@@ -60,6 +60,11 @@ export default {
     return context.$http.get(API_URL + 'detalles-contrato/' + idContrato, authHeader)
       .then(res => { return res.body })
   },
+  getDetallesContrato (context, idContrato) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + idContrato, authHeader)
+      .then(res => { return res.body.data })
+  },
   getContratoFull (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
@@ -103,6 +108,24 @@ export default {
       .catch(error => {
         alert('error: ' + JSON.stringify(error) + '\n' + error)
         console.log('error: ' + JSON.stringify(error) + '\n' + error)
+        return false
+      })
+  },
+  getContratoXCliente (context, idCliente) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    let info = {}
+    return context.$http.get(API_URL + 'contratos/?idCliente=' + idCliente, authHeader)
+      .then(con => {
+        info['contrato'] = con.body.data[con.body.data.length - 1] // me quedo con el ultimo contrato cargado
+        const id = con.body.data[0].idContratos
+        return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + id, authHeader)
+      })
+      .then(det => {
+        info['detalle'] = det.body.data
+        return info
+      })
+      .catch(error => {
+        alert('Algo fallo en el getContratoFull' + error)
         return false
       })
   }
