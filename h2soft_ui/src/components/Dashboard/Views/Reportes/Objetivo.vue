@@ -7,8 +7,8 @@
         </div>
     </div>		
     <div class="horizontal">
-        <div class="circuloborde horizontal">
-        </div>
+        <!-- <div v-if="objetivo.idestado !== 1" class="ti-truck objetivoActual"></div> -->
+        <div v-bind:class="{'horizontal':true, 'circulolleno':(objetivo.idestado === 1), 'circuloborde':(objetivo.idestado !== 1)}"></div>
         <div id="objetivo" class="ct-label ct-horizontal ct-end">
         {{objetivo.nombre}}
         </div>
@@ -33,29 +33,29 @@ export default {
     width: 40px;
     height: 2px;
     background: #68B3C8;
-    margin-top: 49px;
+    margin-top: 45px;
 }
 .circuloborde{
-     width: 50px;
-     height: 50px;
-     -moz-border-radius: 50%;
-     -webkit-border-radius: 50%;
-     border-radius: 50%;
-	 border: 5px solid #EB5E28;
-     margin-top: 25px;
-	 margin-left: 10px;
-     margin-right: 15px;
+    width: 35px;
+    height: 35px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+	  border: 5px solid #EB5E28;
+    margin-top: 28px;
+	  margin-left: 10px;
+    margin-right: 15px;
 }
 .circulolleno {
-     width: 50px;
-     height: 50px;
+    width: 35px;
+    height: 35px;
      -moz-border-radius: 50%;
-     -webkit-border-radius: 50%;
-     border-radius: 50%;
-     background: #5cb85c;
-	 margin-top: 25px;
-	 margin-left: 10px;
-     margin-right: 15px;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #EB5E28;
+	  margin-top: 28px;
+	  margin-left: 10px;
+    margin-right: 15px;
 }
 .triangulo {
     width: 0;
@@ -63,15 +63,23 @@ export default {
     border-left: 7px solid #68B3C8;
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
-    margin-top: 44px;
+    margin-top: 40px;
 }
 .horizontal {
 	float:left;
 }
 #objetivo {
-	margin-left: 10px;
+	margin-left: 0px;
 	margin-top: 10px;
-	padding-top: 80px;
-    margin-bottom: 10px;
+	padding-top: 58px;
+  margin-bottom: 10px;
+}
+.objetivoActual {
+  font-size: 25px;
+  transition: .3s;
+  color: #68B3C8;
+  margin-left: 14px;
+  padding-left: 27px;
+  transform: scaleX(-1);  
 }
 </style>

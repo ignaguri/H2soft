@@ -227,9 +227,21 @@
     },
     methods: {
       cargarRecorridos () {
-        api.getRecorridosAsignados(this)
+        const options = {
+          weekday: 'short',
+          year: 'numeric',
+          month: '2-digit',
+          day: 'numeric'
+        }
+        // console.log(new Date().toISOString(options))
+        const hoy = new Date().toISOString().substring(0, 10).split('-')
+        console.log(hoy)
+        api.getRecorridosAsignadosXFecha(this, hoy[0], hoy[1], hoy[2])
+        // api.getRecorridosAsignadosXFecha(this, '2018', '05', '22')
           .then(res => {
             if (res) {
+              // console.log(res)
+              // console.log(new Date().toISOString())
               res.forEach(rec => {
                 apiUsuario.getEmpleado(this, rec.idEmpleadoAsignado)
                 .then(emps => {

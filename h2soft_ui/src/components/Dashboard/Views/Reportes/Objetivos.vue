@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="">
           <p class="category horizontal repartidor" >{{reparto.repartidor}}</p>
-          <objetivo v-for="obj in reparto.objetivos" :objetivo="obj"></objetivo>
+          <objetivo v-for="obj in ordenados" :objetivo="obj"></objetivo>
         </div>
       </div>
     </div>
@@ -19,7 +19,9 @@
       objetivo
     },
     data () {
-      return {}
+      return {
+        ordenados: []
+      }
     },
     props: {
       reparto: {
@@ -33,22 +35,29 @@
       }
     },
     mounted () {
-      console.log(this.reparto)
-      // this.cargarClientes()
+      this.ordenar()
     },
     methods: {
-      cargarClientes () {}
+      ordenar () {
+        console.log('ordenar')
+        this.ordenados = this.reparto.objetivos.sort(function (o1, o2) {
+          if (o1.orden > o2.orden) {
+            return 1
+          } else if (o1.orden < o2.orden) {
+            return -1
+          }
+          return 0
+        })
+      }
     }
   }
 </script>
 <style>
 .repartidor {
-    margin-top: 40px;
+    margin-top: 36px;
     margin-left: 20px;
     margin-right: 20px;
     width: 60px;
 }
-.fabrica {
 
-}
 </style>
