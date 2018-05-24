@@ -12,7 +12,6 @@
                    options-label="razonSocial"
                    search-text="Buscar"
                    :placeholder="'Sin selección'"
-                   :disabled="edit"
                    :search="true" :justified="true" required>
               </dds>
               <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
@@ -22,8 +21,7 @@
                    options-label="nombre"
                    search-text="Buscar"
                    :placeholder="'Seleccione un cliente'"
-                   :disabled="edit"
-                   :search="true" :justified="true"
+                   :search="true" :min-search="4" :justified="true"
                    @input="cargarDispensers" required>
               </dds>
             </div>
@@ -39,8 +37,7 @@
                    options-label="nombre"
                    search-text="Buscar"
                    :placeholder="'Nada seleccionado'"
-                   :disabled="edit"
-                   :search="true" :justified="true"
+                   :search="true" :min-search="4" :justified="true"
                    required>
               </dds>
               <template v-if="alerta.idTipo === 1">
@@ -51,14 +48,23 @@
                      options-label="datos"
                      search-text="Buscar"
                      :placeholder="'Seleccione un objetivo'"
-                     :search="true" :justified="true"
+                     :search="true" :min-search="4" :justified="true"
                      @input="cargarMensaje" required>
                 </dds>
               </template>
               <template v-else-if="alerta.idTipo === 2">
                 <label for="bidones"><h4><span class="label label-default">Bidones</span></h4></label>
-                <input type="number" id="bidones" class="form-control border-input" min="0" max="100"
-                       v-model="alerta.bidones" style="max-width: 100px" @input="cargarMensaje" required/>
+                  <dds id="bidones" v-model="alerta.bidones"
+                     :options="bidones"
+                     options-value="index"
+                     options-label="number"
+                     search-text="Buscar"
+                     :placeholder="'Cantidad de bidones'"
+                     :search="true" :justified="true"
+                     @input="cargarMensaje" required>
+                </dds>
+                <!-- <input type="number" id="bidones" class="form-control border-input" min="0" max="100"
+                       v-model="alerta.bidones" style="max-width: 100px" @input="cargarMensaje" required/> -->
               </template>
               <template v-if="alerta.idTipo === 3">
                 <label for="desvin_dispenser"><h4><span class="label label-default">Dispenser</span></h4></label>
@@ -70,17 +76,6 @@
                      :placeholder="'Seleccione un objetivo'"
                      :search="true" :justified="true"
                      @input="cargarMensaje" required>
-                </dds>
-              </template>
-              <template v-if="edit">
-                <label for="estado"><h4><span class="label label-default">Estado</span></h4></label>
-                <dds id="estado" v-model="alerta.idEstado"
-                     :options="estados"
-                     options-value="idEstadoAlerta"
-                     options-label="nombre"
-                     search-text="Buscar"
-                     :search="true" :justified="true"
-                     placeholder="Seleccione un estado" required>
                 </dds>
               </template>
             </div>
@@ -135,19 +130,28 @@
         idClientes: null,
         objetivos: [],
         tipos: [],
-        dispensers: [],
-        estados: []
+        dispensers: []
       }
     },
     props: {
-      edit: Boolean,
       id: Number
     },
     mounted () {
       this.cargarClientes()
       this.cargarTiposAlerta()
       this.cargarEstadosAlerta()
-      this.cargarIfEdit()
+    },
+    computed: {
+      bidones: function () {
+        const bidones = []
+        for (let i in [...Array(100).keys()]) {
+          bidones.push({
+            index: Number(i),
+            number: Number(i)
+          })
+        }
+        return bidones
+      }
     },
     watch: {
       idClientes: function () {
@@ -177,14 +181,6 @@
             this.tipos = r
           })
       },
-      cargarEstadosAlerta () {
-        if (this.edit) {
-          api.getEstados(this)
-            .then(r => {
-              this.estados = r
-            })
-        }
-      },
       cargarDispensers () {
         if (this.alerta.idObjetivo !== null) {
           apiDispensers.getDispensersXObjetivo(this, this.alerta.idObjetivo)
@@ -198,10 +194,10 @@
           this.dispensers = null
         }
       },
-      cargarMensaje () {
+      cargarMensaje (e) {
         const dispenser = this.dispensers.find(d => d.idDispensers === this.alerta.idDispenser)
         const objetivo = this.objetivos.find(o => o.idObjetivosXCliente === this.alerta.idObjetivo)
-        if (!dispenser || !objetivo) {
+        if (!objetivo) {
           this.alerta.notificacion = ''
           return
         }
@@ -219,42 +215,16 @@
             this.alerta.notificacion = 'Seleccione un tipo de alerta'
         }
       },
-      cargarIfEdit () {
-        if (this.id) {
-          api.getAlerta(this, this.id)
-            .then(a => {
-              this.idClientes = a.idCliente
-              this.alerta.idObjetivo = a.idObjetivo
-              this.alerta.idTipo = a.idTipo
-              this.alerta.notificacion = a.notificacion
-              this.alerta.idDispenser = a.idDispenser
-              this.alerta.bidones = a.bidones
-              this.alerta.idEstado = a.idEstado
-            })
-        }
-      },
       guardarAlerta () {
-        if (!this.edit) {
-          api.postAlerta(this, this.alerta)
-            .then(r => {
-              if (r) {
-                alert('Alerta guardada con éxito')
-                this.$parent.isAlertasList = true
-              } else {
-                alert('Hubo un error al guardar la alerta')
-              }
-            })
-        } else {
-          api.updateAlerta(this, this.alerta)
-            .then(r => {
-              if (r) {
-                alert('Alerta guardada con éxito')
-                this.$parent.isAlertasList = true
-              } else {
-                alert('Hubo un error al guardar la alerta')
-              }
-            })
-        }
+        api.postAlerta(this, this.alerta)
+          .then(r => {
+            if (r) {
+              alert('Alerta guardada con éxito')
+              this.$parent.isAlertasList = true
+            } else {
+              alert('Hubo un error al guardar la alerta')
+            }
+          })
       }
     }
   }
