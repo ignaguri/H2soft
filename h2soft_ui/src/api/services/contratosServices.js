@@ -113,6 +113,20 @@ export default {
   },
   getContratoXCliente (context, idCliente) {
     const authHeader = { headers: auth.getAuthHeader() }
+    let info = {}
     return context.$http.get(API_URL + 'contratos/?idCliente=' + idCliente, authHeader)
+      .then(con => {
+        info['contrato'] = con.body.data[con.body.data.length - 1] // me quedo con el ultimo contrato cargado
+        const id = con.body.data[0].idContratos
+        return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + id, authHeader)
+      })
+      .then(det => {
+        info['detalle'] = det.body.data
+        return info
+      })
+      .catch(error => {
+        alert('Algo fallo en el getContratoFull' + error)
+        return false
+      })
   }
 }
