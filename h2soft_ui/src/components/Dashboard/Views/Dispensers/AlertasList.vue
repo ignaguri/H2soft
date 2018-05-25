@@ -15,15 +15,13 @@
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-              <label for="estado"><h4><span class="label label-default">Estado</span></h4></label>
-              <dds id="estado" v-model="idEstado"
-                  :options="estados"
-                  options-value="idEstadoAlerta"
-                  options-label="nombre"
-                  search-text="Buscar"
-                  :search="true" :justified="true"
-                  placeholder="Seleccione un estado" required>
-              </dds>
+            <div class="text-center">
+              <label><h4><span class="label label-default">Estado</span></h4></label>
+              <button-group v-model="idEstado" type="info">
+                <radio selected-value="1">Pendiente</radio>
+                <radio selected-value="2">Realizado</radio>
+              </button-group>
+            </div>
           </div>
         </div>
       </div>
@@ -36,14 +34,15 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import { select, modal } from 'vue-strap'
+  import { buttonGroup, radio, modal } from 'vue-strap'
   import api from 'src/api/services/alertasServices'
 
   const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Tipo', 'Notificacion', 'Estado']
   export default {
     components: {
       PaperTable,
-      dds: select,
+      buttonGroup,
+      radio,
       modal
     },
     data () {
@@ -57,6 +56,7 @@
         },
         showCustomModal: false,
         idEstado: null,
+        idAlerta: null,
         estados: []
       }
     },
@@ -84,6 +84,9 @@
       //   this.$emit('emitted', {action: 'edit', alerta: id})
       // },
       borrar (e) {
+        if (!confirm('¿Está seguro de que desea borrar esta alerta?')) {
+          return
+        }
         const id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         api.deleteAlerta(this, id)
           .then(r => {
@@ -91,26 +94,39 @@
               alert('Alerta borrada con éxito!')
               this.cargarAlertas()
             } else {
-              alert('Error al borrar la alerta')
+              alert('Error al borrar alerta')
               this.cargarAlertas()
             }
           })
       },
-      editar () {
+      editar (e) {
+        const id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        this.idAlerta = Number(id)
         this.showCustomModal = true
       },
       ok () {
-        // return !confirm('Ok event.\nClose Modal?')
-        // if (this.idEmpleadoAsignado === null) {
-        //   alert('Debe completar todos los campos')
-        //   return true
-        // }
-        // this.postAsignacion({
-        //   recorrido: Number(this.recorrido),
-        //   empleado: this.idEmpleadoAsignado,
-        //   diasAsignacion: this.diasAsignacion
-        // })
+        if (this.idEstado === null) {
+          alert('Debe seleccionar un estado')
+          return true
+        }
+        this.editarAlerta()
         return false
+      },
+      editarAlerta () {
+        const alerta = {
+          id: this.idAlerta,
+          idEstado: Number(this.idEstado)
+        }
+        api.updateEstado(this, alerta)
+          .then(r => {
+            if (r) {
+              alert('Alerta actualizada con éxito!')
+              this.cargarAlertas()
+            } else {
+              alert('Error al actualizar alerta')
+              this.cargarAlertas()
+            }
+          })
       }
     }
   }

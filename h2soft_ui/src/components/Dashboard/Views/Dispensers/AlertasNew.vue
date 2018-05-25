@@ -58,7 +58,7 @@
                      :options="bidones"
                      options-value="index"
                      options-label="number"
-                     search-text="Buscar"
+                     search-text="Ingrese cantidad"
                      :placeholder="'Cantidad de bidones'"
                      :search="true" :justified="true"
                      @input="cargarMensaje" required>
@@ -146,8 +146,8 @@
         const bidones = []
         for (let i in [...Array(100).keys()]) {
           bidones.push({
-            index: Number(i),
-            number: Number(i)
+            index: i,
+            number: i
           })
         }
         return bidones

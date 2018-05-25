@@ -114,5 +114,16 @@ export default {
         console.error(err)
         return false
       })
+  },
+  updateEstado (context, alerta) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.patch(API_URL + 'alertas/' + alerta.id, { idEstado: alerta.idEstado }, authHeader)
+      .then(res => {
+        return res
+      })
+      .catch(err => {
+        console.error(err)
+        return false
+      })
   }
 }
