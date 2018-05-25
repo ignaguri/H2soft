@@ -195,7 +195,7 @@
             if (resp) {
               alert('recorrido insertado con éxito')
               this.cargarRecorridos()
-              this.cargarComboRecorridos()
+//              this.cargarComboRecorridos()
               this.limpiarCampos()
             //  this.$parent.isRecorridoList = true
             } else {
