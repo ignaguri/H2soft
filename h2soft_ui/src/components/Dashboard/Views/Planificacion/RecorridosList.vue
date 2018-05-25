@@ -190,6 +190,7 @@
         this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
+        // change to return(this.recorrido === 0)
         if (this.recorrido === 0) {
           return true
         } else {
