@@ -13,6 +13,11 @@ export default {
     return context.$http.get(API_URL + 'remitos/?idRemito=' + idRemito, authHeader)
       .then(res => { return res })
   },
+  getRemitoXObjetivo (context, idObjetivo) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'remitos/?idObjetivo=' + idObjetivo, authHeader)
+      .then(res => { return res.body.data })
+  },
   nuevoRemito (context, remito) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'remitos', remito, authHeader)

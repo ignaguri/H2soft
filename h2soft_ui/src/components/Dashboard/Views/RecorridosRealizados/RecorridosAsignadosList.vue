@@ -75,7 +75,7 @@
                   nro: RxE.idRecorridosHistoricos,
                   día: this.getDia(RxE.idDia),
                   turno: this.getTurno(RxE.idTurno),
-                  fecha: d.toLocaleDateString(), // d.getDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear(),
+                  fecha: d.toLocaleDateString(),
                   temp: this.getTemporada(RxE.idTemporada),
                   estado: RxE.idEstado
                 })
