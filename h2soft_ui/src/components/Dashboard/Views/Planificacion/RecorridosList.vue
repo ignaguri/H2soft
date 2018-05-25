@@ -225,8 +225,10 @@
           .then(r => {
             if (r) {
               alert('Recorrido asignado!')
+              this.seeList()
             } else {
               alert('Error asignando recorrido. check consola')
+              this.seeList()
             }
           })
       },
