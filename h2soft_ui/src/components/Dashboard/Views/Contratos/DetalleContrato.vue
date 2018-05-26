@@ -165,6 +165,7 @@
           precioPorUnidad: this.detalleContrato.precioPorUnidad
         })
         alert('Se agregó un nuevo detalle')
+        this.limpiarCampos()
         return false
       },
       cargarProducto (idProd) {
@@ -182,6 +183,12 @@
             return this.productoss[p].idProductos
           }
         }
+      },
+      limpiarCampos () {
+        this.detalleContrato.idProducto = ''
+        this.detalleContrato.cantidadMaxima = ''
+        this.detalleContrato.cantidadMinima = ''
+        this.detalleContrato.precioPorUnidad = ''
       }
     }
   }
