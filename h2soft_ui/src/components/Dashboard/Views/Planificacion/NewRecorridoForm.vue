@@ -196,7 +196,7 @@
             if (resp) {
               noti.exitoConTexto(this,'Éxito', 'Recorrido guardado con éxito')
               this.cargarRecorridos()
-              this.cargarComboRecorridos()
+//              this.cargarComboRecorridos()
               this.limpiarCampos()
             //  this.$parent.isRecorridoList = true
             } else {

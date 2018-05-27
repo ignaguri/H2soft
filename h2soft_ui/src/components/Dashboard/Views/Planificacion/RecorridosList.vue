@@ -191,6 +191,7 @@
         this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
+        // change to return(this.recorrido === 0)
         if (this.recorrido === 0) {
           return true
         } else {
@@ -225,8 +226,10 @@
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito')
+              this.seeList()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al asignar recorrido, chequee consola')
+              this.seeList()
             }
           })
       },

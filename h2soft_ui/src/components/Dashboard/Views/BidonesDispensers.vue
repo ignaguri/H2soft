@@ -32,7 +32,7 @@
   import tab from 'vue-strap/src/Tab.vue'
   import clientes from './Dispensers/DispensersCliente.vue'
   import dispensers from './Dispensers/Dispensers.vue'
-  import alertas from './Dispensers/AlertasList.vue'
+  import alertas from './Dispensers/Alertas.vue'
   import mantenimientos from './Mantenimiento/MantenimientosList.vue'
 
   export default {
@@ -46,7 +46,7 @@
     },
     data () {
       return {
-        pestañaActiva: 0
+        pestañaActiva: 1
       }
     },
     methods: {
