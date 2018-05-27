@@ -51,6 +51,8 @@
   import api from 'src/api/services/contratosServices'
   import DetalleContrato from './DetalleContrato.vue'
   import { datepicker } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
+
   export default {
     components: {
       DetalleContrato,
@@ -110,10 +112,12 @@
           api.postContratos(this, this.contrat, this.detalles).then(res => {
             if (res) {
               console.log('devolvió true en nuevoContrato')
-              alert('Contrato guardado con éxito.')
+              noti.exito(this)
+              // alert('Contrato guardado con éxito.')
             } else {
               console.log('devolvio false')
-              alert('Error al guardar el contrato.')
+              noti.error(this)
+              // alert('Error al guardar el contrato.')
             }
           })
         } else {
@@ -129,12 +133,14 @@
           }
           api.editarContratoFull3(this, this.contrat, this.detalles, this.id).then(res => {
             if (res) {
-              alert('Contrato modificado con éxito')
+              noti.exito(this)
+              // alert('Contrato modificado con éxito')
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
-              console.log('omdificar contrato devolvio false')
-              alert('Error al modificar el contrato.')
+              console.log('modificar contrato devolvio false')
+              noti.error(this)
+              // alert('Error al modificar el contrato.')
             }
           })
         }
