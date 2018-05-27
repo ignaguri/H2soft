@@ -57,9 +57,9 @@
       imagen: ''
     },
     mounted () {
-      this.cargarIngresosEgresos()
       this.getEmpleadoss()
       this.getMedioDePagoCobro()
+      this.cargarIngresosEgresos()
     },
     methods: {
       cargarIngresosEgresos () {

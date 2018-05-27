@@ -103,6 +103,7 @@
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiCT from 'src/api/services/cajaTotalServices'
   import pictureInput from 'vue-picture-input'
+  import noti from 'src/api/notificationsService'
 
   export default {
     components: {
@@ -161,8 +162,8 @@
 
           apiIE.postIngresoEgreso(this, this.ingresosEgresos).then(res => {
             if (res) {
-              console.log('devolvió true en ingresosEgresos')
-              alert('ingresosEgresos guardado con éxito.')
+              noti.exito(this)
+              // alert('ingresosEgresos guardado con éxito.')
               this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
               this.cajaTotal.monto = this.ingresosEgresos.monto
               this.cajaTotal.fecha = this.ingresosEgresos.fecha
@@ -170,15 +171,14 @@
                 if (res) {
                   console.log('devolvió true en cajaTotal')
                 } else {
-                  console.log('devolvio false')
-                  alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-                  alert('JSONN: ' + JSON.stringify(this.cajaTotal))
+                  console.log('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
+                  // alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
                 }
               })
               this.limpiarCampos()
             } else {
-              console.log('devolvio false')
-              alert('Error al guardar el ingresosEgresos.')
+              noti.error(this)
+              // alert('Error al guardar el ingresosEgresos.')
             }
           })
         } else {
@@ -188,11 +188,13 @@
           apiIE.pathcIngresosEgresos(this, this.idGasto, this.ingresosEgresos).then(res => {
             if (res) {
               console.log('devolvió true en modificar ingresosEgresos')
-              alert('ingresosEgresos modificado con éxito.')
+              noti.exito(this)
+              // alert('ingresosEgresos modificado con éxito.')
               this.limpiarCampos()
             } else {
+              noti.error(this)
               console.log('devolvio false')
-              alert('Error al modificar el ingresosEgresos.')
+              // alert('Error al modificar el ingresosEgresos.')
             }
           })
         }
