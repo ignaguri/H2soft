@@ -3,10 +3,10 @@
  */
 import auth from '../auth'
 const API_URL = process.env.API_URL
-const authHeader = { headers: auth.getAuthHeader() }
 
 export default {
   getMedioDePagoCobro (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'medios-de-pago-cobro', authHeader)
   }
 }

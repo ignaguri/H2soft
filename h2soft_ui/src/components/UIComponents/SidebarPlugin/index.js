@@ -6,22 +6,22 @@ const SidebarStore = {
     {
       name: 'Recorridos',
       icon: 'ti-direction-alt',
-      path: '/admin/recorridos'
+      path: '/recorridos'
     },
     {
       name: 'Planificacion',
       icon: 'ti-map-alt',
-      path: '/admin/planificacion'
+      path: '/planificacion'
     },
     {
       name: 'Reportes',
       icon: 'ti-bar-chart',
-      path: '/admin/reportes'
+      path: '/reportes'
     },
     {
       name: 'Bidones y Dispensers',
       icon: 'ti-paint-bucket',
-      path: '/admin/table-list'
+      path: '/bidonesdispensers'
     },
     {
       name: 'Ingresos y Egresos',
@@ -31,22 +31,22 @@ const SidebarStore = {
     {
       name: 'Facturación',
       icon: 'ti-money',
-      path: '/admin/icons'
+      path: '/facturacion'
     },
     {
       name: 'Clientes',
       icon: 'ti-view-list-alt',
-      path: '/admin/clientes'
+      path: '/clientes'
     },
     {
       name: 'Contratos',
       icon: 'ti-pencil-alt',
-      path: '/admin/contratos'
+      path: '/contratos'
     },
     {
       name: 'Usuarios',
       icon: 'ti-user',
-      path: '/admin/usuarios'
+      path: '/usuarios'
     },
     {
       name: 'ListadoRemitos',

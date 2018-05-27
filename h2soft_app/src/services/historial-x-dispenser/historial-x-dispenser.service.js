@@ -1,8 +1,8 @@
-// Initializes the `mantenimiento` service on path `/mantenimiento`
+// Initializes the `historial-x-dispenser` service on path `/historial-x-dispenser`
 const createService = require('feathers-sequelize');
-const createModel = require('../../models/mantenimientos.model');
-const hooks = require('./mantenimientos.hooks');
-const filters = require('./mantenimientos.filters');
+const createModel = require('../../models/historial-x-dispenser.model');
+const hooks = require('./historial-x-dispenser.hooks');
+const filters = require('./historial-x-dispenser.filters');
 
 module.exports = function () {
   const app = this;
@@ -10,17 +10,16 @@ module.exports = function () {
   const paginate = app.get('paginate');
 
   const options = {
-    name: 'mantenimiento',
-    id: 'idMantenimientos',
+    name: 'historial-x-dispenser',
     Model,
     paginate
   };
 
   // Initialize our service with any options it requires
-  app.use('/mantenimiento', createService(options));
+  app.use('/historial-x-dispenser', createService(options));
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('mantenimiento');
+  const service = app.service('historial-x-dispenser');
 
   service.hooks(hooks);
 

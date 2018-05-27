@@ -18,12 +18,11 @@ export default {
             response.body.user.nombre = r.body.nombre
             response.body.user.apellido = r.body.apellido
             sessionStorage.setItem('user', JSON.stringify(response.body.user))
+            // Redirect to a specified route
+            if (redirect) {
+              context.$router.push(redirect)
+            }
           })
-      }
-
-      // Redirect to a specified route
-      if (redirect) {
-        context.$router.push(redirect)
       }
     }, response => {
       context.error = response.body.message
@@ -31,10 +30,12 @@ export default {
   },
 
   // To log out, we just need to remove the token
-  logout () {
+  logout (context) {
     sessionStorage.removeItem('id_token')
     sessionStorage.removeItem('access_token')
+    sessionStorage.removeItem('user')
     this.user.authenticated = false
+    context.$router.push('/login')
   },
 
   checkAuth () {
@@ -51,5 +52,8 @@ export default {
     return {
       'Authorization': sessionStorage.getItem('access_token')
     }
+  },
+  isLoggedIn () {
+    return sessionStorage.getItem('user')
   }
 }

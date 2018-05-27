@@ -8,7 +8,7 @@
       <input
         type="text"
         class="form-control"
-        placeholder="Ingrese su email"
+        placeholder="Ingrese su usuario"
         v-model="credentials.email"
         v-focus
       />
@@ -64,7 +64,7 @@
           email: this.credentials.email,
           password: this.credentials.password
         }
-        auth.login(this, credentials, 'admin')
+        auth.login(this, credentials, 'planificacion')
         // alert(JSON.stringify(credentials))
       }
     },

@@ -36,6 +36,7 @@
       }
     },
     mounted () {
+      // Promise.a
       apiDias.getDias(this).then(res => {
         this.dias = res
         apiTurnos.getTurnos(this).then(res => {
@@ -66,15 +67,15 @@
         }
         api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
           .then(resRxE => {
+            console.log('rec asig', resRxE)
             resRxE.body.data.forEach(RxE => {
-              // console.log(RxE)
               var d = new Date(RxE.fechaAsignacion)
               if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
                 this.table1.data.push({
                   nro: RxE.idRecorridosHistoricos,
                   día: this.getDia(RxE.idDia),
                   turno: this.getTurno(RxE.idTurno),
-                  fecha: d.toLocaleDateString(), // d.getDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear(),
+                  fecha: d.toLocaleDateString(),
                   temp: this.getTemporada(RxE.idTemporada),
                   estado: RxE.idEstado
                 })
@@ -103,6 +104,7 @@
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
             this.$parent.idEstado = res.idEstado
+            this.$parent.camionid = res.idCamionAsignado
           })
       },
       getDia (idDia) {

@@ -26,7 +26,19 @@ module.exports = function (app) {
         model: 'objetivos-x-cliente',
         key: 'idObjetivosXCliente'
       }
-    }
+    },
+	idEstadoDispenser: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'estados-dispenser',
+        key: 'idEstadosDispenser'
+      }
+    },
+	fechaProxMantenimiento: {
+      type: Sequelize.DATE,
+      allowNull: true
+    },
   }, {
     hooks: {
       beforeCount(options) {

@@ -18,36 +18,31 @@ const detalleRecorrido = require('./detalle-recorrido/detalle-recorrido.service.
 const detalleRemito = require('./detalle-remito-productos/detalle-remito-productos.service.js');
 const dispenserXDetalleRecorrido = require('./dispenser-x-detalle-recorrido/dispenser-x-detalle-recorrido.service.js');
 const horariosXObjetivo = require('./horarios-x-objetivo/horarios-x-objetivo.service.js');
-const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
+// const mantenimiento = require('./mantenimiento/mantenimientos.service.js');
 const objetivosXCliente = require('./objetivos-x-cliente/objetivos-x-cliente.service.js');
 const remitosXFactura = require('./remitos-x-factura/remitos-x-factura.service.js');
 const tiposMantenimiento = require('./tipos-mantenimiento/tipos-mantenimiento.service.js');
 const contactosXCliente = require('./contactos-x-cliente/contactos-x-cliente.service.js');
 const clientes = require('./clientes/clientes.service.js');
-
 const tiposCliente = require('./tipos-cliente/tipos-cliente.service.js');
-
 const frecuenciaRecorridos = require('./frecuencia-recorridos/frecuencia-recorridos.service.js');
-
 const turnos = require('./turnos/turnos.service.js');
-
 const estadosRecorrido = require('./estados-recorrido/estados-recorrido.service.js');
-
 const estadosRemito = require('./estados-remito/estados-remito.service.js');
-
 const estadosFactura = require('./estados-factura/estados-factura.service.js');
-
 const temporada = require('./temporada/temporada.service.js');
-
 const recorridoHistorico = require('./recorrido-historico/recorridos-historicos.service.js');
-
 const detalleRecorridoHistorico = require('./detalle-recorrido-historico/detalle-recorrido-historico.service.js');
-
 const detallesContrato = require('./detalles-contrato/detalles-contrato.service.js');
-
 const camiones = require('./camiones/camiones.service.js');
-
 const detalleRemitoDispensers = require('./detalle-remito-dispensers/detalle-remito-dispensers.service.js');
+const mantenimientos = require('./mantenimientos/mantenimientos.service.js');
+const estadosMantenimiento = require('./estados-mantenimiento/estados-mantenimiento.service.js');
+const estadosDispenser = require('./estados-dispenser/estados-dispenser.service.js');
+const alertas = require('./alertas/alertas.service');
+const estadosAlerta = require('./estados-alerta/estados-alerta.service');
+const historialXDispenser = require('./historial-x-dispenser/historial-x-dispenser.service');
+const tiposAlerta = require('./tipos-alerta/tipos-alerta.service');
 
 const mediosDePagoCobro = require('./medios-de-pago-cobro/medios-de-pago-cobro.service.js');
 
@@ -75,7 +70,7 @@ module.exports = function () {
   app.configure(detalleRemito);
   app.configure(dispenserXDetalleRecorrido);
   app.configure(horariosXObjetivo);
-  app.configure(mantenimiento);
+  // app.configure(mantenimiento);
   app.configure(objetivosXCliente);
   app.configure(remitosXFactura);
   app.configure(tiposMantenimiento);
@@ -95,4 +90,11 @@ module.exports = function () {
   app.configure(detalleRemitoDispensers);
   app.configure(mediosDePagoCobro);
   app.configure(cajaTotal);
+  app.configure(mantenimientos);
+  app.configure(estadosMantenimiento);
+  app.configure(estadosDispenser);
+  app.configure(alertas);
+  app.configure(estadosAlerta);
+  app.configure(historialXDispenser);
+  app.configure(tiposAlerta);
 };
