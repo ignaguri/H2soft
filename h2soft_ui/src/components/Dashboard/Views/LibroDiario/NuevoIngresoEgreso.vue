@@ -86,7 +86,6 @@
           </div>
           <div class="clearfix"></div>
         </div>
-        {{ radioValue }}
       </form>
     </div>
   </div>
