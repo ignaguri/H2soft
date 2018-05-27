@@ -61,7 +61,7 @@
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
-  import noti from 'src/api/notificationService'
+  import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
 
   const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
@@ -211,7 +211,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
-         noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
           return true
         }
         this.postAsignacion({

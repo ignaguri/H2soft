@@ -145,7 +145,9 @@
       guardarIngresoEgreso () {
         if (this.idGasto === -1 && !this.edit) {
           if (this.radioValue === null) {
-            alert('Tiene que seleccionar un tipo de operacion')
+            // alert('Tiene que seleccionar un tipo de operacion')
+            noti.errorConTexto(this, 'Error', 'Tiene que seleccionar un tipo de operacion')
+
             return
           }
           if (this.radioValue === 'egreso') {
@@ -195,7 +197,8 @@
       },
       onChange (image) {
         if (image) {
-          alert('!Nueva imagen seleccionada!')
+          // alert('!Nueva imagen seleccionada!')
+          noti.info(this, '', '!Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')
