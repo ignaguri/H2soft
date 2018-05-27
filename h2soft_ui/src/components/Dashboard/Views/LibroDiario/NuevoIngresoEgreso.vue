@@ -195,7 +195,7 @@
       },
       onChange (image) {
         if (image) {
-          alert('Nueva Imagen Seleccionada!')
+          alert('!Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')
