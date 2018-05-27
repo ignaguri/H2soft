@@ -11,6 +11,7 @@
 <script>
   import auth from 'src/api/auth'
   import api from 'src/api/services/listadoRemitoServices'
+  import apiObjetivos from 'src/api/services/objetivoServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   const tableColumns = ['Nro', 'Fecha', 'Objetivo', 'Empleado']
   const dataColumns = []
@@ -27,11 +28,13 @@
           columns: [...tableColumns],
           data: [...dataColumns]
         },
-        empleados: []
+        empleados: [],
+        objetivos: []
       }
     },
     mounted () {
       this.getEmpleados()
+      this.getObjetivo()
       this.cargarRemitos()
     },
     methods: {
@@ -42,7 +45,7 @@
               this.table1.data.push({
                 nro: rem.idRemito,
                 fecha: new Date(rem.fecha).toLocaleDateString(),
-                objetivo: rem.idObjetivo,
+                objetivo: this.cargarObjetivo(rem.idObjetivo),
                 empleado: this.cargarEmpleado(rem.idEmpleado)
               })
             })
@@ -68,6 +71,19 @@
         // this.$emit('emitted', {action: 'edit', client: id})
         this.$parent.isRemitosList = false
         this.$parent.idRemito = id
+      },
+      getObjetivo () {
+        apiObjetivos.getObjetivos(this)
+          .then(res => {
+            this.objetivos = res
+          })
+      },
+      cargarObjetivo (idObjetivo) {
+        for (var i = 0, len = this.objetivos.length; i < len; i++) {
+          if (this.objetivos[i].idObjetivosXCliente === idObjetivo) {
+            return this.objetivos[i].nombre
+          }
+        }
       }
     }
   }

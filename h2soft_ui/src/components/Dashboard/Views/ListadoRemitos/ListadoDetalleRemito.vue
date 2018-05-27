@@ -3,7 +3,8 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns"  :goButton="false" :eraseButton="false" :editButton="false"  >
+          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                       :columns="table1.columns" :goButton="false" :eraseButton="false" :editButton="false">
           </paper-table>
         </div>
       </div>
@@ -11,7 +12,8 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns"  :goButton="false" :eraseButton="false" :editButton="false"  >
+          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
+                       :columns="table2.columns" :goButton="false" :eraseButton="false" :editButton="false">
           </paper-table>
         </div>
       </div>
@@ -21,8 +23,9 @@
 <script>
   import auth from 'src/api/auth'
   import api from 'src/api/services/listadoRemitoServices'
+  import apiDispensers from 'src/api/services/dispensersServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  const tableColumns1 = ['Producto', 'Cantidad', 'Dejadoo']
+  const tableColumns1 = ['Producto', 'Cantidad', 'Dejado']
   const dataColumns1 = []
   const tableColumns2 = ['Dispenser', 'Dejado']
   const dataColumns2 = []
@@ -45,14 +48,16 @@
           columns: [...tableColumns2],
           data: [...dataColumns2]
         },
-        productoss: {}
+        productoss: {},
+        dispensers: {}
       }
     },
     props: {
       idRemito: Number
     },
     mounted () {
-      this.getProductos()
+      this.getDispensers()
+      this.getProductoss()
       this.cargarDetallesProducto(this.idRemito)
       this.cargarDetallesDispensers(this.idRemito)
     },
@@ -62,9 +67,9 @@
           .then(resUs => {
             resUs.body.data.forEach(rem => {
               this.table1.data.push({
-                producto: this.cargarProducto(rem.producto),
+                producto: this.cargarProducto(rem.idProducto),
                 cantidad: rem.cantidad,
-                dejadoo: rem.dejadoEnCliente
+                dejado: this.estaDejado(rem.dejadoEnCliente)
               })
             })
           }, error => {
@@ -78,7 +83,7 @@
           }
         }
       },
-      getProductos () {
+      getProductoss () {
         api.getProductosRemitos(this)
           .then(res => {
             this.productoss = res
@@ -89,13 +94,32 @@
           .then(resUs => {
             resUs.body.data.forEach(remit => {
               this.table2.data.push({
-                dispenser: remit.idDispenser,
-                dejado: remit.dejadoEnCliente
+                dispenser: this.cargarDispenser(remit.idDispenser),
+                dejado: this.estaDejado(remit.dejadoEnCliente)
               })
             })
           }, error => {
             console.log('error al cargar los remitos ' + error)
           })
+      },
+      estaDejado (dejado) {
+        if (dejado === true || dejado === null) {
+          return 'Si'
+        }
+        return 'No'
+      },
+      getDispensers () {
+        apiDispensers.getDispensers(this)
+          .then(r => {
+            this.dispensers = r
+          })
+      },
+      cargarDispenser (idDispenser) {
+        for (let p = 0, len = this.dispensers.length; p < len; p++) {
+          if (this.dispensers[p].idDispensers === idDispenser) {
+            return this.dispensers[p].codigo
+          }
+        }
       }
     }
   }
