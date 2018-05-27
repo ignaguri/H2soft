@@ -370,7 +370,7 @@
           })
       },
       verdetalle () {
-        alert('ver!')
+        noti.exitoConTexto(thus, 'Éxito', 'Ver!')
       },
       recorridoCambioEstado () {
         this.txBtIniciarFinalizar = 'Finalizar'
