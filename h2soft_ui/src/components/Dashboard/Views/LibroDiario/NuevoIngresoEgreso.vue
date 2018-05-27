@@ -7,18 +7,11 @@
     <div class="content">
       <form name="nuevo_ingresoEgreso_Form" @submit.prevent="guardarIngresoEgreso">
         <div class="row">
-          <!--div-- class="text-left">
+          <div class="text-left">
             <button-group v-model="radioValue" type="info">
-              <radio selected-value="ingreso">Ingreso</radio>
               <radio selected-value="egreso">Egreso</radio>
+              <radio selected-value="ingreso">Ingreso</radio>
             </button-group>
-          </div!-->
-          <div class="col-md-6">
-            <input type="radio" id="ingreso" name="tipoOperacion" value="ingreso">
-            <label for="ingreso">Ingreso</label>
-
-            <input type="radio" id="egreso" name="tipoOperacion" value="egreso">
-            <label for="egreso">Egreso</label>
           </div>
         </div>
         <div class="row">
@@ -93,12 +86,13 @@
           </div>
           <div class="clearfix"></div>
         </div>
+        {{ radioValue }}
       </form>
     </div>
   </div>
 </template>
 <script>
-  import {datepicker} from 'vue-strap'
+  import {datepicker, buttonGroup, radio, select} from 'vue-strap'
   import apiMPC from 'src/api/services/medioDePagoCobroService'
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiCT from 'src/api/services/cajaTotalServices'
@@ -108,7 +102,10 @@
   export default {
     components: {
       datepicker,
-      pictureInput
+      pictureInput,
+      buttonGroup,
+      radio,
+      dds: select
     },
     data () {
       return {
@@ -127,7 +124,7 @@
           monto: ''
         },
         mediosDePagoCobro: {},
-        radioValue: 'ingreso'
+        radioValue: null
       }
     },
     props: {
@@ -148,15 +145,13 @@
       },
       guardarIngresoEgreso () {
         if (this.idGasto === -1 && !this.edit) {
-          if (document.nuevo_ingresoEgreso_Form.tipoOperacion[0].checked) {
-
-          } else if (document.nuevo_ingresoEgreso_Form.tipoOperacion[1].checked) {
-            this.ingresosEgresos.monto = '-' + this.ingresosEgresos.monto
-          } else {
+          if (this.radioValue === null) {
             alert('Tiene que seleccionar un tipo de operacion')
             return
           }
-
+          if (this.radioValue === 'egreso') {
+            this.ingresosEgresos.monto = '-' + this.ingresosEgresos.monto
+          }
           let fecha = this.ingresosEgresos.fecha.split('/')
           this.ingresosEgresos.fecha = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
 
@@ -226,10 +221,11 @@
       },
       limpiarCampos () {
         this.ingresosEgresos.monto = null
-        this.ingresosEgresos.fecha = null
+        this.ingresosEgresos.fecha = new Date().toLocaleDateString()
         this.ingresosEgresos.idMedioDePagoCobro = null
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
+        this.radioValue = null
       }
     }
   }
