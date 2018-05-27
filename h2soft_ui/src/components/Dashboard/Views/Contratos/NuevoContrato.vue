@@ -88,15 +88,15 @@
     methods: {
       guardarContrato () {
         if (this.detalles.length <= 0) {
-          alert('Debe agregar al menos un detalle')
+          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
           return
         }
         if (this.contrato.fechaFirma === '' || this.contrato.fechaVigenciaDesde === '' || this.contrato.fechaVigenciaHasta === '') {
-          alert('Debe completar todos los campos')
+          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
           return
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
-          alert('La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+          noti.errorConTexto(this, 'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
         if (this.id === 0 && !this.edit) {
@@ -112,12 +112,10 @@
           api.postContratos(this, this.contrat, this.detalles).then(res => {
             if (res) {
               console.log('devolvió true en nuevoContrato')
-              noti.exito(this)
-              // alert('Contrato guardado con éxito.')
+              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito')
             } else {
               console.log('devolvio false')
-              noti.error(this)
-              // alert('Error al guardar el contrato.')
+              noti.errorConTexto(this, 'Error', 'Error al guardar el contrato')
             }
           })
         } else {
@@ -133,14 +131,12 @@
           }
           api.editarContratoFull3(this, this.contrat, this.detalles, this.id).then(res => {
             if (res) {
-              noti.exito(this)
-              // alert('Contrato modificado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito')
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
-              console.log('modificar contrato devolvio false')
-              noti.error(this)
-              // alert('Error al modificar el contrato.')
+              console.log('omdificar contrato devolvio false')
+              noti.errorConTexto(this, 'Error', 'Error al guardar el contrato')
             }
           })
         }
@@ -170,7 +166,7 @@
         // this.detalles = this.detalles.filter(dets => dets.cantidadMinima === parseInt(cant))
         // this.detalles = this.detalles.filter(dets => dets.cantidadMinima !== parseInt(cant) && dets.idProducto !== parseInt(prod))
         for (let i = 0; i < this.detalles.length; i++) {
-          if (this.detalles[i].idProducto === parseInt(prod) && this.detalles[i].cantidadMinima === parseInt(cant)) {
+          if (parseInt(this.detalles[i].idProducto) === parseInt(prod) && parseInt(this.detalles[i].cantidadMinima) === parseInt(cant)) {
             this.$delete(this.detalles, i)
           }
         }
@@ -197,11 +193,11 @@
       },
       validarCampos () {
         if (this.detalles.length <= 0) {
-          alert('Debe agregar al menos un detalle')
+          noti.errorConTexto(this,'Error', 'Debe agregar al menos un detalle')
           return true
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
-          alert('La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+           noti.errorConTexto(this,'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return true
         }
       }

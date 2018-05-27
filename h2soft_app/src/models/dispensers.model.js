@@ -11,7 +11,7 @@ module.exports = function (app) {
       primaryKey: true,
       autoIncrement: true
     },
-    codigo: {
+    git : {
       type: Sequelize.STRING(45),
       allowNull: false
     },

@@ -117,6 +117,7 @@
   import ObjetivosList from './ObjetivosList.vue'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
   import { select } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   export default {
     components: {
@@ -155,27 +156,27 @@
     methods: {
       saveClient () {
         if (this.objetivos.length <= 0) {
-          alert('Debe agregar al menos 1 objetivo')
+          noti.errorConTexto(this, 'Error', 'Debe agregar al menos 1 objetivo')
           return
         }
         if (!this.edit) {
           api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
               console.log('devolvió true en newclientlist')
-              alert('Cliente guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
             } else {
               console.log('saveclient devolvio false')
-              alert('Error al guardar el cliente. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente, check consola')
             }
           })
         } else {
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
               console.log('devolvió true en edit')
-              alert('Cliente editado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito') 
             } else {
               console.log('editar devolvio false')
-              alert('Error al editar el cliente. check consola')
+               noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
             }
           })
         }
