@@ -194,7 +194,7 @@
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
             if (resp) {
-              noti.exitoConTexto(this,'Éxito', 'Recorrido guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito')
               this.cargarRecorridos()
 //              this.cargarComboRecorridos()
               this.limpiarCampos()

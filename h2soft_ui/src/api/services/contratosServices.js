@@ -77,10 +77,10 @@ export default {
         info['detalle'] = det.body.data
         return info
       })
-      .catch(error => {
-        alert('Algo fallo en el getContratoFull' + error)
-        return false
-      })
+    .catch(error => {
+      alert('Algo fallo en el getContratoFull' + error)
+      return false
+    })
   },
   editarContratoFull3 (context, contrato, detalle, id) {
     const authHeader = { headers: auth.getAuthHeader() }

@@ -20,6 +20,8 @@ import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
+import ListadoRemitos from 'src/components/Dashboard/Views/Remitos.vue'
+import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos.vue'
 import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers.vue'
 import Contabilidad from 'src/components/Dashboard/Views/Contabilidad.vue'
 
@@ -53,9 +55,9 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'icons',
-        name: 'Ingresos y Gastos',
-        component: WorkInProgress,
+        path: 'ingresosEgresos',
+        name: 'Ingresos y Egresos',
+        component: IngresosEgresos,
         meta: {requiresAuth: true}
       },
       {
@@ -99,6 +101,11 @@ const routes = [
         name: 'Gestion de usuarios',
         component: Usuarios,
         meta: {requiresAuth: true}
+      },
+      {
+        path: 'listadoRemitos',
+        name: 'listado de Remitos',
+        component: ListadoRemitos
       }
     ]
   },

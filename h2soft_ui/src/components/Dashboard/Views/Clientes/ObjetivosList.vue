@@ -110,7 +110,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.nombre === '' || this.dirección === '') {
-          noti.errorConTexto(this,'Error', 'Debe completar todos los campos')
+          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
           return true
         }
         this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.dirección, localidad: this.localidad})
