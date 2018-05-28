@@ -87,7 +87,7 @@
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
-  import auth from 'src/api/auth'
+//  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
