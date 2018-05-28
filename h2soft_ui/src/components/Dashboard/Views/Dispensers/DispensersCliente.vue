@@ -16,9 +16,9 @@
 
         </div>
           <div class="col-md-4">
-            <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
+            <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
 
-            <dds id="objetivo" v-model="idObjetivo"
+            <dds id="objetiv" v-model="idObjetivo"
                 :options="objetivos"
                 options-value="idObjetivosXCliente"
                 options-label="nombre"

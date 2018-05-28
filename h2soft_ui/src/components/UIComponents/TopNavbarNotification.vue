@@ -1,16 +1,19 @@
 <template>
-  <div class="row">
-    <div class="col-sm-1">
+  <!-- <div class="row"> -->
+    <!-- <div class="col-sm-1">
       <span :class="icon"></span>
     </div>
     <div class="col-sm-10">
-      <a href="#">{{message}}</a>
+      <a href="#/bidonesdispensers">{{message}}</a>
       <hr>
-    </div>
+    </div> -->
+    <!-- <div class="col-sm-12"> -->
+      <a href="#" class="thumbnail"><span :class="icon"></span> {{message}}</a>
+    <!-- </div> -->
     <!--<div class="col-sm-1">-->
       <!--<span>&times;</span>-->
     <!--</div>-->
-  </div>
+  <!-- </div> -->
 </template>
 <script>
   export default {
