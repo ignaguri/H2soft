@@ -361,8 +361,8 @@
             } else {
               this.dispensersDelObjetivo_placeholder = 'No hay'
             }
-            if (res.filter(x => { return x.idObjetivo == null }).length > 0) {
-              this.dispensersSinObjetivo = res.filter(x => { return x.idObjetivo == null })
+            if (res.filter(x => { return x.idEstadoDispenser === 1 }).length > 0) {
+              this.dispensersSinObjetivo = res.filter(x => { return x.idEstadoDispenser === 1 })
               this.dispensersSinObjetivo_placeholder = 'Seleccione'
             } else {
               this.dispensersSinObjetivo_placeholder = 'No hay'
