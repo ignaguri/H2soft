@@ -12,25 +12,11 @@
       </div>
       <div class="navbar-right-menu">
         <ul class="nav navbar-nav navbar-right">
-<!--          <li class="open">
-            <a href="#" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>-->
-             <drop-down :title="cantNotificaciones" icon="ti-bell">
-               <li v-for="n in notifications">
-                 <top-notification :message="n.notificacion"></top-notification>
-               </li>
-             </drop-down>
-          <!--<li>-->
-            <!--<a href="#" @click.prevent="settings" class="btn-rotate">-->
-              <!--<i class="ti-settings"></i>-->
-              <!--<p>-->
-                <!--Ajustes-->
-              <!--</p>-->
-            <!--</a>-->
-          <!--</li>-->
+          <drop-down :title="cantNotificaciones" icon="ti-bell">
+            <li v-for="n in notifications">
+              <top-notification :message="n.notificacion"></top-notification>
+            </li>
+          </drop-down>
           <li>
             <a href="#" @click.prevent="logout" class="btn-rotate">
               <i class="ti-control-eject"></i>

@@ -269,11 +269,6 @@
               })
             }
           })
-      },
-      route: {
-        canActivate () {
-          return auth.user.authenticated
-        }
       }
     }
   }

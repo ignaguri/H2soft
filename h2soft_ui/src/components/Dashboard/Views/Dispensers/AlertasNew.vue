@@ -14,8 +14,8 @@
                    :placeholder="'Sin selección'"
                    :search="true" :justified="true" required>
               </dds>
-              <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
-              <dds id="objetivo" v-model="alerta.idObjetivo"
+              <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
+              <dds id="objetiv" v-model="alerta.idObjetivo"
                    :options="objetivos"
                    options-value="idObjetivosXCliente"
                    options-label="nombre"
@@ -45,7 +45,7 @@
                 <dds id="dispenser" v-model="alerta.idDispenser"
                      :options="dispensers"
                      options-value="idDispensers"
-                     options-label="datos"
+                     options-label="codigo"
                      search-text="Buscar"
                      :placeholder="'Seleccione un objetivo'"
                      :search="true" :min-search="4" :justified="true"
@@ -71,7 +71,7 @@
                 <dds id="desvin_dispenser" v-model="alerta.idDispenser"
                      :options="dispensers"
                      options-value="idDispensers"
-                     options-label="datos"
+                     options-label="codigo"
                      search-text="Buscar"
                      :placeholder="'Seleccione un objetivo'"
                      :search="true" :justified="true"
@@ -185,9 +185,6 @@
         if (this.alerta.idObjetivo !== null) {
           apiDispensers.getDispensersXObjetivo(this, this.alerta.idObjetivo)
             .then(r => {
-              r.forEach(d => {
-                d.datos = `(Cód: ${d.codigo}) ${d.descripcion}`
-              })
               this.dispensers = r
             })
         } else {
@@ -203,13 +200,13 @@
         }
         switch (this.alerta.idTipo) {
           case 1:
-            this.alerta.notificacion = `Cambiar dispenser (Cód: ${dispenser.codigo}) ${dispenser.descripcion} en ${objetivo.nombre}`
+            this.alerta.notificacion = `Cambiar dispenser ${dispenser.codigo} en ${objetivo.nombre}`
             break
           case 2:
             this.alerta.notificacion = `Llevar ${this.alerta.bidones} bidones a ${objetivo.nombre}`
             break
           case 3:
-            this.alerta.notificacion = `Desvincular dispenser (Cód: ${dispenser.codigo}) ${dispenser.descripcion} de ${objetivo.nombre}`
+            this.alerta.notificacion = `Desvincular dispenser ${dispenser.codigo} de ${objetivo.nombre}`
             break
           default:
             this.alerta.notificacion = 'Seleccione un tipo de alerta'

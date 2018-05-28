@@ -1,19 +1,5 @@
 <template>
-  <!-- <div class="row"> -->
-    <!-- <div class="col-sm-1">
-      <span :class="icon"></span>
-    </div>
-    <div class="col-sm-10">
-      <a href="#/bidonesdispensers">{{message}}</a>
-      <hr>
-    </div> -->
-    <!-- <div class="col-sm-12"> -->
-      <a href="#" class="thumbnail"><span :class="icon"></span> {{message}}</a>
-    <!-- </div> -->
-    <!--<div class="col-sm-1">-->
-      <!--<span>&times;</span>-->
-    <!--</div>-->
-  <!-- </div> -->
+      <a href="#/bidonesdispensers" class="thumbnail"><span :class="icon"></span> {{message}}</a>
 </template>
 <script>
   export default {
@@ -32,10 +18,4 @@
 
 </script>
 <style>
-  .top-notification {
-    background-color: #F3BB45;
-  }
-  .top-notification a {
-    color: white;
-  }
 </style>
