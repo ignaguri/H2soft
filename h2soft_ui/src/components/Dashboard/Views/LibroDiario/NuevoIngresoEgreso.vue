@@ -17,12 +17,16 @@
         <div class="row">
           <div class="col-md-6">
             <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de Pago:</span></h4></label>
-            <select id="medio-de-pago-cobro" v-model="ingresosEgresos.idMedioDePagoCobro" required>
-              <option :value="null">Seleccione un medio de pago</option>
-              <option v-for="medios in mediosDePagoCobro" v-bind:value="medios.idMediosDePagoCobro">
-                {{ medios.nombre }}
-              </option>
-            </select>
+            <dds id="medio-de-pago-cobro"
+                 v-model="ingresosEgresos.idMedioDePagoCobro"
+                 :options="mediosDePagoCobro"
+                 options-value="idMediosDePagoCobro"
+                 options-label="nombre"
+                 search-text="Buscar"
+                 :placeholder="'Nada seleccionado'"
+                 :search="true" :justified="true" required>
+
+            </dds>
           </div>
           <div class="col-md-6">
             <label for="fecha"><h4><span class="label label-default">Fecha:</span></h4></label>
@@ -197,7 +201,8 @@
       },
       onChange (image) {
         if (image) {
-          noti.info(this, '', '!Nueva imagen seleccionada!')
+          // alert('!Nueva imagen seleccionada!')
+          noti.info(this, '', '¡Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')

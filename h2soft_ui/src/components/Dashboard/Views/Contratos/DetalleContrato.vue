@@ -190,13 +190,8 @@
           cantidadMaxima: this.detalleContrato.cantidadMaxima,
           precioPorUnidad: this.detalleContrato.precioPorUnidad
         })
-        this.detalleContrato = {
-          idProducto: '',
-          cantidadMaxima: 0,
-          cantidadMinima: 0,
-          precioPorUnidad: 0
-        }
         noti.exitoConTexto(this, 'Éxito', 'Se agregó un nuevo detalle')
+        this.limpiarCampos()
         return false
       },
       cargarProducto (idProd) {
@@ -214,6 +209,12 @@
             return this.productoss[p].idProductos
           }
         }
+      },
+      limpiarCampos () {
+        this.detalleContrato.idProducto = ''
+        this.detalleContrato.cantidadMaxima = 0
+        this.detalleContrato.cantidadMinima = 0
+        this.detalleContrato.precioPorUnidad = 0
       }
     }
   }

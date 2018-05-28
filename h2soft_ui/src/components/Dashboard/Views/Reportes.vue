@@ -87,7 +87,7 @@
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
-  import auth from 'src/api/auth'
+//  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
@@ -227,12 +227,12 @@
     },
     methods: {
       cargarRecorridos () {
-        const options = {
-          weekday: 'short',
-          year: 'numeric',
-          month: '2-digit',
-          day: 'numeric'
-        }
+//        const options = {
+//          weekday: 'short',
+//          year: 'numeric',
+//          month: '2-digit',
+//          day: 'numeric'
+//        }
         // console.log(new Date().toISOString(options))
         const hoy = new Date().toISOString().substring(0, 10).split('-')
         console.log(hoy)
@@ -269,11 +269,6 @@
               })
             }
           })
-      },
-      route: {
-        canActivate () {
-          return auth.user.authenticated
-        }
       }
     }
   }
