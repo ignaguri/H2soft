@@ -257,7 +257,7 @@
       },
       guardarRemito () {
         if (this.firma === '') {
-          alert('Debe firmar el remito')
+          noti.error('Debe firmar el remito')
         } else {
           // guardar Remito
           var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
@@ -316,7 +316,12 @@
                           'dejadoEnCliente': false
                         }
                         apiRemito.nuevoDetalleRemitoDispensers(this, detalleRemitoDispensersLlevado)
-                        apiDispensers.borrarObjetivoDeDispenser(this, disR)
+                        const dispenser = {
+                          'id': disR,
+                          'idObjetivo': null,
+                          'idEstadoDispenser': this.necesita === true ? 4 : 1 // si no necesita mantenimiento lo dejo en fabrica y limpio
+                        }
+                        apiDispensers.editDispenser(this, dispenser)
                       })
                       if (this.necesita && this.dispensersRetirados[0] !== undefined) { // Alguno de los dispensers retirados necesita mantenimiento
                         var mantenimiento = {
