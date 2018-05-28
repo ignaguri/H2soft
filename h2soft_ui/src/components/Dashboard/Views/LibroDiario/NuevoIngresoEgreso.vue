@@ -197,7 +197,6 @@
       },
       onChange (image) {
         if (image) {
-          // alert('!Nueva imagen seleccionada!')
           noti.info(this, '', '!Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
