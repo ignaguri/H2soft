@@ -44,6 +44,10 @@ const estadosAlerta = require('./estados-alerta/estados-alerta.service');
 const historialXDispenser = require('./historial-x-dispenser/historial-x-dispenser.service');
 const tiposAlerta = require('./tipos-alerta/tipos-alerta.service');
 
+const mediosDePagoCobro = require('./medios-de-pago-cobro/medios-de-pago-cobro.service.js');
+
+const cajaTotal = require('./caja-total/caja-total.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -84,6 +88,8 @@ module.exports = function () {
   app.configure(detallesContrato);
   app.configure(camiones);
   app.configure(detalleRemitoDispensers);
+  app.configure(mediosDePagoCobro);
+  app.configure(cajaTotal);
   app.configure(mantenimientos);
   app.configure(estadosMantenimiento);
   app.configure(estadosDispenser);

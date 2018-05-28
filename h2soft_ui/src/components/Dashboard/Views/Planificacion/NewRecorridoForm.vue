@@ -130,6 +130,7 @@
   import api from 'src/api/services/recorridoServices'
   import PaperTable from '../../../UIComponents/PaperTablePlus.vue'
   import { buttonGroup, radio, select } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   export default {
     components: {
@@ -193,13 +194,13 @@
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
             if (resp) {
-              alert('recorrido insertado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito')
               this.cargarRecorridos()
 //              this.cargarComboRecorridos()
               this.limpiarCampos()
             //  this.$parent.isRecorridoList = true
             } else {
-              alert('error al guardar recorrido. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al guardar recorrido, check consola')
             }
           })
 //        } else {

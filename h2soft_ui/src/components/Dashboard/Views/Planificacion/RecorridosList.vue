@@ -61,6 +61,7 @@
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
+  import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
 
   const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
@@ -165,10 +166,10 @@
         if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
         api.deleteRecorrido(this, id).then(res => {
           if (res) {
-            alert('Borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'Recorrido borrado con éxito')
             this.cargarRecorridos()
           } else {
-            alert('error al borrar')
+            noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
           }
         })
       },
@@ -177,10 +178,10 @@
         api.deleteObjetivoFromRecorrido(this, id, this.recorrido)
           .then(r => {
             if (r) {
-              alert('Se borró con éxito el objetivo del recorrido')
+              noti.exitoConTexto(this, 'Éxito', 'Se borró con éxito el objetivo del recorrido')
               this.verEspecifico()
             } else {
-              alert('Hubo un error. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al borrar objetivo, chequee consola')
             }
           })
       },
@@ -210,7 +211,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
-          alert('Debe completar todos los campos')
+          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
           return true
         }
         this.postAsignacion({
@@ -224,10 +225,10 @@
         api.postAsignacion(this, asignacion)
           .then(r => {
             if (r) {
-              alert('Recorrido asignado!')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito')
               this.seeList()
             } else {
-              alert('Error asignando recorrido. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido, chequee consola')
               this.seeList()
             }
           })
