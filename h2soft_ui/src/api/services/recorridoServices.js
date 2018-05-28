@@ -103,6 +103,10 @@ export default {
       .then(() => {
         return total
       })
+      .catch(err => {
+        console.error('Error en getRecorridosFull', err)
+        return false
+      })
   },
   populateCamposRecorrido (context, info) {
     const authHeader = { headers: auth.getAuthHeader() }

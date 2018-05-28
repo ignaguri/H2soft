@@ -86,8 +86,8 @@
               </dds>
             </div>
             <div class="form-group">
-              <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
-              <dds id="objetivo" v-model="idObjetivo"
+              <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
+              <dds id="objetiv" v-model="idObjetivo"
                    :options="objetivos"
                    options-value="idObjetivosXCliente"
                    options-label="nombre"
