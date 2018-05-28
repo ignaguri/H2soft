@@ -130,37 +130,40 @@
     },
     methods: {
       cargarRecorridoAsignado () {
-        this.getCamiones()
-        api.getDetallesRecorridoAsignado(this, this.id)
-          .then(resDet => {
-            resDet.forEach(det => {
-              api.getObjetivoXId(this, det.idObjetivo)
-              .then(resObj => {
-                resObj = resObj.body.data[0]
-                // console.log(det)
-                this.table1.data.push({
-                  // nro: det.idObjetivo,
-                  nro: det.idDetalleRecorridoHistorico,
-                  orden: det.orden,
-                  objetivo: resObj.nombre,
-                  horario: '',
-                  estado: det.entregado === 0 ? 1 : 4,
-                  bidones: det.cantidadSugerida
+        apiCamiones.getCamiones(this)
+          .then(res => {
+            this.camiones = res
+            api.getDetallesRecorridoAsignado(this, this.id)
+              .then(resDet => {
+                resDet.forEach(det => {
+                  api.getObjetivoXId(this, det.idObjetivo)
+                  .then(resObj => {
+                    resObj = resObj.body.data[0]
+                    // console.log(det)
+                    this.table1.data.push({
+                      // nro: det.idObjetivo,
+                      nro: det.idDetalleRecorridoHistorico,
+                      orden: det.orden,
+                      objetivo: resObj.nombre,
+                      horario: '',
+                      estado: det.entregado === 0 ? 1 : 4,
+                      bidones: det.cantidadSugerida
+                    })
+                    // this.idEstado = det.entregado
+                    if (det.entregado === 0) {
+                      this.puedeFinalizar = false
+                    }
+                    if (this.camionid !== null) {
+                      this.camionAsignado = this.getCamionNombre(this.camionid)
+                    } else {
+                      this.camionAsignado = '-'
+                    }
+                  })
                 })
-                // this.idEstado = det.entregado
-                if (det.entregado === 0) {
-                  this.puedeFinalizar = false
-                }
-                if (this.camionid !== null) {
-                  this.camionAsignado = this.getCamionNombre(this.camionid)
-                } else {
-                  this.camionAsignado = '-'
-                }
+                this.setearEstadoActual()
+              }, error => {
+                console.log('error al cargar los recorridos asignados ' + error)
               })
-            })
-            this.setearEstadoActual()
-          }, error => {
-            console.log('error al cargar los recorridos asignados ' + error)
           })
       },
       verdetalle (e) {

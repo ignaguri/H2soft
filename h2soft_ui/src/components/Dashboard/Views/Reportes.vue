@@ -227,13 +227,6 @@
     },
     methods: {
       cargarRecorridos () {
-        const options = {
-          weekday: 'short',
-          year: 'numeric',
-          month: '2-digit',
-          day: 'numeric'
-        }
-        // console.log(new Date().toISOString(options))
         const hoy = new Date().toISOString().substring(0, 10).split('-')
         console.log(hoy)
         api.getRecorridosAsignadosXFecha(this, hoy[0], hoy[1], hoy[2])

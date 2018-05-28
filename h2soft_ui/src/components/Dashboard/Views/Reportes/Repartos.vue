@@ -32,9 +32,7 @@
           }
         }
       }
-    },
-    mounted () {},
-    methods: {}
+    }
   }
 
 </script>

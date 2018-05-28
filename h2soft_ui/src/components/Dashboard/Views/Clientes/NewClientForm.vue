@@ -173,10 +173,10 @@
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
               console.log('devolvió true en edit')
-              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito') 
+              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito')
             } else {
               console.log('editar devolvio false')
-               noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
             }
           })
         }

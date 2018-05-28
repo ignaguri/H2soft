@@ -193,11 +193,11 @@
       },
       validarCampos () {
         if (this.detalles.length <= 0) {
-          noti.errorConTexto(this,'Error', 'Debe agregar al menos un detalle')
+          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
           return true
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
-           noti.errorConTexto(this,'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+          noti.errorConTexto(this, 'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return true
         }
       }
