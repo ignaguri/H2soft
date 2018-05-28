@@ -67,9 +67,8 @@
         }
         api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
           .then(resRxE => {
-            console.log('rec asig', resRxE)
             resRxE.body.data.forEach(RxE => {
-              var d = new Date(RxE.fechaAsignacion)
+              let d = new Date(RxE.fechaAsignacion)
               if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
                 this.table1.data.push({
                   nro: RxE.idRecorridosHistoricos,
