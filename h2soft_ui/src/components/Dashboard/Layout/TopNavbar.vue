@@ -12,27 +12,11 @@
       </div>
       <div class="navbar-right-menu">
         <ul class="nav navbar-nav navbar-right">
-<!--          <li class="open">
-            <a href="#" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>-->
-             <drop-down title="5 Notificaciones" icon="ti-bell">
-               <li><a href="#">Notification 1</a></li>
-               <li><a href="#">Notification 2</a></li>
-               <li><a href="#">Notification 3</a></li>
-               <li><a href="#">Notification 4</a></li>
-               <li><a href="#">Another notification</a></li>
-             </drop-down>
-          <li>
-            <a href="#" @click.prevent="settings" class="btn-rotate">
-              <i class="ti-settings"></i>
-              <p>
-                Ajustes
-              </p>
-            </a>
-          </li>
+          <drop-down :title="cantNotificaciones" icon="ti-bell">
+            <li v-for="n in notifications">
+              <top-notification :message="n.notificacion"></top-notification>
+            </li>
+          </drop-down>
           <li>
             <a href="#" @click.prevent="logout" class="btn-rotate">
               <i class="ti-control-eject"></i>
@@ -48,7 +32,12 @@
 </template>
 <script>
   import auth from 'src/api/auth'
+  import alertsApi from 'src/api/services/alertasServices'
+  import topNotification from 'src/components/UIComponents/TopNavbarNotification'
   export default {
+    components: {
+      topNotification
+    },
     computed: {
       routeName () {
         const {name} = this.$route
@@ -57,10 +46,22 @@
     },
     data () {
       return {
-        activeNotifications: false
+        activeNotifications: false,
+        cantNotificaciones: 'Sin Notificaciones',
+        notifications: []
       }
     },
+    mounted () {
+      this.cargarNotificaciones()
+    },
     methods: {
+      cargarNotificaciones () {
+        alertsApi.getAlertas(this)
+          .then(a => {
+            this.cantNotificaciones = `${a.length} Notificaciones`
+            this.notifications = a
+          })
+      },
       capitalizeFirstLetter (string) {
         return string.charAt(0).toUpperCase() + string.slice(1)
       },

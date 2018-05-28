@@ -167,11 +167,15 @@
           })
       },
       verdetalle (e) {
-        let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
-        this.$parent.detalleRecorridoAsignadoId = id
-        this.$parent.verRemito = true
-        this.$parent.verDetalle = false
-        this.$parent.verLista = false
+        if (this.idEstado === 2) {
+          let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
+          this.$parent.detalleRecorridoAsignadoId = id
+          this.$parent.verRemito = true
+          this.$parent.verDetalle = false
+          this.$parent.verLista = false
+        } else {
+          noti.errorConTexto(this, 'Error', 'El recorrido debe estar En Proceso para poder cargar remitos')
+        }
       },
       btn_RecorridoIniciarFinalizar () {
         switch (this.idEstado) {
