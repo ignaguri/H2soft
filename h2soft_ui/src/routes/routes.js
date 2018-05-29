@@ -73,8 +73,8 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'facturacion',
-        name: 'Facturación',
+        path: 'contabilidad',
+        name: 'Contabilidad',
         component: Contabilidad,
         meta: {requiresAuth: true}
       },
