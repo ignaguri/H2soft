@@ -1,29 +1,18 @@
-import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout.vue'
+import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout'
 // GeneralViews
-import NotFound from '../components/GeneralViews/NotFoundPage.vue'
-import Landing from '../components/GeneralViews/Landing.vue'
+import NotFound from '../components/GeneralViews/NotFoundPage'
+import Landing from '../components/GeneralViews/Landing'
 
 // Admin pages
-// import Overview from 'src/components/Dashboard/Views/Overview.vue'
-// import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
-// import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
-// import Icons from 'src/components/Dashboard/Views/Icons.vue'
-// import Maps from 'src/components/Dashboard/Views/Maps.vue'
-// import Typography from 'src/components/Dashboard/Views/Typography.vue'
-// import TableList from 'src/components/Dashboard/Views/TableList.vue'
-// import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
-// import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
-import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
-import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
-import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
-// import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
-import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
-import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
-import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
-import ListadoRemitos from 'src/components/Dashboard/Views/Remitos.vue'
-import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos.vue'
-import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers.vue'
-import Contabilidad from 'src/components/Dashboard/Views/Contabilidad.vue'
+import Usuarios from 'src/components/Dashboard/Views/Usuarios'
+import Clientes from 'src/components/Dashboard/Views/Clientes'
+import WorkInProgress from 'src/components/GeneralViews/WorkInProgress'
+import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados'
+import Planificacion from 'src/components/Dashboard/Views/Planificacion'
+import Reporte from 'src/components/Dashboard/Views/Reportes'
+import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos'
+import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers'
+import Contabilidad from 'src/components/Dashboard/Views/Contabilidad'
 
 const routes = [
   {
@@ -95,11 +84,6 @@ const routes = [
         name: 'Gestion de usuarios',
         component: Usuarios,
         meta: {requiresAuth: true}
-      },
-      {
-        path: 'listadoRemitos',
-        name: 'listado de Remitos',
-        component: ListadoRemitos
       }
     ]
   },

@@ -17,8 +17,8 @@
   </div>
 </template>
 <script>
-  import ListadoRemitos from './ListadoRemitos/ListadoRemitos.vue'
-  import ListadoDetalleRemito from './ListadoRemitos/ListadoDetalleRemito.vue'
+  import ListadoRemitos from '../ListadoRemitos/ListadoRemitos.vue'
+  import ListadoDetalleRemito from '../ListadoRemitos/ListadoDetalleRemito.vue'
   export default {
     components: {
       ListadoRemitos,

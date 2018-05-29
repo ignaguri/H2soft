@@ -1,15 +1,12 @@
 <template>
   <div>
-
     <div class="header">
       <slot name="header">
         <h4 class="title">{{title}}</h4>
         <p class="category">{{subTitle}}</p>
       </slot>
     </div>
-
     <div class="content table-responsive table-full-width">
-     
       <table class="table" :class="tableClass">
         <thead>
         <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
@@ -18,7 +15,8 @@
         <tr v-for="item in this.tableData">
           <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
           <td v-if="editButton|eraseButton|goButton">
-            <span class="category badge badge-pill badge-no-color" @click="go" v-show="item.estado==='Pendiente'"  v-if="goButton">Realizar</span>
+            <span class="category badge badge-pill badge-no-color" @click="go" v-show="item.estado==='Pendiente'"
+                  v-if="goButton">Realizar</span>
           </td>
         </tr>
         </tbody>
