@@ -166,7 +166,7 @@
               noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
             } else {
               console.log('saveclient devolvio false')
-              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente')
+              noti.errorConTexto(this, 'Error', 'Error al guardar un cliente')
             }
           })
         } else {
