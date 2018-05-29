@@ -67,7 +67,6 @@
         }
         api.getRecorridosAsignadosUltimaSemanaXEmpleado(this, idEmpleado)
           .then(resRxE => {
-            console.log(this.table1.data.length)
             resRxE.forEach(RxE => {
               let d = new Date(RxE.fechaAsignacion)
               this.table1.data.push({

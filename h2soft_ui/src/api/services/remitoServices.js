@@ -22,7 +22,7 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'remitos/?idObjetivo=' + idObjetivo, authHeader)
       .then(res => {
-        return res.body.data[res.body.data.length - 1]
+        return res.body.data
       })
       .catch(error => {
         console.log('algo falló en el insert del remito' + JSON.stringify(error))
