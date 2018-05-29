@@ -29,9 +29,9 @@ const SidebarStore = {
       path: '/ingresosEgresos'
     },
     {
-      name: 'Facturación',
+      name: 'Contabilidad',
       icon: 'ti-money',
-      path: '/facturacion'
+      path: '/contabilidad'
     },
     {
       name: 'Clientes',
@@ -49,7 +49,7 @@ const SidebarStore = {
       path: '/usuarios'
     },
     {
-      name: 'ListadoRemitos',
+      name: 'Listado Remitos',
       icon: 'ti-pencil',
       path: '/listadoRemitos'
     }

@@ -267,74 +267,20 @@ export default {
         console.log('error asignando el recorrido', error)
         return false
       })
-    /* let idRecorridoHist
-    return context.$http.get(API_URL + 'recorridos/' + asignacion.recorrido, authHeader)
-      .then(rec => {
-        console.log('recorrido a copiar', rec.body)
-        const fechaInicioParsed = asignacion.fechaInicio.split('/')
-        const fechaFinParsed = asignacion.fechaFin.split('/')
-        const newRecorrido = {
-          idDia: rec.body.idDia,
-          idFrecuencia: rec.body.idFrecuencia,
-          idTurno: rec.body.idTurno,
-          idTemporada: rec.body.idTemporada,
-          idEstado: 1,
-          idEmpleadoAsignado: asignacion.empleado,
-          fechaAsignacion: new Date(fechaInicioParsed[2], fechaInicioParsed[1] - 1, fechaInicioParsed[0], 0, 0, 0, 0),
-          fechaInicio: new Date(fechaInicioParsed[2], fechaInicioParsed[1] - 1, fechaInicioParsed[0], 0, 0, 0, 0),
-          fechaFin: new Date(fechaFinParsed[2], fechaFinParsed[1] - 1, fechaFinParsed[0], 0, 0, 0, 0),
-          idRecorrido: asignacion.recorrido
-        }
-        console.log('new recorrido', newRecorrido)
-        return context.$http.post(API_URL + 'recorrido-historico', newRecorrido, authHeader)
-      })
-      .then(recorridoPosted => {
-        console.log('inserté el recorrido historico', recorridoPosted)
-        idRecorridoHist = recorridoPosted.body.idRecorridosHistoricos
-        return context.$http.get(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + asignacion.recorrido, authHeader)
-      })
-      .then(detallesACopiar => {
-        console.log('los detalles a copiar', detallesACopiar.body.data)
-        let promesas = []
-        detallesACopiar.body.data.forEach(det => {
-          const detalle = {
-            idRecorridoHistorico: idRecorridoHist,
-            idObjetivo: det.idObjetivo,
-            orden: det.orden,
-            entregado: 0
-          }
-          promesas.push(context.$http.post(API_URL + 'detalle-recorrido-historico', detalle, authHeader))
-        })
-        return Promise.all(promesas)
-      })
-      .then(detallesPosted => {
-        console.log('inserté los detalles hitoricos', detallesPosted)
-        // return context.$http.get(API_URL + 'recorrido-historico/' + idRecorridoHist, {params: {finAsignacion: true}, headers: auth.getAuthHeader()})
-        return context.$http.get(API_URL + 'recorrido-historico/prueba/' + idRecorridoHist, authHeader)
-      })
-      .then(flagEnviado => {
-        console.log('envie el flag', flagEnviado)
-        return true
-      })
-      .catch(error => {
-        console.log('error asignando el recorrido', error)
-        return false
-      }) */
   },
   checkIfAsignado (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     const hoy = new Date()
-    const tomorrow = new Date(hoy)
-    tomorrow.setDate(hoy.getDate() + 1)
-    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + tomorrow.toISOString(), authHeader)
+    const enUnMes = new Date(hoy)
+    enUnMes.setDate(hoy.getDate() + 30)
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + enUnMes.toISOString(), authHeader)
       .then(r => {
         return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
       })
       .then(emple => {
         return { nombre: emple.body.nombre, apellido: emple.body.apellido }
       })
-      .catch(error => {
-        console.log('no hay recorrido asignado', error)
+      .catch(() => {
         return false
       })
   }
