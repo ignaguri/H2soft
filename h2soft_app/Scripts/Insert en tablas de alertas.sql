@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tipos-alerta` WRITE;
 /*!40000 ALTER TABLE `tipos-alerta` DISABLE KEYS */;
-INSERT INTO `tipos-alerta` (`idTipoAlerta`, `nombre`, `createdAt`, `updatedAt`) VALUES (1,'Recambio d','2018-04-22 00:00:00','2018-04-22 00:00:00'),(2,'Pedido de ','2018-04-22 00:00:00','2018-04-22 00:00:00');
+INSERT INTO `tipos-alerta` (`idTipoAlerta`, `nombre`, `createdAt`, `updatedAt`) VALUES (1,'Recambio de dispenser','2018-04-22 00:00:00','2018-04-22 00:00:00'),(2,'Pedido de bidones','2018-04-22 00:00:00','2018-04-22 00:00:00'),(3,'Desvinculacion de dispenser','2018-04-22 00:00:00','2018-04-22 00:00:00');
 /*!40000 ALTER TABLE `tipos-alerta` ENABLE KEYS */;
 UNLOCK TABLES;
 
