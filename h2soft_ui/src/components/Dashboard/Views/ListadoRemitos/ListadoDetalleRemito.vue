@@ -104,6 +104,7 @@
       },
       estaDejado (dejado) {
         if (dejado === 1) {
+
           return 'Colocado'
         }
         return 'Retirado'
