@@ -47,7 +47,7 @@
                      options-value="idDispensers"
                      options-label="codigo"
                      search-text="Buscar"
-                     :placeholder="'Seleccione un objetivo'"
+                     :placeholder="'Seleccione un dispenser'"
                      :search="true" :min-search="4" :justified="true"
                      @input="cargarMensaje" required>
                 </dds>
@@ -73,7 +73,7 @@
                      options-value="idDispensers"
                      options-label="codigo"
                      search-text="Buscar"
-                     :placeholder="'Seleccione un objetivo'"
+                     :placeholder="'Seleccione un dispenser'"
                      :search="true" :justified="true"
                      @input="cargarMensaje" required>
                 </dds>
