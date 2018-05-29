@@ -30,13 +30,15 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="Empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
-              <select id="Empleado" v-model="idEmpleadoAsignado">
-                <option value="null">Seleccione un repartidor</option>
-                <option v-for="emp in empleados" v-bind:value="emp.idEmpleados">
-                  {{ emp.nombre + ' ' + emp.apellido }}
-                </option>
-              </select>
+              <label for="empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
+              <dds id="empleado" v-model="idEmpleadoAsignado"
+                   :options="empleados"
+                   options-value="idEmpleados"
+                   options-label="data"
+                   search-text="Buscar"
+                   :placeholder="'Seleccione un repartidor'"
+                   :search="true" :justified="true" required>
+              </dds>
             </div>
           </div>
           <div class="col-md-12">
@@ -62,14 +64,15 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
   import noti from 'src/api/notificationsService'
-  import { modal } from 'vue-strap'
+  import { modal, select } from 'vue-strap'
 
   const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
       PaperTable,
-      modal
+      modal,
+      dds: select
     },
     data () {
       return {
@@ -87,7 +90,7 @@
         recorrido: this.idRecorrido,
         showCustomModal: false,
         idEmpleadoAsignado: null,
-        empleados: {},
+        empleados: [],
         asignado: false,
         diasAsignacion: 30
       }
@@ -126,7 +129,14 @@
       cargarEmpleados () {
         api.getEmpleados(this)
           .then(e => {
-            this.empleados = e
+            if (e) {
+              e.forEach(em => {
+                em.data = `${em.nombre} ${em.apellido}`
+              })
+              this.empleados = e
+            } else {
+              this.empleados = []
+            }
           })
       },
       verEspecifico () {

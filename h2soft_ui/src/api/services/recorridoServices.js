@@ -252,8 +252,18 @@ export default {
   },
   getEmpleados (context) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'empleados', authHeader)
-      .then(res => { return res.body.data })
+    return context.$http.get(API_URL + 'users', authHeader)
+      .then(users => {
+        return users.body.data.filter(u => u.idRol === 3)
+      })
+      .then(filtrados => {
+        let promesas = []
+        filtrados.forEach(u => promesas.push(context.$http.get(API_URL + 'empleados/' + u.idEmpleado, authHeader).then(r => r.body)))
+        return Promise.all(promesas)
+      })
+      .then(repartidores => {
+        return repartidores
+      })
   },
   postAsignacion (context, asignacion) {
     const authHeader = { headers: auth.getAuthHeader() }
