@@ -190,41 +190,22 @@
         let detalle = {
           idObjetivo: this.idObjetivo
         }
-        console.log('POST recorrido:', recorrido, 'detalle:', detalle)
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
             if (resp) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
-              this.limpiarCampos()
-              //  this.$parent.isRecorridoList = true
+              if (this.idRecorrido) {
+                this.idClientes = null
+                this.idObjetivo = null
+              } else {
+                this.limpiarCampos()
+              }
             } else {
               noti.errorConTexto(this, 'Error', 'Error al guardar recorrido')
             }
           })
-//        } else {
-//          let recorrido = {
-//            idRecorridos: this.idRecorrido,
-//            idDia: this.idDia,
-//            idFrecuencia: this.idFrecuencia,
-//            idTurno: this.idTurno,
-//            idTemporada: this.idTemporada
-//          }
-//          let detalle = {
-//            idObjetivo: this.idObjetivo
-//          }
-//          console.log('PATCH recorrido:', recorrido, 'detalle:', detalle)
-//          api.postRecorrido(this, recorrido, detalle)
-//            .then(resp => {
-//              if (resp) {
-//                alert('recorrido insertado con éxito')
-//                this.$parent.isRecorridoList = true
-//              } else {
-//                alert('error al guardar recorrido. check consola')
-//              }
-//            })
-//        }
       },
       cargarCombos () {
         api.getTemporadas(this).then(r => {
