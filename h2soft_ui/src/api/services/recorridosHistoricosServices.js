@@ -29,10 +29,23 @@ export default {
   },
   getRecorridosAsignadosXEmpleado (context, idEmpleado) {
     const authHeader = { headers: auth.getAuthHeader() }
-    let hoy = new Date()
+    const hoy = new Date()
     let ayer = new Date(hoy)
     ayer.setDate(hoy.getDate() - 1)
     return context.$http.get(API_URL + 'recorrido-historico/?idEmpleadoAsignado=' + idEmpleado + '&fechaAsignacion[$gte]=' + ayer.toISOString(), authHeader)
+  },
+  getRecorridosAsignadosUltimaSemanaXEmpleado (context, idEmpleado) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    const hoy = new Date()
+    let inicioSemana = new Date()
+    inicioSemana.setDate(inicioSemana.getDate() - 7)
+    return context.$http.get(API_URL + 'recorrido-historico/?idEmpleadoAsignado=' + idEmpleado + '&fechaAsignacion[$gt]=' + inicioSemana.toISOString() + '&fechaAsignacion[$lte]=' + hoy.toISOString(), authHeader)
+    .then(res => {
+      return res.body.data
+    })
+    .catch(error => {
+      console.log('algo falló en el get recorridos' + JSON.stringify(error))
+    })
   },
   getDetallesRecorridoAsignado (context, idRecorridoAsignado) {
     const authHeader = { headers: auth.getAuthHeader() }

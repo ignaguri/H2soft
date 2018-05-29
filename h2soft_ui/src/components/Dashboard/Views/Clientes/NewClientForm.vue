@@ -176,7 +176,7 @@
               noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito')
             } else {
               console.log('editar devolvio false')
-              noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }
           })
         }

@@ -200,7 +200,7 @@
               this.limpiarCampos()
               //  this.$parent.isRecorridoList = true
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al guardar recorrido, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al guardar recorrido')
             }
           })
 //        } else {
