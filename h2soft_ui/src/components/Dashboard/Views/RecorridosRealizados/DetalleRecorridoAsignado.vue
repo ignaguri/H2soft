@@ -79,6 +79,7 @@
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import apiCamiones from 'src/api/services/camionServices'
+  import apiRemito from 'src/api/services/remitoServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
@@ -130,45 +131,63 @@
     },
     methods: {
       cargarRecorridoAsignado () {
-        this.getCamiones()
-        api.getDetallesRecorridoAsignado(this, this.id)
-          .then(resDet => {
-            resDet.forEach(det => {
-              api.getObjetivoXId(this, det.idObjetivo)
-              .then(resObj => {
-                resObj = resObj.body.data[0]
-                // console.log(det)
-                this.table1.data.push({
-                  // nro: det.idObjetivo,
-                  nro: det.idDetalleRecorridoHistorico,
-                  orden: det.orden,
-                  objetivo: resObj.nombre,
-                  horario: '',
-                  estado: det.entregado === 0 ? 1 : 4,
-                  bidones: det.cantidadSugerida
+        apiCamiones.getCamiones(this)
+          .then(res => {
+            this.camiones = res
+            api.getDetallesRecorridoAsignado(this, this.id)
+              .then(resDet => {
+                resDet.forEach(det => {
+                  api.getObjetivoXId(this, det.idObjetivo)
+                  .then(resObj => {
+                    resObj = resObj.body.data[0]
+                    this.table1.data.push({
+                      nro: det.idDetalleRecorridoHistorico,
+                      orden: det.orden,
+                      objetivo: resObj.nombre,
+                      horario: '',
+                      estado: det.entregado === 0 ? 1 : 4,
+                      bidones: det.cantidadSugerida
+                    })
+                    if (det.entregado === 0) {
+                      this.puedeFinalizar = false
+                    }
+                    if (this.camionid !== null) {
+                      this.camionAsignado = this.getCamionNombre(this.camionid)
+                    } else {
+                      this.camionAsignado = '-'
+                    }
+                  })
                 })
-                // this.idEstado = det.entregado
-                if (det.entregado === 0) {
-                  this.puedeFinalizar = false
-                }
-                if (this.camionid !== null) {
-                  this.camionAsignado = this.getCamionNombre(this.camionid)
-                } else {
-                  this.camionAsignado = '-'
-                }
+                this.setearEstadoActual()
+              }, error => {
+                console.log('error al cargar los recorridos asignados ' + error)
               })
-            })
-            this.setearEstadoActual()
-          }, error => {
-            console.log('error al cargar los recorridos asignados ' + error)
           })
       },
+      cantidadUltimoRemito (idObjetivo) {
+        return new Promise((resolve, reject) => {
+          apiRemito.getUltimoRemitoXObjetivo(this, 0)
+          .then(rem => {
+            if (rem) {
+              console.log(rem)
+              apiRemito.getDetalleRemitoDispensers(this, rem.idRemito)
+              .then(remDet => {
+                remDet = remDet.filter(x => { return x.dejadoEnCliente === 0 })
+              })
+            } else { resolve(0) }
+          })
+        })
+      },
       verdetalle (e) {
-        let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
-        this.$parent.detalleRecorridoAsignadoId = id
-        this.$parent.verRemito = true
-        this.$parent.verDetalle = false
-        this.$parent.verLista = false
+        if (this.idEstado === 2) {
+          let id = e.target.parentNode.getElementsByTagName('td')[0].innerHTML
+          this.$parent.detalleRecorridoAsignadoId = id
+          this.$parent.verRemito = true
+          this.$parent.verDetalle = false
+          this.$parent.verLista = false
+        } else {
+          noti.errorConTexto(this, 'Error', 'El recorrido debe estar En Proceso para poder   cargar remitos')
+        }
       },
       btn_RecorridoIniciarFinalizar () {
         switch (this.idEstado) {

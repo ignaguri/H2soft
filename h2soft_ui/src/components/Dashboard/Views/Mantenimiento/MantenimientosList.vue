@@ -35,6 +35,7 @@
   import api from 'src/api/services/mantenimientoServices'
   import apiCliente from 'src/api/services/clientServices'
   import apiDispenser from 'src/api/services/dispensersServices'
+  import apiAlertas from 'src/api/services/alertasServices'
   import { modal, buttonGroup, radio } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
@@ -55,6 +56,8 @@
         estados: [],
         tipos: [],
         idMantenimiento: 0,
+        objetivoSeleccionado: '', // variable para utilzar en alerta
+        dispenserSeleccionado: '', // variable para utilzar en alerta
         table1: {
           title: 'Mantenimientos',
           subTitle: 'Listado de mantenimientos para dispensers',
@@ -155,8 +158,10 @@
       },
       ver (e) {
         this.idMantenimiento = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        this.objetivoSeleccionado = e.target.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML
+        this.dispenserSeleccionado = e.target.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML
         this.showCustomModal = true
-        console.log('id mant selecconado: ' + this.idMantenimiento)
+        console.log('id mant selecconado: ' + this.idMantenimiento + this.objetivoSeleccionado + this.dispenserSeleccionado)
         // this.$emit('emitted', {action: 'ver', client: id})
       },
       btn_registrarMantenimiento () {
@@ -184,6 +189,15 @@
                       this.showCustomModal = false
                       this.table1.data = []
                       this.cargarMantenimientos()
+
+                      const alerta = {
+                        idObjetivo: m.idObjetivo,
+                        idTipo: 1, // tipo: recambio de
+                        idEstado: 1, // estado: pendiente
+                        idDispenser: m.idDispenser,
+                        notificacion: 'Cambiar dispenser ' + this.dispenserSeleccionado + ' en objetivo ' + this.objetivoSeleccionado
+                      }
+                      apiAlertas.postAlerta(this, alerta)
                     } else {
                       console.log('error al editar el dispenser')
                       noti.error(this)

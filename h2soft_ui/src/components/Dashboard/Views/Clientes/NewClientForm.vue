@@ -164,7 +164,7 @@
             if (res) {
               noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente')
             }
           })
         } else {

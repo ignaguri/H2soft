@@ -257,7 +257,7 @@
       },
       guardarRemito () {
         if (this.firma === '') {
-          alert('Debe firmar el remito')
+          noti.error('Debe firmar el remito')
         } else {
           // guardar Remito
           var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
@@ -316,7 +316,12 @@
                           'dejadoEnCliente': false
                         }
                         apiRemito.nuevoDetalleRemitoDispensers(this, detalleRemitoDispensersLlevado)
-                        apiDispensers.borrarObjetivoDeDispenser(this, disR)
+                        const dispenser = {
+                          'id': disR,
+                          'idObjetivo': null,
+                          'idEstadoDispenser': this.necesita === true ? 4 : 1 // si no necesita mantenimiento lo dejo en fabrica y limpio
+                        }
+                        apiDispensers.editDispenser(this, dispenser)
                       })
                       if (this.necesita && this.dispensersRetirados[0] !== undefined) { // Alguno de los dispensers retirados necesita mantenimiento
                         var mantenimiento = {
@@ -354,15 +359,14 @@
         apiDispensers.getDispensers(this)
           .then(res => {
             this.dispensers = res
-            console.log(res.filter(x => { return x.idObjetivo === idObjetivo }))
             if (res.filter(x => { return x.idObjetivo === idObjetivo }).length > 0) {
               this.dispensersDelObjetivo = res.filter(x => { return x.idObjetivo === idObjetivo })
               this.dispensersDelObjetivo_placeholder = 'Seleccione'
             } else {
               this.dispensersDelObjetivo_placeholder = 'No hay'
             }
-            if (res.filter(x => { return x.idObjetivo == null }).length > 0) {
-              this.dispensersSinObjetivo = res.filter(x => { return x.idObjetivo == null })
+            if (res.filter(x => { return x.idEstadoDispenser === 1 }).length > 0) {
+              this.dispensersSinObjetivo = res.filter(x => { return x.idEstadoDispenser === 1 })
               this.dispensersSinObjetivo_placeholder = 'Seleccione'
             } else {
               this.dispensersSinObjetivo_placeholder = 'No hay'

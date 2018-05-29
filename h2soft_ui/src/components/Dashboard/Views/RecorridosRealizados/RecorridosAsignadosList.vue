@@ -29,7 +29,7 @@
       return {
         table1: {
           title: 'Recorridos a realizar',
-          subTitle: 'Listado de recorridos que te fueron asignados',
+          subTitle: 'Listado de los recorridos de la última semana que te fueron asignados',
           columns: [...tableColumns],
           data: [...dataColumns]
         }
@@ -65,26 +65,23 @@
           this.table1.subTitle = 'Empleado no asignado al usuario logueado. No se podrán mostrar recorridos'
           return
         }
-        api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
+        api.getRecorridosAsignadosUltimaSemanaXEmpleado(this, idEmpleado)
           .then(resRxE => {
-            console.log('rec asig', resRxE)
-            resRxE.body.data.forEach(RxE => {
-              var d = new Date(RxE.fechaAsignacion)
-              if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
-                this.table1.data.push({
-                  nro: RxE.idRecorridosHistoricos,
-                  día: this.getDia(RxE.idDia),
-                  turno: this.getTurno(RxE.idTurno),
-                  fecha: d.toLocaleDateString(),
-                  temp: this.getTemporada(RxE.idTemporada),
-                  estado: RxE.idEstado
-                })
-              }
-              if (this.table1.data[0] === undefined) {
-                this.table1.subTitle = 'No hay recorridos asignados para el día de hoy'
-                // alert('No hay recorridos asignados para el día de hoy')
-              }
+            console.log(this.table1.data.length)
+            resRxE.forEach(RxE => {
+              let d = new Date(RxE.fechaAsignacion)
+              this.table1.data.push({
+                nro: RxE.idRecorridosHistoricos,
+                día: this.getDia(RxE.idDia),
+                turno: this.getTurno(RxE.idTurno),
+                fecha: d.toLocaleDateString(),
+                temp: this.getTemporada(RxE.idTemporada),
+                estado: RxE.idEstado
+              })
             })
+            if (this.table1.data.length === 0) {
+              this.table1.subTitle = 'No hay recorridos asignados para el día de hoy'
+            }
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
           })
