@@ -127,6 +127,8 @@
     },
     mounted () {
       // this.cargarRecorrido()
+      // this.cantidadUltimoRemito(2)
+      // .then(res => { console.log('cantidad ' + res) })
       this.cargarRecorridoAsignado()
     },
     methods: {
@@ -140,22 +142,25 @@
                   api.getObjetivoXId(this, det.idObjetivo)
                   .then(resObj => {
                     resObj = resObj.body.data[0]
-                    this.table1.data.push({
-                      nro: det.idDetalleRecorridoHistorico,
-                      orden: det.orden,
-                      objetivo: resObj.nombre,
-                      horario: '',
-                      estado: det.entregado === 0 ? 1 : 4,
-                      bidones: det.cantidadSugerida
+                    this.cantidadUltimoRemito(det.idObjetivo)
+                    .then(cant => {
+                      this.table1.data.push({
+                        nro: det.idDetalleRecorridoHistorico,
+                        orden: det.orden,
+                        objetivo: resObj.nombre,
+                        horario: '',
+                        estado: det.entregado === 0 ? 1 : 4,
+                        bidones: cant
+                      })
+                      if (det.entregado === 0) {
+                        this.puedeFinalizar = false
+                      }
+                      if (this.camionid !== null) {
+                        this.camionAsignado = this.getCamionNombre(this.camionid)
+                      } else {
+                        this.camionAsignado = '-'
+                      }
                     })
-                    if (det.entregado === 0) {
-                      this.puedeFinalizar = false
-                    }
-                    if (this.camionid !== null) {
-                      this.camionAsignado = this.getCamionNombre(this.camionid)
-                    } else {
-                      this.camionAsignado = '-'
-                    }
                   })
                 })
                 this.setearEstadoActual()
@@ -166,15 +171,24 @@
       },
       cantidadUltimoRemito (idObjetivo) {
         return new Promise((resolve, reject) => {
-          apiRemito.getUltimoRemitoXObjetivo(this, 0)
+          apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
           .then(rem => {
-            if (rem) {
+            if (rem.length > 0) {
               console.log(rem)
-              apiRemito.getDetalleRemitoDispensers(this, rem.idRemito)
+              rem = rem[rem.length - 1]
+              apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
               .then(remDet => {
-                remDet = remDet.filter(x => { return x.dejadoEnCliente === 0 })
+                remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
+                if (remDet.length > 0) {
+                  console.log(remDet)
+                  resolve(remDet[0].cantidad)
+                } else {
+                  resolve(0)
+                }
               })
-            } else { resolve(0) }
+            } else {
+              resolve(0)
+            }
           })
         })
       },
