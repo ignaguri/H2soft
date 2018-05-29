@@ -16,7 +16,7 @@ import Landing from '../components/GeneralViews/Landing.vue'
 import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
 import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
-import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
+// import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
 import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
@@ -82,12 +82,6 @@ const routes = [
         path: 'bidonesdispensers',
         name: 'Bidones y Dispensers',
         component: BidonesDispensers,
-        meta: {requiresAuth: true}
-      },
-      {
-        path: 'contratos',
-        name: 'contratos',
-        component: Contratos,
         meta: {requiresAuth: true}
       },
       {

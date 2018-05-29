@@ -96,10 +96,7 @@
       },
       editar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        // console.log('editar id: ' + id)
         this.$emit('emitted', {action: 'edit', client: id})
-        // this.$parent.isClientList = false
-        // this.$router.push('clientes/edit/' + id)
       },
       borrar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
@@ -117,7 +114,6 @@
       ver (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         api.getClienteFull(this, id).then(r => {
-          console.log('me ha iegado', r)
           this.modalData.nombre = r.cliente.razonSocial
           this.modalData.CUIL = r.cliente.CUIL !== undefined ? r.cliente.CUIL : ''
           this.modalData.direccion = r.cliente.direccion !== undefined ? r.cliente.direccion : ''
