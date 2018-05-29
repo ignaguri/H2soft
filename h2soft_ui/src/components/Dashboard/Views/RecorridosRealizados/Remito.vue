@@ -257,7 +257,7 @@
       },
       guardarRemito () {
         if (this.firma === '') {
-          noti.error('Debe firmar el remito')
+          noti.errorConTexto(this, 'Error', 'Debe firmar el remito')
         } else {
           // guardar Remito
           var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
