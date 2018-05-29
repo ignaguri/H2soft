@@ -24,8 +24,8 @@
 <script>
   /* eslint-disable indent */
 
-  import ContratosLista from './Contratos/ContratosLista.vue'
-  import NuevoContrato from './Contratos/NuevoContrato.vue'
+  import ContratosLista from './ContratosLista.vue'
+  import NuevoContrato from './NuevoContrato.vue'
   export default {
     components: {
       ContratosLista,
@@ -55,7 +55,6 @@
             this.isContratosList = false
             break
           case 'ver':
-            console.log('ver cliente: ', e.client.toString())
             break
         }
       }

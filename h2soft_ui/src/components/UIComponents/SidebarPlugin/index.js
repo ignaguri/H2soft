@@ -39,19 +39,9 @@ const SidebarStore = {
       path: '/clientes'
     },
     {
-      name: 'Contratos',
-      icon: 'ti-pencil-alt',
-      path: '/contratos'
-    },
-    {
       name: 'Usuarios',
       icon: 'ti-user',
       path: '/usuarios'
-    },
-    {
-      name: 'Listado Remitos',
-      icon: 'ti-pencil',
-      path: '/listadoRemitos'
     }
   ],
   displaySidebar (value) {

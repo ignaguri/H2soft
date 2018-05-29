@@ -15,15 +15,6 @@
           <dispensers v-if="this.pestañaActiva === 3"></dispensers>
         </tab>
       </tabs>
-
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="text-center">
-
-        </div>
-        <div class="clearfix"></div>
-      </div>
     </div>
   </div>
 </template>

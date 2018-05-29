@@ -135,7 +135,6 @@
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
-              console.log('omdificar contrato devolvio false')
               noti.errorConTexto(this, 'Error', 'Error al guardar el contrato')
             }
           })

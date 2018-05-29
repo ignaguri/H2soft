@@ -25,9 +25,9 @@
   import api from 'src/api/services/listadoRemitoServices'
   import apiDispensers from 'src/api/services/dispensersServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  const tableColumns1 = ['Producto', 'Cantidad', 'Dejado']
+  const tableColumns1 = ['Producto', 'Cantidad', 'Accion']
   const dataColumns1 = []
-  const tableColumns2 = ['Dispenser', 'Dejado']
+  const tableColumns2 = ['Dispenser', 'Accion']
   const dataColumns2 = []
 
   export default {
@@ -69,7 +69,7 @@
               this.table1.data.push({
                 producto: this.cargarProducto(rem.idProducto),
                 cantidad: rem.cantidad,
-                dejado: this.estaDejado(rem.dejadoEnCliente)
+                accion: this.estaDejado(rem.dejadoEnCliente)
               })
             })
           }, error => {
@@ -95,7 +95,7 @@
             resUs.body.data.forEach(remit => {
               this.table2.data.push({
                 dispenser: this.cargarDispenser(remit.idDispenser),
-                dejado: this.estaDejado(remit.dejadoEnCliente)
+                accion: this.estaDejado(remit.dejadoEnCliente)
               })
             })
           }, error => {
@@ -103,10 +103,10 @@
           })
       },
       estaDejado (dejado) {
-        if (dejado === true || dejado === null) {
-          return 'Si'
+        if (dejado === 1) {
+          return 'Colocado'
         }
-        return 'No'
+        return 'Retirado'
       },
       getDispensers () {
         apiDispensers.getDispensers(this)

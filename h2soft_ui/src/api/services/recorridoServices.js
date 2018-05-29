@@ -252,6 +252,11 @@ export default {
   },
   getEmpleados (context) {
     const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'empleados', authHeader)
+      .then(res => { return res.body.data })
+  },
+  getRepartidores (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'users', authHeader)
       .then(users => {
         return users.body.data.filter(u => u.idRol === 3)
