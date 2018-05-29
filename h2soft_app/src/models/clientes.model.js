@@ -13,7 +13,8 @@ module.exports = function (app) {
     },
     razonSocial: {
       type: Sequelize.STRING(45),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     direccion: {
       type: Sequelize.STRING(100),
