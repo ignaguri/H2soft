@@ -7,7 +7,7 @@
     <div class="content">
       <form name="nuevo_ingresoEgreso_Form" @submit.prevent="guardarIngresoEgreso">
         <div class="row">
-          <div class="text-left">
+          <div class="text-left" style="padding:10px">
             <button-group v-model="radioValue" type="info">
               <radio selected-value="egreso">Egreso</radio>
               <radio selected-value="ingreso">Ingreso</radio>
@@ -25,7 +25,6 @@
                  search-text="Buscar"
                  :placeholder="'Nada seleccionado'"
                  :search="true" :justified="true" required>
-
             </dds>
           </div>
           <div class="col-md-6">
