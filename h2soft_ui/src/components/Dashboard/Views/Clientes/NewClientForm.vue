@@ -166,7 +166,7 @@
               noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
             } else {
               console.log('saveclient devolvio false')
-              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente')
             }
           })
         } else {
@@ -176,7 +176,7 @@
               noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito')
             } else {
               console.log('editar devolvio false')
-              noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }
           })
         }
