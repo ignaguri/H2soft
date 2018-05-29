@@ -56,7 +56,7 @@
     },
     methods: {
       cargarNotificaciones () {
-        alertsApi.getAlertas(this)
+        alertsApi.getAlertasPendientes(this)
           .then(a => {
             this.cantNotificaciones = `${a.length} Notificaciones`
             this.notifications = a

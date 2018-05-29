@@ -15,6 +15,18 @@ export default {
         return r
       })
   },
+  getAlertasPendientes (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'alertas' + '?idEstado=' + 1, authHeader)
+      .then(res => {
+        let promesas = []
+        res.body.data.forEach(a => promesas.push(this.populateCamposAlerta(context, a)))
+        return Promise.all(promesas)
+      })
+      .then(r => {
+        return r
+      })
+  },
   getAlerta (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     let result = {}

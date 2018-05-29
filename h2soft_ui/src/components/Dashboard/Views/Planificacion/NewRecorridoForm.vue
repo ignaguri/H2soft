@@ -86,8 +86,8 @@
               </dds>
             </div>
             <div class="form-group">
-              <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
-              <dds id="objetiv" v-model="idObjetivo"
+              <label for="objetivo"><h4><span class="label label-default">Objetivo</span></h4></label>
+              <dds id="objetivo" v-model="idObjetivo"
                    :options="objetivos"
                    options-value="idObjetivosXCliente"
                    options-label="nombre"
@@ -196,9 +196,9 @@
             if (resp) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito')
               this.cargarRecorridos()
-//              this.cargarComboRecorridos()
+              this.cargarComboRecorridos()
               this.limpiarCampos()
-            //  this.$parent.isRecorridoList = true
+              //  this.$parent.isRecorridoList = true
             } else {
               noti.errorConTexto(this, 'Error', 'Error al guardar recorrido, check consola')
             }
@@ -242,6 +242,9 @@
         api.getClientes(this).then(r => {
           this.clientes = r
         })
+        this.cargarComboRecorridos()
+      },
+      cargarComboRecorridos () {
         api.getRecorridosFull(this).then(recs => {
           recs.forEach(r => {
             r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia}, ${r.temporada})`
@@ -303,22 +306,17 @@
       },
       cambiarRecorrido (e) {
         // TODO: que en la grilla de abajo sólo se vean los datos correspondientes a este recorrido
-        let id = e // e.target.value
-        if (id !== '') {
+        const id = e // e.target.value
+        if (id) {
           api.getRecorrido(this, id)
             .then(r => {
-              console.log('me llego el recorrido', r)
               this.idTurno = r.idTurno
               this.idTemporada = r.idTemporada
               this.idDia = r.idDia
               this.idFrecuencia = r.idFrecuencia
             })
         } else {
-          console.log('eligió un recorrido nuevo')
-          this.idTurno = null
-          this.idTemporada = null
-          this.idDia = null
-          this.idFrecuencia = null
+          this.limpiarCampos()
         }
       },
       limpiarCampos () {
