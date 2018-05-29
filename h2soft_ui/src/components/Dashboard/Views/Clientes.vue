@@ -1,66 +1,38 @@
 <template>
   <div>
     <div class="row">
-      <clients-list v-if="isClientList" @emitted="capturarEvento"></clients-list>
-      <new-client-form v-if="!isClientList" :edit="edit" :idCliente="idCliente"></new-client-form>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient" v-show="isClientList">
-            Agregar Cliente
-          </button>
-          <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList" v-show="!isClientList">
-            Volver
-          </button>
-        </div>
-        <div class="clearfix"></div>
-      </div>
+      <tabs id="pestañas" v-model="this.pestañaActiva" @active="cambio" nav-style="tabs" justified>
+        <tab header="Clientes">
+           <clientes v-if="this.pestañaActiva === 0"></clientes>
+        </tab>
+        <tab header="Contratos" >
+          <contratos v-if="this.pestañaActiva === 1"></contratos>
+        </tab>
+      </tabs>
     </div>
   </div>
 </template>
 <script>
-  // TODO: poner los botones en cada componente
-  import ClientsList from './Clientes/ClientsList.vue'
-  import NewClientForm from './Clientes/NewClientForm.vue'
+  import { tabs, tab } from 'vue-strap'
+  import clientes from './Clientes/Clientes'
+  import contratos from './Contratos/Contratos'
 
   export default {
     components: {
-      ClientsList,
-      NewClientForm
+      tabs,
+      tab,
+      clientes,
+      contratos
     },
     data () {
       return {
-        isClientList: true,
-        edit: false,
-        idCliente: -1
+        pestañaActiva: 0
       }
     },
     methods: {
-      addClient () {
-        this.edit = false
-        this.isClientList = false
-      },
-      seeList () {
-        this.isClientList = true
-      },
-      capturarEvento (e) {
-        switch (e.action) {
-          case 'edit':
-            console.log('editar cliente: ', e.client)
-            this.edit = true
-            this.idCliente = parseInt(e.client)
-            this.isClientList = false
-            break
-          case 'ver':
-            console.log('ver cliente: ', e.client)
-            break
-        }
+      cambio (index) {
+        this.pestañaActiva = index
       }
     }
   }
-
 </script>
-<style>
-
-</style>

@@ -162,21 +162,17 @@
         if (!this.edit) {
           api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              console.log('devolvió true en newclientlist')
               noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
             } else {
-              console.log('saveclient devolvio false')
               noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente, check consola')
             }
           })
         } else {
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              console.log('devolvió true en edit')
               noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito')
             } else {
-              console.log('editar devolvio false')
-              noti.errorConTexto(this, 'Error', 'Error al editar el cliente, check consola')
+              noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }
           })
         }
@@ -191,7 +187,6 @@
       cargarCliente () {
         if (this.idCliente !== -1 && this.edit) {
           api.getClienteFull(this, this.idCliente).then(r => {
-            console.log('me ha iegado', r)
             this.cliente.razonSocial = r.cliente.razonSocial
             this.cliente.CUIL = r.cliente.CUIL
             this.$refs.address.update(r.cliente.direccion)
