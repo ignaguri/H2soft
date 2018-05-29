@@ -359,7 +359,6 @@
         apiDispensers.getDispensers(this)
           .then(res => {
             this.dispensers = res
-            console.log(res.filter(x => { return x.idObjetivo === idObjetivo }))
             if (res.filter(x => { return x.idObjetivo === idObjetivo }).length > 0) {
               this.dispensersDelObjetivo = res.filter(x => { return x.idObjetivo === idObjetivo })
               this.dispensersDelObjetivo_placeholder = 'Seleccione'
