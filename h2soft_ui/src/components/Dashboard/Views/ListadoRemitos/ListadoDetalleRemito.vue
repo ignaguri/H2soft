@@ -103,10 +103,10 @@
           })
       },
       estaDejado (dejado) {
-        if (dejado === true || dejado === null) {
-          return 'Si'
+        if (dejado === 1 || dejado === null) {
+          return 'Colocado'
         }
-        return 'No'
+        return 'Retirado'
       },
       getDispensers () {
         apiDispensers.getDispensers(this)
