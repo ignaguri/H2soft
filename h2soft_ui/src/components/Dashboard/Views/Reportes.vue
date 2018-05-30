@@ -229,7 +229,7 @@
       cargarRecorridos () {
         const hoy = new Date().toISOString().substring(0, 10).split('-')
         console.log(hoy)
-        api.getRecorridosAsignadosXFecha(this, hoy[0], hoy[1], hoy[2])
+        api.getRecorridosAsignadosParaHoy(this)
         // api.getRecorridosAsignadosXFecha(this, '2018', '05', '22')
           .then(res => {
             if (res) {

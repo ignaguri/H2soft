@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <div v-if="true" class="col-md-3 left">
-      <h5>Camion asignado: <a>{{camionAsignado}}</a> </h5>
+      <h5>Camión asignado: <a>{{camionAsignado}}</a> </h5>
     </div>
     <div class="col-md-3 left">
       <h5>Estado del recorrido: <a>{{estado}}</a> </h5>
@@ -80,12 +80,12 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import apiCamiones from 'src/api/services/camionServices'
   import apiRemito from 'src/api/services/remitoServices'
-  import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
+  import PaperTable from 'components/UIComponents/TablaObjetivosdeRecorrido.vue'
   import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
   import sele from 'vue-strap/src/Select.vue'
 
-  const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Bidones']
+  const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Dirección', 'Bidones']
   const dataColumns = []
   export default {
     components: {
@@ -145,12 +145,12 @@
                     this.cantidadUltimoRemito(det.idObjetivo)
                     .then(cant => {
                       this.table1.data.push({
-                        nro: det.idDetalleRecorridoHistorico,
-                        orden: det.orden,
-                        objetivo: resObj.nombre,
-                        horario: '',
-                        estado: det.entregado === 0 ? 1 : 4,
-                        bidones: cant
+                        'nro': det.idDetalleRecorridoHistorico,
+                        'orden': det.orden,
+                        'objetivo': resObj.nombre,
+                        'dirección': resObj.direccion,
+                        'estado': det.entregado === 0 ? 1 : 4,
+                        'bidones': cant
                       })
                       if (det.entregado === 0) {
                         this.puedeFinalizar = false

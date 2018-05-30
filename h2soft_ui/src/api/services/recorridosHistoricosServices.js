@@ -13,9 +13,10 @@ export default {
       console.log('algo falló en el get' + JSON.stringify(error))
     })
   },
-  getRecorridosAsignadosXFecha (context, año, mes, dia) {
+  getRecorridosAsignadosParaHoy (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     const hoy = new Date()
+    hoy.setHours(0, 0, 0, 0)
     const tomorrow = new Date(hoy)
     tomorrow.setDate(hoy.getDate() + 1)
     return context.$http.get(API_URL + 'recorrido-historico/?fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + tomorrow.toISOString(), authHeader)

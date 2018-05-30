@@ -18,7 +18,7 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Día', 'Turno', 'Fecha', 'Temp']
+  const tableColumns = ['Nro', 'Día', 'Turno', 'Fecha', 'Temp.']
   const dataColumns = []
 
   export default {
@@ -70,12 +70,12 @@
             resRxE.forEach(RxE => {
               let d = new Date(RxE.fechaAsignacion)
               this.table1.data.push({
-                nro: RxE.idRecorridosHistoricos,
-                día: this.getDia(RxE.idDia),
-                turno: this.getTurno(RxE.idTurno),
-                fecha: d.toLocaleDateString(),
-                temp: this.getTemporada(RxE.idTemporada),
-                estado: RxE.idEstado
+                'nro': RxE.idRecorridosHistoricos,
+                'día': this.getDia(RxE.idDia),
+                'turno': this.getTurno(RxE.idTurno),
+                'fecha': d.toLocaleDateString(),
+                'temp.': this.getTemporada(RxE.idTemporada),
+                'estado': RxE.idEstado
               })
             })
             if (this.table1.data.length === 0) {
