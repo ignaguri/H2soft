@@ -12,6 +12,11 @@
       </div>
       <div class="navbar-right-menu">
         <ul class="nav navbar-nav navbar-right">
+          <li class="open">
+            <a href="Fecha de hoy" class="btn-magnify" @click.prevent="">
+              {{new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}
+            </a>
+          </li>
           <drop-down :title="cantNotificaciones" icon="ti-bell">
             <li v-for="n in notifications">
               <top-notification :message="n.notificacion"></top-notification>

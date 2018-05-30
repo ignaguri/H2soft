@@ -92,8 +92,8 @@
       this.desde = new Date()
       this.desde.setMonth(this.desde.getMonth() - 1)
       this.hasta = new Date()
-      this.fechaDesde = this.desde.toLocaleDateString()
-      this.fechaHasta = this.hasta.toLocaleDateString()
+      this.fechaDesde = this.desde.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+      this.fechaHasta = this.hasta.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
     },
     watch: {
       idClientes: function () {
@@ -152,7 +152,7 @@
                           this.cantidad = this.cantidad + det.cantidad
                           let venta = {
                             objetivo: obj.nombre,
-                            fecha: rem.fecha === null ? '-' : new Date(rem.fecha).toLocaleDateString(),
+                            fecha: rem.fecha === null ? '-' : new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                             cantidad: det.cantidad,
                             firmadoconforme: rem.firmaConforme === 1 ? 'Si' : 'No'
                           }

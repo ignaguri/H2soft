@@ -50,9 +50,9 @@
                // cliente: contrat.idCliente, // Cambiar por el nombre del ciente
                 cliente: this.cargarCliente(contrat.idCliente),
               //  fechafirma: new Date(contrat.fechaFirma).getFullYear() + '/' + new Date(contrat.fechaFirma).getMonth() + '/' + new Date(contrat.fechaFirma).getDate(), // arreglar
-                firmado: new Date(contrat.fechaFirma).toLocaleDateString(),
-                vigentedesde: new Date(contrat.fechaVigenciaDesde).toLocaleDateString(),
-                vigentehasta: new Date(contrat.fechaVigenciaHasta).toLocaleDateString()
+                firmado: new Date(contrat.fechaFirma).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+                vigentedesde: new Date(contrat.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+                vigentehasta: new Date(contrat.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
               })
             })
         }, error => {

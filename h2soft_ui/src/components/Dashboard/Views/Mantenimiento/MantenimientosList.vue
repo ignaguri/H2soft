@@ -98,8 +98,8 @@
                 cliente: '',
                 objetivo: '',
                 dispenser: '',
-                creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString(),
-                realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString(),
+                creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+                realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 estado: this.getEstado(mant.idEstadoMantenimiento),
                 tipo: this.getTipo(mant.idTipoMantenimiento)
               }
@@ -131,8 +131,8 @@
               cliente: '',
               objetivo: '',
               dispenser: '',
-              creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString(),
-              realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString(),
+              creado: mant.createdAt === null ? '-' : new Date(mant.createdAt).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              realizado: mant.fechaRealizado === null ? '-' : new Date(mant.fechaRealizado).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
               estado: this.getEstado(mant.idEstadoMantenimiento),
               tipo: this.getTipo(mant.idTipoMantenimiento)
             }

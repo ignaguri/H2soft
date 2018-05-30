@@ -114,7 +114,7 @@
         // se idGastos seria el ID de ingresoEgreso
         ingresosEgresos: {
           idGastos: '',
-          fecha: new Date().toLocaleDateString(),
+          fecha: new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
           descripcion: '',
           monto: '',
           idMedioDePagoCobro: '',
@@ -212,7 +212,7 @@
           apiIE.getIngresoEgreso2(this, this.idGasto).then(ie => {
             this.ingresosEgresos.idMedioDePagoCobro = ie.idMedioDePagoCobro
             this.ingresosEgresos.monto = ie.monto
-            this.ingresosEgresos.fecha = new Date(ie.fecha).toLocaleDateString()
+            this.ingresosEgresos.fecha = new Date(ie.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             this.ingresosEgresos.descripcion = ie.descripcion
             this.ingresosEgresos.idEmpleado = ie.idEmpleado
             this.ingresosEgresos.imagen = ie.imagen
@@ -226,7 +226,7 @@
       },
       limpiarCampos () {
         this.ingresosEgresos.monto = null
-        this.ingresosEgresos.fecha = new Date().toLocaleDateString()
+        this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
         this.ingresosEgresos.idMedioDePagoCobro = null
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null

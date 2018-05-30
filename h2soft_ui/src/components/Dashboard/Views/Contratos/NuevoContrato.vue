@@ -175,9 +175,9 @@
           api.getContratoFull(this, this.id).then(c => {
            // alert('llegue el full con: ' + JSON.stringify(c))
             this.contrato.idCliente = c.contrato.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString()
-            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString()
-            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString()
+            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             c.detalle.forEach(dc => {
               this.detalles.push({
                 // idDetallesContrato: dc.idDetallesContrato,

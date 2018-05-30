@@ -130,7 +130,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString()
+                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -151,7 +151,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString()
+                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -174,7 +174,7 @@
                   'cantidadminima': det.cantidadMinima,
                   'cantidadmaxima': det.cantidadMaxima,
                   'precio': det.precioPorUnidad,
-                  'vigentehasta': contrato.fechaVigenciaHasta === null ? '-' : new Date(contrato.fechaVigenciaHasta).toLocaleDateString()
+                  'vigentehasta': contrato.fechaVigenciaHasta === null ? '-' : new Date(contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.table2.data.push(detalle)
                 console.log(detalle)
