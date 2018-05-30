@@ -195,7 +195,7 @@
               this.dispenser.fechaProxMantenimiento = 'No especificado'
             } else {
               let fecha = new Date(res.fechaProxMantenimiento)
-              this.dispenser.fechaProxMantenimiento = fecha.toLocaleDateString()
+              this.dispenser.fechaProxMantenimiento = fecha.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             }
             if (res.idObjetivo !== null) {
               apiClientes.getObjetivo(this, res.idObjetivo)

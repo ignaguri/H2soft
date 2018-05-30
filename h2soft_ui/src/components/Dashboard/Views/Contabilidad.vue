@@ -13,17 +13,17 @@
                 :placeholder="'Cliente'"
                 :search="true" :justified="true" style="width: 200PX;" >
             </dds>
-        </div> 
+        </div>
       </div>
       <div class="row text-line">
         <div class="col-md-3">
           <label><h4><span class="label label-default">Desde</span></h4></label>
           <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
-        </div> 
+        </div>
         <div class="col-md-3">
           <label><h4><span class="label label-default">Hasta</span></h4></label>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
-        </div> 
+        </div>
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
@@ -32,7 +32,7 @@
     </form>
    <div class="row" >
       <div class="col-md-12">
-        <div class="card"> 
+        <div class="card">
           <div class="row">
                   <div class="col-md-4 text-center">
                     <h5>Precio por unidad</h5>
@@ -46,7 +46,7 @@
                     <h5>Total</h5>
                     <h4 style="margin-top: 0px;" class="">$ {{this.total}}</h4>
                   </div>
-          </div>        
+          </div>
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>
@@ -95,8 +95,8 @@
       this.desde = new Date()
       this.desde.setMonth(this.desde.getMonth() - 1)
       this.hasta = new Date()
-      this.fechaDesde = this.desde.toLocaleDateString()
-      this.fechaHasta = this.hasta.toLocaleDateString()
+      this.fechaDesde = this.desde.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+      this.fechaHasta = this.hasta.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
     },
     watch: {
       idClientes: function () {
@@ -155,7 +155,7 @@
                           this.cantidad = this.cantidad + det.cantidad
                           let venta = {
                             objetivo: obj.nombre,
-                            fecha: rem.fecha === null ? '-' : new Date(rem.fecha).toLocaleDateString(),
+                            fecha: rem.fecha === null ? '-' : new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                             cantidad: det.cantidad,
                             firmadoconforme: rem.firmaConforme === 1 ? 'Si' : 'No'
                           }

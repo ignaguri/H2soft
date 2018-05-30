@@ -67,7 +67,7 @@
           res.body.data.forEach(ingreEgre => {
             this.table1.data.push({
               id: ingreEgre.idGastos,
-              fecha: new Date(ingreEgre.fecha).toLocaleDateString(),
+              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               monto: ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),

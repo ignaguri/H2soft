@@ -52,7 +52,7 @@
               nro: dis.idDispensers,
               código: dis.codigo,
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-              próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString()
+              próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             }
             if (dis.idObjetivo === null) {
               disp.ubicación = 'En fabrica'
