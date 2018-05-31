@@ -137,7 +137,7 @@ export default {
     return context.$http.get(API_URL + 'tipos-cliente', authHeader)
       .then(res => { return res.body.data })
   },
-  getClienteConContrato (context, id) {
+  getClienteConContratos (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
     return context.$http.get(API_URL + 'clientes/' + id, authHeader)
@@ -150,12 +150,7 @@ export default {
         return context.$http.get(API_URL + 'contratos' + '/?idCliente=' + id, authHeader)
       })
       .then(con => {
-        // console.log(con.body.data[0])
-        info['contrato'] = con.body.data[0]
-        return context.$http.get(API_URL + 'detalles-contrato' + '/?idContrato=' + con.body.data[0].idContratos, authHeader)
-      })
-      .then(det => {
-        info['detalle'] = det.body.data
+        info['contratos'] = con.body.data
         return info
       })
       .catch(error => {

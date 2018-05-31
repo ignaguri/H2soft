@@ -126,9 +126,6 @@
       idEstado: Number
     },
     mounted () {
-      // this.cargarRecorrido()
-      // this.cantidadUltimoRemito(2)
-      // .then(res => { console.log('cantidad ' + res) })
       this.cargarRecorridoAsignado()
     },
     methods: {
@@ -174,13 +171,11 @@
           apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
           .then(rem => {
             if (rem.length > 0) {
-              console.log(rem)
               rem = rem[rem.length - 1]
               apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
               .then(remDet => {
                 remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
                 if (remDet.length > 0) {
-                  console.log(remDet)
                   resolve(remDet[0].cantidad)
                 } else {
                   resolve(0)
@@ -269,7 +264,6 @@
       recorridoSuspenderReanudar () {
         switch (this.idEstado) {
           case 2: // en proceso
-            console.log('entro a suspender. Estado: ' + this.idEstado)
             apiEstados.suspenderRecorrido(this, this.id)
               .then(resObj => {
                 this.verBtIniciarFinalizar = false
@@ -285,7 +279,6 @@
                 })
             break
           case 3: // suspendido
-            console.log('entro a reanudar. Estado: ' + this.idEstado)
             apiEstados.reanudarRecorrido(this, this.id)
               .then(resObj => {
                 this.verBtIniciarFinalizar = true
@@ -307,7 +300,6 @@
       },
       recorridoAnular () {
         if (this.idEstado === 1 || this.idEstado === 2) {
-          console.log('entro a anular. Estado: ' + this.idEstado)
           apiEstados.anularRecorrido(this, this.id)
             .then(resObj => {
               this.$parent.estado = 'Anulado'
@@ -326,7 +318,6 @@
         }
       },
       setearEstadoActual () {
-        console.log('estado ' + this.idEstado)
         switch (this.idEstado) {
           case 1:
             this.$parent.estado = 'Nuevo'
