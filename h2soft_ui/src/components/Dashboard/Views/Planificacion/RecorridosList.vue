@@ -221,7 +221,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
-          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
         this.postAsignacion({

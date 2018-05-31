@@ -200,7 +200,7 @@
           this.$parent.verDetalle = false
           this.$parent.verLista = false
         } else {
-          noti.errorConTexto(this, 'Error', 'El recorrido debe estar En Proceso para poder   cargar remitos')
+          noti.infoConTexto(this, 'Alerta', 'El recorrido debe estar En Proceso para poder cargar remitos')
         }
       },
       btn_RecorridoIniciarFinalizar () {

@@ -13,17 +13,17 @@
                 :placeholder="'Cliente'"
                 :search="true" :justified="true" style="width: 200PX;" >
             </dds>
-        </div>
+        </div> 
       </div>
       <div class="row text-line">
         <div class="col-md-3">
           <label><h4><span class="label label-default">Desde</span></h4></label>
           <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
-        </div>
+        </div> 
         <div class="col-md-3">
           <label><h4><span class="label label-default">Hasta</span></h4></label>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
-        </div>
+        </div> 
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
@@ -32,7 +32,7 @@
     </form>
    <div class="row" >
       <div class="col-md-12">
-        <div class="card">
+        <div class="card"> 
           <div class="row">
                   <div class="col-md-4 text-center">
                     <h5>Precio por unidad</h5>
@@ -46,7 +46,7 @@
                     <h5>Total</h5>
                     <h4 style="margin-top: 0px;" class="">$ {{this.total}}</h4>
                   </div>
-          </div>
+          </div>        
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>
@@ -55,18 +55,21 @@
   </div>
 </template>
 <script>
-  import PaperTable from './PaperTablePlusContabilidad'
-  import { datepicker, select } from 'vue-strap'
+  import PaperTable from 'components/Dashboard/Views/Contabilidad/PaperTablePlusContabilidad.vue'
+  import { datepicker } from 'vue-strap'
+  import dds from 'vue-strap/src/Select.vue'
   import api from 'src/api/services/clientServices.js'
   import apiRemito from 'src/api/services/remitoServices.js'
   import noti from 'src/api/notificationsService'
+  // import apiDispensers from 'src/api/services/dispensersServices.js'
+  // import apiContratos from 'src/api/services/contratosServices.js'
 
   const table1Columns = ['Objetivo', 'Fecha', 'Cantidad', 'Firmado conforme']
   export default {
     components: {
       PaperTable,
       dp: datepicker,
-      dds: select
+      dds
     },
     data () {
       return {
@@ -119,7 +122,7 @@
           this.hasta.setHours(23, 59, 59) // seteo las 23:59 para incluir el último dia seleccionado
           this.calcularValores()
         } else {
-          noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
+          noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un cliente')
         }
       },
       calcularValores () {

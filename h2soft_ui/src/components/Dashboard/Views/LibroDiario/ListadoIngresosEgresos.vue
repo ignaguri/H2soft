@@ -25,6 +25,7 @@
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
+  import noti from 'src/api/notificationsService'
   import {modal} from 'vue-strap'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Monto', 'MediodePago', 'Descripcion']
@@ -110,12 +111,12 @@
         apiIE.deleteIngresoEgreso(this, id)
           .then(res => {
             if (res) {
-              alert('Ingreso/Egreso eliminado:' + id)
+              noti.exitoConTexto(this, 'Éxito', 'El Ingreso/Egreso se eliminó con éxito!')
             }
           })
           .catch(err => {
             console.log('errorrrrrr', err)
-            alert('Algo salio mal!')
+            noti.errorConTexto(this, 'Éxito', 'El Ingreso/Egreso no se pudo eliminar')
           })
       },
       editarIngresoEgreso (e) {

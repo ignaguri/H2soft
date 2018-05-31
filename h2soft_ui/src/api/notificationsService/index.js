@@ -48,7 +48,7 @@ export default {
         type: 'danger'
       })
   },
-  info (context, titulo, mensaje) {
+  infoConTexto (context, titulo, mensaje) {
     context.$notifications.notify(
       {
         message: titulo + '<br />' + mensaje,

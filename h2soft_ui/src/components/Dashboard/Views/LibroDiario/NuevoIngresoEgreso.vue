@@ -149,7 +149,7 @@
         if (this.idGasto === -1 && !this.edit) {
           if (this.radioValue === null) {
             // alert('Tiene que seleccionar un tipo de operacion')
-            noti.errorConTexto(this, 'Error', 'Tiene que seleccionar un tipo de operacion')
+            noti.infoConTexto(this, 'Alerta', 'Tiene que seleccionar un tipo de operación')
 
             return
           }
