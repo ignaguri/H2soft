@@ -168,8 +168,7 @@
       },
       ok () {
         if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '' || this.detalleContrato.cantidadMinima === '') {
-         // alert('Debe completar todos los campos')
-          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
         if (Number(this.detalleContrato.cantidadMinima) > Number(this.detalleContrato.cantidadMaxima)) {
@@ -190,7 +189,7 @@
           cantidadMaxima: this.detalleContrato.cantidadMaxima,
           precioPorUnidad: this.detalleContrato.precioPorUnidad
         })
-        noti.exitoConTexto(this, 'Éxito', 'Se agregó un nuevo detalle')
+        noti.exitoConTexto(this, 'Éxito', 'Se agregó un nuevo detalle!')
         this.limpiarCampos()
         return false
       },

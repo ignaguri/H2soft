@@ -88,15 +88,15 @@
     methods: {
       guardarContrato () {
         if (this.detalles.length <= 0) {
-          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos un detalle')
           return
         }
         if (this.contrato.fechaFirma === '' || this.contrato.fechaVigenciaDesde === '' || this.contrato.fechaVigenciaHasta === '') {
-          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
-          noti.errorConTexto(this, 'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+          noti.infoConTexto(this, 'Alerta', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
         if (this.id === 0 && !this.edit) {
@@ -192,7 +192,7 @@
       },
       validarCampos () {
         if (this.detalles.length <= 0) {
-          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos un detalle')
           return true
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {

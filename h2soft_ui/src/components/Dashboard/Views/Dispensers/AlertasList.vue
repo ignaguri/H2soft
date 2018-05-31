@@ -36,6 +36,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import { buttonGroup, radio, modal } from 'vue-strap'
   import api from 'src/api/services/alertasServices'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Tipo', 'Notificacion', 'Estado']
   export default {
@@ -91,10 +92,10 @@
         api.deleteAlerta(this, id)
           .then(r => {
             if (r) {
-              alert('Alerta borrada con éxito!')
+              noti.exitoConTexto(this, 'Éxito', 'Alerta borrada con éxito!')
               this.cargarAlertas()
             } else {
-              alert('Error al borrar alerta')
+              noti.errorConTexto(this, 'Error', 'Error al borrar alerta')
               this.cargarAlertas()
             }
           })
@@ -106,7 +107,7 @@
       },
       ok () {
         if (this.idEstado === null) {
-          alert('Debe seleccionar un estado')
+          noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un estado')
           return true
         }
         this.editarAlerta()
@@ -120,10 +121,10 @@
         api.updateEstado(this, alerta)
           .then(r => {
             if (r) {
-              alert('Alerta actualizada con éxito!')
+              noti.exitoConTexto(this, 'Éxito', 'Alerta actualizada con éxito!')
               this.cargarAlertas()
             } else {
-              alert('Error al actualizar alerta')
+              noti.errorConTexto(this, 'Error', 'Error al actualizar alerta')
               this.cargarAlertas()
             }
           })

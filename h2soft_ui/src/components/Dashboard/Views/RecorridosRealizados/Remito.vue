@@ -91,13 +91,13 @@
       </div>
       <div class="row">
           <div class="col-md-4 left">
-            <h5>Dispenser colocados: </h5>
+            <h5>Dispensers colocados: </h5>
             <h6>{{this.remito.txdispensersDejo}}</h6>
           </div>
         </div>
         <div class="row">
           <div class="col-md-4 left">
-            <h5>Dispenser retirados: </h5>
+            <h5>Dispensers retirados: </h5>
             <h6>{{this.remito.txdispensersLlevo}}</h6>
           </div>
         </div>
@@ -257,7 +257,7 @@
       },
       guardarRemito () {
         if (this.firma === '') {
-          noti.errorConTexto(this, 'Error', 'Debe firmar el remito')
+          noti.infoConTexto(this, 'Alerta', 'Debe firmar el remito')
         } else {
           // guardar Remito
           var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
