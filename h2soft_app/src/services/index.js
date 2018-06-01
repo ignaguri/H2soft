@@ -48,6 +48,8 @@ const mediosDePagoCobro = require('./medios-de-pago-cobro/medios-de-pago-cobro.s
 
 const cajaTotal = require('./caja-total/caja-total.service.js');
 
+const motivosDeReasignacion = require('./motivos-de-reasignacion/motivos-de-reasignacion.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -97,4 +99,5 @@ module.exports = function () {
   app.configure(estadosAlerta);
   app.configure(historialXDispenser);
   app.configure(tiposAlerta);
+  app.configure(motivosDeReasignacion);
 };
