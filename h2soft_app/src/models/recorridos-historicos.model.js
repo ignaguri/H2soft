@@ -86,7 +86,15 @@ module.exports = function (app) {
         model: 'recorridos',
         key: 'idRecorridos'
       }
-    }
+    },
+    idMotivoDeReasignacion: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'motivos_de_reasignacion',
+        key: 'idMotivoDeReasignacion'
+      }
+    }  
   }, {
     hooks: {
       beforeCount(options) {
