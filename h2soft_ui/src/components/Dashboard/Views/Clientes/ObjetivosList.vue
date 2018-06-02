@@ -10,7 +10,7 @@
     <div class="col-md-4 col-md-offset-8">
       <div class="text-center">
         <button type="button" class="btn btn-info btn-fill btn-wd" @click="btn_agregar">
-          Agregar Objetivo
+          Agregar objetivo
         </button>
       </div>
     </div>

@@ -7,7 +7,7 @@
         </paper-table>
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="planificar">
-            Planificar Recorrido
+            Planificar recorrido
           </button>
         </div>
         <br>
@@ -176,7 +176,7 @@
         if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
         api.deleteRecorrido(this, id).then(res => {
           if (res) {
-            noti.exitoConTexto(this, 'Éxito', 'Recorrido borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
             this.cargarRecorridos()
           } else {
             noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
@@ -188,10 +188,10 @@
         api.deleteObjetivoFromRecorrido(this, id, this.recorrido)
           .then(r => {
             if (r) {
-              noti.exitoConTexto(this, 'Éxito', 'Se borró con éxito el objetivo del recorrido')
+              noti.exitoConTexto(this, 'Éxito', 'El objetivo del recorrido se ha eliminado!')
               this.verEspecifico()
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al borrar objetivo, chequee consola')
+              noti.errorConTexto(this, 'Error', 'Error al borrar objetivo')
             }
           })
       },
@@ -235,10 +235,10 @@
         api.postAsignacion(this, asignacion)
           .then(r => {
             if (r) {
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
               this.seeList()
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido, chequee consola')
+              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
               this.seeList()
             }
           })

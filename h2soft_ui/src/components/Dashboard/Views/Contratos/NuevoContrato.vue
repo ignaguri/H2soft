@@ -112,7 +112,7 @@
           api.postContratos(this, this.contrat, this.detalles).then(res => {
             if (res) {
               console.log('devolvió true en nuevoContrato')
-              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito!')
             } else {
               console.log('devolvio false')
               noti.errorConTexto(this, 'Error', 'Error al guardar el contrato')
@@ -131,7 +131,7 @@
           }
           api.editarContratoFull3(this, this.contrat, this.detalles, this.id).then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Contrato guardado con éxito!')
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {

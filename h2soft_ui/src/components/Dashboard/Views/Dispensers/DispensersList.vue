@@ -81,7 +81,7 @@
         if (!confirm('Desea eliminar a este cliente, sus contactos y todos sus objetivos?')) return
         api.deleteClientes(this, id).then(res => {
           if (res) {
-            noti.exitoConTexto(this, 'Éxito', 'Dispenser borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'El dispenser se ha borrado!')
             this.table1.data = []
             this.cargarClientes()
           } else {

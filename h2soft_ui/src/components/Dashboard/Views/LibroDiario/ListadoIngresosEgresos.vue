@@ -111,12 +111,12 @@
         apiIE.deleteIngresoEgreso(this, id)
           .then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'El Ingreso/Egreso se eliminó con éxito!')
+              noti.exitoConTexto(this, 'Éxito', 'El Ingreso/Egreso se ha eliminado!')
             }
           })
           .catch(err => {
             console.log('errorrrrrr', err)
-            noti.errorConTexto(this, 'Éxito', 'El Ingreso/Egreso no se pudo eliminar')
+            noti.errorConTexto(this, 'Error', 'Error al eliminar Ingreso/Egreso')
           })
       },
       editarIngresoEgreso (e) {
