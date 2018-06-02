@@ -55,6 +55,14 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-md-4 left">
+            <h5>Dispensers a mantenimiento</h5>
+            <div class="btn-group btn-group-justified">
+              <sele :options="dispensersAMantenimiento" options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersAMantenimiento_placeholder" options-label="codigo" :multiple="true" name=""  :search="true" :justified="true"></sele>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-6 left" @click="cambioNecesita">
             <check :value.sync="this.necesita" >Dispenser/s retirado/s requiere/n mantenimiento</check>
           </div>
@@ -99,6 +107,12 @@
           <div class="col-md-4 left">
             <h5>Dispenser retirados: </h5>
             <h6>{{this.remito.txdispensersLlevo}}</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 left">
+            <h5>Dispenser a mantenimiento: </h5>
+            <h6>{{this.remito.txdispensersMantenimiento}}</h6>
           </div>
         </div>
         <div class="row">
@@ -162,14 +176,17 @@
           bidonesDejo: '',
           bidonesLlevo: '',
           txdispensersDejo: '',
-          txdispensersLlevo: ''
+          txdispensersLlevo: '',
+          txdispensersMantenimiento: ''
         },
         necesita: false,
         dispensers: [],
         dispensersSinObjetivo: [],
         dispensersDelObjetivo: [],
+        dispensersAMantenimiento: [],
         dispensersSinObjetivo_placeholder: 'Seleccione',
         dispensersDelObjetivo_placeholder: 'Seleccione',
+        dispensersAMantenimiento_placeholder: 'Ninguno',
         idObjetivo: '',
         objetivo: '',
         idRemito: 0,
@@ -333,6 +350,7 @@
                         }
                         apiDispensers.editDispenser(this, dispenser)
                       })
+                      // Guardo los mantenimientos de dispensers
                       if (this.necesita && this.dispensersRetirados[0] !== undefined) { // Alguno de los dispensers retirados necesita mantenimiento
                         var mantenimiento = {
                           'idObjetivo': this.idObjetivo,
@@ -416,13 +434,13 @@
               this.dispensersDelObjetivo = res.filter(x => { return x.idObjetivo === idObjetivo })
               this.dispensersDelObjetivo_placeholder = 'Seleccione'
             } else {
-              this.dispensersDelObjetivo_placeholder = 'No hay'
+              this.dispensersDelObjetivo_placeholder = 'Ninguno'
             }
             if (res.filter(x => { return x.idEstadoDispenser === 1 }).length > 0) {
               this.dispensersSinObjetivo = res.filter(x => { return x.idEstadoDispenser === 1 })
               this.dispensersSinObjetivo_placeholder = 'Seleccione'
             } else {
-              this.dispensersSinObjetivo_placeholder = 'No hay'
+              this.dispensersSinObjetivo_placeholder = 'Ninguno'
             }
           })
       },
@@ -443,6 +461,12 @@
       },
       cambioDispensersRetirados (value) {
         this.dispensersRetirados = value
+        let i
+        this.dispensersAMantenimiento = []
+        for (i = 0; i < value.length; i++) {
+          console.log(this.dispensersDelObjetivo.filter(x => { return x.idDispensers === value[i] }))
+          this.dispensersAMantenimiento.push(this.dispensersDelObjetivo.filter(x => { return x.idDispensers === value[i] })[0])
+        }
       },
       cambioNecesita () {
         this.necesita = !this.necesita
