@@ -63,7 +63,7 @@
     },
     methods: {
       cargarIngresosEgresos () {
-        apiIE.getIngresoEgresoSinImagen(this).then(res => {
+        apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
             this.table1.data.push({
               id: ingreEgre.idGastos,
