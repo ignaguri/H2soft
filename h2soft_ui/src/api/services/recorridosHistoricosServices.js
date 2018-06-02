@@ -65,6 +65,16 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idDetalleRecorridoHistorico=' + idDetalleRecorridoHistorico, authHeader)
   },
+  getDetalleRecorridosAsignadosXRemito (context, idRemito) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRemito=' + idRemito, authHeader)
+    .then(res => {
+      return res.body.data[0]
+    })
+    .catch(error => {
+      console.log('algo falló en el get' + JSON.stringify(error))
+    })
+  },
   getRecorrido (context, idRecorrido) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'recorridos/?idRecorridos=' + idRecorrido, authHeader)

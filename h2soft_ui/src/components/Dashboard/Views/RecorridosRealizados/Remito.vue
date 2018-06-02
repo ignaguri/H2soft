@@ -115,6 +115,15 @@
             </div>
           </div>
         </div>
+        <div class="row">
+      <div class="col-md-3">
+        <div class="text-center">
+          <button type="button" class="btn btn-success btn-fill btn-wd" v-if="this.$parent.verRemito" @click="anular">
+            Anular
+          </button>
+        </div>
+      </div>
+    </div>
     </div>
     <div class="row">
       <div class="col-md-3">
@@ -228,13 +237,13 @@
         apiRemito.getDetalleRemitoDispensers(this, this.idRemito)
           .then(res => {
             res = res.body.data
-            var dispenserCodigo = ''
-            var huboDispensersLlevados = false // variable de control utilizada luego para mostrar "No hubo"
-            var huboDispensersDejados = false // variable de control utilizada luego para mostrar "No hubo"
+            let dispenserCodigo = ''
+            let huboDispensersLlevados = false // variable de control utilizada luego para mostrar "No hubo"
+            let huboDispensersDejados = false // variable de control utilizada luego para mostrar "No hubo"
             if (res !== null) {
               for (var i = 0, len = res.length; i < len; i++) {
                 if (res[i].dejadoEnCliente === 0) {
-                  dispenserCodigo = this.dispensers.filter(x => { return x.idDispensers === res[i].idDispensers })
+                  dispenserCodigo = this.dispensers.filter(x => { return x.idDispensers === res[i].idDispenser })
                   huboDispensersLlevados = true
                   this.remito.txdispensersLlevo = this.remito.txdispensersLlevo + ' - ' + dispenserCodigo[0].codigo
                 }
@@ -266,7 +275,8 @@
             'idEmpleado': idEmpleado,
             'firma': this.firma,
             'firmaConforme': true,
-            'idObjetivo': this.idObjetivo
+            'idObjetivo': this.idObjetivo,
+            'idEstadoRemito': 1 // creado
           }
           apiRemito.nuevoRemito(this, remito)
             .then(rem => {
@@ -328,7 +338,8 @@
                           'idObjetivo': this.idObjetivo,
                           'idDispenser': this.dispensersRetirados[0],
                           'idEstadoMantenimiento': 1, // se crea en estado Pendiente
-                          'idTipoMantenimiento': 1 // por defecto, se crea de tipo Preventivo
+                          'idTipoMantenimiento': 1, // por defecto, se crea de tipo Preventivo
+                          'idRemito': rem.idRemito
                         }
                         apiMantenimiento.nuevoMantenimiento(this, mantenimiento)
                           .then(mant => {
@@ -354,6 +365,48 @@
               noti.errorConTexto(this, 'Error', 'No se pudo crear el remito')
             })
         }
+      },
+      anular () {
+        api.getDetalleRecorridosAsignadosXRemito(this, this.idRemito)
+        .then(det => {
+          // edito los dispensers
+          const detalleRecorrido = {
+            'idDetalleRecorridoHistorico': det.idDetalleRecorridoHistorico,
+            'entregado': 0,
+            'idRemito': null
+          }
+          api.editarDetalleRecorridoHistorico(this, detalleRecorrido)
+          .then(detrec => {
+            apiRemito.getDetalleRemitoDispensers(this, this.idRemito)
+            .then(detDips => {
+              detDips = detDips.body.data
+              detDips.forEach(d => {
+                let dispenser = {
+                  'id': d.idDispenser,
+                  'idObjetivo': null,
+                  'idEstadoDispenser': 1
+                }
+                if (d.dejadoEnCliente === 0) {
+                  dispenser.idObjetivo = det.idObjetivo
+                  dispenser.idEstadoDispenser = 2
+                }
+                apiDispensers.editDispenser(this, dispenser)
+              })
+            })
+          })
+          // borro los mantenimientos
+          apiMantenimiento.deleteMantenimientoXRemito(this, this.idRemito)
+          .then(mant => {
+            // borro el remito completo
+            apiRemito.deleteRemito(this, this.idRemito)
+            .then(disp => {
+              noti.exitoConTexto(this, 'Exito', 'El remito ha sido anulado')
+              this.$parent.current = 'DetalleRecorrido'
+              this.$parent.verRemito = false
+              this.$parent.verDetalle = true
+            })
+          })
+        })
       },
       cargarDispensers (idObjetivo) {
         apiDispensers.getDispensers(this)

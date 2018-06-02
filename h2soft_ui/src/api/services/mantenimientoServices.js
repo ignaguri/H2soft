@@ -14,6 +14,11 @@ export default {
     return context.$http.get(API_URL + 'mantenimientos' + '/?idMantenimientos=' + id, authHeader)
       .then(res => { return res.body.data })
   },
+  getMantenimientosXRemito (context, idRemito) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'mantenimientos' + '/?idRemito=' + idRemito, authHeader)
+      .then(res => { return res.body.data })
+  },
   getMantenimientosPendientes (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'mantenimientos' + '/?idEstadoMantenimiento=' + 1, authHeader)
@@ -46,6 +51,18 @@ export default {
       })
       .catch(error => {
         console.log('algo falló en el edit' + JSON.stringify(error))
+      })
+  },
+  deleteMantenimientoXRemito (context, idRemito) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.delete(API_URL + 'mantenimientos/?idRemito=' + idRemito, authHeader)
+      .then(res => {
+        console.log('borrado', res)
+        return true
+      })
+      .catch(error => {
+        console.log('error', error)
+        return false
       })
   }
 }
