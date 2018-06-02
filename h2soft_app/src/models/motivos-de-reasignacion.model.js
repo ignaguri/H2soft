@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const motivosDeReasignacion = sequelizeClient.define('motivos_de_reasignacion', {
+  const motivosDeReasignacion = sequelizeClient.define('motivos-de-reasignacion', {
     idMotivoDeReasignacion: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
