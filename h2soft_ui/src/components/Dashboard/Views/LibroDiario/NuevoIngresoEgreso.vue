@@ -43,10 +43,10 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input label="Monto"
+            <fg-input label="Importe"
                       type="number"
-                      placeholder="Monto"
-                      v-model="ingresosEgresos.monto"
+                      placeholder="Importe"
+                      v-model="ingresosEgresos.importe"
                       :disabled="edit"
                       required>
             </fg-input>
@@ -116,7 +116,7 @@
           idGastos: '',
           fecha: new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
           descripcion: '',
-          monto: '',
+          importe: '',
           idMedioDePagoCobro: '',
           imagen: ''
         },
@@ -154,7 +154,7 @@
             return
           }
           if (this.radioValue === 'egreso') {
-            this.ingresosEgresos.monto = '-' + this.ingresosEgresos.monto
+            this.ingresosEgresos.importe = '-' + this.ingresosEgresos.importe
           }
           let fecha = this.ingresosEgresos.fecha.split('/')
           this.ingresosEgresos.fecha = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
@@ -164,7 +164,7 @@
               noti.exito(this)
               // alert('ingresosEgresos guardado con éxito.')
               this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
-              this.cajaTotal.monto = this.ingresosEgresos.monto
+              this.cajaTotal.monto = this.ingresosEgresos.importe
               this.cajaTotal.fecha = this.ingresosEgresos.fecha
               apiCT.postCajaTotal(this, this.cajaTotal).then(res => {
                 if (res) {
@@ -211,7 +211,7 @@
         if (this.idGasto !== -1 && this.edit) {
           apiIE.getIngresoEgreso2(this, this.idGasto).then(ie => {
             this.ingresosEgresos.idMedioDePagoCobro = ie.idMedioDePagoCobro
-            this.ingresosEgresos.monto = ie.monto
+            this.ingresosEgresos.importe = ie.monto
             this.ingresosEgresos.fecha = new Date(ie.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             this.ingresosEgresos.descripcion = ie.descripcion
             this.ingresosEgresos.idEmpleado = ie.idEmpleado
@@ -225,7 +225,7 @@
         console.log('el ref es', ref)
       },
       limpiarCampos () {
-        this.ingresosEgresos.monto = null
+        this.ingresosEgresos.importe = null
         this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
         this.ingresosEgresos.idMedioDePagoCobro = null
         this.ingresosEgresos.descripcion = null

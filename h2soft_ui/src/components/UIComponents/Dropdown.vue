@@ -2,8 +2,8 @@
   <li class="dropdown" :class="{open:isOpen}" @click="toggleDropDown">
     <a class="dropdown-toggle btn-rotate" data-toggle="dropdown" >
       <slot name="title">
-        <i :class="icon"></i>
-        <p class="notification">{{title}}
+        <i :class="icon" :style="colorStyle"></i>
+        <p class="notification" :style="colorStyle">{{title}}
           <b class="caret"></b>
         </p>
       </slot>
@@ -17,7 +17,13 @@
   export default{
     props: {
       title: String,
-      icon: String
+      icon: String,
+      color: String
+    },
+    computed: {
+      colorStyle () {
+        return `color: ${this.color}`
+      }
     },
     data () {
       return {

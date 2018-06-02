@@ -53,13 +53,23 @@
                 </dds>
               </template>
               <template v-else-if="alerta.idTipo === 2">
-                <label for="bidones"><h4><span class="label label-default">Bidones</span></h4></label>
-                  <dds id="bidones" v-model="alerta.bidones"
-                     :options="bidones"
+                <label for="producto"><h4><span class="label label-default">Producto</span></h4></label>
+                  <dds id="producto" v-model="alerta.producto"
+                     :options="productos"
+                     options-value="idProductos"
+                     options-label="nombre"
+                     search-text="Buscar"
+                     :placeholder="'Tipo de producto'"
+                     :search="true" :justified="true"
+                     required>
+                </dds>
+                <label for="cantidad"><h4><span class="label label-default">Cantidad</span></h4></label>
+                <dds id="cantidad" v-model="alerta.cantidad"
+                     :options="cantidad"
                      options-value="index"
                      options-label="number"
                      search-text="Ingrese cantidad"
-                     :placeholder="'Cantidad de bidones'"
+                     :placeholder="'Ingrese una cantidad'"
                      :search="true" :justified="true"
                      @input="cargarMensaje" required>
                 </dds>
@@ -122,7 +132,8 @@
           idTipo: null,
           notificacion: '',
           idDispenser: null,
-          bidones: null,
+          producto: null,
+          cantidad: null,
           idEstado: 1,
           isDesvinculacion: false
         },
@@ -130,7 +141,8 @@
         idClientes: null,
         objetivos: [],
         tipos: [],
-        dispensers: []
+        dispensers: [],
+        productos: []
       }
     },
     props: {
@@ -139,18 +151,18 @@
     mounted () {
       this.cargarClientes()
       this.cargarTiposAlerta()
-      this.cargarEstadosAlerta()
+      this.cargarProductos()
     },
     computed: {
-      bidones: function () {
-        const bidones = []
+      cantidad: function () {
+        const cantidad = []
         for (let i in [...Array(100).keys()]) {
-          bidones.push({
+          cantidad.push({
             index: i,
             number: i
           })
         }
-        return bidones
+        return cantidad
       }
     },
     watch: {
@@ -191,9 +203,16 @@
           this.dispensers = null
         }
       },
+      cargarProductos () {
+        api.getProductos(this)
+          .then(r => {
+            this.productos = r
+          })
+      },
       cargarMensaje (e) {
         const dispenser = this.dispensers.find(d => d.idDispensers === this.alerta.idDispenser)
         const objetivo = this.objetivos.find(o => o.idObjetivosXCliente === this.alerta.idObjetivo)
+        const producto = this.productos.find(o => o.idProductos === this.alerta.producto)
         if (!objetivo) {
           this.alerta.notificacion = ''
           return
@@ -203,7 +222,7 @@
             this.alerta.notificacion = `Cambiar dispenser ${dispenser.codigo} en ${objetivo.nombre}`
             break
           case 2:
-            this.alerta.notificacion = `Llevar ${this.alerta.bidones} bidones a ${objetivo.nombre}`
+            this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${producto.nombre} a ${objetivo.nombre}`
             break
           case 3:
             this.alerta.notificacion = `Desvincular dispenser ${dispenser.codigo} de ${objetivo.nombre}`

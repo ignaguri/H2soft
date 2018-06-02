@@ -92,6 +92,11 @@ export default {
     return context.$http.get(API_URL + 'estados-alerta', authHeader)
       .then(res => { return res.body.data })
   },
+  getProductos (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'productos', authHeader)
+      .then(res => { return res.body.data })
+  },
   postAlerta (context, alerta) {
     // TODO: add logica desvinculacion
     const authHeader = { headers: auth.getAuthHeader() }

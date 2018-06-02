@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <alertas-list v-if="isAlertasList" @emitted="capturarEvento"></alertas-list>
+      <alertas-list v-if="isAlertasList" @notiUpdate="notiUpdate"></alertas-list>
       <alertas-new v-if="!isAlertasList" :edit="edit" :id="idAlerta"></alertas-new>
     </div>
     <div class="row">
@@ -45,17 +45,8 @@
         this.idAlerta = 0
         this.edit = false
       },
-      capturarEvento (e) {
-        switch (e.action) {
-          case 'edit':
-            this.edit = true
-            this.idAlerta = Number(e.alerta)
-            this.isAlertasList = false
-            break
-          case 'erase':
-            console.log('borrar', e.alerta)
-            break
-        }
+      notiUpdate (e) {
+        console.log('como mierda actualizo la barra de arriba', e)
       }
     }
   }

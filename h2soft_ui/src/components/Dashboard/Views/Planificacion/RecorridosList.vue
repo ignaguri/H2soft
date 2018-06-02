@@ -78,7 +78,7 @@
       return {
         table1: {
           title: 'Planificación',
-          subTitle: 'Lista de recorridos programados',
+          subTitle: 'Listado de recorridos',
           columns: [...table1Columns],
           data: []
         },
