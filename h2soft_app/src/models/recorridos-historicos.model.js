@@ -91,7 +91,7 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'motivos_de_reasignacion',
+        model: 'motivos-de-reasignacion',
         key: 'idMotivoDeReasignacion'
       }
     }  
