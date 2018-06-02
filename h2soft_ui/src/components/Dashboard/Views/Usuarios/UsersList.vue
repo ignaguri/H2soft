@@ -105,7 +105,7 @@
         }
         api.editUsuario(this, this.usuario).then(res => {
           if (res) {
-            noti.exitoConTexto(this, 'Éxito', 'El usuario se borró exitosamente')
+            noti.exitoConTexto(this, 'Éxito', 'El usuario se ha eliminado!')
             this.table1.data = []
             this.cargarUsuarios()
           } else {

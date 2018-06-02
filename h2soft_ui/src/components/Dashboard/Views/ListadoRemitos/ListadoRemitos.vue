@@ -1,4 +1,5 @@
 <template>
+<div class="content">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -7,6 +8,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 //  import auth from 'src/api/auth'

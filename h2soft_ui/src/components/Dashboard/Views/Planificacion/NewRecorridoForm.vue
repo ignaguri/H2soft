@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title">Planificar Recorrido</h3>
+      <h3 class="title">Planificar recorrido</h3>
     </div>
     <div class="content">
       <form @submit.prevent="guardarRecorrido" class="form-inline">
@@ -193,7 +193,7 @@
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
             if (resp) {
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
               if (this.idRecorrido) {
