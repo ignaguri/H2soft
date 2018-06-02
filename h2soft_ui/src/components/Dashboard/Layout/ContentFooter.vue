@@ -11,7 +11,7 @@
       <div class="copyright pull-right">
         &copy; Hecho con
         <i class="fa fa-heart heart"></i> por
-        <a href="https://github.com/ignaguri/H2soft" target="_blank">H2Soft team</a>.
+        <a href="mailto:teamh2soft@gmail.com">H2Soft team</a>.
       </div>
     </div>
   </footer>

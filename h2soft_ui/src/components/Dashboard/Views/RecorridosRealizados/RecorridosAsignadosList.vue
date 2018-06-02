@@ -73,7 +73,7 @@
                 'nro': RxE.idRecorridosHistoricos,
                 'día': this.getDia(RxE.idDia),
                 'turno': this.getTurno(RxE.idTurno),
-                'fecha': d.toLocaleDateString(),
+                'fecha': d.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 'temp.': this.getTemporada(RxE.idTemporada),
                 'estado': RxE.idEstado
               })
@@ -96,7 +96,7 @@
             this.$parent.dia = this.getDia(res.idDia)
             this.$parent.turno = this.getTurno(res.idTurno)
             var d = new Date(res.fechaAsignacion)
-            this.$parent.fecha = d.toLocaleDateString() // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
+            this.$parent.fecha = d.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }) // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
             this.$parent.idEstado = res.idEstado

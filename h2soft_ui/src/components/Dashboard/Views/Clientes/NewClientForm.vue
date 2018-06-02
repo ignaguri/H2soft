@@ -156,13 +156,13 @@
     methods: {
       saveClient () {
         if (this.objetivos.length <= 0) {
-          noti.errorConTexto(this, 'Error', 'Debe agregar al menos 1 objetivo')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos 1 objetivo')
           return
         }
         if (!this.edit) {
           api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito!')
             } else {
               noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente')
             }
@@ -170,7 +170,7 @@
         } else {
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito !')
             } else {
               noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }

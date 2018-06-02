@@ -13,17 +13,17 @@
                 :placeholder="'Cliente'"
                 :search="true" :justified="true" style="width: 200PX;" >
             </dds>
-        </div>
+        </div> 
       </div>
       <div class="row text-line">
         <div class="col-md-3">
           <label><h4><span class="label label-default">Desde</span></h4></label>
           <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
-        </div>
+        </div> 
         <div class="col-md-3">
           <label><h4><span class="label label-default">Hasta</span></h4></label>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
-        </div>
+        </div> 
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
@@ -32,7 +32,7 @@
     </form>
    <div class="row" >
       <div class="col-md-12">
-        <div class="card">
+        <div class="card"> 
           <div class="row">
                   <div class="col-md-4 text-center">
                     <h5>Precio por unidad</h5>
@@ -46,7 +46,12 @@
                     <h5>Total</h5>
                     <h4 style="margin-top: 0px;" class="">$ {{this.total}}</h4>
                   </div>
-          </div>
+          </div>  
+          <div class="row">
+            <div class="col-md-12" style="margin-left: 20px;">
+              <p class="category" v-if="superaRangos">La cantidad de bidones de 20 L vendida en el periodo seleccionado supera los rangos del contrato. Se tomará el precio del mayor rango</p>
+            </div>
+          </div>      
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>
@@ -55,18 +60,22 @@
   </div>
 </template>
 <script>
-  import PaperTable from './PaperTablePlusContabilidad'
-  import { datepicker, select } from 'vue-strap'
+  import PaperTable from 'components/Dashboard/Views/Contabilidad/PaperTablePlusContabilidad.vue'
+  import { datepicker } from 'vue-strap'
+  import dds from 'vue-strap/src/Select.vue'
   import api from 'src/api/services/clientServices.js'
+  import apiContrato from 'src/api/services/contratosServices.js'
   import apiRemito from 'src/api/services/remitoServices.js'
   import noti from 'src/api/notificationsService'
+  // import apiDispensers from 'src/api/services/dispensersServices.js'
+  // import apiContratos from 'src/api/services/contratosServices.js'
 
   const table1Columns = ['Objetivo', 'Fecha', 'Cantidad', 'Firmado conforme']
   export default {
     components: {
       PaperTable,
       dp: datepicker,
-      dds: select
+      dds
     },
     data () {
       return {
@@ -84,7 +93,8 @@
         fechaDesde: '',
         fechaHasta: '',
         desde: null,
-        hasta: null
+        hasta: null,
+        superaRangos: false
       }
     },
     mounted () {
@@ -123,17 +133,31 @@
         }
       },
       calcularValores () {
-        api.getClienteConContrato(this, this.idClientes)
+        api.getClienteConContratos(this, this.idClientes)
           .then(res => {
             this.objetivos = res['objetivos']
-            this.contrato = res['contrato']
-            this.detalleContrato = res['detalle']
-            this.calcularCantidad()
-            .then(r => {
-              if (r) {
-                this.calcularVenta()
-              }
-            })
+            this.contratos = res['contratos']
+            if (this.contratos.length > 0) {
+              this.contratos.forEach(c => {
+                const hoy = new Date()
+                if (c.fechaVigenciaDesde < hoy.toISOString() && c.fechaVigenciaHasta > hoy.toISOString()) {
+                  apiContrato.getDetallesContrato(this, c.idContratos)
+                  .then(det => {
+                    this.detalleContrato = det
+                    this.calcularCantidad()
+                    .then(r => {
+                      if (r) {
+                        this.calcularVenta()
+                      }
+                    })
+                  })
+                } else {
+                  noti.errorConTexto(this, 'Error', 'No se encontró un contrato vigente para el cliente')
+                }
+              })
+            } else {
+              noti.errorConTexto(this, 'Error', 'No se encontró un contrato para el cliente')
+            }
           })
       },
       calcularCantidad () {
@@ -171,15 +195,24 @@
       },
       calcularVenta () {
         this.detalleContrato.forEach(det => {
+          let cantMax = 0
           if (det.cantidadMinima <= this.cantidad && this.cantidad <= det.cantidadMaxima) {
             this.precioPorUnidad = det.precioPorUnidad
             this.total = this.cantidad * this.precioPorUnidad
           }
+          if (det.cantidadMaxima > cantMax) {
+            this.precioPorUnidad = det.precioPorUnidad
+            cantMax = det.cantidadMaxima
+          }
         })
+        if (this.total === 0) {
+          this.total = this.cantidad * this.precioPorUnidad
+          this.superaRangos = true
+          // noti.errorConTexto(this, 'Error', 'La cantidad vendida de ' + this.cantidad + ' bidones está fuera de los rangos del contrato')
+        }
       }
     }
   }
-
 </script>
 <style>
 

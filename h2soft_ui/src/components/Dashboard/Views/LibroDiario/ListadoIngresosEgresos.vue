@@ -25,9 +25,10 @@
   import apiIE from 'src/api/services/ingresosEgresosServices'
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
+  import noti from 'src/api/notificationsService'
   import {modal} from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Monto', 'MediodePago', 'Descripcion']
+  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -67,9 +68,9 @@
           res.body.data.forEach(ingreEgre => {
             this.table1.data.push({
               id: ingreEgre.idGastos,
-              fecha: new Date(ingreEgre.fecha).toLocaleDateString(),
+              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
-              monto: ingreEgre.monto,
+              importe: ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
             })
@@ -110,12 +111,12 @@
         apiIE.deleteIngresoEgreso(this, id)
           .then(res => {
             if (res) {
-              alert('Ingreso/Egreso eliminado:' + id)
+              noti.exitoConTexto(this, 'Éxito', 'El Ingreso/Egreso se eliminó con éxito!')
             }
           })
           .catch(err => {
             console.log('errorrrrrr', err)
-            alert('Algo salio mal!')
+            noti.errorConTexto(this, 'Éxito', 'El Ingreso/Egreso no se pudo eliminar')
           })
       },
       editarIngresoEgreso (e) {

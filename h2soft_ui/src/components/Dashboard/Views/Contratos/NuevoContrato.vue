@@ -88,15 +88,15 @@
     methods: {
       guardarContrato () {
         if (this.detalles.length <= 0) {
-          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos un detalle')
           return
         }
         if (this.contrato.fechaFirma === '' || this.contrato.fechaVigenciaDesde === '' || this.contrato.fechaVigenciaHasta === '') {
-          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {
-          noti.errorConTexto(this, 'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
+          noti.infoConTexto(this, 'Alerta', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
         if (this.id === 0 && !this.edit) {
@@ -175,9 +175,9 @@
           api.getContratoFull(this, this.id).then(c => {
            // alert('llegue el full con: ' + JSON.stringify(c))
             this.contrato.idCliente = c.contrato.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString()
-            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString()
-            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString()
+            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             c.detalle.forEach(dc => {
               this.detalles.push({
                 // idDetallesContrato: dc.idDetallesContrato,
@@ -192,7 +192,7 @@
       },
       validarCampos () {
         if (this.detalles.length <= 0) {
-          noti.errorConTexto(this, 'Error', 'Debe agregar al menos un detalle')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos un detalle')
           return true
         }
         if (new Date(this.contrato.fechaVigenciaDesde) > new Date(this.contrato.fechaVigenciaHasta)) {

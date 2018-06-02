@@ -12,9 +12,14 @@
       </div>
       <div class="navbar-right-menu">
         <ul class="nav navbar-nav navbar-right">
-          <drop-down :title="cantNotificaciones" icon="ti-bell">
+          <li>
+            <a href="Fecha de hoy" class="btn-magnify" @click.prevent="">
+              {{new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}
+            </a>
+          </li>
+          <drop-down :title="cantNotificaciones" icon="ti-bell" :color="notiColor">
             <li v-for="n in notifications">
-              <top-notification :message="n.notificacion"></top-notification>
+              <top-notification :notification="n" @notiUpdate="notiUpdate"></top-notification>
             </li>
           </drop-down>
           <li>
@@ -47,8 +52,9 @@
     data () {
       return {
         activeNotifications: false,
-        cantNotificaciones: 'Sin Notificaciones',
-        notifications: []
+        cantNotificaciones: '0 Notificaciones',
+        notifications: [],
+        notiColor: null
       }
     },
     mounted () {
@@ -58,7 +64,8 @@
       cargarNotificaciones () {
         alertsApi.getAlertasPendientes(this)
           .then(a => {
-            this.cantNotificaciones = `${a.length} Notificaciones`
+            this.cantNotificaciones = a.length === 1 ? `1 Notificación` : `${a.length} Notificaciones`
+            this.notiColor = a.length ? '#EB5E28' : null
             this.notifications = a
           })
       },
@@ -80,8 +87,8 @@
       logout () {
         auth.logout(this)
       },
-      settings () {
-        alert('Implementar')
+      notiUpdate (e) {
+        this.cargarNotificaciones()
       }
     }
   }

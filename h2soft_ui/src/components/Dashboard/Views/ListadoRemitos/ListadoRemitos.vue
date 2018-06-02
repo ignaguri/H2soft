@@ -44,7 +44,7 @@
             resUs.body.data.forEach(rem => {
               this.table1.data.push({
                 nro: rem.idRemito,
-                fecha: new Date(rem.fecha).toLocaleDateString(),
+                fecha: new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 objetivo: this.cargarObjetivo(rem.idObjetivo),
                 empleado: this.cargarEmpleado(rem.idEmpleado)
               })

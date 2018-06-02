@@ -78,7 +78,7 @@
       return {
         table1: {
           title: 'Planificación',
-          subTitle: 'Lista de recorridos programados',
+          subTitle: 'Listado de recorridos',
           columns: [...table1Columns],
           data: []
         },
@@ -221,7 +221,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
-          noti.errorConTexto(this, 'Error', 'Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
         this.postAsignacion({
