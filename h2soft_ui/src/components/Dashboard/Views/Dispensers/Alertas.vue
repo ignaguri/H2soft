@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <alertas-list v-if="isAlertasList" @notiUpdate="notiUpdate"></alertas-list>
+      <alertas-list v-if="isAlertasList"></alertas-list>
       <alertas-new v-if="!isAlertasList" :edit="edit" :id="idAlerta"></alertas-new>
     </div>
     <div class="row">
@@ -44,9 +44,6 @@
         this.isAlertasList = true
         this.idAlerta = 0
         this.edit = false
-      },
-      notiUpdate (e) {
-        console.log('como mierda actualizo la barra de arriba', e)
       }
     }
   }
