@@ -122,7 +122,6 @@
         }
       },
       calcularValores () {
-        this.table1.data = []
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
           .then(ventasXProducto => {
             if (ventasXProducto && ventasXProducto.length) {
