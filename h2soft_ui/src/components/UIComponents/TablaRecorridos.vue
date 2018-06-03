@@ -6,6 +6,13 @@
         <p class="category">{{subTitle}}</p>
       </slot>
     </div>
+    <div class="text-right">
+        <span>Referencias:</span>
+        <span class="badge badge-pill badge-danger">No iniciado</span>
+        <span class="badge badge-pill badge-success">En proceso</span>
+        <span class="badge badge-pill badge-info">Suspendido</span>
+        <span class="badge badge-pill badge-no-color">Finalizado</span>
+    </div>
     <div class="content table-responsive table-full-width">
       <table class="table" :class="tableClass">
         <thead>
@@ -64,4 +71,26 @@
   }
 </script>
 <style>
+  span.badge.badge-pill.badge-success {
+    background-color: #8EF3C5;
+    color: #000;
+  }
+  span.badge.badge-pill.badge-info {
+    background-color: #7CE4FE;
+    color: #000;
+  }
+  span.badge.badge-pill.badge-danger {
+    background-color: #FF8F5E;
+    color: #000;
+  }
+  span.badge.badge-pill.badge-warning {
+    background-color: #FFE28C;
+    color: #000;
+  }
+  span.badge.badge-pill.badge-no-color {
+    background-color: white;
+    border-style: solid;
+    border-width: thin;
+    color: #000;
+  }
 </style>

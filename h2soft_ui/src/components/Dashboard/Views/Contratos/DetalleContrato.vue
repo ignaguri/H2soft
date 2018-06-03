@@ -2,7 +2,7 @@
   <div>
     <div class="col-md-12">
       <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :erase="borrar">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :erase="borrar_confirm">
         </paper-table>
       </div>
     </div>
@@ -13,7 +13,7 @@
         </button>
       </div>
     </div>
-    <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar cláusula">
+    <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar cláusula">
       <div class="row">
         <div class="col-md-6">
           <label for="productos"><h4><span class="label label-default">Producto:</span></h4></label>
@@ -41,7 +41,6 @@
                     type="number"
                     placeholder="Cantidad Minima"
                     v-model="detalleContrato.cantidadMinima"
-                    pattern="[0-9]+"
                     min="1">
           </fg-input>
         </div>
@@ -51,7 +50,7 @@
                     type="number"
                     placeholder="Cantidad Maxima"
                     v-model="detalleContrato.cantidadMaxima"
-                    pattern="[0-9]+">
+                    :min="detalleContrato.cantidadMinima">
           </fg-input>
         </div>
       </div>
@@ -60,12 +59,24 @@
         <button type="button" class="btn btn-success" @click="showCustomModal = ok()">Guardar</button>
       </div>
     </modal>
+    <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModalBorrar" @ok="showCustomModal = borrar()" title="Confirmación">
+      <div class="row">
+        <div class="col-md-12">
+          <div>¿Desea borrar la cláusula del contrato?</div>
+        </div>
+      </div>
+      <div slot="modal-footer" class="modal-footer">
+        <button type="button" class="btn btn-default" @click="showCustomModalBorrar = false">Cancelar</button>
+        <button type="button" class="btn btn-success" @click="borrar()">Aceptar</button>
+      </div>
+    </modal>
     </div>
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Producto', 'Cantidad desde', 'Cantidad hasta', 'Precio']
 
@@ -77,20 +88,23 @@
     data () {
       return {
         showCustomModal: false,
+        showCustomModalBorrar: false,
         detalleContrato: {
           // idDetallesContrato: '',
           idProducto: '',
-          cantidadMaxima: '',
-          cantidadMinima: '',
-          precioPorUnidad: ''
+          cantidadMaxima: 0,
+          cantidadMinima: 0,
+          precioPorUnidad: 0
         },
         productoss: {},
         table1: {
-          title: 'Detalle de Contrato',
-          subTitle: 'Lista de clausulas por contrato',
+          title: 'Detalle de contrato',
+          subTitle: 'Lista de cláusulas por contrato',
           columns: [...tableColumns],
           data: []
-        }
+        },
+        toDeleteProducto: 0,
+        toDeleteCantidad: ''
       }
     },
     props: {
@@ -134,21 +148,32 @@
             this.productoss = res
           })
       },
-      borrar (e) {
+      borrar () {
         // let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        // let DeleteProducto = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        // let toDeleteProducto = this.buscarIdProducto(DeleteProducto)
+        // let toDeleteCantidad = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
+        // alert('prod: ' + toDeleteProducto + ', cant: ' + toDeleteCantidad)
+        this.$emit('delete_detalle', this.toDeleteProducto, this.toDeleteCantidad)
+        this.showCustomModalBorrar = false
+      },
+      borrar_confirm (e) {
+        console.log(e)
         let DeleteProducto = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         let toDeleteProducto = this.buscarIdProducto(DeleteProducto)
         let toDeleteCantidad = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
-        // alert('prod: ' + toDeleteProducto + ', cant: ' + toDeleteCantidad)
-        this.$emit('delete_detalle', toDeleteProducto, toDeleteCantidad)
+        this.toDeleteCantidad = toDeleteCantidad
+        this.toDeleteProducto = toDeleteProducto
+        this.showCustomModalBorrar = true
       },
       ok () {
         if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '' || this.detalleContrato.cantidadMinima === '') {
-          alert('Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
-        if (this.detalleContrato.cantidadMinima > this.detalleContrato.cantidadMaxima) {
-          alert('La cantidad mínima no puede ser mayor a la cantidad máxima')
+        if (Number(this.detalleContrato.cantidadMinima) > Number(this.detalleContrato.cantidadMaxima)) {
+          console.log(this.detalleContrato.cantidadMinima + ' ' + this.detalleContrato.cantidadMaxima)
+          noti.errorConTexto(this, 'Error', 'La cantidad mínima no puede ser mayor a la cantidad máxima')
           return true
         }
         /*
@@ -164,7 +189,8 @@
           cantidadMaxima: this.detalleContrato.cantidadMaxima,
           precioPorUnidad: this.detalleContrato.precioPorUnidad
         })
-        alert('Se agregó un nuevo detalle')
+        noti.exitoConTexto(this, 'Éxito', 'Se agregó un nuevo detalle!')
+        this.limpiarCampos()
         return false
       },
       cargarProducto (idProd) {
@@ -182,6 +208,12 @@
             return this.productoss[p].idProductos
           }
         }
+      },
+      limpiarCampos () {
+        this.detalleContrato.idProducto = ''
+        this.detalleContrato.cantidadMaxima = 0
+        this.detalleContrato.cantidadMinima = 0
+        this.detalleContrato.precioPorUnidad = 0
       }
     }
   }

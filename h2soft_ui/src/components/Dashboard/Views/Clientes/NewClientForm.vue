@@ -28,13 +28,16 @@
           <div class="row">
             <div class="col-md-5">
               <div class="form-group">
-                <label for="tipoCliente"><h4><span class="label label-default">Tipo de cliente*</span></h4></label>
-                <select id="tipoCliente" v-model="cliente.idTipo" required>
-                  <option :value="null">Seleccione un tipo</option>
-                  <option v-for="tipo in tiposCliente" v-bind:value="tipo.idTiposCliente">
-                    {{ tipo.nombre }}
-                  </option>
-                </select>
+                <label for="tipoCliente">
+                  <h4><span class="label label-default">Tipo de cliente*</span></h4>
+                </label>
+                <dds id="tipoCliente" v-model="cliente.idTipo"
+                     :options="tiposCliente"
+                     options-value="idTiposCliente" search-text="Buscar"
+                     :placeholder="'Nada seleccionado'"
+                     options-label="nombre"
+                     :search="true" :justified="true">
+                </dds>
               </div>
             </div>
             <div class="col-md-6">
@@ -113,11 +116,14 @@
   import api from 'src/api/services/clientServices'
   import ObjetivosList from './ObjetivosList.vue'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
+  import { select } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   export default {
     components: {
       ObjetivosList,
-      vga: VueGoogleAutocomplete
+      vga: VueGoogleAutocomplete,
+      dds: select
     },
     props: {
       edit: Boolean,
@@ -150,27 +156,23 @@
     methods: {
       saveClient () {
         if (this.objetivos.length <= 0) {
-          alert('Debe agregar al menos 1 objetivo')
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos 1 objetivo')
           return
         }
         if (!this.edit) {
           api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              console.log('devolvió true en newclientlist')
-              alert('Cliente guardado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito!')
             } else {
-              console.log('saveclient devolvio false')
-              alert('Error al guardar el cliente. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al eliminar un cliente')
             }
           })
         } else {
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              console.log('devolvió true en edit')
-              alert('Cliente editado con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito!')
             } else {
-              console.log('editar devolvio false')
-              alert('Error al editar el cliente. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }
           })
         }
@@ -185,7 +187,6 @@
       cargarCliente () {
         if (this.idCliente !== -1 && this.edit) {
           api.getClienteFull(this, this.idCliente).then(r => {
-            console.log('me ha iegado', r)
             this.cliente.razonSocial = r.cliente.razonSocial
             this.cliente.CUIL = r.cliente.CUIL
             this.$refs.address.update(r.cliente.direccion)

@@ -12,29 +12,18 @@
       </div>
       <div class="navbar-right-menu">
         <ul class="nav navbar-nav navbar-right">
-<!--          <li class="open">
-            <a href="#" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>-->
-             <drop-down title="5 Notificaciones" icon="ti-bell">
-               <li><a href="#">Notification 1</a></li>
-               <li><a href="#">Notification 2</a></li>
-               <li><a href="#">Notification 3</a></li>
-               <li><a href="#">Notification 4</a></li>
-               <li><a href="#">Another notification</a></li>
-             </drop-down>
           <li>
-            <a href="" class="btn-rotate">
-              <i class="ti-settings"></i>
-              <p>
-                Ajustes
-              </p>
+            <a href="Fecha de hoy" class="btn-magnify" @click.prevent="">
+              {{new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}
             </a>
           </li>
+          <drop-down :title="cantNotificaciones" icon="ti-bell" :color="notiColor">
+            <li v-for="n in notifications">
+              <top-notification :notification="n" @notiUpdate="notiUpdate"></top-notification>
+            </li>
+          </drop-down>
           <li>
-            <a href="" @click="logout" class="btn-rotate">
+            <a href="#" @click.prevent="logout" class="btn-rotate">
               <i class="ti-control-eject"></i>
               <p>
                 Salir
@@ -48,7 +37,12 @@
 </template>
 <script>
   import auth from 'src/api/auth'
+  import alertsApi from 'src/api/services/alertasServices'
+  import topNotification from 'src/components/UIComponents/TopNavbarNotification'
   export default {
+    components: {
+      topNotification
+    },
     computed: {
       routeName () {
         const {name} = this.$route
@@ -57,10 +51,24 @@
     },
     data () {
       return {
-        activeNotifications: false
+        activeNotifications: false,
+        cantNotificaciones: '0 Notificaciones',
+        notifications: [],
+        notiColor: null
       }
     },
+    mounted () {
+      this.cargarNotificaciones()
+    },
     methods: {
+      cargarNotificaciones () {
+        alertsApi.getAlertasPendientes(this)
+          .then(a => {
+            this.cantNotificaciones = a.length === 1 ? `1 Notificación` : `${a.length} Notificaciones`
+            this.notiColor = a.length ? '#EB5E28' : null
+            this.notifications = a
+          })
+      },
       capitalizeFirstLetter (string) {
         return string.charAt(0).toUpperCase() + string.slice(1)
       },
@@ -77,7 +85,10 @@
         this.$sidebar.displaySidebar(false)
       },
       logout () {
-        auth.logout()
+        auth.logout(this)
+      },
+      notiUpdate (e) {
+        this.cargarNotificaciones()
       }
     }
   }

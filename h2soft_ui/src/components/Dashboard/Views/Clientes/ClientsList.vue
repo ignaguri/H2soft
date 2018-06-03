@@ -40,12 +40,12 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/clientServices'
   import { modal } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nro', 'Nombre', 'CUIL', 'Domicilio']
   //  let tableData = []
   // TODO: agregar cantidad de objetivos a la tabla
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
-  // TODO: ver como hacer para que despues del login recien se ejecute el getLocalidades
   export default {
     components: {
       PaperTable,
@@ -96,28 +96,24 @@
       },
       editar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        // console.log('editar id: ' + id)
         this.$emit('emitted', {action: 'edit', client: id})
-        // this.$parent.isClientList = false
-        // this.$router.push('clientes/edit/' + id)
       },
       borrar (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         if (!confirm('Desea eliminar a este cliente, sus contactos y todos sus objetivos?')) return
         api.deleteClientes(this, id).then(res => {
           if (res) {
-            alert('Borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'El cliente se ha eliminado!')
             this.table1.data = []
             this.cargarClientes()
           } else {
-            alert('error al borrar')
+            noti.errorConTexto(this, 'Error', 'Error al eliminar cliente')
           }
         })
       },
       ver (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         api.getClienteFull(this, id).then(r => {
-          console.log('me ha iegado', r)
           this.modalData.nombre = r.cliente.razonSocial
           this.modalData.CUIL = r.cliente.CUIL !== undefined ? r.cliente.CUIL : ''
           this.modalData.direccion = r.cliente.direccion !== undefined ? r.cliente.direccion : ''

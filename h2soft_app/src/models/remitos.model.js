@@ -15,7 +15,7 @@ module.exports = function (app) {
       type: Sequelize.INTEGER(11),
       allowNull: true,
       references: {
-        model: 'objetivosxcliente',
+        model: 'objetivos-x-cliente',
         key: 'idObjetivosXCliente'
       }
     },
@@ -37,7 +37,8 @@ module.exports = function (app) {
     },
     firma: {
       type: Sequelize.TEXT('medium'),
-      allowNull: true
+	  // type: Sequelize.STRING(30700),
+	  allowNull: true
     }
   }, {
     hooks: {

@@ -8,7 +8,7 @@
       <div class="col-md-12">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="addUser" v-show="isUserList">
-            Agregar Usuario
+            Agregar usuario
           </button>
           <button type="button" class="btn btn-fill btn-wd" @click="seeList" v-show="!isUserList">
             Volver

@@ -31,6 +31,21 @@ const router = new VueRouter({
   routes, // short for routes: routes
   linkActiveClass: 'active'
 })
+// Some middleware to help us ensure the user is authenticated.
+router.beforeEach((to, from, next) => {
+  const userLoggedIn = JSON.parse(window.sessionStorage.getItem('user'))
+  // window.console.log('Ir de', from.path, 'a', to.path, 'y user', userLoggedIn)
+  if (to.matched.some(record => record.meta.requiresAuth) && !userLoggedIn) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    window.console.error('Not authenticated')
+    next({
+      path: '/login'
+    })
+  } else {
+    next()
+  }
+})
 // Vue.http.headers.common['Authorization'] = auth.getAuthHeader()
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {

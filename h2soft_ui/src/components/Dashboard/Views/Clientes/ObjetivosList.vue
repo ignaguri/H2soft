@@ -10,7 +10,7 @@
     <div class="col-md-4 col-md-offset-8">
       <div class="text-center">
         <button type="button" class="btn btn-info btn-fill btn-wd" @click="btn_agregar">
-          Agregar Objetivo
+          Agregar objetivo
         </button>
       </div>
     </div>
@@ -45,6 +45,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import { modal } from 'vue-strap'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
+  import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nombre', 'Dirección', 'Localidad']
   export default {
@@ -109,7 +110,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.nombre === '' || this.dirección === '') {
-          alert('Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
         this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.dirección, localidad: this.localidad})

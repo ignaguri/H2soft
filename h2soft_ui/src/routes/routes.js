@@ -1,91 +1,89 @@
-import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout.vue'
+import DashboardLayout from '../components/Dashboard/Layout/DashboardLayout'
 // GeneralViews
-import NotFound from '../components/GeneralViews/NotFoundPage.vue'
-import Landing from '../components/GeneralViews/Landing.vue'
+import NotFound from '../components/GeneralViews/NotFoundPage'
+import Landing from '../components/GeneralViews/Landing'
 
 // Admin pages
-// import Overview from 'src/components/Dashboard/Views/Overview.vue'
-// import UserProfile from 'src/components/Dashboard/Views/UserProfile.vue'
-// import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
-// import Icons from 'src/components/Dashboard/Views/Icons.vue'
-// import Maps from 'src/components/Dashboard/Views/Maps.vue'
-// import Typography from 'src/components/Dashboard/Views/Typography.vue'
-// import TableList from 'src/components/Dashboard/Views/TableList.vue'
-import Usuarios from 'src/components/Dashboard/Views/Usuarios.vue'
-// import EditarUsuarioForm from 'src/components/Dashboard/Views/Usuarios/NewUserForm.vue'
-import Clientes from 'src/components/Dashboard/Views/Clientes.vue'
-import WorkInProgress from 'src/components/GeneralViews/WorkInProgress.vue'
-import Contratos from 'src/components/Dashboard/Views/Contratos.vue'
-import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados.vue'
-// import NewClientForm from 'src/components/Dashboard/Views/Clientes/NewClientForm.vue'
-import Planificacion from 'src/components/Dashboard/Views/Planificacion.vue'
-import Reporte from 'src/components/Dashboard/Views/Reportes.vue'
+import Usuarios from 'src/components/Dashboard/Views/Usuarios'
+import Clientes from 'src/components/Dashboard/Views/Clientes'
+import WorkInProgress from 'src/components/GeneralViews/WorkInProgress'
+import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados'
+import Planificacion from 'src/components/Dashboard/Views/Planificacion'
+import Reporte from 'src/components/Dashboard/Views/Reportes'
+import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos'
+import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers'
+import Contabilidad from 'src/components/Dashboard/Views/Contabilidad'
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     component: Landing
   },
   {
-    path: '/admin',
-    name: 'admin',
+    path: '/',
+    name: 'app',
     component: DashboardLayout,
-    redirect: '/admin/planificacion',
+    redirect: 'planificacion',
     children: [
       {
         path: 'overview',
         name: 'overview',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
         path: 'reportes',
         name: 'Reportes',
-        component: Reporte
+        component: Reporte,
+        meta: {requiresAuth: true}
       },
       {
         path: 'notifications',
         name: 'Work-in-Progress',
-        component: WorkInProgress
+        component: WorkInProgress,
+        meta: {requiresAuth: true}
       },
       {
-        path: 'icons',
-        name: 'Ingresos y Gastos',
-        component: WorkInProgress
+        path: 'ingresosEgresos',
+        name: 'Ingresos y Egresos',
+        component: IngresosEgresos,
+        meta: {requiresAuth: true}
       },
       {
         path: 'recorridos',
         name: 'Recorridos',
-        component: RecorridosAsignados
+        component: RecorridosAsignados,
+        meta: {requiresAuth: true}
       },
       {
         path: 'planificacion',
         name: 'Planificación',
-        component: Planificacion
+        component: Planificacion,
+        meta: {requiresAuth: true}
       },
       {
-        path: 'typography',
-        name: 'Facturación',
-        component: WorkInProgress
+        path: 'contabilidad',
+        name: 'Contabilidad',
+        component: Contabilidad,
+        meta: {requiresAuth: true}
       },
       {
-        path: 'table-list',
+        path: 'bidonesdispensers',
         name: 'Bidones y Dispensers',
-        component: WorkInProgress
-      },
-      {
-        path: 'contratos',
-        name: 'contratos',
-        component: Contratos
+        component: BidonesDispensers,
+        meta: {requiresAuth: true}
       },
       {
         path: 'clientes',
         name: 'clientes',
-        component: Clientes
+        component: Clientes,
+        meta: {requiresAuth: true}
       },
       {
         path: 'usuarios',
         name: 'Gestion de usuarios',
-        component: Usuarios
+        component: Usuarios,
+        meta: {requiresAuth: true}
       }
     ]
   },

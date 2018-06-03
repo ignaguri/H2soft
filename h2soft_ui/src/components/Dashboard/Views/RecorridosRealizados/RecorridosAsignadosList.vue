@@ -29,13 +29,14 @@
       return {
         table1: {
           title: 'Recorridos a realizar',
-          subTitle: 'Listado de recorridos que te fueron asignados',
+          subTitle: 'Listado de los recorridos de la última semana que te fueron asignados',
           columns: [...tableColumns],
           data: [...dataColumns]
         }
       }
     },
     mounted () {
+      // Promise.a
       apiDias.getDias(this).then(res => {
         this.dias = res
         apiTurnos.getTurnos(this).then(res => {
@@ -64,26 +65,22 @@
           this.table1.subTitle = 'Empleado no asignado al usuario logueado. No se podrán mostrar recorridos'
           return
         }
-        api.getRecorridosAsignadosXEmpleado(this, idEmpleado)
+        api.getRecorridosAsignadosUltimaSemanaXEmpleado(this, idEmpleado)
           .then(resRxE => {
-            resRxE.body.data.forEach(RxE => {
-              // console.log(RxE)
-              var d = new Date(RxE.fechaAsignacion)
-              if (d.toLocaleDateString() === new Date().toLocaleDateString()) {
-                this.table1.data.push({
-                  nro: RxE.idRecorridosHistoricos,
-                  día: this.getDia(RxE.idDia),
-                  turno: this.getTurno(RxE.idTurno),
-                  fecha: d.toLocaleDateString(), // d.getDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear(),
-                  temp: this.getTemporada(RxE.idTemporada),
-                  estado: RxE.idEstado
-                })
-              }
-              if (this.table1.data[0] === undefined) {
-                this.table1.subTitle = 'No hay recorridos asignados para el día de hoy'
-                // alert('No hay recorridos asignados para el día de hoy')
-              }
+            resRxE.forEach(RxE => {
+              let d = new Date(RxE.fechaAsignacion)
+              this.table1.data.push({
+                nro: RxE.idRecorridosHistoricos,
+                día: this.getDia(RxE.idDia),
+                turno: this.getTurno(RxE.idTurno),
+                fecha: d.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+                temp: this.getTemporada(RxE.idTemporada),
+                estado: RxE.idEstado
+              })
             })
+            if (this.table1.data.length === 0) {
+              this.table1.subTitle = 'No hay recorridos asignados para el día de hoy'
+            }
           }, error => {
             console.log('error al cargar los recorridos asignados ' + error)
           })
@@ -99,10 +96,11 @@
             this.$parent.dia = this.getDia(res.idDia)
             this.$parent.turno = this.getTurno(res.idTurno)
             var d = new Date(res.fechaAsignacion)
-            this.$parent.fecha = d.toLocaleDateString() // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
+            this.$parent.fecha = d.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }) // d.getUTCDate() + '/' + d.getUTCMonth() + '/' + d.getFullYear()
             this.$parent.temporada = this.getTemporada(res.idTemporada)
             this.$parent.estado = this.getEstado(res.idEstado)
             this.$parent.idEstado = res.idEstado
+            this.$parent.camionid = res.idCamionAsignado
           })
       },
       getDia (idDia) {

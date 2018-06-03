@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="row">
     <div class="col-md-12">
       <div class="card" v-if="verCompleto() == true">
@@ -7,7 +7,7 @@
         </paper-table>
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="planificar">
-            Planificar Recorrido
+            Planificar recorrido
           </button>
         </div>
         <br>
@@ -30,13 +30,15 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="Empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
-              <select id="Empleado" v-model="idEmpleadoAsignado">
-                <option value="null">Seleccione un repartidor</option>
-                <option v-for="emp in empleados" v-bind:value="emp.idEmpleados">
-                  {{ emp.nombre + ' ' + emp.apellido }}
-                </option>
-              </select>
+              <label for="empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
+              <dds id="empleado" v-model="idEmpleadoAsignado"
+                   :options="empleados"
+                   options-value="idEmpleados"
+                   options-label="data"
+                   search-text="Buscar"
+                   :placeholder="'Seleccione un repartidor'"
+                   :search="true" :justified="true" required>
+              </dds>
             </div>
           </div>
           <div class="col-md-12">
@@ -61,20 +63,22 @@
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
-  import { modal } from 'vue-strap'
+  import noti from 'src/api/notificationsService'
+  import { modal, select } from 'vue-strap'
 
   const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
       PaperTable,
-      modal
+      modal,
+      dds: select
     },
     data () {
       return {
         table1: {
           title: 'Planificación',
-          subTitle: 'Lista de recorridos programados',
+          subTitle: 'Listado de recorridos',
           columns: [...table1Columns],
           data: []
         },
@@ -86,7 +90,7 @@
         recorrido: this.idRecorrido,
         showCustomModal: false,
         idEmpleadoAsignado: null,
-        empleados: {},
+        empleados: [],
         asignado: false,
         diasAsignacion: 30
       }
@@ -125,7 +129,14 @@
       cargarEmpleados () {
         api.getEmpleados(this)
           .then(e => {
-            this.empleados = e
+            if (e) {
+              e.forEach(em => {
+                em.data = `${em.nombre} ${em.apellido}`
+              })
+              this.empleados = e
+            } else {
+              this.empleados = []
+            }
           })
       },
       verEspecifico () {
@@ -165,10 +176,10 @@
         if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
         api.deleteRecorrido(this, id).then(res => {
           if (res) {
-            alert('Borrado con éxito')
+            noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
             this.cargarRecorridos()
           } else {
-            alert('error al borrar')
+            noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
           }
         })
       },
@@ -177,10 +188,10 @@
         api.deleteObjetivoFromRecorrido(this, id, this.recorrido)
           .then(r => {
             if (r) {
-              alert('Se borró con éxito el objetivo del recorrido')
+              noti.exitoConTexto(this, 'Éxito', 'El objetivo del recorrido se ha eliminado!')
               this.verEspecifico()
             } else {
-              alert('Hubo un error. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al borrar objetivo')
             }
           })
       },
@@ -190,6 +201,7 @@
         this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
+        // change to return(this.recorrido === 0)
         if (this.recorrido === 0) {
           return true
         } else {
@@ -209,7 +221,7 @@
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
-          alert('Debe completar todos los campos')
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
         this.postAsignacion({
@@ -223,9 +235,11 @@
         api.postAsignacion(this, asignacion)
           .then(r => {
             if (r) {
-              alert('Recorrido asignado!')
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+              this.seeList()
             } else {
-              alert('Error asignando recorrido. check consola')
+              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
+              this.seeList()
             }
           })
       },

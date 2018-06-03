@@ -1,19 +1,21 @@
 import auth from 'src/api/auth'
-// const API_URL = process.env.API_URL
-const authHeader = { headers: auth.getAuthHeader() }
+const API_URL = process.env.API_URL
 
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR
 export default {
   getLocalidades (context) {
-    return context.$http.get('http://localhost:3030/localidades', authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'localidades', authHeader)
       .then(res => { return res.body.data })
   },
   getContratos (context) {
-    return context.$http.get('http://localhost:3030/contratos', authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'contratos', authHeader)
   },
   postContratos (context, contrato, detalle) {
+    const authHeader = { headers: auth.getAuthHeader() }
     // console.log('llegue al post contratos con:' + JSON.stringify(contrato) + '\n' + JSON.stringify(detalle))
-    return context.$http.post('http://localhost:3030/contratos', contrato, authHeader)
+    return context.$http.post(API_URL + 'contratos', contrato, authHeader)
       .then(contratoInsertado => {
         // alert('inserte el cliente')
         detalle.forEach(det => {
@@ -21,7 +23,7 @@ export default {
         })
         let promesas = []
         detalle.forEach(detalle => {
-          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato', detalle, authHeader))
+          promesas.push(context.$http.post(API_URL + 'detalles-contrato', detalle, authHeader))
         })
         return Promise.all(promesas)
         // alert('llegue al detalle con:' + JSON.stringify(promesas))
@@ -36,44 +38,56 @@ export default {
       })
   },
   getClientesContratos (context) {
-    return context.$http.get('http://localhost:3030/clientes', authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'clientes', authHeader)
       .then(res => { return res.body.data })
   },
   getProductosContratos (context) {
-    return context.$http.get('http://localhost:3030/productos', authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'productos', authHeader)
       .then(res => { return res.body.data })
   },
   editarContrato (context, contrato) {
-    return context.$http.patch('http://localhost:3030/contratos/' + contrato.id, contrato, authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.patch(API_URL + 'contratos/' + contrato.id, contrato, authHeader)
   },
   getContrato (context, idContrato) {
-    return context.$http.get('http://localhost:3030/contratos/?idContratos=' + idContrato, authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'contratos/?idContratos=' + idContrato, authHeader)
   },
   getDetalleContrato (context, idContrato) {
-    return context.$http.get('http://localhost:3030/detalles-contrato/' + idContrato, authHeader)
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalles-contrato/' + idContrato, authHeader)
       .then(res => { return res.body })
   },
+  getDetallesContrato (context, idContrato) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + idContrato, authHeader)
+      .then(res => { return res.body.data })
+  },
   getContratoFull (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     let info = {}
-    return context.$http.get('http://localhost:3030/contratos/' + id, authHeader)
+    return context.$http.get(API_URL + 'contratos/' + id, authHeader)
       .then(con => {
         info['contrato'] = con.body
-        return context.$http.get('http://localhost:3030/detalles-contrato/?idContrato=' + id, authHeader)
+        return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + id, authHeader)
       })
       .then(det => {
         info['detalle'] = det.body.data
         return info
       })
-      .catch(error => {
-        alert('Algo fallo en el getContratoFull' + error)
-        return false
-      })
+    .catch(error => {
+      alert('Algo fallo en el getContratoFull' + error)
+      return false
+    })
   },
   editarContratoFull3 (context, contrato, detalle, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
     console.log('llegue a patch con: \n' + JSON.stringify(contrato) + '\n' + JSON.stringify(detalle))
-    return context.$http.delete('http://localhost:3030/detalles-contrato/?idContrato=' + contrato.id, authHeader)
+    return context.$http.delete(API_URL + 'detalles-contrato/?idContrato=' + contrato.id, authHeader)
       .then(contElim => {
-        return context.$http.patch('http://localhost:3030/contratos/' + contrato.id, contrato, authHeader)
+        return context.$http.patch(API_URL + 'contratos/' + contrato.id, contrato, authHeader)
       })
       .then(contratoModificado => {
         detalle.forEach(det => {
@@ -83,7 +97,7 @@ export default {
         let promesas = []
         console.log('El detalle es: ' + detalle + ' *** ' + JSON.stringify(detalle))
         detalle.forEach(det => {
-          promesas.push(context.$http.post('http://localhost:3030/detalles-contrato/', det, authHeader))
+          promesas.push(context.$http.post(API_URL + 'detalles-contrato/', det, authHeader))
         })
         return Promise.all(promesas)
       })
@@ -94,6 +108,24 @@ export default {
       .catch(error => {
         alert('error: ' + JSON.stringify(error) + '\n' + error)
         console.log('error: ' + JSON.stringify(error) + '\n' + error)
+        return false
+      })
+  },
+  getContratoXCliente (context, idCliente) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    let info = {}
+    return context.$http.get(API_URL + 'contratos/?idCliente=' + idCliente, authHeader)
+      .then(con => {
+        info['contrato'] = con.body.data[con.body.data.length - 1] // me quedo con el ultimo contrato cargado
+        const id = con.body.data[0].idContratos
+        return context.$http.get(API_URL + 'detalles-contrato/?idContrato=' + id, authHeader)
+      })
+      .then(det => {
+        info['detalle'] = det.body.data
+        return info
+      })
+      .catch(error => {
+        alert('Algo fallo en el getContratoFull' + error)
         return false
       })
   }

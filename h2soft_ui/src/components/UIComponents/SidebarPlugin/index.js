@@ -6,47 +6,42 @@ const SidebarStore = {
     {
       name: 'Recorridos',
       icon: 'ti-direction-alt',
-      path: '/admin/recorridos'
+      path: '/recorridos'
     },
     {
       name: 'Planificacion',
       icon: 'ti-map-alt',
-      path: '/admin/planificacion'
+      path: '/planificacion'
     },
     {
       name: 'Reportes',
       icon: 'ti-bar-chart',
-      path: '/admin/reportes'
+      path: '/reportes'
     },
     {
       name: 'Bidones y Dispensers',
       icon: 'ti-paint-bucket',
-      path: '/admin/table-list'
+      path: '/bidonesdispensers'
     },
     {
-      name: 'Ingresos y Gastos',
+      name: 'Ingresos y Egresos',
       icon: 'ti-shopping-cart',
-      path: '/admin/typography'
+      path: '/ingresosEgresos'
     },
     {
-      name: 'Facturación',
+      name: 'Contabilidad',
       icon: 'ti-money',
-      path: '/admin/icons'
+      path: '/contabilidad'
     },
     {
       name: 'Clientes',
       icon: 'ti-view-list-alt',
-      path: '/admin/clientes'
-    },
-    {
-      name: 'Contratos',
-      icon: 'ti-pencil-alt',
-      path: '/admin/contratos'
+      path: '/clientes'
     },
     {
       name: 'Usuarios',
       icon: 'ti-user',
-      path: '/admin/usuarios'
+      path: '/usuarios'
     }
   ],
   displaySidebar (value) {
