@@ -127,10 +127,14 @@ export default {
       })
       .then(temp => {
         res.temporada = temp.body.nombre
+        return this.checkIfAsignado(context, info.recorrido)
+      })
+      .then(asignado => {
+        res.asignado = asignado
         return res
       })
       .catch(error => {
-        console.log('error en el getRecorridosFull', error)
+        console.log('error en el populateCamposRecorrido', error)
         return false
       })
   },
@@ -288,7 +292,10 @@ export default {
     const hoy = new Date()
     const enUnMes = new Date(hoy)
     enUnMes.setDate(hoy.getDate() + 30)
-    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + enUnMes.toISOString(), authHeader)
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id +
+          '&fechaAsignacion[$gte]=' + hoy.toISOString() +
+          '&fechaAsignacion[$lt]=' + enUnMes.toISOString(),
+          authHeader)
       .then(r => {
         return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
       })
