@@ -76,6 +76,11 @@
           </div>
         </chart-card>
       </div>
+      <div class="row">
+        <div class="col-md-12">
+          <estadoDeCaja> </estadoDeCaja>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -87,12 +92,14 @@
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
+  import estadoDeCaja from 'components/Dashboard/Views/Reportes/EstadoDeCaja.vue'
 //  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
       ChartCard,
-      repartos
+      repartos,
+      estadoDeCaja
     },
     /**
      * Chart data used to render stats, charts. Should be replaced with server data
@@ -151,7 +158,7 @@
           data: {
             labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
             series: [
-              [825, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
+              [825, 830, 815, 750, 680, 110, 1450, 455, 400, 480, 610, 756]
             ]
           },
           options: {
