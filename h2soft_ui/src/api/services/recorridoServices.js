@@ -81,13 +81,14 @@ export default {
     return context.$http.get(API_URL + 'recorridos/' + id, authHeader)
       .then(r => { return r.body })
   },
-  getRecorridosFull (context) {
+  getRecorridosFull (context, soloActivos = true) {
     const authHeader = { headers: auth.getAuthHeader() }
     // TODO: guardar dia, freq, turno y temp en una variable y comparar con eso
     let info = {}
     let total = []
     let promesas = []
-    return context.$http.get(API_URL + 'recorridos', authHeader)
+    const activos = soloActivos ? '/?activo=1' : ''
+    return context.$http.get(API_URL + 'recorridos' + activos, authHeader)
       .then(r => {
         r.body.data.forEach(re => {
           info = {}
@@ -240,17 +241,35 @@ export default {
   },
   deleteRecorrido (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.delete(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + id, authHeader)
-      .then(noDetails => {
-        console.log('se borraron los detalles', noDetails)
-        return context.$http.delete(API_URL + 'recorridos/' + id, authHeader)
+    return context.$http.delete(API_URL + 'detalle-recorrido' + '?idRecorrido=' + id, authHeader)
+      .then(() => {
+        return context.$http.get(API_URL + 'recorrido-historico' + '?idRecorrido=' + id +
+          '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+      })
+      .then(recorridosHistoricos => {
+        recorridosHistoricos = recorridosHistoricos.body.data
+        let promesas = []
+        recorridosHistoricos.forEach(r =>
+          promesas.push(
+            context.$http.delete(API_URL + 'detalle-recorrido-historico' + '?idRecorridoHistorico=' + r.idRecorridosHistoricos, authHeader)
+              .then(() => {
+                return context.$http.delete(API_URL + 'recorrido-historico/' + r.idRecorridosHistoricos, authHeader)
+              })
+              .then(recorridoHistoricoBorrado => {
+                return recorridoHistoricoBorrado.body
+              })
+          )
+        )
+        return Promise.all(promesas)
+      })
+      .then(historicosBorrados => {
+        return context.$http.patch(API_URL + 'recorridos/' + id, { activo: 0 }, authHeader)
       })
       .then(r => {
-        console.log('borrado el recorrido', r)
         return true
       })
       .catch(error => {
-        console.log('error al borrar el recorrido', error)
+        console.error('Error al borrar el recorrido', error)
         return false
       })
   },
