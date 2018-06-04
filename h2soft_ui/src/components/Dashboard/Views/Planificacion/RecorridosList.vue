@@ -182,14 +182,15 @@
       borrarRecorrido (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
-        api.deleteRecorrido(this, id).then(res => {
-          if (res) {
-            noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
-            this.cargarRecorridos()
-          } else {
-            noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
-          }
-        })
+        api.deleteRecorrido(this, id)
+          .then(res => {
+            if (res) {
+              noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
+              this.cargarRecorridos()
+            } else {
+              noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
+            }
+          })
       },
       borrarDetalle (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
