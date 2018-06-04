@@ -66,7 +66,7 @@
   import noti from 'src/api/notificationsService'
   import { modal, select } from 'vue-strap'
 
-  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
+  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia', 'Asignado a']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
@@ -77,13 +77,14 @@
     data () {
       return {
         table1: {
-          title: 'Planificación',
-          subTitle: 'Listado de recorridos',
+          title: 'Recorridos existentes',
+          subTitle: 'Listado de recorridos disponibles para ser asignados',
           columns: [...table1Columns],
           data: []
         },
         table2: {
           title: 'Recorrido',
+          subTitle: 'Info del recorrido',
           columns: [...table2Columns],
           data: []
         },
@@ -92,7 +93,8 @@
         idEmpleadoAsignado: null,
         empleados: [],
         asignado: false,
-        diasAsignacion: 30
+        diasAsignacion: 30,
+        recorridos: []
       }
     },
     props: {
@@ -115,15 +117,18 @@
         this.table1.data = []
         api.getRecorridosFull(this)
           .then(r => {
+            r.sort((a, b) => a.recorrido - b.recorrido)
             r.forEach(recs => {
               this.table1.data.push({
                 nro: recs.recorrido,
                 temporada: recs.temporada,
                 dia: recs.dia,
                 turno: recs.turno,
-                frecuencia: recs.frecuencia
+                frecuencia: recs.frecuencia,
+                asignadoa: recs.asignado ? `${recs.asignado.apellido}, ${recs.asignado.nombre}` : null
               })
             })
+            this.recorridos = r
           })
       },
       cargarEmpleados () {
@@ -144,6 +149,7 @@
           this.table2.data = []
           api.getDetalleRecorridosFull(this, this.recorrido)
             .then(r => {
+              r.sort((a, b) => a.orden - b.orden)
               r.forEach(recs => {
                 this.table2.data.push({
                   id: recs.detalleRecorrido,
@@ -165,6 +171,8 @@
                 this.asignado = false
               }
             })
+          const recorrido = this.recorridos.find(r => r.recorrido === Number(this.recorrido))
+          this.table2.subTitle = `Día: ${recorrido.dia} - Turno: ${recorrido.turno} - Frecuencia: ${recorrido.frecuencia} - Temporada: ${recorrido.temporada}`
         }
       },
       editar (e) {
@@ -201,12 +209,7 @@
         this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
-        // change to return(this.recorrido === 0)
-        if (this.recorrido === 0) {
-          return true
-        } else {
-          return false
-        }
+        return this.recorrido === 0
       },
       seeList () {
         this.recorrido = 0
