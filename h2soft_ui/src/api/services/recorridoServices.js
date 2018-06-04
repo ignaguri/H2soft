@@ -295,7 +295,6 @@ export default {
   },
   postAsignacion (context, asignacion) {
     const authHeader = { headers: auth.getAuthHeader() }
-    console.log('somehow asignar', asignacion)
     return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
         console.log('asigné', asignado)
@@ -324,5 +323,10 @@ export default {
       .catch(() => {
         return false
       })
+  },
+  getMotivosReasignacion (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'motivos-de-reasignacion', authHeader)
+      .then(res => { return res.body.data })
   }
 }

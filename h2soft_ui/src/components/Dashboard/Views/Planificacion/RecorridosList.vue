@@ -26,7 +26,7 @@
         </div>
         <br>
       </div>
-      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Asignar recorrido">
+      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" :title="modalTitle">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
@@ -39,6 +39,17 @@
                    :placeholder="'Seleccione un repartidor'"
                    :search="true" :justified="true" required>
               </dds>
+              <template v-if="asignado">
+                <label for="motivo"><h4><span class="label label-default">Motivo</span></h4></label>
+                <dds id="motivo" v-model="idMotivo"
+                     :options="motivos"
+                     options-value="idMotivoDeReasignacion"
+                     options-label="descripcion"
+                     search-text="Buscar"
+                     :placeholder="'Motivo de reasignación'"
+                     :search="true" :justified="true" required>
+                </dds>
+              </template>
             </div>
           </div>
           <div class="col-md-12">
@@ -94,7 +105,10 @@
         empleados: [],
         asignado: false,
         diasAsignacion: 30,
-        recorridos: []
+        recorridos: [],
+        motivos: [],
+        idMotivo: null,
+        modalTitle: 'Asignar recorrido'
       }
     },
     props: {
@@ -141,6 +155,16 @@
               this.empleados = e
             } else {
               this.empleados = []
+            }
+          })
+      },
+      cargarMotivosReasignacion () {
+        api.getMotivosReasignacion(this)
+          .then(e => {
+            if (e) {
+              this.motivos = e
+            } else {
+              this.motivos = []
             }
           })
       },
@@ -231,7 +255,8 @@
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
-          diasAsignacion: this.diasAsignacion
+          diasAsignacion: this.diasAsignacion,
+          idMotivoDeReasignacion: this.idMotivo
         })
         return false
       },
@@ -240,6 +265,7 @@
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+              this.cargarRecorridos()
               this.seeList()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
@@ -249,7 +275,10 @@
       },
       cambioAsignacion () {
         if (this.asignado) {
-          this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+          this.cargarMotivosReasignacion()
+          this.modalTitle = this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+        } else {
+          this.modalTitle = this.$refs.btn_asignar.innerText = 'Asignar recorrido'
         }
       }
     }
