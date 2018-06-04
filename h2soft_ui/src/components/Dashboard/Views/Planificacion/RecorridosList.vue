@@ -252,6 +252,10 @@
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
+        if (this.asignado && !this.idMotivo) {
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
+          return true
+        }
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
