@@ -118,7 +118,7 @@
   import apiRecorridos from 'src/api/services/recorridoServices'
   import apiDispensers from 'src/api/services/dispensersServices'
   import api from 'src/api/services/alertasServices'
-//  import noti from 'src/api/notificationsService'
+  import noti from 'src/api/notificationsService'
   import { select } from 'vue-strap'
 
   export default {
@@ -235,10 +235,10 @@
         api.postAlerta(this, this.alerta)
           .then(r => {
             if (r) {
-              alert('Alerta guardada con éxito')
+              noti.exitoConTexto(this, 'Éxito', 'Alerta guardada con éxito!')
               this.$parent.isAlertasList = true
             } else {
-              alert('Hubo un error al guardar la alerta')
+              noti.errorConTexto(this, 'Error', 'Error al guardar alerta')
             }
           })
       }

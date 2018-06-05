@@ -112,7 +112,7 @@
               noti.danger(this)
             }
           })
-          noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+          noti.exitoConTexto(this, 'Éxito', 'Usuario guardado con éxito!')
          // noti.exito(this)
         } else {
           console.log(this.id)
@@ -125,7 +125,7 @@
           api.editUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'El usuario se guardó correctamente')
+              noti.exitoConTexto(this, 'Éxito', 'Usuario guardado con éxito!')
              // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true

@@ -8,7 +8,7 @@
       <div class="col-md-12">
         <div class="text-center">
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="addAlerta" v-show="isAlertasList">
-            Agregar Alerta
+            Agregar alerta
           </button>
           <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList" v-show="!isAlertasList">
             Volver

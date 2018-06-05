@@ -13,26 +13,25 @@
                 :placeholder="'Cliente'"
                 :search="true" :justified="true" style="width: 200PX;" >
             </dds>
-        </div> 
+        </div>
       </div>
       <div class="row text-line">
         <div class="col-md-3">
           <label><h4><span class="label label-default">Desde</span></h4></label>
           <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
-        </div> 
+        </div>
         <div class="col-md-3">
           <label><h4><span class="label label-default">Hasta</span></h4></label>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
-        </div> 
+        </div>
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
       </div>
-
     </form>
    <div class="row" >
       <div class="col-md-12">
-        <div class="card"> 
+        <div class="card">
           <div class="row">
                   <div class="col-md-4 text-center">
                     <h5>Precio por unidad</h5>
@@ -61,21 +60,16 @@
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlusContabilidad.vue'
-  import { datepicker } from 'vue-strap'
-  import dds from 'vue-strap/src/Select.vue'
+  import { datepicker, select } from 'vue-strap'
   import api from 'src/api/services/clientServices.js'
-  import apiContrato from 'src/api/services/contratosServices.js'
-  import apiRemito from 'src/api/services/remitoServices.js'
   import noti from 'src/api/notificationsService'
-  // import apiDispensers from 'src/api/services/dispensersServices.js'
-  // import apiContratos from 'src/api/services/contratosServices.js'
 
   const table1Columns = ['Objetivo', 'Fecha', 'Cantidad', 'Firmado conforme']
   export default {
     components: {
       PaperTable,
       dp: datepicker,
-      dds
+      dds: select
     },
     data () {
       return {
@@ -133,83 +127,20 @@
         }
       },
       calcularValores () {
-        api.getClienteConContratos(this, this.idClientes)
-          .then(res => {
-            this.objetivos = res['objetivos']
-            this.contratos = res['contratos']
-            if (this.contratos.length > 0) {
-              this.contratos.forEach(c => {
-                const hoy = new Date()
-                if (c.fechaVigenciaDesde < hoy.toISOString() && c.fechaVigenciaHasta > hoy.toISOString()) {
-                  apiContrato.getDetallesContrato(this, c.idContratos)
-                  .then(det => {
-                    this.detalleContrato = det
-                    this.calcularCantidad()
-                    .then(r => {
-                      if (r) {
-                        this.calcularVenta()
-                      }
-                    })
-                  })
-                } else {
-                  noti.errorConTexto(this, 'Error', 'No se encontró un contrato vigente para el cliente')
-                }
-              })
+        api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
+          .then(ventasXProducto => {
+            if (ventasXProducto && ventasXProducto.length) {
+              this.precioPorUnidad = ventasXProducto[0].precioPorUnidad
+              this.cantidad = ventasXProducto[0].cantidad
+              this.total = ventasXProducto[0].total
+              this.table1.data = ventasXProducto[0].ventas
             } else {
-              noti.errorConTexto(this, 'Error', 'No se encontró un contrato para el cliente')
+              this.precioPorUnidad = 0
+              this.cantidad = 0
+              this.total = 0
+              this.table1.data = []
             }
           })
-      },
-      calcularCantidad () {
-        return new Promise((resolve, reject) => {
-          this.objetivos.forEach((obj, i) => {
-            apiRemito.getRemitoXObjetivo(this, obj.idObjetivosXCliente)
-              .then(rems => {
-                rems.forEach(rem => {
-                  let f = new Date(rem.fecha)
-                  if (f < this.hasta && f > this.desde) {
-                    apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
-                    .then(dets => {
-                      dets = dets.body.data
-                      dets.forEach(det => {
-                        if (det.dejadoEnCliente === 1) {
-                          this.cantidad = this.cantidad + det.cantidad
-                          let venta = {
-                            objetivo: obj.nombre,
-                            fecha: rem.fecha === null ? '-' : new Date(rem.fecha).toLocaleDateString(),
-                            cantidad: det.cantidad,
-                            firmadoconforme: rem.firmaConforme === 1 ? 'Si' : 'No'
-                          }
-                          this.table1.data.push(venta)
-                        }
-                        if (this.objetivos.length - 1 === i) { // al finalizar el for devuelvo el valor de la promise
-                          resolve(true)
-                        }
-                      })
-                    })
-                  }
-                })
-              })
-          })
-        })
-      },
-      calcularVenta () {
-        this.detalleContrato.forEach(det => {
-          let cantMax = 0
-          if (det.cantidadMinima <= this.cantidad && this.cantidad <= det.cantidadMaxima) {
-            this.precioPorUnidad = det.precioPorUnidad
-            this.total = this.cantidad * this.precioPorUnidad
-          }
-          if (det.cantidadMaxima > cantMax) {
-            this.precioPorUnidad = det.precioPorUnidad
-            cantMax = det.cantidadMaxima
-          }
-        })
-        if (this.total === 0) {
-          this.total = this.cantidad * this.precioPorUnidad
-          this.superaRangos = true
-          // noti.errorConTexto(this, 'Error', 'La cantidad vendida de ' + this.cantidad + ' bidones está fuera de los rangos del contrato')
-        }
       }
     }
   }

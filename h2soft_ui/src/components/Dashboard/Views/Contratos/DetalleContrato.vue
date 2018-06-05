@@ -62,7 +62,7 @@
     <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModalBorrar" @ok="showCustomModal = borrar()" title="Confirmación">
       <div class="row">
         <div class="col-md-12">
-          <div>Desea borrar la clausula del contrato?</div>
+          <div>¿Desea borrar la cláusula del contrato?</div>
         </div>
       </div>
       <div slot="modal-footer" class="modal-footer">

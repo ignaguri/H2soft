@@ -170,7 +170,7 @@
         } else {
           api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito !')
+              noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito!')
             } else {
               noti.errorConTexto(this, 'Error', 'Error al editar el cliente')
             }
