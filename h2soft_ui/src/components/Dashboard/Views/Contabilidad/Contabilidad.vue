@@ -45,12 +45,12 @@
                     <h5>Total</h5>
                     <h4 style="margin-top: 0px;" class="">$ {{this.total}}</h4>
                   </div>
-          </div>  
+          </div>
           <div class="row">
             <div class="col-md-12" style="margin-left: 20px;">
               <p class="category" v-if="superaRangos">La cantidad de bidones de 20 L vendida en el periodo seleccionado supera los rangos del contrato. Se tomará el precio del mayor rango</p>
             </div>
-          </div>      
+          </div>
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>
@@ -86,18 +86,15 @@
         idClientes: 0,
         fechaDesde: '',
         fechaHasta: '',
-        desde: null,
-        hasta: null,
         superaRangos: false
       }
     },
     mounted () {
       this.cargarClientes()
-      this.desde = new Date()
-      this.desde.setMonth(this.desde.getMonth() - 1)
-      this.hasta = new Date()
-      this.fechaDesde = this.desde.toLocaleDateString()
-      this.fechaHasta = this.hasta.toLocaleDateString()
+      const lastMonth = new Date()
+      lastMonth.setMonth(lastMonth.getMonth() - 1)
+      this.fechaDesde = lastMonth.toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+      this.fechaHasta = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
     },
     watch: {
       idClientes: function () {
@@ -116,11 +113,6 @@
           this.cantidad = 0
           this.total = 0
           this.table1.data = []
-          let dsd = this.fechaDesde.split('/')
-          let hst = this.fechaHasta.split('/')
-          this.desde = new Date(dsd[2], dsd[1] - 1, dsd[0])
-          this.hasta = new Date(hst[2], hst[1] - 1, hst[0])
-          this.hasta.setHours(23, 59, 59) // seteo las 23:59 para incluir el último dia seleccionado
           this.calcularValores()
         } else {
           noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
