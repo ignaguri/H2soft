@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-  import PaperTable from 'components/Dashboard/Views/Contabilidad/PaperTablePlusContabilidad.vue'
+  import PaperTable from 'components/UIComponents/PaperTablePlusContabilidad.vue'
   import { datepicker } from 'vue-strap'
   import dds from 'vue-strap/src/Select.vue'
   import api from 'src/api/services/clientServices.js'

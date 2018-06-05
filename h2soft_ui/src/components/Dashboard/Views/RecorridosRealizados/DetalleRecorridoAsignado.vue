@@ -85,7 +85,7 @@
   import { modal } from 'vue-strap'
   import sele from 'vue-strap/src/Select.vue'
 
-  const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Dirección', 'Bidones']
+  const tableColumns = ['Nro.', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
   const dataColumns = []
   export default {
     components: {
@@ -142,13 +142,14 @@
                     this.cantidadUltimoRemito(det.idObjetivo)
                     .then(cant => {
                       this.table1.data.push({
-                        'nro': det.idDetalleRecorridoHistorico,
+                        'nro.': det.idDetalleRecorridoHistorico,
                         'orden': det.orden,
                         'objetivo': resObj.nombre,
                         'dirección': resObj.direccion,
                         'estado': det.entregado === 0 ? 1 : 4,
-                        'bidones': cant
+                        'bidones20l.': cant
                       })
+                      this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
                       if (det.entregado === 0) {
                         this.puedeFinalizar = false
                       }
@@ -228,7 +229,6 @@
                   this.showCustomModal = false
                 },
                 error => {
-                  alert('Error al iniciar el recorrido')
                   console.log('error al cambiar el estado ' + error)
                 })
             },
@@ -246,7 +246,6 @@
           // alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
           noti.errorConTexto(this, 'Error', 'No se puede finalizar porque no has visitado todos los objetivos')
         } else {
-          console.log('entro a finalizar. Estado: ' + this.idEstado)
           apiEstados.finalizarRecorrido(this, this.id)
             .then(resObj => {
               this.verBtSuspReanudar = false
@@ -256,7 +255,6 @@
               noti.exito(this)
             },
             error => {
-              alert('Error al finalizar el recorrido')
               console.log('error al cambiar el estado ' + error)
             })
         }
@@ -274,7 +272,6 @@
                 noti.exito(this)
               },
                 error => {
-                  alert('Error al suspender el recorrido')
                   console.log('error al cambiar el estado ' + error)
                 })
             break
@@ -290,7 +287,6 @@
                 noti.exito(this)
               },
               error => {
-                alert('Error al suspender el recorrido')
                 console.log('error al cambiar el estado ' + error)
               })
             break
@@ -310,7 +306,6 @@
               noti.exito(this)
             },
             error => {
-              alert('Error al anular el recorrido')
               console.log('error al cambiar el estado ' + error)
             })
         } else {
@@ -360,7 +355,6 @@
       getCamiones () {
         apiCamiones.getCamiones(this)
           .then(res => {
-            console.log(res)
             this.camiones = res
           })
       },

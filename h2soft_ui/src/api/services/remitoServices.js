@@ -32,7 +32,7 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'remitos', remito, authHeader)
       .then(rem => {
-        return rem
+        return rem.body
       })
       .catch(error => {
         console.log('algo falló en el insert del remito' + JSON.stringify(error))

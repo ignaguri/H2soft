@@ -6,27 +6,36 @@
         <p class="category">{{subTitle}}</p>
       </slot>
     </div>
-    <div class="text-right">
-        <span>Referencias:</span>
-        <span class="badge badge-pill badge-danger">No visitado</span>
-        <span class="badge badge-pill badge-no-color">Ya visitado</span>
-    </div>
     <div class="content table-responsive table-full-width">
       <table class="table" :class="tableClass">
         <thead>
-          <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
+        <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
         </thead>
         <tbody>
-          <tr v-for="item in data" @click="go" >
-            <td v-for="column in columns" v-if="hasValue(item, column)" v-bind:class="{ 'danger': item['estado'] === 1, 'success': item['estado'] === 2, 'info': item['estado'] === 3 }">{{itemValue(item, column)}}</td>
-          </tr>
+        <tr v-for="item in this.tableData">
+          <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
+          <td v-if="editButton|eraseButton|goButton">
+            <span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
+            &nbsp;
+            <span class="ti-trash" @click="erase" v-if="eraseButton"></span>
+            &nbsp;
+            <span class="ti-new-window" @click="go" v-if="goButton"></span>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
   </div>
 </template>
 <script>
+  import bsInput from '../UIComponents/Inputs/InputPlus'
+  import Dropdown from 'vue-strap/src/Dropdown'
+
   export default {
+    components: {
+      bsInput,
+      Dropdown
+    },
     props: {
       columns: Array,
       data: Array,
@@ -42,12 +51,46 @@
         type: String,
         default: ''
       },
+      editButton: {
+        type: Boolean,
+        default: true
+      },
+      edit: {
+        type: Function
+      },
+      eraseButton: {
+        type: Boolean,
+        default: true
+      },
+      erase: {
+        type: Function
+      },
       goButton: {
         type: Boolean,
         default: false
       },
       go: {
         type: Function
+      },
+      filter: {
+        type: Boolean,
+        default: true
+      }
+    },
+    mounted () {
+      this.sort(this.columns[0])
+    },
+    watch: {
+      data: function () {
+        this.tableData = this.data
+      }
+    },
+    data () {
+      return {
+        sortedAsc: false,
+        filterText: '',
+        filterOption: 'Sin filtro',
+        tableData: this.data
       }
     },
     computed: {
@@ -57,13 +100,17 @@
     },
     methods: {
       hasValue (item, column) {
+        // column = column.replace(' ', '')
+        // alert(JSON.stringify(column)) // console.log('item: ' + JSON.stringify(item) + 'columna: ' + JSON.stringify(item))
         return item[column.toLowerCase().replace(' ', '')] !== 'undefined'
       },
       itemValue (item, column) {
         return item[column.toLowerCase().replace(' ', '')]
       },
+      prueba (elem) {
+        console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
+      },
       sort (col) {
-        console.log(col)
         if (col === undefined) return
         if (!this.sortedAsc) {
           this.data = this.data.sort((item1, item2) => {
@@ -91,33 +138,32 @@
           this.sortedAsc = false
         }
       },
-      prueba (elem) {
-        console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
+      filterButton () {
+        this.tableData = this.data.filter(item => {
+          if (item[this.filterOption.toLowerCase()]) {
+            if (isNaN(item[this.filterOption.toLowerCase()])) {
+              const itemAux = item[this.filterOption.toLowerCase()].toLowerCase()
+              const filterAux = this.filterText.toLowerCase()
+              return itemAux.includes(filterAux)
+            } else {
+              const itemAux = Number(item[this.filterOption.toLowerCase()])
+              const filterAux = Number(this.filterText)
+              return itemAux === filterAux
+            }
+          } else {
+            return true
+          }
+        })
+      },
+      changeFilter (filter) {
+        if (filter === 'Sin filtro') {
+          // No anda ¯\_(ツ)_/¯
+          // this.filterText = ''
+        }
+        this.filterOption = filter
       }
     }
   }
 </script>
 <style>
-  span.badge.badge-pill.badge-success {
-    background-color: #8EF3C5;
-    color: #000;
-  }
-  span.badge.badge-pill.badge-info {
-    background-color: #7CE4FE;
-    color: #000;
-  }
-  span.badge.badge-pill.badge-danger {
-    background-color: #FF8F5E;
-    color: #000;
-  }
-  span.badge.badge-pill.badge-warning {
-    background-color: #FFE28C;
-    color: #000;
-  }
-  span.badge.badge-pill.badge-no-color {
-    background-color: white;
-    border-style: solid;
-    border-width: thin;
-    color: #000;
-  }
 </style>
