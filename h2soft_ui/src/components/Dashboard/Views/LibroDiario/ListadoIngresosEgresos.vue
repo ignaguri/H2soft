@@ -96,7 +96,7 @@
       getMedioDePagoCobro () {
         apiMedios.getMedioDePagoCobro(this)
           .then(tipo => {
-            this.tipoDePago = tipo.body.data
+            this.tipoDePago = tipo
           })
       },
       cargarMeidoDePagoCobro  (idMedioDePago) {

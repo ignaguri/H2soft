@@ -1,7 +1,8 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title">Planificar recorrido</h3>
+      <h4 class="title">Planificar recorrido</h4>
+      <p class="category">Cree un recorrido nuevo o agregue objetivos a uno ya creado</p>
     </div>
     <div class="content">
       <form @submit.prevent="guardarRecorrido" class="form-inline">
@@ -110,6 +111,12 @@
           <div class="clearfix"></div>
         </div>
         <hr>
+        <div class="row" v-if="planificando">
+          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
+                       :columns="table2.columns" :editButton="false" :eraseButton="false" :filter="false">
+          </paper-table>
+          <hr>
+        </div>
         <div class="row">
           <div class="text-right">
             Ver objetivos
@@ -159,9 +166,16 @@
         idObjetivo: null,
         recorridos: [],
         idRecorrido: null,
+        planificando: false,
         table1: {
-          title: 'Recorridos planificados',
+          title: 'Objetivos planificados',
           columns: [],
+          data: []
+        },
+        table2: {
+          title: 'Recorrido',
+          subTitle: 'Estás planificando este recorrido',
+          columns: ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente'],
           data: []
         }
       }
@@ -227,6 +241,7 @@
       },
       cargarComboRecorridos () {
         api.getRecorridosFull(this).then(recs => {
+          recs.sort((a, b) => a.recorrido - b.recorrido)
           recs.forEach(r => {
             r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia}, ${r.temporada})`
           })
@@ -244,7 +259,7 @@
       },
       cargarRecorridos () {
         if (this.radioValue === 'planificados') {
-          this.table1.title = 'Recorridos planificados'
+          this.table1.title = 'Objetivos planificados'
           this.table1.columns = ['Recorrido', 'Objetivo', 'Cliente', 'Día', 'Turno', 'Frecuencia', 'Temporada']
           this.table1.data = []
           api.getRecorridosFull(this).then(rec => {
@@ -286,7 +301,6 @@
         this.$parent.isRecorridoList = true
       },
       cambiarRecorrido (e) {
-        // TODO: que en la grilla de abajo sólo se vean los datos correspondientes a este recorrido
         const id = e // e.target.value
         if (id) {
           api.getRecorrido(this, id)
@@ -296,7 +310,10 @@
               this.idDia = r.idDia
               this.idFrecuencia = r.idFrecuencia
             })
+          this.planificando = true
+          this.cargarPlanificando(id)
         } else {
+          this.planificando = false
           this.limpiarCampos()
         }
       },
@@ -308,6 +325,31 @@
         this.idTemporada = null
         this.idDia = null
         this.idFrecuencia = null
+      },
+      cargarPlanificando (idRecorrido) {
+        this.table2.data = []
+        this.table2.title = 'Recorrido n° ' + idRecorrido
+        api.getDetalleRecorridosFull(this, idRecorrido)
+          .then(r => {
+            r.sort((a, b) => a.orden - b.orden)
+            r.forEach(recs => {
+              this.table2.data.push({
+                id: recs.detalleRecorrido,
+                recorrido: recs.recorrido,
+                objetivo: recs.objetivo,
+                orden: recs.orden,
+                direccion: recs.direccion,
+                localidad: recs.localidad,
+                cliente: recs.cliente
+              })
+            })
+          })
+        api.checkIfAsignado(this, idRecorrido)
+          .then(r => {
+            if (r) {
+              this.table2.title = this.table2.title + ' asignado a ' + r.nombre + ' ' + r.apellido
+            }
+          })
       }
     }
   }

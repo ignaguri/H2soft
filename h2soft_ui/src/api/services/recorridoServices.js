@@ -81,13 +81,14 @@ export default {
     return context.$http.get(API_URL + 'recorridos/' + id, authHeader)
       .then(r => { return r.body })
   },
-  getRecorridosFull (context) {
+  getRecorridosFull (context, soloActivos = true) {
     const authHeader = { headers: auth.getAuthHeader() }
     // TODO: guardar dia, freq, turno y temp en una variable y comparar con eso
     let info = {}
     let total = []
     let promesas = []
-    return context.$http.get(API_URL + 'recorridos', authHeader)
+    const activos = soloActivos ? '/?activo=1' : ''
+    return context.$http.get(API_URL + 'recorridos' + activos, authHeader)
       .then(r => {
         r.body.data.forEach(re => {
           info = {}
@@ -127,10 +128,14 @@ export default {
       })
       .then(temp => {
         res.temporada = temp.body.nombre
+        return this.checkIfAsignado(context, info.recorrido)
+      })
+      .then(asignado => {
+        res.asignado = asignado
         return res
       })
       .catch(error => {
-        console.log('error en el getRecorridosFull', error)
+        console.log('error en el populateCamposRecorrido', error)
         return false
       })
   },
@@ -236,17 +241,35 @@ export default {
   },
   deleteRecorrido (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.delete(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + id, authHeader)
-      .then(noDetails => {
-        console.log('se borraron los detalles', noDetails)
-        return context.$http.delete(API_URL + 'recorridos/' + id, authHeader)
+    return context.$http.delete(API_URL + 'detalle-recorrido' + '?idRecorrido=' + id, authHeader)
+      .then(() => {
+        return context.$http.get(API_URL + 'recorrido-historico' + '?idRecorrido=' + id +
+          '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+      })
+      .then(recorridosHistoricos => {
+        recorridosHistoricos = recorridosHistoricos.body.data
+        let promesas = []
+        recorridosHistoricos.forEach(r =>
+          promesas.push(
+            context.$http.delete(API_URL + 'detalle-recorrido-historico' + '?idRecorridoHistorico=' + r.idRecorridosHistoricos, authHeader)
+              .then(() => {
+                return context.$http.delete(API_URL + 'recorrido-historico/' + r.idRecorridosHistoricos, authHeader)
+              })
+              .then(recorridoHistoricoBorrado => {
+                return recorridoHistoricoBorrado.body
+              })
+          )
+        )
+        return Promise.all(promesas)
+      })
+      .then(historicosBorrados => {
+        return context.$http.patch(API_URL + 'recorridos/' + id, { activo: 0 }, authHeader)
       })
       .then(r => {
-        console.log('borrado el recorrido', r)
         return true
       })
       .catch(error => {
-        console.log('error al borrar el recorrido', error)
+        console.error('Error al borrar el recorrido', error)
         return false
       })
   },
@@ -272,7 +295,6 @@ export default {
   },
   postAsignacion (context, asignacion) {
     const authHeader = { headers: auth.getAuthHeader() }
-    console.log('somehow asignar', asignacion)
     return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
         console.log('asigné', asignado)
@@ -288,7 +310,10 @@ export default {
     const hoy = new Date()
     const enUnMes = new Date(hoy)
     enUnMes.setDate(hoy.getDate() + 30)
-    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id + '&fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + enUnMes.toISOString(), authHeader)
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' + id +
+          '&fechaAsignacion[$gte]=' + hoy.toISOString() +
+          '&fechaAsignacion[$lt]=' + enUnMes.toISOString(),
+          authHeader)
       .then(r => {
         return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
       })
@@ -298,5 +323,10 @@ export default {
       .catch(() => {
         return false
       })
+  },
+  getMotivosReasignacion (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'motivos-de-reasignacion', authHeader)
+      .then(res => { return res.body.data })
   }
 }

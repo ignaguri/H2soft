@@ -32,7 +32,9 @@
         api.updateEstado(this, alerta)
           .then(r => {
             if (r) {
+              // TODO cambiar por noti service
               alert('exito')
+              location.reload()
               this.$emit('notiUpdate', { alerta: this.notification.nro })
             } else {
               alert('error')

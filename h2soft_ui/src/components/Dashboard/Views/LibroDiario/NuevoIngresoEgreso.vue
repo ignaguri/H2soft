@@ -46,7 +46,7 @@
             <fg-input label="Importe"
                       type="number"
                       placeholder="Importe"
-                      v-model="ingresosEgresos.importe"
+                      v-model="ingresosEgresos.monto"
                       :disabled="edit"
                       required>
             </fg-input>
@@ -114,9 +114,9 @@
         // se idGastos seria el ID de ingresoEgreso
         ingresosEgresos: {
           idGastos: '',
-          fecha: new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+          fecha: new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'}),
           descripcion: '',
-          importe: '',
+          monto: '',
           idMedioDePagoCobro: '',
           imagen: ''
         },
@@ -125,7 +125,7 @@
           idMedioDePago: '',
           monto: ''
         },
-        mediosDePagoCobro: {},
+        mediosDePagoCobro: [],
         radioValue: null
       }
     },
@@ -141,9 +141,10 @@
     },
     methods: {
       cargarMedioDePagoCobro () {
-        apiMPC.getMedioDePagoCobro(this).then(r => {
-          this.mediosDePagoCobro = r.body.data
-        })
+        apiMPC.getMedioDePagoCobro(this)
+          .then(r => {
+            this.mediosDePagoCobro = r
+          })
       },
       guardarIngresoEgreso () {
         if (this.idGasto === -1 && !this.edit) {
@@ -154,48 +155,51 @@
             return
           }
           if (this.radioValue === 'egreso') {
-            this.ingresosEgresos.importe = '-' + this.ingresosEgresos.importe
+            this.ingresosEgresos.monto = '-' + this.ingresosEgresos.monto
           }
           let fecha = this.ingresosEgresos.fecha.split('/')
           this.ingresosEgresos.fecha = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
 
-          apiIE.postIngresoEgreso(this, this.ingresosEgresos).then(res => {
-            if (res) {
-              noti.exito(this)
-              // alert('ingresosEgresos guardado con éxito.')
-              this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
-              this.cajaTotal.monto = this.ingresosEgresos.importe
-              this.cajaTotal.fecha = this.ingresosEgresos.fecha
-              apiCT.postCajaTotal(this, this.cajaTotal).then(res => {
-                if (res) {
-                  console.log('devolvió true en cajaTotal')
-                } else {
-                  console.log('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-                  // alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-                }
-              })
-              this.limpiarCampos()
-            } else {
-              noti.error(this)
-              // alert('Error al guardar el ingresosEgresos.')
-            }
-          })
+          apiIE.postIngresoEgreso(this, this.ingresosEgresos)
+            .then(res => {
+              if (res) {
+                noti.exito(this)
+                // alert('ingresosEgresos guardado con éxito.')
+                this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
+                this.cajaTotal.monto = this.ingresosEgresos.monto
+                this.cajaTotal.fecha = this.ingresosEgresos.fecha
+                apiCT.postCajaTotal(this, this.cajaTotal)
+                  .then(res => {
+                    if (res) {
+                      console.log('devolvió true en cajaTotal')
+                    } else {
+                      console.log('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
+                      // alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
+                    }
+                  })
+                this.limpiarCampos()
+              } else {
+                noti.error(this)
+                // alert('Error al guardar el ingresosEgresos.')
+              }
+            })
         } else {
           let fecha = this.ingresosEgresos.fecha.split('/')
           this.ingresosEgresos.fecha = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
 
-          apiIE.pathcIngresosEgresos(this, this.idGasto, this.ingresosEgresos).then(res => {
-            if (res) {
-              console.log('devolvió true en modificar ingresosEgresos')
-              noti.exito(this)
-              // alert('ingresosEgresos modificado con éxito.')
-              this.limpiarCampos()
-            } else {
-              noti.error(this)
-              console.log('devolvio false')
-              // alert('Error al modificar el ingresosEgresos.')
-            }
-          })
+          apiIE.pathcIngresosEgresos(this, this.idGasto, this.ingresosEgresos)
+            .then(res => {
+              if (res) {
+                console.log('devolvió true en modificar ingresosEgresos')
+                noti.exito(this)
+                // alert('ingresosEgresos modificado con éxito.')
+                this.limpiarCampos()
+              } else {
+                noti.error(this)
+                console.log('devolvio false')
+                // alert('Error al modificar el ingresosEgresos.')
+              }
+            })
         }
       },
       onChange (image) {
@@ -209,14 +213,19 @@
       },
       cargaIngresosEgresos2 () {
         if (this.idGasto !== -1 && this.edit) {
-          apiIE.getIngresoEgreso2(this, this.idGasto).then(ie => {
-            this.ingresosEgresos.idMedioDePagoCobro = ie.idMedioDePagoCobro
-            this.ingresosEgresos.importe = ie.monto
-            this.ingresosEgresos.fecha = new Date(ie.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-            this.ingresosEgresos.descripcion = ie.descripcion
-            this.ingresosEgresos.idEmpleado = ie.idEmpleado
-            this.ingresosEgresos.imagen = ie.imagen
-          })
+          apiIE.getIngresoEgreso2(this, this.idGasto)
+            .then(ie => {
+              this.ingresosEgresos.idMedioDePagoCobro = ie.idMedioDePagoCobro
+              this.ingresosEgresos.monto = ie.monto
+              this.ingresosEgresos.fecha = new Date(ie.fecha).toLocaleDateString('es-AR', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit'
+              })
+              this.ingresosEgresos.descripcion = ie.descripcion
+              this.ingresosEgresos.idEmpleado = ie.idEmpleado
+              this.ingresosEgresos.imagen = ie.imagen
+            })
         }
       },
       checkMonto () {
@@ -225,8 +234,12 @@
         console.log('el ref es', ref)
       },
       limpiarCampos () {
-        this.ingresosEgresos.importe = null
-        this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+        this.ingresosEgresos.monto = null
+        this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit'
+        })
         this.ingresosEgresos.idMedioDePagoCobro = null
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null

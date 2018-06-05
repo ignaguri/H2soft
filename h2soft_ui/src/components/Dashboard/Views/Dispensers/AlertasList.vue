@@ -80,10 +80,6 @@
           })
         }
       },
-      // editar (e) {
-      //   const id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-      //   this.$emit('emitted', {action: 'edit', alerta: id})
-      // },
       borrar (e) {
         if (!confirm('¿Está seguro de que desea borrar esta alerta?')) {
           return
@@ -93,9 +89,11 @@
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Alerta borrada con éxito!')
+              location.reload()
               this.cargarAlertas()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al borrar alerta')
+              location.reload()
               this.cargarAlertas()
             }
           })
@@ -122,9 +120,11 @@
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Alerta actualizada con éxito!')
+              location.reload()
               this.cargarAlertas()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al actualizar alerta')
+              location.reload()
               this.cargarAlertas()
             }
           })
