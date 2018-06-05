@@ -30,6 +30,10 @@ module.exports = function (app) {
     dejadoEnCliente: {
       type: Sequelize.BOOLEAN,
       allowNull: true
+    },
+    requiereMantenimiento: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true
     }
   }, {
     hooks: {

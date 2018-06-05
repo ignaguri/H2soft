@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <div v-if="true" class="col-md-3 left">
-      <h5>Camion asignado: <a>{{camionAsignado}}</a> </h5>
+      <h5>Camión asignado: <a>{{camionAsignado}}</a> </h5>
     </div>
     <div class="col-md-3 left">
       <h5>Estado del recorrido: <a>{{estado}}</a> </h5>
@@ -80,12 +80,12 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import apiCamiones from 'src/api/services/camionServices'
   import apiRemito from 'src/api/services/remitoServices'
-  import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
+  import PaperTable from 'components/UIComponents/TablaObjetivosdeRecorrido.vue'
   import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
   import sele from 'vue-strap/src/Select.vue'
 
-  const tableColumns = ['Nro', 'Orden', 'Objetivo', 'Bidones']
+  const tableColumns = ['Nro.', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
   const dataColumns = []
   export default {
     components: {
@@ -126,9 +126,6 @@
       idEstado: Number
     },
     mounted () {
-      // this.cargarRecorrido()
-      // this.cantidadUltimoRemito(2)
-      // .then(res => { console.log('cantidad ' + res) })
       this.cargarRecorridoAsignado()
     },
     methods: {
@@ -145,13 +142,14 @@
                     this.cantidadUltimoRemito(det.idObjetivo)
                     .then(cant => {
                       this.table1.data.push({
-                        nro: det.idDetalleRecorridoHistorico,
-                        orden: det.orden,
-                        objetivo: resObj.nombre,
-                        horario: '',
-                        estado: det.entregado === 0 ? 1 : 4,
-                        bidones: cant
+                        'nro.': det.idDetalleRecorridoHistorico,
+                        'orden': det.orden,
+                        'objetivo': resObj.nombre,
+                        'dirección': resObj.direccion,
+                        'estado': det.entregado === 0 ? 1 : 4,
+                        'bidones20l.': cant
                       })
+                      this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
                       if (det.entregado === 0) {
                         this.puedeFinalizar = false
                       }
@@ -174,13 +172,11 @@
           apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
           .then(rem => {
             if (rem.length > 0) {
-              console.log(rem)
               rem = rem[rem.length - 1]
               apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
               .then(remDet => {
                 remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
                 if (remDet.length > 0) {
-                  console.log(remDet)
                   resolve(remDet[0].cantidad)
                 } else {
                   resolve(0)
@@ -233,7 +229,6 @@
                   this.showCustomModal = false
                 },
                 error => {
-                  alert('Error al iniciar el recorrido')
                   console.log('error al cambiar el estado ' + error)
                 })
             },
@@ -251,7 +246,6 @@
           // alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
           noti.errorConTexto(this, 'Error', 'No se puede finalizar porque no has visitado todos los objetivos')
         } else {
-          console.log('entro a finalizar. Estado: ' + this.idEstado)
           apiEstados.finalizarRecorrido(this, this.id)
             .then(resObj => {
               this.verBtSuspReanudar = false
@@ -261,7 +255,6 @@
               noti.exito(this)
             },
             error => {
-              alert('Error al finalizar el recorrido')
               console.log('error al cambiar el estado ' + error)
             })
         }
@@ -269,7 +262,6 @@
       recorridoSuspenderReanudar () {
         switch (this.idEstado) {
           case 2: // en proceso
-            console.log('entro a suspender. Estado: ' + this.idEstado)
             apiEstados.suspenderRecorrido(this, this.id)
               .then(resObj => {
                 this.verBtIniciarFinalizar = false
@@ -280,12 +272,10 @@
                 noti.exito(this)
               },
                 error => {
-                  alert('Error al suspender el recorrido')
                   console.log('error al cambiar el estado ' + error)
                 })
             break
           case 3: // suspendido
-            console.log('entro a reanudar. Estado: ' + this.idEstado)
             apiEstados.reanudarRecorrido(this, this.id)
               .then(resObj => {
                 this.verBtIniciarFinalizar = true
@@ -297,7 +287,6 @@
                 noti.exito(this)
               },
               error => {
-                alert('Error al suspender el recorrido')
                 console.log('error al cambiar el estado ' + error)
               })
             break
@@ -307,7 +296,6 @@
       },
       recorridoAnular () {
         if (this.idEstado === 1 || this.idEstado === 2) {
-          console.log('entro a anular. Estado: ' + this.idEstado)
           apiEstados.anularRecorrido(this, this.id)
             .then(resObj => {
               this.$parent.estado = 'Anulado'
@@ -318,7 +306,6 @@
               noti.exito(this)
             },
             error => {
-              alert('Error al anular el recorrido')
               console.log('error al cambiar el estado ' + error)
             })
         } else {
@@ -326,7 +313,6 @@
         }
       },
       setearEstadoActual () {
-        console.log('estado ' + this.idEstado)
         switch (this.idEstado) {
           case 1:
             this.$parent.estado = 'Nuevo'
@@ -369,7 +355,6 @@
       getCamiones () {
         apiCamiones.getCamiones(this)
           .then(res => {
-            console.log(res)
             this.camiones = res
           })
       },

@@ -27,6 +27,14 @@ module.exports = function (app) {
         key: 'idDispensers'
       }
     },
+	idRemito: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      references: {
+        model: 'remitos',
+        key: 'idRemito'
+      }
+    },
 	idEstadoMantenimiento: {
       type: Sequelize.INTEGER(11),
       allowNull: false,

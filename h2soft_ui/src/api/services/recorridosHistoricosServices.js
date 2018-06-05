@@ -13,9 +13,10 @@ export default {
       console.log('algo falló en el get' + JSON.stringify(error))
     })
   },
-  getRecorridosAsignadosXFecha (context, año, mes, dia) {
+  getRecorridosAsignadosParaHoy (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     const hoy = new Date()
+    hoy.setHours(0, 0, 0, 0)
     const tomorrow = new Date(hoy)
     tomorrow.setDate(hoy.getDate() + 1)
     return context.$http.get(API_URL + 'recorrido-historico/?fechaAsignacion[$gte]=' + hoy.toISOString() + '&fechaAsignacion[$lt]=' + tomorrow.toISOString(), authHeader)
@@ -63,6 +64,16 @@ export default {
   getDetalleRecorridoAsignado (context, idDetalleRecorridoHistorico) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idDetalleRecorridoHistorico=' + idDetalleRecorridoHistorico, authHeader)
+  },
+  getDetalleRecorridosAsignadosXRemito (context, idRemito) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRemito=' + idRemito, authHeader)
+    .then(res => {
+      return res.body.data[0]
+    })
+    .catch(error => {
+      console.log('algo falló en el get' + JSON.stringify(error))
+    })
   },
   getRecorrido (context, idRecorrido) {
     const authHeader = { headers: auth.getAuthHeader() }

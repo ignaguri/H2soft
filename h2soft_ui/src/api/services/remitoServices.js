@@ -32,7 +32,7 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'remitos', remito, authHeader)
       .then(rem => {
-        return rem
+        return rem.body
       })
       .catch(error => {
         console.log('algo falló en el insert del remito' + JSON.stringify(error))
@@ -58,6 +58,17 @@ export default {
         console.log('algo falló en el insert del detalle del remito' + JSON.stringify(error))
       })
   },
+  editRemito (context, remito) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.patch(API_URL + 'remitos/' + remito.idRemito, remito, authHeader)
+      .then(remitoUpdated => {
+        return remitoUpdated
+      })
+      .catch(error => {
+        console.log('algo falló en el update ', error)
+        return false
+      })
+  },
   getDetalleRemitoProducto (context, idRemito) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'detalle-remito-productos/?idRemito=' + idRemito, authHeader)
@@ -76,6 +87,24 @@ export default {
       })
       .catch(error => {
         console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))
+      })
+  },
+  deleteRemito (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.delete(API_URL + 'detalle-remito-productos/?idRemito=' + id, authHeader)
+      .then(() => {
+        return context.$http.delete(API_URL + 'detalle-remito-dispensers/?idRemito=' + id, authHeader)
+      })
+      .then(() => {
+        return context.$http.delete(API_URL + 'remitos/?idRemito=' + id, authHeader)
+      })
+      .then(res => {
+        console.log('borrado', res)
+        return true
+      })
+      .catch(error => {
+        console.log('error', error)
+        return false
       })
   }
 }

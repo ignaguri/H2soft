@@ -31,6 +31,14 @@ module.exports = function (app) {
         key: 'idEmpleados'
       }
     },
+	idEstadoRemito: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'estados-remito',
+        key: 'idEstadosRemito'
+      }
+    },
     firmaConforme: {
       type: Sequelize.INTEGER(1),
       allowNull: true
