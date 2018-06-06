@@ -145,6 +145,7 @@ export default {
     fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
     const hasta = fechaHasta.split('/')
     fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
+    fechaHasta.setDate(fechaHasta.getDate() + 1)
     let objetivosAux
     // BUSCO LOS OBJETIVOS DEL CLIENTE QUE VIENE POR PARAMETRO
     return this.getObjetivos(context, cliente)
