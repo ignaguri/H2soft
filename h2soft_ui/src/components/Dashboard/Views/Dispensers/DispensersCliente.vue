@@ -56,9 +56,11 @@
   import api from 'src/api/services/clientServices.js'
   import apiDispensers from 'src/api/services/dispensersServices.js'
   import apiContratos from 'src/api/services/contratosServices.js'
+  import apiProductos from 'src/api/services/productosServices.js'
+  import noti from 'src/api/notificationsService'
 
   const table1Columns = ['Objetivo', 'Dispenser', 'Estado', 'Próx Mantenimiento']
-  const table2Columns = ['Cantidad minima', 'Cantidad maxima', 'Precio', 'Vigente hasta']
+  const table2Columns = ['Producto', 'Cantidad mínima', 'Cantidad máxima', 'Precio', 'Vigente hasta']
   export default {
     components: {
       PaperTable,
@@ -151,7 +153,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  'próxmantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -165,20 +167,26 @@
         this.table2.data = []
         apiContratos.getContratoXCliente(this, this.idClientes)
           .then(res => {
-            console.log(res)
-            var contrato = res[res.length - 1]
-            apiContratos.getDetalleContrato(this, contrato.idContratos)
-              .then(det => {
-                console.log(det)
-                var detalle = {
-                  'cantidadminima': det.cantidadMinima,
-                  'cantidadmaxima': det.cantidadMaxima,
-                  'precio': det.precioPorUnidad,
-                  'vigentehasta': contrato.fechaVigenciaHasta === null ? '-' : new Date(contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-                }
-                this.table2.data.push(detalle)
-                console.log(detalle)
+            if (res) {
+              console.log('contrato', res)
+              res['detalle'].forEach(d => {
+                apiProductos.getProductoXId(this, d.idProducto)
+                .then(p => {
+                  p = p[0]
+                  console.log('prod', p)
+                  let detalle = {
+                    'producto': p.nombre,
+                    'cantidadmínima': d.cantidadMinima,
+                    'cantidadmáxima': d.cantidadMaxima,
+                    'precio': d.precioPorUnidad,
+                    'vigentehasta': res['contrato'].fechaVigenciaHasta === null ? '-' : new Date(res['contrato'].fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  }
+                  this.table2.data.push(detalle)
+                })
               })
+            } else {
+              noti.infoConTexto(this, 'Error', 'No se ha encontrado un contrato para el cliente seleccionado')
+            }
           })
       },
       getEstadoDispenser (idEstado) {

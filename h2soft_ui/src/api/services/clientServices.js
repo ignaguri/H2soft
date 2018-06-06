@@ -140,6 +140,7 @@ export default {
   calcularVentasPorCliente (context, cliente, fechaDesde, fechaHasta) {
     const authHeader = { headers: auth.getAuthHeader() }
     // PREPARO LAS FECHAS PARA SU USO
+    console.log(fechaDesde, fechaHasta)
     const desde = fechaDesde.split('/')
     fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
     const hasta = fechaHasta.split('/')
@@ -159,6 +160,7 @@ export default {
         return Promise.all(promesas)
       })
       .then(remitosXObjetivo => {
+        console.log('remitosXObjetivo', remitosXObjetivo)
         let promesas = []
         // LOS REMITOS VIENEN AGRUPADOS POR OBJETIVO. POR CADA UNO DE ESOS REMITOS QUIERO SU DETALLE-REMITO-PRODUCTOS
         // TENIENDO EN CUENTA SOLO LOS PRODUCTOS 'DEJADOS EN CLIENTE'

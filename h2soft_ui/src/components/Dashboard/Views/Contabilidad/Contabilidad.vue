@@ -121,6 +121,7 @@
       calcularValores () {
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
           .then(ventasXProducto => {
+            console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
               this.precioPorUnidad = ventasXProducto[0].precioPorUnidad
               this.cantidad = ventasXProducto[0].cantidad
