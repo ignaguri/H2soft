@@ -116,11 +116,6 @@
           this.cantidad = 0
           this.total = 0
           this.table1.data = []
-          let dsd = this.fechaDesde.split('/')
-          let hst = this.fechaHasta.split('/')
-          this.desde = new Date(dsd[2], dsd[1] - 1, dsd[0])
-          this.hasta = new Date(hst[2], hst[1] - 1, hst[0])
-          this.hasta.setHours(23, 59, 59) // seteo las 23:59 para incluir el último dia seleccionado
           this.calcularValores()
         } else {
           noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
@@ -129,6 +124,7 @@
       calcularValores () {
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
           .then(ventasXProducto => {
+            console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
               this.precioPorUnidad = ventasXProducto[0].precioPorUnidad
               this.cantidad = ventasXProducto[0].cantidad
