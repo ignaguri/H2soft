@@ -7,6 +7,14 @@
                      :erase="borrarIngresoEgreso" :goButton="true" :go="verImagenComprobante">
         </paper-table>
       </div>
+      <json-excel
+        class="btn btn-default"
+        :data="exportData"
+        :fields="exportFields"
+        :name="filename"
+        :title="title">
+        Descargar
+      </json-excel>
       <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
         <div class="row">
           <div class="col-md-12">
@@ -27,6 +35,7 @@
   import apiMedios from 'src/api/services/medioDePagoCobroService'
   import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
+  import JsonExcel from 'vue-json-excel'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
 
@@ -35,7 +44,8 @@
     // TODO: mover todos las fnc que cargan los datos de otras tablas a una misma funcion.
     components: {
       PaperTable,
-      modal
+      modal,
+      JsonExcel
     },
     data () {
       return {
@@ -50,7 +60,30 @@
         modalData: {
           imagen: ''
         },
-        showCustomModal: false
+        showCustomModal: false,
+        exportData: [],
+        exportFields: {
+          'Fecha': 'fecha',
+          'Empleado': 'empleado',
+          'Importe': {
+            field: 'importe',
+            callback: (value) => {
+              return `$ ${value}`
+            }
+          },
+          'Medio de pago': 'mediodepago',
+          'Descripción': 'descripcion'
+        }
+      }
+    },
+    computed: {
+      filename: function () {
+        const today = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+        return `Ingresos y Egresos - ${today}.xls`
+      },
+      title: function () {
+        const today = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+        return `Resumen de Ingresos y Egresos al día ${today}`
       }
     },
     props: {
@@ -64,16 +97,20 @@
     },
     methods: {
       cargarIngresosEgresos () {
+        this.table1.data = []
+        this.exportData = []
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
-            this.table1.data.push({
+            const ie = {
               id: ingreEgre.idGastos,
               fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               importe: ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
-            })
+            }
+            this.table1.data.push(ie)
+            this.exportData.push(ie)
           })
         }, error => {
           console.log('error' + JSON.stringify(error))
