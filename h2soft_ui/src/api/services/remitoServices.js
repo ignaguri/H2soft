@@ -86,79 +86,41 @@ export default {
   },
   cantidadDeBidonesPorMes (context) {
     const authHeader = {headers: auth.getAuthHeader()}
-    let mes
-    let fecha
-    let cantidades = {}
-    cantidades.enero = 0
-    cantidades.febrero = 0
-    cantidades.marzo = 0
-    cantidades.abril = 0
-    cantidades.mayo = 0
-    cantidades.junio = 0
-    cantidades.julio = 0
-    cantidades.agosto = 0
-    cantidades.septiembre = 0
-    cantidades.octubre = 0
-    cantidades.noviembre = 0
-    cantidades.diciembre = 0
     return context.$http.get(API_URL + 'remitos?$select[]=fecha&$select[]=idRemito', authHeader)
-      .then(rem => {
-        let i = 0
-        let lengh = rem.body.data.length
-        rem.body.data.forEach(remitos => {
-          fecha = new Date(remitos.fecha)
-          mes = fecha.getMonth()
-          return context.$http.get(API_URL + 'detalle-remito-productos/?idRemito=' + remitos.idRemito, authHeader)
+      .then(remitos => {
+        remitos = remitos.body.data
+        let promesas = []
+        remitos.forEach(remito => {
+          const mes = new Date(remito.fecha).getMonth()
+          promesas.push(context.$http.get(API_URL + 'detalle-remito-productos/?idRemito=' + remito.idRemito, authHeader)
             .then(detRem => {
-              detRem.body.data.forEach(detalle => {
-                if (detalle.dejadoEnCliente === 1) {
-                  switch (mes) {
-                    case 1:
-                      cantidades.enero += detalle.cantidad
-                      break
-                    case 2:
-                      cantidades.febrero += detalle.cantidad
-                      break
-                    case 3:
-                      cantidades.marzo += detalle.cantidad
-                      break
-                    case 4:
-                      cantidades.abril += detalle.cantidad
-                      break
-                    case 5:
-                      cantidades.mayo += detalle.cantidad
-                      break
-                    case 6:
-                      cantidades.junio += detalle.cantidad
-                      break
-                    case 7:
-                      cantidades.julio += detalle.cantidad
-                      break
-                    case 8:
-                      cantidades.agosto += detalle.cantidad
-                      break
-                    case 9:
-                      cantidades.septiembre += detalle.cantidad
-                      break
-                    case 10:
-                      cantidades.octubre += detalle.cantidad
-                      break
-                    case 11:
-                      cantidades.noviembre += detalle.cantidad
-                      break
-                    case 12:
-                      cantidades.diciembre += detalle.cantidad
-                      break
-                  }
-                }
-              })
-              i += 1
-              if (i === lengh) {
-                console.log('cantidades:' + JSON.stringify(cantidades))
-                return cantidades
-              }
-            })
+              detRem.body.data.push({mes: mes})
+              return detRem.body.data
+            }))
         })
+        return Promise.all(promesas)
+      })
+      .then(detallesRemitoProducto => {
+        const cantidades = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
+          8: 0,
+          9: 0,
+          10: 0,
+          11: 0,
+          12: 0
+        }
+        detallesRemitoProducto.forEach(detalles => {
+          const mes = detalles.find(d => d.mes).mes
+          const dejadoEnCliente = detalles.find(d => d.dejadoEnCliente === 1)
+          cantidades[mes + 1] += dejadoEnCliente.cantidad
+        })
+        return cantidades
       })
       .catch(error => {
         console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))

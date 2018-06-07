@@ -239,7 +239,6 @@
     methods: {
       cargarRecorridos () {
         const hoy = new Date().toISOString().substring(0, 10).split('-')
-        console.log(hoy)
         api.getRecorridosAsignadosXFecha(this, hoy[0], hoy[1], hoy[2])
         // api.getRecorridosAsignadosXFecha(this, '2018', '05', '22')
           .then(res => {
@@ -277,8 +276,8 @@
       cantBidonesXmes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
-            console.log('CANTI:' + JSON.stringify(resp))
-            this.catidadDeBidonesPorMes = resp
+            console.log('CANTI:', resp)
+            this.cantidadDeBidonesPorMes = resp
           })
           .catch(err => {
             console.log('ERRRO:' + err)
