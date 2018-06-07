@@ -49,7 +49,6 @@
       getTotales () {
         cajaTotal.getTotalPorTipoDePago(this)
           .then(totales => {
-            console.log('TOTALES:' + JSON.stringify(totales))
             this.efectivoo = totales.efectivo
             this.chequee = totales.cheque
             this.transferenciaa = totales.transferencia

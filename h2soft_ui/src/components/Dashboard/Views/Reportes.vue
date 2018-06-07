@@ -2,24 +2,24 @@
   <div>
 
     <!--Stats cards-->
-<!--    <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
-        <stats-card>
-          <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
-            <i :class="stats.icon"></i>
+    <!--    <div class="row">
+          <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
+            <stats-card>
+              <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
+                <i :class="stats.icon"></i>
+              </div>
+              <div class="numbers" slot="content">
+                <p>{{stats.title}}</p>
+                {{stats.value}}
+              </div>
+              <div class="stats" slot="footer">
+                <i :class="stats.footerIcon"></i> {{stats.footerText}}
+              </div>
+            </stats-card>
           </div>
-          <div class="numbers" slot="content">
-            <p>{{stats.title}}</p>
-            {{stats.value}}
-          </div>
-          <div class="stats" slot="footer">
-            <i :class="stats.footerIcon"></i> {{stats.footerText}}
-          </div>
-        </stats-card>
-      </div>
-    </div>
+        </div>
 
-    <! -- Charts-->
+        <! -- Charts-->
     <div class="row">
       <div class="col-md-12">
         <repartos :rep="reparts"></repartos>
@@ -39,7 +39,7 @@
         </chart-card>
       </div>
       <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="preferencesChart.data"  chart-type="Pie">
+        <chart-card :chart-data="preferencesChart.data" chart-type="Pie">
           <h4 class="title" slot="title">Estados de objetivos</h4>
           <span slot="subTitle"> Estado actual de los objetivos a visitar el día hoy</span>
           <span slot="footer">
@@ -78,7 +78,7 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <estadoDeCaja> </estadoDeCaja>
+          <estadoDeCaja></estadoDeCaja>
         </div>
       </div>
     </div>
@@ -89,11 +89,12 @@
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiCliente from 'src/api/services/clientServices'
   import apiUsuario from 'src/api/services/userServices'
+  import apiRemitos from 'src/api/services/remitoServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
   import estadoDeCaja from 'components/Dashboard/Views/Reportes/EstadoDeCaja.vue'
-//  import auth from 'src/api/auth'
+  //  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
@@ -107,19 +108,21 @@
     data () {
       return {
         /* reparts: {
-          reps: [
-            { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
-              repartidor: 'ema'
-            },
-            { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
-              repartidor: 'cami'
-            },
-            { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
-              repartidor: 'nico'
-            }
-          ]}, */
+         reps: [
+         { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
+         repartidor: 'ema'
+         },
+         { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
+         repartidor: 'cami'
+         },
+         { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
+         repartidor: 'nico'
+         }
+         ]}, */
         reparts: {
-          reps: [] },
+          reps: []
+        },
+        cantidadDeBidonesPorMes: {},
         statsCards: [
           {
             type: 'warning',
@@ -158,7 +161,7 @@
           data: {
             labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
             series: [
-              [825, 830, 815, 750, 680, 110, 1450, 455, 400, 480, 610, 756]
+              [800, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
             ]
           },
           options: {
@@ -231,6 +234,7 @@
     },
     mounted () {
       this.cargarRecorridos()
+      this.cantBidonesXmes()
     },
     methods: {
       cargarRecorridos () {
@@ -244,30 +248,40 @@
               // console.log(new Date().toISOString())
               res.forEach(rec => {
                 apiUsuario.getEmpleado(this, rec.idEmpleadoAsignado)
-                .then(emps => {
-                  let reparto = {
-                    repartidor: emps[0].nombre,
-                    objetivos: []
-                  }
-                  api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
-                  .then(dets => {
-                    dets.forEach(det => {
-                      apiCliente.getObjetivo(this, det.idObjetivo)
-                      .then(obj => {
-                        obj = obj.body.data[0]
-                        let objetivo = {
-                          nombre: obj.nombre,
-                          idestado: det.entregado,
-                          orden: det.orden
-                        }
-                        reparto.objetivos.push(objetivo)
+                  .then(emps => {
+                    let reparto = {
+                      repartidor: emps[0].nombre,
+                      objetivos: []
+                    }
+                    api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
+                      .then(dets => {
+                        dets.forEach(det => {
+                          apiCliente.getObjetivo(this, det.idObjetivo)
+                            .then(obj => {
+                              obj = obj.body.data[0]
+                              let objetivo = {
+                                nombre: obj.nombre,
+                                idestado: det.entregado,
+                                orden: det.orden
+                              }
+                              reparto.objetivos.push(objetivo)
+                            })
+                        })
                       })
-                    })
+                    this.reparts.reps.push(reparto)
                   })
-                  this.reparts.reps.push(reparto)
-                })
               })
             }
+          })
+      },
+      cantBidonesXmes () {
+        apiRemitos.cantidadDeBidonesPorMes(this)
+          .then(resp => {
+            console.log('CANTI:' + JSON.stringify(resp))
+            this.catidadDeBidonesPorMes = resp
+          })
+          .catch(err => {
+            console.log('ERRRO:' + err)
           })
       }
     }
