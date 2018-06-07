@@ -154,7 +154,7 @@ export default {
               })
               i += 1
               if (i === lengh) {
-                console.log('cantidades:' + JSON.stringify(cantidades.body.data)
+                console.log('cantidades:' + JSON.stringify(cantidades))
                 return cantidades
               }
             })
