@@ -7,8 +7,10 @@
         </div>
     </div>		
     <div class="horizontal">
-        <!-- <div v-if="objetivo.idestado !== 1" class="ti-truck objetivoActual"></div> -->
-        <div v-bind:class="{'horizontal':true, 'circulolleno':(objetivo.idestado === 1), 'circuloborde':(objetivo.idestado !== 1)}"></div>
+        
+        <div v-bind:class="{'horizontal':true, 'visitado':(objetivo.idestado === 1), 'pendiente':(objetivo.idestado !== 1)}">
+          <div v-if="objetivo.ultimovisitado === true" class="ti-truck objetivoActual"></div>
+        </div>
         <div id="objetivo" class="ct-label ct-horizontal ct-end">
         {{objetivo.nombre}}
         </div>
@@ -35,25 +37,25 @@ export default {
     background: #68B3C8;
     margin-top: 45px;
 }
-.circuloborde{
-    width: 35px;
-    height: 35px;
+.pendiente {
+    width: 50px;
+    height: 50px;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
 	  border: 5px solid #EB5E28;
-    margin-top: 28px;
+    margin-top: 20px;
 	  margin-left: 10px;
     margin-right: 15px;
 }
-.circulolleno {
-    width: 35px;
-    height: 35px;
+.visitado {
+    width: 50px;
+    height: 50px;
      -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
-    background: #EB5E28;
-	  margin-top: 28px;
+     border: 5px solid #41B883;
+	  margin-top: 20px;
 	  margin-left: 10px;
     margin-right: 15px;
 }
@@ -69,17 +71,18 @@ export default {
 	float:left;
 }
 #objetivo {
-	margin-left: 0px;
-	margin-top: 10px;
+	margin-left: 4px;
+	margin-top: 19px;
 	padding-top: 58px;
   margin-bottom: 10px;
 }
 .objetivoActual {
-  font-size: 25px;
+  font-size: 23px;
   transition: .3s;
   color: #68B3C8;
   margin-left: 14px;
-  padding-left: 27px;
+  padding-left: 7px;
   transform: scaleX(-1);  
+  padding-top: 6px;
 }
 </style>
