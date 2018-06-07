@@ -313,13 +313,13 @@
                     dispenserCodigo = '' // limpio la variable aux para el proximo ciclo del FOR
                   })
                   if (huboDispensersLlevados === false) {
-                    this.remito.txdispensersLlevo = 'No hubo'
+                    this.remito.dispensersLlevo.push('No hubo')
                   }
                   if (huboDispensersDejados === false) {
-                    this.remito.txdispensersDejo = 'No hubo'
+                    this.remito.dispensersDejo.push('No hubo')
                   }
                   if (huboDispensersMantenimiento === false) {
-                    this.remito.txdispensersMantenimiento = 'No hubo'
+                    this.remito.dispensersMantenimiento.push('No hubo')
                   }
                   // this.dispensersDelObjetivo = res.filter(x => { return x.dejadoEnCliente === 0 })
                 }
