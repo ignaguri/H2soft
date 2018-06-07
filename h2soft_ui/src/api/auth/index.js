@@ -13,7 +13,7 @@ export default {
       sessionStorage.setItem('access_token', response.body.accessToken)
       this.user.authenticated = true
       if (response.body.user.idEmpleado) {
-        context.$http.get(API_URL + 'empleados/' + response.body.user.idEmpleado, { headers: {'Authorization': response.body.accessToken} })
+        context.$http.get(API_URL + 'empleados/' + response.body.user.idEmpleado, {headers: {'Authorization': response.body.accessToken}})
           .then(r => {
             response.body.user.nombre = r.body.nombre
             response.body.user.apellido = r.body.apellido
@@ -25,7 +25,16 @@ export default {
           })
       }
     }, response => {
-      context.error = response.body.message
+      switch (response.body.message) {
+        case 'Missing credentials':
+          context.error = 'Debe ingresar usuario y contraseña'
+          break
+        case 'Invalid login':
+          context.error = 'El usuario o la contraseña son incorrectos'
+          break
+        default:
+          context.error = response.body.message
+      }
     })
   },
 

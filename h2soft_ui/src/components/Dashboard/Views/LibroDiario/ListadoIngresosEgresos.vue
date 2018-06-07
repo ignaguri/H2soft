@@ -7,14 +7,7 @@
                      :erase="borrarIngresoEgreso" :goButton="true" :go="verImagenComprobante">
         </paper-table>
       </div>
-      <json-excel
-        class="btn btn-default"
-        :data="exportData"
-        :fields="exportFields"
-        :name="filename"
-        :title="title">
-        Descargar
-      </json-excel>
+      <button type="button" class="btn btn-default" @click="descargar">Descargar</button>
       <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
         <div class="row">
           <div class="col-md-12">
@@ -34,9 +27,8 @@
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
   import noti from 'src/api/notificationsService'
+  import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
-  import JsonExcel from 'vue-json-excel'
-
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
 
   export default{
@@ -44,8 +36,7 @@
     // TODO: mover todos las fnc que cargan los datos de otras tablas a una misma funcion.
     components: {
       PaperTable,
-      modal,
-      JsonExcel
+      modal
     },
     data () {
       return {
@@ -61,29 +52,7 @@
           imagen: ''
         },
         showCustomModal: false,
-        exportData: [],
-        exportFields: {
-          'Fecha': 'fecha',
-          'Empleado': 'empleado',
-          'Importe': {
-            field: 'importe',
-            callback: (value) => {
-              return `$ ${value}`
-            }
-          },
-          'Medio de pago': 'mediodepago',
-          'Descripción': 'descripcion'
-        }
-      }
-    },
-    computed: {
-      filename: function () {
-        const today = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-        return `Ingresos y Egresos - ${today}.xls`
-      },
-      title: function () {
-        const today = new Date().toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-        return `Resumen de Ingresos y Egresos al día ${today}`
+        exportData: []
       }
     },
     props: {
@@ -103,19 +72,23 @@
           res.body.data.forEach(ingreEgre => {
             const ie = {
               id: ingreEgre.idGastos,
-              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit'
+              }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               importe: ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
             }
             this.table1.data.push(ie)
-            this.exportData.push(ie)
+            this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
           })
-        }, error => {
+        })
+        .catch(error => {
           console.log('error' + JSON.stringify(error))
-        }
-        )
+        })
       },
       getEmpleadoss () {
         apiEmpleados.getEmpleados(this)
@@ -170,6 +143,15 @@
           this.modalData.imagen = res.imagen
         })
         this.showCustomModal = true
+      },
+      descargar () {
+        const today = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
+        const title = `Resumen de Ingresos y Egresos al día ${today}`
+        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de Pago', 'Descripción']
+        // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
+        const total = this.exportData.reduce((a, b) => a + b[3], 0)
+        const columnaTotal = ['Total', null, null, total]
+        apiExport.exportToExcel(title, columns, this.exportData, columnaTotal)
       }
     }
   }
