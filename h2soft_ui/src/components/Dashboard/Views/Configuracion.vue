@@ -5,6 +5,9 @@
         <tab header="Camiones">
           <camiones v-if="this.pestañaActiva === 0"></camiones>
         </tab>
+        <tab header="Empleados">
+          <empleados v-if="this.pestañaActiva === 1"></empleados>
+        </tab>
       </tabs>
     </div>
   </div>
@@ -12,12 +15,14 @@
 <script>
   import { tabs, tab } from 'vue-strap'
   import camiones from './camiones/Camiones.vue'
+  import empleados from './Empleados/Empleados.vue'
 
   export default {
     components: {
       tabs,
       tab,
-      camiones
+      camiones,
+      empleados
     },
     data () {
       return {

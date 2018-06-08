@@ -22,7 +22,7 @@
   import apiCliente from 'src/api/services/clientServices'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['Nro', 'Camión', 'Capacidad Máxima']
+  const tableColumns = ['Nro', 'Cliente', 'Capacidad Máxima']
   //  let tableData = []
 
   export default {
@@ -50,7 +50,7 @@
           res.forEach(camion => {
             this.table1.data.push({
               nro: camion.idCamiones,
-              camión: camion.nombre,
+              cliente: camion.nombre,
               capacidadmáxima: camion.capacidadMaxima
             })
           })
