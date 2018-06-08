@@ -33,7 +33,7 @@ module.exports = function (app) {
     },
 	idEstadoRemito: {
       type: Sequelize.INTEGER(11),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'estados-remito',
         key: 'idEstadosRemito'

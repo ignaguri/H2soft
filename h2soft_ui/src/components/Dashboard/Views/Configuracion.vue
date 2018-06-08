@@ -8,6 +8,9 @@
         <tab header="Empleados">
           <empleados v-if="this.pestañaActiva === 1"></empleados>
         </tab>
+        <tab header="Productos">
+          <productos v-if="this.pestañaActiva === 2"></productos>
+        </tab>
       </tabs>
     </div>
   </div>
@@ -16,13 +19,15 @@
   import { tabs, tab } from 'vue-strap'
   import camiones from './camiones/Camiones.vue'
   import empleados from './Empleados/Empleados.vue'
+  import productos from './Productos/Productos.vue'
 
   export default {
     components: {
       tabs,
       tab,
       camiones,
-      empleados
+      empleados,
+      productos
     },
     data () {
       return {
@@ -30,6 +35,9 @@
       }
     },
     methods: {
+      cambio (index) {
+        this.pestañaActiva = index
+      }
     }
   }
 </script>

@@ -217,7 +217,8 @@ export default {
       })
       .catch(error => {
         console.error('algo falló en el calculo de ventas por cliente ', error)
-        return false
+        throw error
+        // return false
       })
   },
   calcularTotalPorVenta (context, cliente, ventas) {
@@ -260,8 +261,9 @@ export default {
         return ventas
       })
       .catch(error => {
-        console.error('Error en calcularTotalPorVenta', error)
-        return false
+        throw error
+        // console.error('Error en calcularTotalPorVenta', error)
+        // return false
       })
   }
 }
