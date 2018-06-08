@@ -12,5 +12,28 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'productos/?idProductos=' + idProducto, authHeader)
       .then(res => { return res.body.data })
+  },
+  postProducto (context, producto) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.post(API_URL + 'productos', producto, authHeader)
+      .then(clienteInsertado => {
+        console.log('inserté el producto')
+        return clienteInsertado
+      })
+    .catch(error => {
+      console.log('algo falló en el insert ', error)
+      return false
+    })
+  },
+  editProducto (context, id, producto) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.patch(API_URL + 'productos/' + id, producto, authHeader)
+      .then(prodUpdated => {
+        return true
+      })
+      .catch(error => {
+        console.log('algo falló en el update ', error)
+        return false
+      })
   }
 }

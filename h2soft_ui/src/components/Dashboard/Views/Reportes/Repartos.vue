@@ -47,21 +47,20 @@
                   }
                   api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
                   .then(dets => {
-                    dets = dets.sort((a, b) => b.updatedAt - a.updatedAt) // los ordeno para que quede primero el que ultimo que se visitó
-                    let eselprimero = true
+                    const ultimovisitado = dets.filter(x => x.entregado === 1).sort((a, b) => b.updatedAt > a.updatedAt)[0]
                     dets.forEach(det => {
                       apiCliente.getObjetivo(this, det.idObjetivo)
                       .then(obj => {
                         obj = obj.body.data[0]
                         let objetivo = {
+                          id: det.idDetalleRecorridoHistorico,
                           nombre: obj.nombre,
                           idestado: det.entregado,
                           orden: det.orden,
                           ultimovisitado: false
                         }
-                        if (eselprimero && det.entregado) {
+                        if (ultimovisitado !== undefined && det.idDetalleRecorridoHistorico === ultimovisitado.idDetalleRecorridoHistorico) {
                           objetivo.ultimovisitado = true
-                          eselprimero = false
                         }
                         reparto.objetivos.push(objetivo)
                         reparto.objetivos.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando por el campo Orden

@@ -514,7 +514,7 @@
         if (this.idProducto === null) {
           noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un producto')
         } else if (this.remito.bidonesDejo === null || this.remito.bidonesLlevo === null) {
-          noti.infoConTexto(this, 'Alerta', 'Debe ingrear las cantidades que deja y retira')
+          noti.infoConTexto(this, 'Alerta', 'Debe ingresar las cantidades que deja y retira')
         } else if (existe !== undefined) {
           noti.infoConTexto(this, 'Alerta', 'El producto seleccionado ya se cargó')
         } else {
