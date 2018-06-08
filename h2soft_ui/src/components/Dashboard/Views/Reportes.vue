@@ -76,6 +76,11 @@
           </div>
         </chart-card>
       </div>
+      <div class="row">
+        <div class="col-md-12">
+          <estadoDeCaja></estadoDeCaja>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -84,15 +89,18 @@
   import api from 'src/api/services/recorridosHistoricosServices'
   import apiCliente from 'src/api/services/clientServices'
   import apiUsuario from 'src/api/services/userServices'
+  import apiRemitos from 'src/api/services/remitoServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
-//  import auth from 'src/api/auth'
+  import estadoDeCaja from 'components/Dashboard/Views/Reportes/EstadoDeCaja.vue'
+  //  import auth from 'src/api/auth'
   export default {
     components: {
       StatsCard,
       ChartCard,
-      repartos
+      repartos,
+      estadoDeCaja
     },
     /**
      * Chart data used to render stats, charts. Should be replaced with server data
@@ -112,7 +120,9 @@
             }
           ]}, */
         reparts: {
-          reps: [] },
+          reps: []
+        },
+        cantidadDeBidonesPorMes: {},
         statsCards: [
           {
             type: 'warning',
@@ -224,6 +234,7 @@
     },
     mounted () {
       this.cargarRecorridos()
+      this.cantBidonesXmes()
     },
     methods: {
       cargarRecorridos () {
@@ -261,6 +272,29 @@
                 })
               })
             }
+          })
+      },
+      cantBidonesXmes () {
+        apiRemitos.cantidadDeBidonesPorMes(this)
+          .then(resp => {
+            var consumo = []
+            console.log('CANTI:', resp)
+            consumo.push(resp[1])
+            consumo.push(resp[2])
+            consumo.push(resp[3])
+            consumo.push(resp[4])
+            consumo.push(resp[5])
+            consumo.push(resp[6])
+            consumo.push(resp[7])
+            consumo.push(resp[8])
+            consumo.push(resp[9])
+            consumo.push(resp[10])
+            consumo.push(resp[11])
+            consumo.push(resp[12])
+            // this.usersChart.data.series.push(consumo)
+          })
+          .catch(err => {
+            console.log('ERRRO:' + err)
           })
       }
     }
