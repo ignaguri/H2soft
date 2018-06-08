@@ -2,24 +2,24 @@
   <div>
 
     <!--Stats cards-->
-    <!--    <div class="row">
-          <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
-            <stats-card>
-              <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
-                <i :class="stats.icon"></i>
-              </div>
-              <div class="numbers" slot="content">
-                <p>{{stats.title}}</p>
-                {{stats.value}}
-              </div>
-              <div class="stats" slot="footer">
-                <i :class="stats.footerIcon"></i> {{stats.footerText}}
-              </div>
-            </stats-card>
+<!--    <div class="row">
+      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
+        <stats-card>
+          <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
+            <i :class="stats.icon"></i>
           </div>
-        </div>
+          <div class="numbers" slot="content">
+            <p>{{stats.title}}</p>
+            {{stats.value}}
+          </div>
+          <div class="stats" slot="footer">
+            <i :class="stats.footerIcon"></i> {{stats.footerText}}
+          </div>
+        </stats-card>
+      </div>
+    </div>
 
-        <! -- Charts-->
+    <! -- Charts-->
     <div class="row">
       <div class="col-md-12">
         <repartos :rep="reparts"></repartos>
@@ -39,7 +39,7 @@
         </chart-card>
       </div>
       <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="preferencesChart.data" chart-type="Pie">
+        <chart-card :chart-data="preferencesChart.data"  chart-type="Pie">
           <h4 class="title" slot="title">Estados de objetivos</h4>
           <span slot="subTitle"> Estado actual de los objetivos a visitar el día hoy</span>
           <span slot="footer">
@@ -82,6 +82,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -107,17 +108,17 @@
     data () {
       return {
         /* reparts: {
-         reps: [
-         { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
-         repartidor: 'ema'
-         },
-         { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
-         repartidor: 'cami'
-         },
-         { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
-         repartidor: 'nico'
-         }
-         ]}, */
+          reps: [
+            { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
+              repartidor: 'ema'
+            },
+            { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
+              repartidor: 'cami'
+            },
+            { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
+              repartidor: 'nico'
+            }
+          ]}, */
         reparts: {
           reps: []
         },
@@ -159,7 +160,8 @@
         usersChart: {
           data: {
             labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
-            series: [[825, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
+            series: [
+              [825, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
             ]
           },
           options: {
@@ -237,7 +239,8 @@
     methods: {
       cargarRecorridos () {
         const hoy = new Date().toISOString().substring(0, 10).split('-')
-        api.getRecorridosAsignadosXFecha(this, hoy[0], hoy[1], hoy[2])
+        console.log(hoy)
+        api.getRecorridosAsignadosParaHoy(this)
         // api.getRecorridosAsignadosXFecha(this, '2018', '05', '22')
           .then(res => {
             if (res) {
@@ -245,28 +248,28 @@
               // console.log(new Date().toISOString())
               res.forEach(rec => {
                 apiUsuario.getEmpleado(this, rec.idEmpleadoAsignado)
-                  .then(emps => {
-                    let reparto = {
-                      repartidor: emps[0].nombre,
-                      objetivos: []
-                    }
-                    api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
-                      .then(dets => {
-                        dets.forEach(det => {
-                          apiCliente.getObjetivo(this, det.idObjetivo)
-                            .then(obj => {
-                              obj = obj.body.data[0]
-                              let objetivo = {
-                                nombre: obj.nombre,
-                                idestado: det.entregado,
-                                orden: det.orden
-                              }
-                              reparto.objetivos.push(objetivo)
-                            })
-                        })
+                .then(emps => {
+                  let reparto = {
+                    repartidor: emps[0].nombre,
+                    objetivos: []
+                  }
+                  api.getDetallesRecorridoAsignado(this, rec.idRecorridosHistoricos)
+                  .then(dets => {
+                    dets.forEach(det => {
+                      apiCliente.getObjetivo(this, det.idObjetivo)
+                      .then(obj => {
+                        obj = obj.body.data[0]
+                        let objetivo = {
+                          nombre: obj.nombre,
+                          idestado: det.entregado,
+                          orden: det.orden
+                        }
+                        reparto.objetivos.push(objetivo)
                       })
-                    this.reparts.reps.push(reparto)
+                    })
                   })
+                  this.reparts.reps.push(reparto)
+                })
               })
             }
           })

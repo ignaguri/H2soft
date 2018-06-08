@@ -26,7 +26,7 @@
         </div>
         <br>
       </div>
-      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Asignar recorrido">
+      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" :title="modalTitle">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
@@ -39,6 +39,17 @@
                    :placeholder="'Seleccione un repartidor'"
                    :search="true" :justified="true" required>
               </dds>
+              <template v-if="asignado">
+                <label for="motivo"><h4><span class="label label-default">Motivo</span></h4></label>
+                <dds id="motivo" v-model="idMotivo"
+                     :options="motivos"
+                     options-value="idMotivoDeReasignacion"
+                     options-label="descripcion"
+                     search-text="Buscar"
+                     :placeholder="'Motivo de reasignación'"
+                     :search="true" :justified="true" required>
+                </dds>
+              </template>
             </div>
           </div>
           <div class="col-md-12">
@@ -66,7 +77,7 @@
   import noti from 'src/api/notificationsService'
   import { modal, select } from 'vue-strap'
 
-  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia']
+  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia', 'Asignado a']
   const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
   export default {
     components: {
@@ -77,13 +88,14 @@
     data () {
       return {
         table1: {
-          title: 'Planificación',
-          subTitle: 'Listado de recorridos',
+          title: 'Recorridos existentes',
+          subTitle: 'Listado de recorridos disponibles para ser asignados',
           columns: [...table1Columns],
           data: []
         },
         table2: {
           title: 'Recorrido',
+          subTitle: 'Info del recorrido',
           columns: [...table2Columns],
           data: []
         },
@@ -92,7 +104,11 @@
         idEmpleadoAsignado: null,
         empleados: [],
         asignado: false,
-        diasAsignacion: 30
+        diasAsignacion: 30,
+        recorridos: [],
+        motivos: [],
+        idMotivo: null,
+        modalTitle: 'Asignar recorrido'
       }
     },
     props: {
@@ -115,15 +131,18 @@
         this.table1.data = []
         api.getRecorridosFull(this)
           .then(r => {
+            r.sort((a, b) => a.recorrido - b.recorrido)
             r.forEach(recs => {
               this.table1.data.push({
                 nro: recs.recorrido,
                 temporada: recs.temporada,
                 dia: recs.dia,
                 turno: recs.turno,
-                frecuencia: recs.frecuencia
+                frecuencia: recs.frecuencia,
+                asignadoa: recs.asignado ? `${recs.asignado.apellido}, ${recs.asignado.nombre}` : null
               })
             })
+            this.recorridos = r
           })
       },
       cargarEmpleados () {
@@ -139,11 +158,22 @@
             }
           })
       },
+      cargarMotivosReasignacion () {
+        api.getMotivosReasignacion(this)
+          .then(e => {
+            if (e) {
+              this.motivos = e
+            } else {
+              this.motivos = []
+            }
+          })
+      },
       verEspecifico () {
         if (this.recorrido !== 0) {
           this.table2.data = []
           api.getDetalleRecorridosFull(this, this.recorrido)
             .then(r => {
+              r.sort((a, b) => a.orden - b.orden)
               r.forEach(recs => {
                 this.table2.data.push({
                   id: recs.detalleRecorrido,
@@ -165,6 +195,8 @@
                 this.asignado = false
               }
             })
+          const recorrido = this.recorridos.find(r => r.recorrido === Number(this.recorrido))
+          this.table2.subTitle = `Día: ${recorrido.dia} - Turno: ${recorrido.turno} - Frecuencia: ${recorrido.frecuencia} - Temporada: ${recorrido.temporada}`
         }
       },
       editar (e) {
@@ -174,14 +206,15 @@
       borrarRecorrido (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
-        api.deleteRecorrido(this, id).then(res => {
-          if (res) {
-            noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
-            this.cargarRecorridos()
-          } else {
-            noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
-          }
-        })
+        api.deleteRecorrido(this, id)
+          .then(res => {
+            if (res) {
+              noti.exitoConTexto(this, 'Éxito', 'El recorrido se ha eliminado!')
+              this.cargarRecorridos()
+            } else {
+              noti.errorConTexto(this, 'Error', 'Error al borrar recorrido')
+            }
+          })
       },
       borrarDetalle (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
@@ -201,12 +234,7 @@
         this.table2.title = 'Recorrido n° ' + id
       },
       verCompleto () {
-        // change to return(this.recorrido === 0)
-        if (this.recorrido === 0) {
-          return true
-        } else {
-          return false
-        }
+        return this.recorrido === 0
       },
       seeList () {
         this.recorrido = 0
@@ -224,10 +252,15 @@
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
+        if (this.asignado && !this.idMotivo) {
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
+          return true
+        }
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
-          diasAsignacion: this.diasAsignacion
+          diasAsignacion: this.diasAsignacion,
+          idMotivoDeReasignacion: this.idMotivo
         })
         return false
       },
@@ -236,6 +269,7 @@
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+              this.cargarRecorridos()
               this.seeList()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
@@ -245,7 +279,10 @@
       },
       cambioAsignacion () {
         if (this.asignado) {
-          this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+          this.cargarMotivosReasignacion()
+          this.modalTitle = this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+        } else {
+          this.modalTitle = this.$refs.btn_asignar.innerText = 'Asignar recorrido'
         }
       }
     }

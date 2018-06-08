@@ -5,17 +5,6 @@
       <new-recorrido-form v-if="!isRecorridoList" :edit="edit" :idRecorrido="idRecorrido"></new-recorrido-form>
     </div>
     <div class="row">
-<!--      <div class="col-md-12">
-        <div class="text-center">
-          <button type="button" class="btn btn-info btn-fill btn-wd" @click="addClient" v-show="isRecorridoList">
-            Nuevo Recorrido
-          </button>
-          <button type="button" class="btn btn-danger btn-fill btn-wd" @click="seeList" v-show="!isRecorridoList">
-            Cancelar
-          </button>
-        </div>
-        <div class="clearfix"></div>
-      </div>-->
     </div>
   </div>
 </template>
@@ -47,7 +36,6 @@
       capturarEvento (e) {
         switch (e.action) {
           case 'edit':
-            console.log('editar cliente: ', e.client)
             this.edit = true
             this.idRecorrido = parseInt(e.client)
             this.isRecorridoList = false

@@ -38,7 +38,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth) && !userLoggedIn) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
-    window.console.error('Not authenticated')
+    // window.console.error('Not authenticated')
     next({
       path: '/login'
     })

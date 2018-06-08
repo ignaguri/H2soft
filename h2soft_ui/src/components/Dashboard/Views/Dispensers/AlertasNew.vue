@@ -219,13 +219,25 @@
         }
         switch (this.alerta.idTipo) {
           case 1:
-            this.alerta.notificacion = `Cambiar dispenser ${dispenser.codigo} en ${objetivo.nombre}`
+            if (dispenser) {
+              this.alerta.notificacion = `Cambiar dispenser ${dispenser.codigo} en ${objetivo.nombre}`
+            } else {
+              this.alerta.notificacion = ''
+            }
             break
           case 2:
-            this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${producto.nombre} a ${objetivo.nombre}`
+            if (producto) {
+              this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${producto.nombre} a ${objetivo.nombre}`
+            } else {
+              this.alerta.notificacion = ''
+            }
             break
           case 3:
-            this.alerta.notificacion = `Desvincular dispenser ${dispenser.codigo} de ${objetivo.nombre}`
+            if (dispenser) {
+              this.alerta.notificacion = `Desvincular dispenser ${dispenser.codigo} de ${objetivo.nombre}`
+            } else {
+              this.alerta.notificacion = ''
+            }
             break
           default:
             this.alerta.notificacion = 'Seleccione un tipo de alerta'
@@ -237,6 +249,7 @@
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Alerta guardada con éxito!')
               this.$parent.isAlertasList = true
+              location.reload()
             } else {
               noti.errorConTexto(this, 'Error', 'Error al guardar alerta')
             }

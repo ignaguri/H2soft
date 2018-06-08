@@ -26,7 +26,7 @@
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
   import noti from 'src/api/notificationsService'
-  import {modal} from 'vue-strap'
+  import { modal } from 'vue-strap'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
 
@@ -96,7 +96,7 @@
       getMedioDePagoCobro () {
         apiMedios.getMedioDePagoCobro(this)
           .then(tipo => {
-            this.tipoDePago = tipo.body.data
+            this.tipoDePago = tipo
           })
       },
       cargarMeidoDePagoCobro  (idMedioDePago) {
