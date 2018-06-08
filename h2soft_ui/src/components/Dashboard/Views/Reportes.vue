@@ -82,7 +82,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -160,8 +159,7 @@
         usersChart: {
           data: {
             labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
-            series: [
-              [800, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
+            series: [[825, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
             ]
           },
           options: {
@@ -276,8 +274,21 @@
       cantBidonesXmes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
+            var consumo = []
             console.log('CANTI:', resp)
-            this.cantidadDeBidonesPorMes = resp
+            consumo.push(resp[1])
+            consumo.push(resp[2])
+            consumo.push(resp[3])
+            consumo.push(resp[4])
+            consumo.push(resp[5])
+            consumo.push(resp[6])
+            consumo.push(resp[7])
+            consumo.push(resp[8])
+            consumo.push(resp[9])
+            consumo.push(resp[10])
+            consumo.push(resp[11])
+            consumo.push(resp[12])
+            // this.usersChart.data.series.push(consumo)
           })
           .catch(err => {
             console.log('ERRRO:' + err)
