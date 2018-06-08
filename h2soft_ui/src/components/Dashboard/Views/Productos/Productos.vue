@@ -21,8 +21,8 @@
 </template>
 <script>
   // TODO: poner los botones en cada componente
-  import ProductosList from './Productos/ProductosList'
-  import NuevoProductoForm from './Productos/NuevoProductoForm'
+  import ProductosList from 'src/components/Dashboard/Views/Productos/ProductosList'
+  import NuevoProductoForm from 'src/components/Dashboard/Views/Productos/NuevoProductoForm'
 
   export default {
     components: {

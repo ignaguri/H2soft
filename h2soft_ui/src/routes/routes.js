@@ -13,7 +13,7 @@ import Reporte from 'src/components/Dashboard/Views/Reportes'
 import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos'
 import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers'
 import Contabilidad from 'src/components/Dashboard/Views/Contabilidad'
-import Productos from 'src/components/Dashboard/Views/Productos'
+import Configuracion from 'src/components/Dashboard/Views/Configuracion.vue'
 
 const routes = [
   {
@@ -87,9 +87,9 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'productos',
-        name: 'Productos',
-        component: Productos,
+        path: 'config',
+        name: 'Configuración',
+        component: Configuracion,
         meta: {requiresAuth: true}
       }
     ]

@@ -12,8 +12,7 @@
   // import PaperTable from 'components/UIComponents/PaperTable.vue'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/productosServices'
-  import noti from 'src/api/notificationsService'
-
+  
   const tableColumns = ['Nro', 'Nombre', 'Descripción']
   export default {
     components: {
