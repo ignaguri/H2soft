@@ -59,7 +59,7 @@
     },
     methods: {
       submit () {
-        var credentials = {
+        const credentials = {
           strategy: 'local',
           email: this.credentials.email,
           password: this.credentials.password
