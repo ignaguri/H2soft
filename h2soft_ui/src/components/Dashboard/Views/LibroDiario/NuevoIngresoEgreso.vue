@@ -44,7 +44,7 @@
           </div>
           <div class="col-md-6">
             <slot name="label"><label class="control-label">Importe</label></slot>
-            <money id="importe" v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit" :required="true" ></money>
+            <money id="importe" v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit"></money>
           </div>
         </div>
         <div class="row" v-if="!cambiarImagen && idGasto != -1">
@@ -124,7 +124,6 @@
         },
         mediosDePagoCobro: [],
         radioValue: null,
-        price: 123.45,
         money: {
           decimal: ',',
           thousands: '.',
@@ -242,13 +241,13 @@
         console.log('el ref es', ref)
       },
       limpiarCampos () {
-        this.ingresosEgresos.monto = null
+        this.ingresosEgresos.monto = ''
         this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', {
           year: '2-digit',
           month: '2-digit',
           day: '2-digit'
         })
-        this.ingresosEgresos.idMedioDePagoCobro = null
+        this.ingresosEgresos.idMedioDePagoCobro = ''
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
         this.radioValue = null

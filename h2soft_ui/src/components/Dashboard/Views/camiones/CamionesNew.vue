@@ -8,9 +8,8 @@
       <form name="new_camion_form" @submit.prevent="guardarCamion">
         <div class="row">
           <div class="col-md-6">
-            <h5>Nombre</h5>
             <fg-input type="text"
-                      label=""
+                      label="Nombre"
                       :disabled="false"
                       placeholder="Código"
                       v-model="camion.nombre"

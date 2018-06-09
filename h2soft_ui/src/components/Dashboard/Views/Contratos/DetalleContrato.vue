@@ -25,13 +25,8 @@
           </select>
         </div>
         <div class="col-md-6">
-          <label for="precio"><h4><span class="label label-default">Precio por unidad:</span></h4></label>
-          <fg-input id="precio"
-                    type="number"
-                    placeholder="Precio"
-                    v-model="detalleContrato.precioPorUnidad"
-                    pattern="[0-9]+">
-          </fg-input>
+          <label for="productos"><h4><span class="label label-default">Precio:</span></h4></label>
+          <money id="importe" v-model="detalleContrato.precioPorUnidad" v-bind="money" class="form-control" :disabled="edit"></money>
         </div>
       </div>
       <div class="row">
@@ -77,13 +72,15 @@
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
   import noti from 'src/api/notificationsService'
+  import {Money} from 'v-money'
 
   const tableColumns = ['Producto', 'Cantidad desde', 'Cantidad hasta', 'Precio']
 
   export default {
     components: {
       PaperTable,
-      modal
+      modal,
+      Money
     },
     data () {
       return {
@@ -104,7 +101,15 @@
           data: []
         },
         toDeleteProducto: 0,
-        toDeleteCantidad: ''
+        toDeleteCantidad: '',
+        money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false
+        }
       }
     },
     props: {

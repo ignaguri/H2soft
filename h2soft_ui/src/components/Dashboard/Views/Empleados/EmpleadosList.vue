@@ -1,15 +1,13 @@
 <template>
   <div>
     <div v-if="isEmpleadosList">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
-                         :columns="table1.columns" :editButton="true" :eraseButton="true"
-                         :erase="borrarEmpleado" :goButton="false"
-                         :edit="editar">
-            </paper-table>
-          </div>
+      <div class="col-md-12">
+        <div class="card">
+          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                       :columns="table1.columns" :editButton="true" :eraseButton="true"
+                       :erase="borrarEmpleado" :goButton="false"
+                       :edit="editar">
+          </paper-table>
         </div>
       </div>
     </div>
@@ -65,7 +63,11 @@
               nro: empleado.idEmpleados,
               nombre: empleado.nombre + ' ' + empleado.apellido,
               dni: empleado.dni,
-              fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit'
+              }),
               domicilio: empleado.domicilio,
               localidad: this.cargarLocalidades(empleado.idLocalidad)
             })
