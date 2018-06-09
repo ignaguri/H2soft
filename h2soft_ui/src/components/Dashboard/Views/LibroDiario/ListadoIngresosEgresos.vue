@@ -47,7 +47,7 @@
       return {
         table1: {
           title: 'Ingresos/Egresos',
-          subTitle: 'Listado de Ingresos/Egresos',
+          subTitle: 'Listado de todas las transacciones de dinero realizadas',
           columns: [...tableColumns],
           data: []
         },
