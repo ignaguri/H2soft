@@ -230,7 +230,6 @@
       }
     },
     mounted () {
-      this.cargarRecorridos()
       this.cantBidonesXmes()
     },
     methods: {
