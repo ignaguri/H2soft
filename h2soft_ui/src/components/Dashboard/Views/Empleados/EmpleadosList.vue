@@ -20,8 +20,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  // const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio']
-  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento']
+  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio']
   //  let tableData = []
 
   export default {
@@ -51,8 +50,8 @@
               nro: empleado.idEmpleados,
               nombre: empleado.nombre + ' ' + empleado.apellido,
               dni: empleado.dni,
-              fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-              // domicilio: empleado.domicilio
+              fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              domicilio: empleado.domicilio
             })
           })
         }, error => {
