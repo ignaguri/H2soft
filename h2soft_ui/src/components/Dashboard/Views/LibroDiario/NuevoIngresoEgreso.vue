@@ -16,7 +16,7 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de Pago:</span></h4></label>
+            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de pago:</span></h4></label>
             <dds id="medio-de-pago-cobro"
                  v-model="ingresosEgresos.idMedioDePagoCobro"
                  :options="mediosDePagoCobro"
@@ -35,21 +35,16 @@
         </div>
         <div class="row">
           <div class="col-md-6">
+            <h5>Descripcion</h5>
             <fg-input type="text"
-                      label="Descripcion"
                       placeholder="Descripcion"
                       v-model="ingresosEgresos.descripcion"
                       required>
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input label="Importe"
-                      type="number"
-                      placeholder="Importe"
-                      v-model="ingresosEgresos.monto"
-                      :disabled="edit"
-                      required>
-            </fg-input>
+            <h5>Importe</h5>
+            <money v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit" :required="true" ></money>
           </div>
         </div>
         <div class="row" v-if="!cambiarImagen && idGasto != -1">
@@ -100,6 +95,7 @@
   import apiCT from 'src/api/services/cajaTotalServices'
   import pictureInput from 'vue-picture-input'
   import noti from 'src/api/notificationsService'
+  import {Money} from 'v-money'
 
   export default {
     components: {
@@ -107,7 +103,8 @@
       pictureInput,
       buttonGroup,
       radio,
-      dds: select
+      dds: select,
+      Money
     },
     data () {
       return {
@@ -126,7 +123,16 @@
           monto: ''
         },
         mediosDePagoCobro: [],
-        radioValue: null
+        radioValue: null,
+        price: 123.45,
+        money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false
+        }
       }
     },
     props: {
@@ -152,6 +158,10 @@
             // alert('Tiene que seleccionar un tipo de operacion')
             noti.infoConTexto(this, 'Alerta', 'Tiene que seleccionar un tipo de operación')
 
+            return
+          }
+          if (this.ingresosEgresos.monto === 0) {
+            noti.infoConTexto(this, 'Alerta', 'El monto no puede ser cero')
             return
           }
           if (this.radioValue === 'egreso') {
