@@ -34,7 +34,7 @@
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
+  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio depago', 'Descripcion']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -83,7 +83,7 @@
                 day: '2-digit'
               }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
-              importe: ingreEgre.monto,
+              importe: '$ ' + ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
             }

@@ -8,9 +8,8 @@
       <form name="new_camion_form" @submit.prevent="guardarEmpleado">
         <div class="row">
           <div class="col-md-6">
-            <h5>Nombre</h5>
             <fg-input type="text"
-                      label=""
+                      label="Nombre"
                       :disabled="false"
                       placeholder="Nombre"
                       v-model="empleado.nombre"
@@ -19,9 +18,8 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <h5>Apellido</h5>
             <fg-input type="text"
-                      label=""
+                      label="Apellido"
                       :disabled="false"
                       placeholder="Apellido"
                       v-model="empleado.apellido"
@@ -38,9 +36,8 @@
                         :placeholder="'Fecha'" width="100%" :clear-button="true"></datepicker>
           </div>
           <div class="col-md-6">
-            <h5>Dni</h5>
             <fg-input type="text"
-                      label=""
+                      label="Dni"
                       :disabled="false"
                       placeholder="Dni"
                       v-model="empleado.dni"
@@ -51,9 +48,8 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <h5>Domicilio</h5>
             <fg-input type="text"
-                      label=""
+                      label="Domicilio"
                       :disabled="false"
                       placeholder="Domicilio"
                       v-model="empleado.domicilio"

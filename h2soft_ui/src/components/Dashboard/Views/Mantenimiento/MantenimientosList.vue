@@ -39,7 +39,7 @@
   import { modal, buttonGroup, radio } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['#', 'Cliente', 'Objetivo', 'Dispenser', 'Tipo', 'Estado', 'Creado', 'Realizado']
+  const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Dispenser', 'Tipo', 'Estado', 'Creado', 'Realizado']
   //  let tableData = []
 
   export default {
@@ -94,7 +94,7 @@
           .then(res => {
             res.forEach(mant => {
               var mantenimiento = {
-                '#': mant.idMantenimientos,
+                nro: mant.idMantenimientos,
                 cliente: '',
                 objetivo: '',
                 dispenser: '',
@@ -127,7 +127,7 @@
         api.getMantenimientosPendientes(this).then(res => {
           res.forEach(mant => {
             var mantenimiento = {
-              '#': mant.idMantenimientos,
+              nro: mant.idMantenimientos,
               cliente: '',
               objetivo: '',
               dispenser: '',
@@ -195,7 +195,7 @@
                         idTipo: 1, // tipo: recambio de
                         idEstado: 1, // estado: pendiente
                         idDispenser: m.idDispenser,
-                        notificacion: 'Cambiar dispenser ' + this.dispenserSeleccionado + ' en ' + this.objetivoSeleccionado
+                        notificacion: 'Devolver dispenser ' + this.dispenserSeleccionado + ' en objetivo ' + this.objetivoSeleccionado
                       }
                       apiAlertas.postAlerta(this, alerta)
                     } else {

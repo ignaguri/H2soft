@@ -22,7 +22,7 @@
   /*
   const tableColumns = ['idcontrato', 'Cliente', 'FechaFirma', 'FechaVigencia', 'Cantidad', 'Precio']
   */
-  const tableColumns = ['#', 'Cliente', 'Firmado', 'Vigente desde', 'Vigente hasta']
+  const tableColumns = ['Nro', 'Cliente', 'Firmado', 'Vigente desde', 'Vigente hasta']
   export default{
     components: {
       PaperTable
@@ -46,7 +46,7 @@
       api.getContratos(this).then(res => {
             res.body.data.forEach(contrat => {
               this.table1.data.push({
-                '#': contrat.idContratos,
+                nro: contrat.idContratos,
                // cliente: contrat.idCliente, // Cambiar por el nombre del ciente
                 cliente: this.cargarCliente(contrat.idCliente),
               //  fechafirma: new Date(contrat.fechaFirma).getFullYear() + '/' + new Date(contrat.fechaFirma).getMonth() + '/' + new Date(contrat.fechaFirma).getDate(), // arreglar
