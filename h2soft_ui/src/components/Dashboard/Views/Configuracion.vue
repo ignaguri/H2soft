@@ -30,6 +30,9 @@
       }
     },
     methods: {
+      cambio (index) {
+        this.pestañaActiva = index
+      }
     }
   }
 </script>

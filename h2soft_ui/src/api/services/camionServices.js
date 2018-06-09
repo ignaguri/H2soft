@@ -41,6 +41,6 @@ export default {
   },
   deleteCamion (context, idICamion) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.delete('http://localhost:3030/camiones/' + idICamion, authHeader)
+    return context.$http.delete(API_URL + 'camiones/' + idICamion, authHeader)
   }
 }
