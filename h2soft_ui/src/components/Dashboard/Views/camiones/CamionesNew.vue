@@ -18,8 +18,9 @@
             </fg-input>
           </div>
           <div class="col-md-6">
+            <h5>Capacidad máxima</h5>
             <fg-input type="number"
-                      label="Capacidad Máxima"
+                      label="Capacidad máxima"
                       :disabled="false"
                       placeholder="Número"
                       v-model="camion.capacidadMaxima"

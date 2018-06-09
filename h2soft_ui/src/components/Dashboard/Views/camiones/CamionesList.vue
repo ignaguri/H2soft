@@ -18,7 +18,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/camionServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Camión', 'Capacidad Máxima']
+  const tableColumns = ['#', 'Camión', 'Capacidad máxima']
   //  let tableData = []
 
   export default {
@@ -45,7 +45,7 @@
         api.getCamiones(this).then(res => {
           res.forEach(camion => {
             this.table1.data.push({
-              nro: camion.idCamiones,
+              '#': camion.idCamiones,
               camión: camion.nombre,
               capacidadmáxima: camion.capacidadMaxima
             })
@@ -64,12 +64,12 @@
         api.deleteCamion(this, id)
           .then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'El Camión se ha eliminado!')
+              noti.exitoConTexto(this, 'Éxito', 'El camión se ha eliminado!')
             }
           })
           .catch(err => {
             console.log('error', err)
-            noti.errorConTexto(this, 'Error', 'Error al eliminar Camión')
+            noti.errorConTexto(this, 'Error', 'Error al eliminar camión')
           })
       }
     }
