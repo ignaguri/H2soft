@@ -34,7 +34,7 @@
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio depago', 'Descripcion']
+  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripcion']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -152,7 +152,7 @@
       descargar () {
         const today = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
         const title = `Resumen de Ingresos y Egresos al día ${today}`
-        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de Pago', 'Descripción']
+        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
         // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
         const total = this.exportData.reduce((a, b) => a + b[3], 0)
         const columnaTotal = ['Total', null, null, total]
