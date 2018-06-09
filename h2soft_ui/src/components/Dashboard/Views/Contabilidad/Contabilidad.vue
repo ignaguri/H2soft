@@ -133,6 +133,8 @@
         }
       },
       calcularValores () {
+        this.table1.data = []
+        this.table2.data = []
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
           .then(ventasXProducto => {
             console.log(ventasXProducto)
@@ -165,7 +167,7 @@
                 })
               })
             } else {
-              noti.errorConTexto(this, 'Error', 'Ha ocurrido un error en la búsqueda de los datos.')
+              noti.infoConTexto(this, 'Indo', 'No se han obtenido datos para mostrar.')
               this.total = 0
               this.table1.data = []
               this.table2.data = []
