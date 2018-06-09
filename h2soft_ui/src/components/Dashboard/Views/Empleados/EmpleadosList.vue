@@ -20,7 +20,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio']
+  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio', 'Localidad']
   //  let tableData = []
 
   export default {
@@ -36,13 +36,28 @@
           subTitle: 'Listado de empleados de la empresa',
           columns: [...tableColumns],
           data: []
-        }
+        },
+        localidades: []
       }
     },
     mounted () {
+      this.getLocalidades()
       this.cargarEmpleados()
     },
     methods: {
+      getLocalidades () {
+        api.getLocalidad(this)
+          .then(res => {
+            this.localidades = res
+          })
+      },
+      cargarLocalidades (idLocalidades) {
+        for (var i = 0, len = this.localidades.length; i < len; i++) {
+          if (this.localidades[i].idLocalidad === idLocalidades) {
+            return this.localidades[i].nombre
+          }
+        }
+      },
       cargarEmpleados () {
         api.getEmpleados(this).then(res => {
           res.forEach(empleado => {
@@ -51,7 +66,8 @@
               nombre: empleado.nombre + ' ' + empleado.apellido,
               dni: empleado.dni,
               fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
-              domicilio: empleado.domicilio
+              domicilio: empleado.domicilio,
+              localidad: this.cargarLocalidades(empleado.idLocalidad)
             })
           })
         }, error => {

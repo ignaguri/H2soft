@@ -61,6 +61,18 @@
             >
             </fg-input>
           </div>
+          <div class="col-md-6">
+            <label for="id-localidad"><h4><span class="label label-default">Localidad:</span></h4></label>
+            <dds id="id-localidad"
+                 v-model="empleado.idLocalidad"
+                 :options="localidades"
+                 options-value="idLocalidad"
+                 options-label="nombre"
+                 search-text="Buscar"
+                 :placeholder="'Nada seleccionado'"
+                 :search="true" :justified="true" required>
+            </dds>
+          </div>
         </div>
         <hr>
         <div class="text-center">
@@ -74,7 +86,7 @@
   </div>
 </template>
 <script>
-  import {datepicker} from 'vue-strap'
+  import {datepicker, select} from 'vue-strap'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
   import sele from 'vue-strap/src/Select.vue'
@@ -84,7 +96,8 @@
     components: {
       sele,
       check,
-      datepicker
+      datepicker,
+      dds: select
     },
     data () {
       return {
@@ -94,8 +107,10 @@
           apellido: '',
           dni: '',
           fechaNacimiento: new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'}),
-          domicilio: ''
-        }
+          domicilio: '',
+          idLocalidad: ''
+        },
+        localidades: []
       }
     },
     props: {
@@ -103,9 +118,16 @@
       id: Number
     },
     mounted () {
+      this.cargarLocalidades()
       this.cargarEmpleado()
     },
     methods: {
+      cargarLocalidades () {
+        api.getLocalidad(this)
+          .then(r => {
+            this.localidades = r
+          })
+      },
       guardarEmpleado () {
         if (!this.edit) {
           api.postEmpleado(this, this.empleado)
@@ -139,6 +161,7 @@
             this.empleado.dni = empleado.dni
             this.empleado.fechaNacimiento = new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
             this.empleado.domicilio = empleado.domicilio
+            this.empleado.idLocalidad = empleado.idLocalidad
           })
         }
       },
@@ -149,6 +172,7 @@
         this.empleado.dni = null
         this.empleado.fechaNacimiento = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
         this.empleado.domicilio = null
+        this.empleado.idLocalidad = null
       }
     }
   }

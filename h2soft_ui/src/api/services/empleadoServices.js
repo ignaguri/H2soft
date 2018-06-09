@@ -44,5 +44,10 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'empleados/' + idEmplead, authHeader)
       .then(res => { return res.body })
+  },
+  getLocalidad (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'localidades', authHeader)
+      .then(res => { return res.body.data })
   }
 }
