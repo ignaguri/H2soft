@@ -76,7 +76,7 @@ export default {
       })
       .then(estado => {
         result.estado = estado.data.nombre
-        result.notificación = alerta.notificacion
+        result.notificacion = alerta.notificacion
         result.nro = alerta.idAlertas
         result.bidones = alerta.notificacion.split(' ')[1]
         return result
@@ -85,11 +85,6 @@ export default {
   getTipos (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'tipos-alerta', authHeader)
-      .then(res => { return res.body.data })
-  },
-  getTipoAlerta (context, idTipo) {
-    const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'tipos-alerta' + idTipo, authHeader)
       .then(res => { return res.body.data })
   },
   getEstados (context) {

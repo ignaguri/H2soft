@@ -19,7 +19,7 @@
   import apiCliente from 'src/api/services/clientServices'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['#', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
+  const tableColumns = ['Nro', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
   //  let tableData = []
 
   export default {
@@ -49,13 +49,13 @@
         api.getDispensers(this).then(res => {
           res.forEach(dis => {
             var disp = {
-              '#': dis.idDispensers,
+              nro: dis.idDispensers,
               código: dis.codigo,
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),
               próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             }
             if (dis.idObjetivo === null) {
-              disp.ubicación = 'En fábrica'
+              disp.ubicación = 'En fabrica'
               this.table1.data.push(disp)
             } else {
               this.getObjetivo(dis.idObjetivo)
@@ -92,6 +92,7 @@
       ver (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
         api.getClienteFull(this, id).then(r => {
+          console.log('me ha iegado', r)
           this.modalData.nombre = r.cliente.razonSocial
           this.modalData.CUIL = r.cliente.CUIL !== undefined ? r.cliente.CUIL : ''
           this.modalData.direccion = r.cliente.direccion !== undefined ? r.cliente.direccion : ''

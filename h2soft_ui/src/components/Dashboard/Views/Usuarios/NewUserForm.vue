@@ -27,33 +27,23 @@
         <div class="row">
           <div class="col-md-6">
             <label for="Empleado">Empleado</label>
-              <dds id="empleado" v-model="user.idEmpleado"
-                   :options="empleados"
-                   options-value="idEmpleados"
-                   options-label="data"
-                   search-text="Buscar"
-                   :placeholder="'Seleccione un empleado'"
-                   :search="true" :justified="true" required>
-              </dds>
+            <select id="Empleado" v-model="user.idEmpleado">
+              <option value="">Seleccione</option>
+              <option v-for="emp in empleados" v-bind:value="emp.idEmpleados">
+                {{ emp.nombre + ' ' + emp.apellido }}
+              </option>
+            </select>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <label for="rol">Rol</label>
-              <dds id="rol" v-model="user.idRol"
-                   :options="roles"
-                   options-value="idRoles"
-                   options-label="nombre"
-                   search-text="Buscar"
-                   :placeholder="'Seleccione un rol'"
-                   :search="true" :justified="true" required>
-              </dds>
-            <!-- <select id="rol" v-model="user.idRol" required>
+            <select id="rol" v-model="user.idRol" required>
               <option value="">Seleccione</option>
               <option v-for="rol in roles" v-bind:value="rol.idRoles">
                 {{ rol.nombre }}
               </option>
-            </select> -->
+            </select>
           </div>
         </div>
         <hr>
@@ -71,14 +61,10 @@
   // import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import noti from 'src/api/notificationsService'
-  import { select } from 'vue-strap'
 
   // import fgdrop from 'components/UIComponents/Inputs/formGroupDropDown.vue'
 
   export default {
-    components: {
-      dds: select
-    },
     data () {
       return {
         // id: 0, // alta
@@ -89,13 +75,11 @@
           usuario: '',
           password: '',
           repassword: '',
-          idEmpleado: null,
-          idRol: null
+          idEmpleado: '',
+          idRol: ''
         },
-        empleados: [],
-        roles: [],
-        idEmpleadoAsignado: null,
-        idRolEmpleado: null
+        empleados: {},
+        roles: {}
       }
     },
     props: ['id'],
@@ -121,13 +105,15 @@
           api.newUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
+              // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
-              // noti.error(this)
+              noti.danger(this)
             }
           })
           noti.exitoConTexto(this, 'Éxito', 'Usuario guardado con éxito!')
+         // noti.exito(this)
         } else {
           console.log(this.id)
           this.usuario = {
@@ -137,7 +123,7 @@
             'idRol': this.user.idRol
           }
           api.editUsuario(this, this.usuario).then(res => {
-            // console.log('res es ' + res)
+            console.log('res es ' + res)
             if (res) {
               noti.exitoConTexto(this, 'Éxito', 'Usuario guardado con éxito!')
              // noti.success(this)
@@ -150,28 +136,18 @@
         }
       },
       cargarRoles () { // devuelve el listado de roles
-        api.getRoles(this)
-          .then(r => {
-            this.roles = r
-          })
+        api.getRoles(this).then(res => {
+          this.roles = res
+        }, error => {
+          console.log('error ' + error)
+        })
       },
       cargarEmpleados () { // devuelve el listado de empleados
-        api.getEmpleados(this)
-          .then(e => {
-            if (e) {
-              e.forEach(em => {
-                em.data = `${em.nombre} ${em.apellido}`
-              })
-              this.empleados = e
-            } else {
-              this.empleados = []
-            }
-          })
-        // api.getEmpleados(this).then(res => {
-        //   this.empleados = res
-        // }, error => {
-        //   console.log('error ' + error)
-        // })
+        api.getEmpleados(this).then(res => {
+          this.empleados = res
+        }, error => {
+          console.log('error ' + error)
+        })
       },
       getUsuario () { // trae los datos de un usuario
         api.getUsuario(this, this.id).then(res => {

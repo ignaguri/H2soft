@@ -15,7 +15,7 @@
   import api from 'src/api/services/userServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Usuario', 'Empleado', 'Rol']
+  const tableColumns = ['Nro', 'Usuario', 'Empleado', 'Rol']
   const dataColumns = []
 
   export default {
@@ -35,6 +35,7 @@
     mounted () {
       this.cargarRoles()
       this.cargarUsuarios()
+      // this.getEmpleado()
     },
     methods: {
       cargarUsuarios () {
@@ -47,11 +48,12 @@
                 res = res.body.data[0]
                 this.nombreRol = this.getRol(us.idRol)
                 this.table1.data.push({
-                  '#': us.id,
-                  'usuario': us.email,
-                  'empleado': res === undefined ? '' : res.nombre + ' ' + res.apellido,
-                  'rol': this.nombreRol
+                  nro: us.id,
+                  usuario: us.email,
+                  empleado: res === undefined ? '' : res.nombre + ' ' + res.apellido,
+                  rol: this.nombreRol
                 })
+                console.log(us)
               })
             }
           })

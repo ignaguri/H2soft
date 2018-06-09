@@ -11,7 +11,7 @@
                    options-value="idClientes"
                    options-label="razonSocial"
                    search-text="Buscar"
-                   :placeholder="'Seleccione un cliente'"
+                   :placeholder="'Sin selección'"
                    :search="true" :justified="true" required>
               </dds>
               <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
@@ -20,7 +20,7 @@
                    options-value="idObjetivosXCliente"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Seleccione un objetivo'"
+                   :placeholder="'Seleccione un cliente'"
                    :search="true" :min-search="4" :justified="true"
                    @input="cargarDispensers" required>
               </dds>
