@@ -138,7 +138,7 @@
             producto: this.cargarProducto(det.idProducto),
             cantidaddesde: det.cantidadMinima,
             cantidadhasta: det.cantidadMaxima,
-            precio: det.precioPorUnidad
+            precio: '$ ' + det.precioPorUnidad
           })
         })
       },

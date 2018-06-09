@@ -27,6 +27,9 @@
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
+        <div class="col-md-3"  style="padding-top: 25px;" >
+          <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
+        </div>
       </div>
     </form>
   <div class="row" >
@@ -62,9 +65,10 @@
   import { datepicker, select } from 'vue-strap'
   import api from 'src/api/services/clientServices.js'
   import apiProducto from 'src/api/services/productosServices.js'
+  import apiExport from 'src/api/export'
   import noti from 'src/api/notificationsService'
 
-  const table1Columns = ['Producto', 'Cantidad vendida', '$/unidad', 'Subtotal']
+  const table1Columns = ['Producto', 'Cantidad vendida', 'Precio por unidad', 'Subtotal']
   const table2Columns = ['Fecha', 'Objetivo', 'Producto', 'Cantidad vendida', 'Firmado conforme']
   export default {
     components: {
@@ -93,7 +97,11 @@
         idClientes: 0,
         fechaDesde: '',
         fechaHasta: '',
-        superaRangos: false
+        superaRangos: false,
+        exportData: {
+          remitos: [],
+          totales: []
+        }
       }
     },
     mounted () {
@@ -135,12 +143,13 @@
                   p = p[0]
                   let venta = {
                     'producto': p.nombre,
-                    '$/unidad': '$ ' + vxp.precioPorUnidad,
+                    'precioporunidad': '$ ' + vxp.precioPorUnidad,
                     'cantidadvendida': vxp.cantidad,
                     'subtotal': '$ ' + vxp.total
                   }
                   this.total = this.total + vxp.total
                   this.table1.data.push(venta)
+                  this.exportData.totales.push([venta.producto, venta.precioporunidad, venta.cantidadvendida, venta.subtotal])
                   vxp.ventas.forEach(v => {
                     let detalleVenta = {
                       'fecha': v.fecha,
@@ -151,6 +160,7 @@
                     }
                     this.table2.data.push(detalleVenta)
                     this.table2.data.sort((a, b) => a.fecha - b.fecha) // a medida que voy insertando, voy ordenando
+                    this.exportData.remitos.push([detalleVenta.fecha, detalleVenta.objetivo, detalleVenta.producto, detalleVenta.cantidadvendida])
                   })
                 })
               })
@@ -164,6 +174,23 @@
             noti.errorConTexto(this, error.name, error.message)
             // console.log('error ' + JSON.stringify(error))
           })
+      },
+      descargar () {
+        if (this.idClientes !== 0) {
+          const cliente = this.clientes.find(c => { return c.idClientes === this.idClientes }).razonSocial
+          const fechas = this.fechaDesde + ' y ' + this.fechaHasta
+          let datos = []
+          const title = `Ventas realizadas a ${cliente} entre ${fechas}`
+          const columns = ['Fecha', 'Objetivo', 'Producto', 'Cantidad']
+          this.exportData.remitos.push([null, null, null, null]) // agrego una linea en blanco
+          this.exportData.remitos.push(['Totales por producto'])
+          this.exportData.remitos.push(['Producto', 'Cantidad Vendida', '$/unidad', 'Subtotal'])
+          datos = this.exportData.remitos.concat(this.exportData.totales)
+          const columnaTotal = [null, null, 'Total', '$ ' + this.total]
+          apiExport.exportToExcel(title, columns, datos, columnaTotal)
+        } else {
+          noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
+        }
       }
     }
   }

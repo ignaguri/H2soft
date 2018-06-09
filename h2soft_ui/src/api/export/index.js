@@ -23,6 +23,7 @@ export default {
     if (!columns.length || !rows.length) throw new Error('Missing column\'s or row\'s data')
     // if (!columns.every(c => typeof c === 'string')) throw new Error('Column\'s names must be of string type') -> overhead, toCellData alredy checks type
     const output = [[toCellData(title)], columns.map(toCellData)]
+    console.log('rows', rows)
     rows.forEach(r => output.push(r.map(c => toCellData(c))))
     if (endRow.length) output.push(endRow.map(toCellData))
     const config = {

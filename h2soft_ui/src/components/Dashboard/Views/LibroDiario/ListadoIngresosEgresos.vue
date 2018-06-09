@@ -7,7 +7,11 @@
                      :erase="borrarIngresoEgreso" :goButton="true" :go="verImagenComprobante">
         </paper-table>
       </div>
-      <button type="button" class="btn btn-default" @click="descargar">Descargar</button>
+      <div class="row">
+          <div class="text-center">
+            <button type="button" class="btn btn-info btn-fill btn-wd" @click="descargar">Exportar</button>
+          </div>
+      </div>
       <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
         <div class="row">
           <div class="col-md-12">
