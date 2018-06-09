@@ -377,6 +377,7 @@
               apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
             })
             // Guardo los dispensers retirados del cliente
+            const idDispensersAMantenimiento = this.dispensersAMantenimiento.map(x => x.idDispensers)
             this.dispensersRetirados.forEach(disR => {
               let detalleRemitoDispensersLlevado = {
                 'idRemito': rem.idRemito,
@@ -390,7 +391,10 @@
                 'idEstadoDispenser': null // estado limpio y en fabrica
               }
               // Guardo los mantenimientos de dispensers
-              if (disR in this.dispensersAMantenimiento) {
+              console.log('if mante', disR, idDispensersAMantenimiento)
+              console.log('in', idDispensersAMantenimiento.includes(disR))
+              if (idDispensersAMantenimiento.includes(disR)) {
+                console.log('ingreso: ' + disR)
                 dispenser.idEstadoDispenser = 4 // a mantenimiento
                 detalleRemitoDispensersLlevado.requiereMantenimiento = true
                 apiDispensers.editDispenser(this, dispenser)
