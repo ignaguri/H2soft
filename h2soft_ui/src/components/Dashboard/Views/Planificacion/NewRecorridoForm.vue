@@ -207,9 +207,11 @@
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
             if (resp) {
+              this.planificando = true
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
+              this.cambiarRecorrido(resp.idRecorridos)
               if (this.idRecorrido) {
                 this.idClientes = null
                 this.idObjetivo = null
@@ -302,6 +304,7 @@
       },
       cambiarRecorrido (e) {
         const id = e // e.target.value
+        console.log('id', id)
         if (id) {
           api.getRecorrido(this, id)
             .then(r => {

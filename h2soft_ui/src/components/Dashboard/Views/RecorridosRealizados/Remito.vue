@@ -391,10 +391,7 @@
                 'idEstadoDispenser': null // estado limpio y en fabrica
               }
               // Guardo los mantenimientos de dispensers
-              console.log('if mante', disR, idDispensersAMantenimiento)
-              console.log('in', idDispensersAMantenimiento.includes(disR))
               if (idDispensersAMantenimiento.includes(disR)) {
-                console.log('ingreso: ' + disR)
                 dispenser.idEstadoDispenser = 4 // a mantenimiento
                 detalleRemitoDispensersLlevado.requiereMantenimiento = true
                 apiDispensers.editDispenser(this, dispenser)

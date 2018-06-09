@@ -4,7 +4,6 @@ import NotFound from '../components/GeneralViews/NotFoundPage'
 import Landing from '../components/GeneralViews/Landing'
 
 // Admin pages
-import Usuarios from 'src/components/Dashboard/Views/Usuarios'
 import Clientes from 'src/components/Dashboard/Views/Clientes'
 import WorkInProgress from 'src/components/GeneralViews/WorkInProgress'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados'
@@ -78,12 +77,6 @@ const routes = [
         path: 'clientes',
         name: 'clientes',
         component: Clientes,
-        meta: {requiresAuth: true}
-      },
-      {
-        path: 'usuarios',
-        name: 'Gestión de usuarios',
-        component: Usuarios,
         meta: {requiresAuth: true}
       },
       {

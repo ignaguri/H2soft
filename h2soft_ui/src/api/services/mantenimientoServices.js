@@ -35,6 +35,7 @@ export default {
       .then(res => { return res.body.data })
   },
   nuevoMantenimiento (context, mantenimiento) {
+    const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'mantenimientos', mantenimiento, authHeader)
       .then(mant => {
         return true
