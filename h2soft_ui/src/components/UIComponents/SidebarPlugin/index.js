@@ -9,14 +9,9 @@ const SidebarStore = {
       path: '/recorridos'
     },
     {
-      name: 'Planificacion',
+      name: 'Planificación',
       icon: 'ti-map-alt',
       path: '/planificacion'
-    },
-    {
-      name: 'Reportes',
-      icon: 'ti-bar-chart',
-      path: '/reportes'
     },
     {
       name: 'Bidones y Dispensers',
@@ -39,6 +34,19 @@ const SidebarStore = {
       path: '/clientes'
     },
     {
+<<<<<<< HEAD
+      name: 'Reportes',
+      icon: 'ti-bar-chart',
+      path: '/reportes'
+    },
+    {
+      name: 'Usuarios',
+      icon: 'ti-user',
+      path: '/usuarios'
+    },
+    {
+=======
+>>>>>>> b78c6e0311b11fd419575e3b42c700c25dab7c1d
       name: 'configuracion',
       icon: 'ti-settings',
       path: '/config'

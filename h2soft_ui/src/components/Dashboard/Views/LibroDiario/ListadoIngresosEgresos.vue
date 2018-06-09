@@ -33,7 +33,12 @@
   import noti from 'src/api/notificationsService'
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
+<<<<<<< HEAD
+
+  const tableColumns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio pago', 'Descripción']
+=======
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
+>>>>>>> c7af73ae05ddb36602f445549a2f61984016850d
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -46,7 +51,7 @@
       return {
         table1: {
           title: 'Ingresos/Egresos',
-          subTitle: 'Listado de Ingresos/Egresos',
+          subTitle: 'Listado de todas las transacciones de dinero realizadas',
           columns: [...tableColumns],
           data: []
         },
@@ -74,6 +79,16 @@
         this.exportData = []
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
+<<<<<<< HEAD
+            this.table1.data.push({
+              '#': ingreEgre.idGastos,
+              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
+              importe: ingreEgre.monto,
+              mediopago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
+              descripción: ingreEgre.descripcion
+            })
+=======
             const ie = {
               id: ingreEgre.idGastos,
               fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', {
@@ -88,6 +103,7 @@
             }
             this.table1.data.push(ie)
             this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
+>>>>>>> c7af73ae05ddb36602f445549a2f61984016850d
           })
         })
         .catch(error => {

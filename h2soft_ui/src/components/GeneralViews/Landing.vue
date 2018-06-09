@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-12 text-center">
           <button v-if="seen" id="btn_login" type="button" class="btn btn-lg btn-success btn-fill" @click="btn_login_click">
-            Iniciar Sesión
+            Iniciar sesión
           </button>
           <login v-if="!seen"></login>
         </div>

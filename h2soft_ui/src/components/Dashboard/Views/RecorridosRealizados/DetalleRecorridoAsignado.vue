@@ -85,7 +85,7 @@
   import { modal } from 'vue-strap'
   import sele from 'vue-strap/src/Select.vue'
 
-  const tableColumns = ['Nro.', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
+  const tableColumns = ['#', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
   const dataColumns = []
   export default {
     components: {
@@ -142,7 +142,7 @@
                     this.cantidadUltimoRemito(det.idObjetivo)
                     .then(cant => {
                       this.table1.data.push({
-                        'nro.': det.idDetalleRecorridoHistorico,
+                        '#': det.idDetalleRecorridoHistorico,
                         'orden': det.orden,
                         'objetivo': resObj.nombre,
                         'dirección': resObj.direccion,

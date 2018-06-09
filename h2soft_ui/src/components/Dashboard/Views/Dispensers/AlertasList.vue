@@ -36,9 +36,10 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import { buttonGroup, radio, modal } from 'vue-strap'
   import api from 'src/api/services/alertasServices'
+  // import ap from 'src/api/services/clientServices'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Tipo', 'Notificacion', 'Estado']
+  const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Tipo', 'Notificación', 'Estado']
   export default {
     components: {
       PaperTable,
@@ -81,7 +82,7 @@
         }
       },
       borrar (e) {
-        if (!confirm('¿Está seguro de que desea borrar esta alerta?')) {
+        if (!confirm('¿Desea borrar esta alerta?')) {
           return
         }
         const id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
