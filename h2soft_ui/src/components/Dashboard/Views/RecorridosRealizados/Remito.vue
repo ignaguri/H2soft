@@ -313,13 +313,13 @@
                     dispenserCodigo = '' // limpio la variable aux para el proximo ciclo del FOR
                   })
                   if (huboDispensersLlevados === false) {
-                    this.remito.txdispensersLlevo = 'No hubo'
+                    this.remito.dispensersLlevo.push('No hubo')
                   }
                   if (huboDispensersDejados === false) {
-                    this.remito.txdispensersDejo = 'No hubo'
+                    this.remito.dispensersDejo.push('No hubo')
                   }
                   if (huboDispensersMantenimiento === false) {
-                    this.remito.txdispensersMantenimiento = 'No hubo'
+                    this.remito.dispensersMantenimiento.push('No hubo')
                   }
                   // this.dispensersDelObjetivo = res.filter(x => { return x.dejadoEnCliente === 0 })
                 }
@@ -340,7 +340,7 @@
             'firma': this.firma,
             'firmaConforme': true,
             'idObjetivo': this.idObjetivo,
-            'idEstadoRemito': 1 // creado
+            'idEstadoRemito': null // creado
           }
           apiRemito.nuevoRemito(this, remito)
           .then(rem => {
@@ -377,6 +377,7 @@
               apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
             })
             // Guardo los dispensers retirados del cliente
+            const idDispensersAMantenimiento = this.dispensersAMantenimiento.map(x => x.idDispensers)
             this.dispensersRetirados.forEach(disR => {
               let detalleRemitoDispensersLlevado = {
                 'idRemito': rem.idRemito,
@@ -390,7 +391,10 @@
                 'idEstadoDispenser': null // estado limpio y en fabrica
               }
               // Guardo los mantenimientos de dispensers
-              if (disR in this.dispensersAMantenimiento) {
+              console.log('if mante', disR, idDispensersAMantenimiento)
+              console.log('in', idDispensersAMantenimiento.includes(disR))
+              if (idDispensersAMantenimiento.includes(disR)) {
+                console.log('ingreso: ' + disR)
                 dispenser.idEstadoDispenser = 4 // a mantenimiento
                 detalleRemitoDispensersLlevado.requiereMantenimiento = true
                 apiDispensers.editDispenser(this, dispenser)
@@ -514,7 +518,7 @@
         if (this.idProducto === null) {
           noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un producto')
         } else if (this.remito.bidonesDejo === null || this.remito.bidonesLlevo === null) {
-          noti.infoConTexto(this, 'Alerta', 'Debe ingrear las cantidades que deja y retira')
+          noti.infoConTexto(this, 'Alerta', 'Debe ingresar las cantidades que deja y retira')
         } else if (existe !== undefined) {
           noti.infoConTexto(this, 'Alerta', 'El producto seleccionado ya se cargó')
         } else {

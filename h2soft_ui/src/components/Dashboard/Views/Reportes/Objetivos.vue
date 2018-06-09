@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="">
           <p class="category horizontal repartidor" >{{reparto.repartidor}}</p>
-          <objetivo v-for="obj in ordenados" :objetivo="obj"></objetivo>
+          <objetivo v-for="obj in reparto.objetivos" :objetivo="obj"></objetivo>
         </div>
       </div>
     </div>
@@ -18,11 +18,6 @@
     components: {
       objetivo
     },
-    data () {
-      return {
-        ordenados: []
-      }
-    },
     props: {
       reparto: {
         type: Object,
@@ -34,22 +29,19 @@
         }
       }
     },
-    mounted () {
-      this.ordenar()
+    created () {
+      // this.marcarUltimoVisitado()
     },
     methods: {
-      ordenar () {
-        console.log('ordenar')
-        this.ordenados = this.reparto.objetivos.sort(function (o1, o2) {
-          if (o1.orden > o2.orden) {
-            return 1
-          } else if (o1.orden < o2.orden) {
-            return -1
-          }
-          return 0
-        })
+      marcarUltimoVisitado () {
+        let ultimosvisitados = []
+        ultimosvisitados = this.reparto.objetivos.sort((a, b) => b.horavisitado - a.horavisitado)
+        console.log('ultimosvisitados', ultimosvisitados)
+        console.log('ultimo visitado', this.reparto.objetivos[0])
+        // this.reparto.objetivos.find(x => x === ultimosvisitados[0]).ultimovisitado = true
       }
     }
+
   }
 </script>
 <style>
