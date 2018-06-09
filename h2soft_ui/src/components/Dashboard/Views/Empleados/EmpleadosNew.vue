@@ -70,7 +70,7 @@
                  options-label="nombre"
                  search-text="Buscar"
                  :placeholder="'Nada seleccionado'"
-                 :search="true" :justified="true" required>
+                 :search="true" :justified="true">
             </dds>
           </div>
         </div>
@@ -108,7 +108,7 @@
           dni: '',
           fechaNacimiento: new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'}),
           domicilio: '',
-          idLocalidad: ''
+          idLocalidad: null
         },
         localidades: []
       }
@@ -130,6 +130,8 @@
       },
       guardarEmpleado () {
         if (!this.edit) {
+          let fecha = this.empleado.fechaNacimiento.split('/')
+          this.empleado.fechaNacimiento = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
           api.postEmpleado(this, this.empleado)
             .then(res => {
               if (res) {
@@ -140,6 +142,8 @@
               }
             })
         } else {
+          let fecha = this.empleado.fechaNacimiento.split('/')
+          this.empleado.fechaNacimiento = fecha[1] + '/' + fecha[0] + '/' + fecha[2]
           api.editEmpleado(this, this.empleado)
             .then(res => {
               if (res) {
