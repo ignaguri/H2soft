@@ -16,7 +16,7 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de pago:</span></h4></label>
+            <slot name="label"><label class="control-label">Medio de pago</label></slot>
             <dds id="medio-de-pago-cobro"
                  v-model="ingresosEgresos.idMedioDePagoCobro"
                  :options="mediosDePagoCobro"
@@ -28,23 +28,23 @@
             </dds>
           </div>
           <div class="col-md-6">
-            <label for="fecha"><h4><span class="label label-default">Fecha:</span></h4></label>
+            <label class="control-label">Fecha</label>
             <datepicker v-model="ingresosEgresos.fecha" id="fecha" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"
                         :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <h5>Descripcion</h5>
             <fg-input type="text"
+                      label="Descripcion"
                       placeholder="Descripcion"
                       v-model="ingresosEgresos.descripcion"
                       required>
             </fg-input>
           </div>
           <div class="col-md-6">
-            <h5>Importe</h5>
-            <money v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit" :required="true" ></money>
+            <slot name="label"><label class="control-label">Importe</label></slot>
+            <money id="importe" v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit" :required="true" ></money>
           </div>
         </div>
         <div class="row" v-if="!cambiarImagen && idGasto != -1">
@@ -214,8 +214,6 @@
       },
       onChange (image) {
         if (image) {
-          // alert('!Nueva imagen seleccionada!')
-          noti.info(this, '', '¡Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')

@@ -1,57 +1,15 @@
 <template>
   <div>
-
-    <!--Stats cards-->
-<!--    <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
-        <stats-card>
-          <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
-            <i :class="stats.icon"></i>
-          </div>
-          <div class="numbers" slot="content">
-            <p>{{stats.title}}</p>
-            {{stats.value}}
-          </div>
-          <div class="stats" slot="footer">
-            <i :class="stats.footerIcon"></i> {{stats.footerText}}
-          </div>
-        </stats-card>
+    <div class="row">
+      <div class="col-md-12">
+        <estadoDeCaja></estadoDeCaja>
       </div>
     </div>
-
-    <! -- Charts-->
     <div class="row">
       <div class="col-md-12">
         <repartos></repartos>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="estadosChart.data" chart-type="Bar">
-          <h4 class="title" slot="title">Objetivos por empleado</h4>
-          <span slot="subTitle"> Estado de objetivos a visitar en el día de hoy por empleado</span>
-          <span slot="footer">
-              <i class="ti-check"></i> Información actualizada</span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Ya visitados
-            <i class="fa fa-circle text-danger"></i> Pendientes de visitar
-          </div>
-        </chart-card>
-      </div>
-      <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="preferencesChart.data"  chart-type="Pie">
-          <h4 class="title" slot="title">Estados de objetivos</h4>
-          <span slot="subTitle"> Estado actual de los objetivos a visitar el día hoy</span>
-          <span slot="footer">
-              <i class="ti-check"></i> Información actualizada</span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Ya visitados
-            <i class="fa fa-circle text-danger"></i> Pendientes de visitar
-          </div>
-        </chart-card>
-      </div>
-    </div>
-
     <div class="row">
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options">
@@ -76,13 +34,7 @@
           </div>
         </chart-card>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <estadoDeCaja></estadoDeCaja>
-        </div>
-      </div>
     </div>
-
   </div>
 </template>
 <script>
@@ -158,7 +110,6 @@
           data: {
             labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
             series: [
-              [825, 830, 815, 750, 680, 510, 450, 455, 400, 480, 610, 756]
             ]
           },
           options: {
@@ -230,7 +181,6 @@
       }
     },
     mounted () {
-      this.cargarRecorridos()
       this.cantBidonesXmes()
     },
     methods: {
@@ -251,7 +201,7 @@
             consumo.push(resp[10])
             consumo.push(resp[11])
             consumo.push(resp[12])
-            // this.usersChart.data.series.push(consumo)
+            this.usersChart.data.series.push(consumo)
           })
           .catch(err => {
             console.log('ERRRO:' + err)
