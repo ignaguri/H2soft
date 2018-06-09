@@ -185,7 +185,7 @@
                 apiDispenser.editDispenser(this, dispenser)
                   .then(dis => {
                     if (dis) {
-                      noti.exito(this)
+                      noti.exitoConTexto(this, 'Éxito', 'Mantenimiento registrado con éxito!')
                       this.showCustomModal = false
                       this.table1.data = []
                       this.cargarMantenimientos()
@@ -199,8 +199,7 @@
                       }
                       apiAlertas.postAlerta(this, alerta)
                     } else {
-                      console.log('error al editar el dispenser')
-                      noti.error(this)
+                      noti.errorConTexto(this, 'Error', 'Error al registrar mantenimiento')
                       this.showCustomModal = true
                     }
                   }, error => {

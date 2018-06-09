@@ -412,7 +412,7 @@
               }
             })
             // muestro la notificacion de ok
-            noti.exito(this)
+            noti.exitoConTexto(this, 'Éxito', 'Remito guardado con éxito!')
             // vuelvo atrás
             this.$parent.current = 'DetalleRecorrido'
             this.$parent.verRemito = false
