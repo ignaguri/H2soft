@@ -20,8 +20,8 @@
   </div>
 </template>
 <script>
-  import UsersList from './Usuarios/UsersList.vue'
-  import NewUserForm from './Usuarios/NewUserForm.vue'
+  import UsersList from 'src/components/Dashboard/Views//Usuarios/UsersList.vue'
+  import NewUserForm from 'src/components/Dashboard/Views//Usuarios/NewUserForm.vue'
   export default {
     components: {
       UsersList,
