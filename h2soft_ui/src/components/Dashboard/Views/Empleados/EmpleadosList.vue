@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="isCamionesList">
+    <div v-if="isEmpleadosList">
       <div class="row">
         <div class="col-md-12">
           <div class="card">
             <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
                          :columns="table1.columns" :editButton="true" :eraseButton="true"
-                         :erase="borrarCamion" :goButton="false"
+                         :erase="borrarEmpleado" :goButton="false"
                          :edit="editar">
             </paper-table>
           </div>
@@ -18,9 +18,10 @@
 <script>
   // import PaperTable from 'components/UIComponents/PaperTable.vue'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import api from 'src/api/services/camionServices'
+  import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Camión', 'Capacidad Máxima']
+  // const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio']
+  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento']
   //  let tableData = []
 
   export default {
@@ -29,27 +30,29 @@
     },
     data () {
       return {
-        isCamionesList: true,
+        isEmpleadosList: true,
         estados: [],
         table1: {
-          title: 'Camiones',
-          subTitle: 'Listado de camiones de la empresa',
+          title: 'Empleados',
+          subTitle: 'Listado de empleados de la empresa',
           columns: [...tableColumns],
           data: []
         }
       }
     },
     mounted () {
-      this.cargarCamiones()
+      this.cargarEmpleados()
     },
     methods: {
-      cargarCamiones () {
-        api.getCamiones(this).then(res => {
-          res.forEach(camion => {
+      cargarEmpleados () {
+        api.getEmpleados(this).then(res => {
+          res.forEach(empleado => {
             this.table1.data.push({
-              nro: camion.idCamiones,
-              camión: camion.nombre,
-              capacidadmáxima: camion.capacidadMaxima
+              nro: empleado.idEmpleados,
+              nombre: empleado.nombre + ' ' + empleado.apellido,
+              dni: empleado.dni,
+              fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+              // domicilio: empleado.domicilio
             })
           })
         }, error => {
@@ -61,17 +64,17 @@
         this.$emit('emitted', {action: 'edit', client: id})
         this.$parent.idCamiones = id
       },
-      borrarCamion (e) {
+      borrarEmpleado (e) {
         let id = Number(e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
-        api.deleteCamion(this, id)
+        api.deleteEmpleado(this, id)
           .then(res => {
             if (res) {
-              noti.exitoConTexto(this, 'Éxito', 'El Camión se ha eliminado!')
+              noti.exitoConTexto(this, 'Éxito', 'El Empleado se ha eliminado!')
             }
           })
           .catch(err => {
             console.log('error', err)
-            noti.errorConTexto(this, 'Error', 'Error al eliminar Camión')
+            noti.errorConTexto(this, 'Error', 'Error al eliminar Empleado')
           })
       }
     }
