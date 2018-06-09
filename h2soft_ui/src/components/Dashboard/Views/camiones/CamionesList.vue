@@ -20,7 +20,6 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/camionServices'
   import noti from 'src/api/notificationsService'
-
   const tableColumns = ['Nro', 'Camión', 'Capacidad Máxima']
   //  let tableData = []
 

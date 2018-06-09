@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="row">
-      <dispenser-list v-if="isCamionesList" @emitted="capturarEvento"></dispenser-list>
-      <dispenser-new v-if="!isCamionesList" :edit="edit" :id="idCamiones"></dispenser-new>
+      <camion-list v-if="isCamionesList" @emitted="capturarEvento"></camion-list>
+      <camion-new v-if="!isCamionesList" :edit="edit" :id="idCamiones"></camion-new>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -21,13 +21,13 @@
 </template>
 <script>
   // TODO: poner los botones en cada componente
-  import DispenserList from './CamionesList.vue'
-  import DispenserNew from './CamionesNew.vue'
+  import CamionList from './CamionesList.vue'
+  import CamionNew from './CamionesNew.vue'
 
   export default {
     components: {
-      DispenserList,
-      DispenserNew
+      CamionList,
+      CamionNew
     },
     data () {
       return {
