@@ -39,11 +39,6 @@ const SidebarStore = {
       path: '/clientes'
     },
     {
-      name: 'Usuarios',
-      icon: 'ti-user',
-      path: '/usuarios'
-    },
-    {
       name: 'configuracion',
       icon: 'ti-settings',
       path: '/config'

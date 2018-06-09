@@ -99,10 +99,10 @@
       hasValue (item, column) {
         // column = column.replace(' ', '')
         // alert(JSON.stringify(column)) // console.log('item: ' + JSON.stringify(item) + 'columna: ' + JSON.stringify(item))
-        return item[column.toLowerCase().replace(' ', '')] !== 'undefined'
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')] !== 'undefined'
       },
       itemValue (item, column) {
-        return item[column.toLowerCase().replace(' ', '')]
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')]
       },
       prueba (elem) {
         console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)

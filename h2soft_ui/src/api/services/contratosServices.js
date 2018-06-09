@@ -42,6 +42,11 @@ export default {
     return context.$http.get(API_URL + 'clientes', authHeader)
       .then(res => { return res.body.data })
   },
+  getClienteContratos (context, id) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'clientes/' + id, authHeader)
+      .then(res => res.body)
+  },
   getProductosContratos (context) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'productos', authHeader)

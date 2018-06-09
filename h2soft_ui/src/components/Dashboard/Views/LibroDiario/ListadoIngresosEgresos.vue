@@ -7,6 +7,11 @@
                      :erase="borrarIngresoEgreso" :goButton="true" :go="verImagenComprobante">
         </paper-table>
       </div>
+      <div class="row">
+          <div class="text-center">
+            <button type="button" class="btn btn-info btn-fill btn-wd" @click="descargar">Exportar</button>
+          </div>
+      </div>
       <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
         <div class="row">
           <div class="col-md-12">
@@ -26,6 +31,7 @@
   import apiEmpleados from 'src/api/services/listadoRemitoServices'
   import apiMedios from 'src/api/services/medioDePagoCobroService'
   import noti from 'src/api/notificationsService'
+  import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
 
   const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio depago', 'Descripcion']
@@ -50,7 +56,8 @@
         modalData: {
           imagen: ''
         },
-        showCustomModal: false
+        showCustomModal: false,
+        exportData: []
       }
     },
     props: {
@@ -64,21 +71,29 @@
     },
     methods: {
       cargarIngresosEgresos () {
+        this.table1.data = []
+        this.exportData = []
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
-            this.table1.data.push({
+            const ie = {
               id: ingreEgre.idGastos,
-              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+              fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', {
+                year: '2-digit',
+                month: '2-digit',
+                day: '2-digit'
+              }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               importe: '$ ' + ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
-            })
+            }
+            this.table1.data.push(ie)
+            this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
           })
-        }, error => {
+        })
+        .catch(error => {
           console.log('error' + JSON.stringify(error))
-        }
-        )
+        })
       },
       getEmpleadoss () {
         apiEmpleados.getEmpleados(this)
@@ -133,6 +148,15 @@
           this.modalData.imagen = res.imagen
         })
         this.showCustomModal = true
+      },
+      descargar () {
+        const today = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
+        const title = `Resumen de Ingresos y Egresos al día ${today}`
+        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de Pago', 'Descripción']
+        // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
+        const total = this.exportData.reduce((a, b) => a + b[3], 0)
+        const columnaTotal = ['Total', null, null, total]
+        apiExport.exportToExcel(title, columns, this.exportData, columnaTotal)
       }
     }
   }

@@ -178,7 +178,7 @@
                     'producto': p.nombre,
                     'cantidadmínima': d.cantidadMinima,
                     'cantidadmáxima': d.cantidadMaxima,
-                    'precio': d.precioPorUnidad,
+                    'precio': '$ ' + d.precioPorUnidad,
                     'vigentehasta': res['contrato'].fechaVigenciaHasta === null ? '-' : new Date(res['contrato'].fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                   }
                   this.table2.data.push(detalle)
