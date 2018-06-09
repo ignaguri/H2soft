@@ -20,7 +20,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Nombre', 'Dni', 'Fecha Nacimiento', 'Domicilio', 'Localidad']
+  const tableColumns = ['#', 'Nombre', 'Dni', 'Fecha nacimiento', 'Domicilio', 'Localidad']
   //  let tableData = []
 
   export default {
@@ -62,7 +62,7 @@
         api.getEmpleados(this).then(res => {
           res.forEach(empleado => {
             this.table1.data.push({
-              nro: empleado.idEmpleados,
+              '#': empleado.idEmpleados,
               nombre: empleado.nombre + ' ' + empleado.apellido,
               dni: empleado.dni,
               fechanacimiento: new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),

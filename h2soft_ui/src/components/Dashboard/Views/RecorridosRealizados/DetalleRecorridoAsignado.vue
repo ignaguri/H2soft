@@ -225,7 +225,7 @@
                   this.$parent.estado = 'En proceso'
                   this.$parent.idEstado = 2
                   this.camionAsignado = this.getCamionNombre(this.idCamion)
-                  noti.exito(this)
+                  noti.exitoConTexto(this, 'Éxito', 'Recorrido inicializado')
                   this.showCustomModal = false
                 },
                 error => {
@@ -233,7 +233,7 @@
                 })
             },
             error => {
-              noti.errorConTexto(this, 'Error', 'No se pudo asignar el camion al recorrido')
+              noti.errorConTexto(this, 'Error', 'No se pudo asignar el camión al recorrido')
               console.log('error al asignar el camión ' + error)
               this.showCustomModal = false
             })
@@ -252,7 +252,7 @@
               this.verBtAnular = false
               this.verBtIniciarFinalizar = false
               this.$parent.estado = 'Finalizado'
-              noti.exito(this)
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido finalizado')
             },
             error => {
               console.log('error al cambiar el estado ' + error)
@@ -269,7 +269,7 @@
                 this.txBtSuspReanudar = 'Reanudar'
                 this.$parent.estado = 'Suspendido'
                 this.$parent.idEstado = 3
-                noti.exito(this)
+                noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
               },
                 error => {
                   console.log('error al cambiar el estado ' + error)
@@ -284,7 +284,7 @@
                 this.txBtSuspReanudar = 'Suspender'
                 this.$parent.estado = 'En Proceso'
                 this.$parent.idEstado = 2
-                noti.exito(this)
+                noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
               },
               error => {
                 console.log('error al cambiar el estado ' + error)
@@ -303,13 +303,13 @@
               this.verBtAnular = false
               this.verBtSuspReanudar = false
               this.$parent.idEstado = 5
-              noti.exito(this)
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido anulado')
             },
             error => {
               console.log('error al cambiar el estado ' + error)
             })
         } else {
-          alert('No se puede realizar el cambio de estado')
+          noti.infoConTexto('No se puede realizar el cambio de estado')
         }
       },
       setearEstadoActual () {
@@ -369,7 +369,6 @@
         }
       },
       verRecorridoEnMapa () {
-        // alert('Ver objetivos en el mapa')
         api.mostrarRecorridoEnMapa(this, this.table1.data)
           .then(url => {
             window.open(url)
