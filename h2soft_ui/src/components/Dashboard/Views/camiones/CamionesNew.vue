@@ -77,6 +77,7 @@
             .then(res => {
               if (res) {
                 noti.exitoConTexto(this, 'Éxito', 'Camión guardado con éxito!')
+                this.limpiarCampos()
               } else {
                 noti.errorConTexto(this, 'Error', 'Error al guardar el camión')
               }
@@ -86,6 +87,7 @@
             .then(res => {
               if (res) {
                 noti.exitoConTexto(this, 'Éxito', 'Camión guardado con éxito!')
+                this.limpiarCampos()
               } else {
                 noti.errorConTexto(this, 'Error', 'Error al guardar el camión')
               }
@@ -102,6 +104,11 @@
             this.camion.capacidadMaxima = camio.body.capacidadMaxima
           })
         }
+      },
+      limpiarCampos () {
+        this.camion.idCamiones = null
+        this.camion.nombre = null
+        this.camion.capacidadMaxima = null
       }
     }
   }
