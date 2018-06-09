@@ -25,7 +25,7 @@
           </select>
         </div>
         <div class="col-md-6">
-          <label for="precio"><h4><span class="label label-default">Precio por unidad:</span></h4></label>
+          <label for="precio"><h4><span class="label label-default">Precio por unidad ($):</span></h4></label>
           <fg-input id="precio"
                     type="number"
                     placeholder="Precio"
@@ -36,19 +36,19 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <label for="cantmin"><h4><span class="label label-default">Cant mínima de unidades:</span></h4></label>
+          <label for="cantmin"><h4><span class="label label-default">Cant. mínima de unidades:</span></h4></label>
           <fg-input id="cantmin"
                     type="number"
-                    placeholder="Cantidad Minima"
+                    placeholder="Cantidad mínima"
                     v-model="detalleContrato.cantidadMinima"
                     min="1">
           </fg-input>
         </div>
         <div class="col-md-6">
-          <label for="cantmax"><h4><span class="label label-default">Cant máxima de unidades:</span></h4></label>
+          <label for="cantmax"><h4><span class="label label-default">Cant. máxima de unidades:</span></h4></label>
           <fg-input id="cantmax"
                     type="number"
-                    placeholder="Cantidad Maxima"
+                    placeholder="Cantidad máxima"
                     v-model="detalleContrato.cantidadMaxima"
                     :min="detalleContrato.cantidadMinima">
           </fg-input>
@@ -92,9 +92,9 @@
         detalleContrato: {
           // idDetallesContrato: '',
           idProducto: '',
-          cantidadMaxima: 0,
-          cantidadMinima: 0,
-          precioPorUnidad: 0
+          cantidadMaxima: ' ',
+          cantidadMinima: ' ',
+          precioPorUnidad: ' '
         },
         productoss: {},
         table1: {
@@ -134,7 +134,6 @@
         this.table1.data = []
         this.detalles.forEach(det => {
           this.table1.data.push({
-            // nro: det.idDetallesContrato,
             producto: this.cargarProducto(det.idProducto),
             cantidaddesde: det.cantidadMinima,
             cantidadhasta: det.cantidadMaxima,
@@ -149,11 +148,6 @@
           })
       },
       borrar () {
-        // let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        // let DeleteProducto = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        // let toDeleteProducto = this.buscarIdProducto(DeleteProducto)
-        // let toDeleteCantidad = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
-        // alert('prod: ' + toDeleteProducto + ', cant: ' + toDeleteCantidad)
         this.$emit('delete_detalle', this.toDeleteProducto, this.toDeleteCantidad)
         this.showCustomModalBorrar = false
       },
@@ -211,9 +205,9 @@
       },
       limpiarCampos () {
         this.detalleContrato.idProducto = ''
-        this.detalleContrato.cantidadMaxima = 0
-        this.detalleContrato.cantidadMinima = 0
-        this.detalleContrato.precioPorUnidad = 0
+        this.detalleContrato.cantidadMaxima = ''
+        this.detalleContrato.cantidadMinima = ''
+        this.detalleContrato.precioPorUnidad = ''
       }
     }
   }

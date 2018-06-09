@@ -18,17 +18,17 @@
           </div>
           <div class="col-md-6">
             <label for="fechaFirma"><h4><span class="label label-default">Firmado:</span></h4></label>
-            <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
+            <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha firmado'" width="100%" :clear-button="true"></datepicker>
           </div>
         </div>
           <div class="row">
             <div class="col-md-6">
               <label for="fechaDesde"><h4><span class="label label-default">Vigente desde:</span></h4></label>
-              <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
+              <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha desde'" width="100%" :clear-button="true"></datepicker>
             </div>
             <div class="col-md-6">
               <label for="fechaHasta"><h4><span class="label label-default">Vigente hasta:</span></h4></label>
-              <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
+              <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha hasta'" width="100%" :clear-button="true"></datepicker>
             </div>
           </div>
           <hr>

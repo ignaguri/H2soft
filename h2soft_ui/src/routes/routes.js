@@ -81,7 +81,7 @@ const routes = [
       },
       {
         path: 'usuarios',
-        name: 'Gestion de usuarios',
+        name: 'Gestión de usuarios',
         component: Usuarios,
         meta: {requiresAuth: true}
       }

@@ -16,7 +16,7 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de Pago:</span></h4></label>
+            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de pago:</span></h4></label>
             <dds id="medio-de-pago-cobro"
                  v-model="ingresosEgresos.idMedioDePagoCobro"
                  :options="mediosDePagoCobro"
@@ -36,14 +36,14 @@
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Descripcion"
-                      placeholder="Descripcion"
+                      label="Descripción"
+                      placeholder="Descripción"
                       v-model="ingresosEgresos.descripcion"
                       required>
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input label="Importe"
+            <fg-input label="Importe $"
                       type="number"
                       placeholder="Importe"
                       v-model="ingresosEgresos.monto"
@@ -60,7 +60,7 @@
         </div>
         <div class="row" v-if="idGasto == -1 || (idGasto !== -1 && cambiarImagen)">
           <div class="col-md-3">
-            <h5>Imagen Comprobante</h5>
+            <h5>Imagen comprobante</h5>
             <picture-input
               ref="pictureInput"
               @change="onChange"
@@ -163,7 +163,7 @@
           apiIE.postIngresoEgreso(this, this.ingresosEgresos)
             .then(res => {
               if (res) {
-                noti.exito(this)
+                noti.exitoConTexto(this, 'Éxito', 'Ingreso/Egreso guardado con éxito!')
                 // alert('ingresosEgresos guardado con éxito.')
                 this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
                 this.cajaTotal.monto = this.ingresosEgresos.monto
@@ -179,8 +179,7 @@
                   })
                 this.limpiarCampos()
               } else {
-                noti.error(this)
-                // alert('Error al guardar el ingresosEgresos.')
+                noti.errorConTexto(this, 'Error', 'Error al guardar Ingreso/Egreso')
               }
             })
         } else {
@@ -190,14 +189,10 @@
           apiIE.pathcIngresosEgresos(this, this.idGasto, this.ingresosEgresos)
             .then(res => {
               if (res) {
-                console.log('devolvió true en modificar ingresosEgresos')
-                noti.exito(this)
-                // alert('ingresosEgresos modificado con éxito.')
+                noti.exitoConTexto(this, 'Éxito', 'Ingreso/Egreso actualizado con éxito!')
                 this.limpiarCampos()
               } else {
-                noti.error(this)
-                console.log('devolvio false')
-                // alert('Error al modificar el ingresosEgresos.')
+                noti.errorConTexto(this, 'Error', 'Error al modificar Ingreso/Egreso')
               }
             })
         }

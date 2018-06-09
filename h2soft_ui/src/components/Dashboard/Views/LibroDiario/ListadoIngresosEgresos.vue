@@ -28,7 +28,7 @@
   import noti from 'src/api/notificationsService'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
+  const tableColumns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio pago', 'Descripción']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -41,7 +41,7 @@
       return {
         table1: {
           title: 'Ingresos/Egresos',
-          subTitle: 'Listado de Ingresos/Egresos',
+          subTitle: 'Listado de todas las transacciones de dinero realizadas',
           columns: [...tableColumns],
           data: []
         },
@@ -67,12 +67,12 @@
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
             this.table1.data.push({
-              id: ingreEgre.idGastos,
+              '#': ingreEgre.idGastos,
               fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               importe: ingreEgre.monto,
-              mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
-              descripcion: ingreEgre.descripcion
+              mediopago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
+              descripción: ingreEgre.descripcion
             })
           })
         }, error => {
