@@ -2,7 +2,7 @@
   <div class="content">
     <form name="new_dispenser_form">
       <div class="row">
-        <h5 class="title">Información útil de cada cliente para realizar la facturación</h5>
+        <h5 style="margin-left: 15px;">Información útil de cada cliente para realizar la facturación</h5>
         <div class="col-md-3">
           <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
             <dds id="cliente" v-model="idClientes"
@@ -27,31 +27,33 @@
         <div class="col-md-3"  style="padding-top: 25px;" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
+        <div class="col-md-3"  style="padding-top: 25px;" >
+          <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
+        </div>
       </div>
     </form>
-   <div class="row" >
-      <div class="col-md-12">
-        <div class="card">
-          <div class="row">
-                  <div class="col-md-4 text-center">
-                    <h5>Precio por unidad</h5>
-                    <h4 style="margin-top: 0px;" class="">$ {{this.precioPorUnidad}} / bidón</h4>
-                  </div>
-                  <div class="col-md-4 text-center">
-                    <h5>Cantidad vendida</h5>
-                    <h4 style="margin-top: 0px;" class="">{{this.cantidad}} bidones</h4>
-                  </div>
-                  <div class="col-md-4 text-center">
-                    <h5>Total</h5>
-                    <h4 style="margin-top: 0px;" class="">$ {{this.total}}</h4>
-                  </div>
+  <div class="row" >
+    <div class="col-md-12">
+      <div class="card">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
+        </paper-table>
+        <div class="row" >
+          <div class="col-md-9">
+            <p class="category" v-if="superaRangos">La cantidad vendida en el periodo seleccionado supera los rangos del contrato. Se considera el precio del mayor rango</p>
           </div>
-          <div class="row">
-            <div class="col-md-12" style="margin-left: 20px;">
-              <p class="category" v-if="superaRangos">La cantidad de bidones de 20 L vendida en el periodo seleccionado supera los rangos del contrato. Se tomará el precio del mayor rango</p>
+          <div class="col-md-3">
+            <div class="text-left">
+              <h4>TOTAL ${{this.total}}</h4>
             </div>
           </div>
-          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" >
+      <div class="col-md-12">
+        <div class="card">        
+          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>
       </div>
@@ -62,9 +64,12 @@
   import PaperTable from 'components/UIComponents/PaperTablePlusContabilidad.vue'
   import { datepicker, select } from 'vue-strap'
   import api from 'src/api/services/clientServices.js'
+  import apiProducto from 'src/api/services/productosServices.js'
+  import apiExport from 'src/api/export'
   import noti from 'src/api/notificationsService'
 
-  const table1Columns = ['Objetivo', 'Fecha', 'Cantidad', 'Firmado conforme']
+  const table1Columns = ['Producto', 'Cantidad vendida', 'Precio por unidad', 'Subtotal']
+  const table2Columns = ['Fecha', 'Objetivo', 'Producto', 'Cantidad vendida', 'Firmado conforme']
   export default {
     components: {
       PaperTable,
@@ -74,9 +79,15 @@
     data () {
       return {
         table1: {
-          title: 'Listado de ventas realizadas',
-          subTitle: 'Detalle de las ventas de bidones realizadas para el cliente seleccionado',
+          title: 'Ventas al cliente por producto',
+          subTitle: 'Cantidad de productos vendidos al cliente y su precio según el contrato actual',
           columns: [...table1Columns],
+          data: []
+        },
+        table2: {
+          title: 'Detalle de ventas realizadas',
+          subTitle: 'Listado de las ventas realizadas al cliente por fecha y objetivo',
+          columns: [...table2Columns],
           data: []
         },
         precioPorUnidad: 0,
@@ -86,7 +97,11 @@
         idClientes: 0,
         fechaDesde: '',
         fechaHasta: '',
-        superaRangos: false
+        superaRangos: false,
+        exportData: {
+          remitos: [],
+          totales: []
+        }
       }
     },
     mounted () {
@@ -109,10 +124,9 @@
       },
       actualizar () {
         if (this.idClientes !== 0) {
-          this.precioPorUnidad = 0
-          this.cantidad = 0
           this.total = 0
           this.table1.data = []
+          this.table2.data = []
           this.calcularValores()
         } else {
           noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
@@ -123,17 +137,60 @@
           .then(ventasXProducto => {
             console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
-              this.precioPorUnidad = ventasXProducto[0].precioPorUnidad
-              this.cantidad = ventasXProducto[0].cantidad
-              this.total = ventasXProducto[0].total
-              this.table1.data = ventasXProducto[0].ventas
+              ventasXProducto.forEach(vxp => {
+                apiProducto.getProductoXId(this, vxp.idProducto)
+                .then(p => {
+                  p = p[0]
+                  let venta = {
+                    'producto': p.nombre,
+                    'precioporunidad': '$ ' + vxp.precioPorUnidad,
+                    'cantidadvendida': vxp.cantidad,
+                    'subtotal': '$ ' + vxp.total
+                  }
+                  this.total = this.total + vxp.total
+                  this.table1.data.push(venta)
+                  this.exportData.totales.push([venta.producto, venta.precioporunidad, venta.cantidadvendida, venta.subtotal])
+                  vxp.ventas.forEach(v => {
+                    let detalleVenta = {
+                      'fecha': v.fecha,
+                      'objetivo': v.objetivo,
+                      'producto': p.nombre,
+                      'cantidadvendida': v.cantidad,
+                      'firmadoconforme': 'Si'
+                    }
+                    this.table2.data.push(detalleVenta)
+                    this.table2.data.sort((a, b) => a.fecha - b.fecha) // a medida que voy insertando, voy ordenando
+                    this.exportData.remitos.push([detalleVenta.fecha, detalleVenta.objetivo, detalleVenta.producto, detalleVenta.cantidadvendida])
+                  })
+                })
+              })
             } else {
-              this.precioPorUnidad = 0
-              this.cantidad = 0
+              noti.errorConTexto(this, 'Error', 'Ha ocurrido un error en la búsqueda de los datos.')
               this.total = 0
               this.table1.data = []
+              this.table2.data = []
             }
+          }, error => {
+            noti.errorConTexto(this, error.name, error.message)
+            // console.log('error ' + JSON.stringify(error))
           })
+      },
+      descargar () {
+        if (this.idClientes !== 0) {
+          const cliente = this.clientes.find(c => { return c.idClientes === this.idClientes }).razonSocial
+          const fechas = this.fechaDesde + ' y ' + this.fechaHasta
+          let datos = []
+          const title = `Ventas realizadas a ${cliente} entre ${fechas}`
+          const columns = ['Fecha', 'Objetivo', 'Producto', 'Cantidad']
+          this.exportData.remitos.push([null, null, null, null]) // agrego una linea en blanco
+          this.exportData.remitos.push(['Totales por producto'])
+          this.exportData.remitos.push(['Producto', 'Cantidad Vendida', '$/unidad', 'Subtotal'])
+          datos = this.exportData.remitos.concat(this.exportData.totales)
+          const columnaTotal = [null, null, 'Total', '$ ' + this.total]
+          apiExport.exportToExcel(title, columns, datos, columnaTotal)
+        } else {
+          noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
+        }
       }
     }
   }

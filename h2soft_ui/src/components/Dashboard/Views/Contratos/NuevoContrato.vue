@@ -35,6 +35,9 @@
         <detalle-contrato :detalles="detalles" :edit="edit" :idContrato="id" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
         <div class="row">
           <div class="text-center">
+            <button type="button" v-if="edit" class="btn btn-info btn-fill btn-wd" @click="exportar">
+              Exportar a PDF
+            </button>
             <button type="submit"  class="btn btn-success btn-fill btn-wd">
               Guardar contrato
             </button>
@@ -49,6 +52,7 @@
   // TODO: agregar columna de idDetalleContrato para poder borra solo un detalle
   // TODO: agrefar el nombre de producto en vez del idProducto
   import api from 'src/api/services/contratosServices'
+  import exportApi from 'src/api/export'
   import DetalleContrato from './DetalleContrato.vue'
   import { datepicker } from 'vue-strap'
   import noti from 'src/api/notificationsService'
@@ -68,7 +72,8 @@
         },
         clientes: {},
         contrat: {},
-        detalles: []
+        detalles: [],
+        productos: []
       }
     },
     props: {
@@ -86,6 +91,27 @@
       */
     },
     methods: {
+      exportar () {
+        const clausulas = this.detalles.map(d => {
+          const aux = Object.assign({}, d)
+          const nombre = this.productos.find(p => p.idProductos === d.idProducto).nombre
+          aux.producto = nombre
+          return aux
+        })
+        api.getClienteContratos(this, this.contrato.idCliente)
+          .then(cliente => {
+            const data = {
+              razonSocial: cliente.razonSocial,
+              cuil: cliente.CUIL,
+              domicilio: cliente.direccion,
+              fechaFirma: this.contrato.fechaFirma,
+              vigenciaDesde: this.contrato.fechaVigenciaDesde,
+              vigenciaHasta: this.contrato.fechaVigenciaHasta,
+              clausulas
+            }
+            exportApi.exportToPDF(data)
+          })
+      },
       guardarContrato () {
         if (this.detalles.length <= 0) {
           noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos un detalle')

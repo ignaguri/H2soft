@@ -13,6 +13,7 @@ import Reporte from 'src/components/Dashboard/Views/Reportes'
 import IngresosEgresos from 'src/components/Dashboard/Views/IngresosEgresos'
 import BidonesDispensers from 'src/components/Dashboard/Views/BidonesDispensers'
 import Contabilidad from 'src/components/Dashboard/Views/Contabilidad'
+import Configuracion from 'src/components/Dashboard/Views/Configuracion.vue'
 
 const routes = [
   {
@@ -83,6 +84,12 @@ const routes = [
         path: 'usuarios',
         name: 'Gestión de usuarios',
         component: Usuarios,
+        meta: {requiresAuth: true}
+      },
+      {
+        path: 'config',
+        name: 'Configuración',
+        component: Configuracion,
         meta: {requiresAuth: true}
       }
     ]
