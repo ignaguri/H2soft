@@ -16,7 +16,7 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <label for="medio-de-pago-cobro"><h4><span class="label label-default">Medio de Pago:</span></h4></label>
+            <slot name="label"><label class="control-label">Medio de pago</label></slot>
             <dds id="medio-de-pago-cobro"
                  v-model="ingresosEgresos.idMedioDePagoCobro"
                  :options="mediosDePagoCobro"
@@ -28,7 +28,7 @@
             </dds>
           </div>
           <div class="col-md-6">
-            <label for="fecha"><h4><span class="label label-default">Fecha:</span></h4></label>
+            <label class="control-label">Fecha</label>
             <datepicker v-model="ingresosEgresos.fecha" id="fecha" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"
                         :placeholder="'fecha'" width="100%" :clear-button="true"></datepicker>
           </div>
@@ -36,20 +36,15 @@
         <div class="row">
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Descripcion"
-                      placeholder="Descripcion"
+                      label="Descripción"
+                      placeholder="Descripción"
                       v-model="ingresosEgresos.descripcion"
                       required>
             </fg-input>
           </div>
           <div class="col-md-6">
-            <fg-input label="Importe"
-                      type="number"
-                      placeholder="Importe"
-                      v-model="ingresosEgresos.monto"
-                      :disabled="edit"
-                      required>
-            </fg-input>
+            <slot name="label"><label class="control-label">Importe</label></slot>
+            <money id="importe" v-model="ingresosEgresos.monto" v-bind="money" class="form-control" :disabled="edit"></money>
           </div>
         </div>
         <div class="row" v-if="!cambiarImagen && idGasto != -1">
@@ -60,7 +55,7 @@
         </div>
         <div class="row" v-if="idGasto == -1 || (idGasto !== -1 && cambiarImagen)">
           <div class="col-md-3">
-            <h5>Imagen Comprobante</h5>
+            <h5>Imagen comprobante</h5>
             <picture-input
               ref="pictureInput"
               id="foto"
@@ -102,6 +97,7 @@
   import apiCT from 'src/api/services/cajaTotalServices'
   import pictureInput from 'vue-picture-input'
   import noti from 'src/api/notificationsService'
+  import {Money} from 'v-money'
 
   export default {
     components: {
@@ -109,7 +105,8 @@
       pictureInput,
       buttonGroup,
       radio,
-      dds: select
+      dds: select,
+      Money
     },
     data () {
       return {
@@ -129,7 +126,15 @@
         },
         mediosDePagoCobro: [],
         radioValue: null,
-        limpiarImagen: false
+        limpiarImagen: false,
+        money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false
+        }
       }
     },
     props: {
@@ -156,6 +161,10 @@
             noti.infoConTexto(this, 'Alerta', 'Tiene que seleccionar un tipo de operación')
             return
           }
+          if (this.ingresosEgresos.monto === 0) {
+            noti.infoConTexto(this, 'Alerta', 'El monto no puede ser cero')
+            return
+          }
           if (this.radioValue === 'egreso') {
             this.ingresosEgresos.monto = '-' + this.ingresosEgresos.monto
           }
@@ -165,7 +174,7 @@
           apiIE.postIngresoEgreso(this, this.ingresosEgresos)
             .then(res => {
               if (res) {
-                noti.exito(this)
+                noti.exitoConTexto(this, 'Éxito', 'Ingreso/Egreso guardado con éxito!')
                 // alert('ingresosEgresos guardado con éxito.')
                 this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
                 this.cajaTotal.monto = this.ingresosEgresos.monto
@@ -181,8 +190,7 @@
                   })
                 this.limpiarCampos()
               } else {
-                noti.error(this)
-                // alert('Error al guardar el ingresosEgresos.')
+                noti.errorConTexto(this, 'Error', 'Error al guardar Ingreso/Egreso')
               }
             })
         } else {
@@ -192,22 +200,17 @@
           apiIE.pathcIngresosEgresos(this, this.idGasto, this.ingresosEgresos)
             .then(res => {
               if (res) {
-                console.log('devolvió true en modificar ingresosEgresos')
-                noti.exito(this)
-                // alert('ingresosEgresos modificado con éxito.')
+                noti.exitoConTexto(this, 'Éxito', 'Ingreso/Egreso actualizado con éxito!')
                 this.limpiarCampos()
               } else {
                 noti.error(this)
-                console.log('devolvio false')
-                // alert('Error al modificar el ingresosEgresos.')
+                noti.errorConTexto(this, 'Error', 'Error al modificar Ingreso/Egreso')
               }
             })
         }
       },
       onChange (image) {
         if (image) {
-          // alert('!Nueva imagen seleccionada!')
-          // noti.info(this, '', '¡Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')
@@ -236,13 +239,13 @@
         console.log('el ref es', ref)
       },
       limpiarCampos () {
-        this.ingresosEgresos.monto = null
+        this.ingresosEgresos.monto = ''
         this.ingresosEgresos.fecha = new Date().toLocaleDateString('es-AR', {
           year: '2-digit',
           month: '2-digit',
           day: '2-digit'
         })
-        this.ingresosEgresos.idMedioDePagoCobro = null
+        this.ingresosEgresos.idMedioDePagoCobro = ''
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
         this.radioValue = null

@@ -33,7 +33,8 @@
   import noti from 'src/api/notificationsService'
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'MediodePago', 'Descripcion']
+
+  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripcion']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -46,7 +47,7 @@
       return {
         table1: {
           title: 'Ingresos/Egresos',
-          subTitle: 'Listado de Ingresos/Egresos',
+          subTitle: 'Listado de todas las transacciones de dinero realizadas',
           columns: [...tableColumns],
           data: []
         },
@@ -82,7 +83,7 @@
                 day: '2-digit'
               }),
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
-              importe: ingreEgre.monto,
+              importe: '$ ' + ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
               descripcion: ingreEgre.descripcion
             }
@@ -151,7 +152,7 @@
       descargar () {
         const today = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
         const title = `Resumen de Ingresos y Egresos al día ${today}`
-        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de Pago', 'Descripción']
+        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
         // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
         const total = this.exportData.reduce((a, b) => a + b[3], 0)
         const columnaTotal = ['Total', null, null, total]

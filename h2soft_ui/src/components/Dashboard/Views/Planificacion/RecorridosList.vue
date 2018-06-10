@@ -77,8 +77,8 @@
   import noti from 'src/api/notificationsService'
   import { modal, select } from 'vue-strap'
 
-  const table1Columns = ['Nro', 'Temporada', 'Dia', 'Turno', 'Frecuencia', 'Asignado a']
-  const table2Columns = ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente']
+  const table1Columns = ['#', 'Temporada', 'Día', 'Turno', 'Frecuencia', 'Asignado a']
+  const table2Columns = ['Orden', 'Objetivo', 'Dirección', 'Localidad', 'Cliente']
   export default {
     components: {
       PaperTable,
@@ -95,7 +95,7 @@
         },
         table2: {
           title: 'Recorrido',
-          subTitle: 'Info del recorrido',
+          subTitle: 'Información del recorrido',
           columns: [...table2Columns],
           data: []
         },
@@ -134,9 +134,9 @@
             r.sort((a, b) => a.recorrido - b.recorrido)
             r.forEach(recs => {
               this.table1.data.push({
-                nro: recs.recorrido,
+                '#': recs.recorrido,
                 temporada: recs.temporada,
-                dia: recs.dia,
+                día: recs.dia,
                 turno: recs.turno,
                 frecuencia: recs.frecuencia,
                 asignadoa: recs.asignado ? `${recs.asignado.apellido}, ${recs.asignado.nombre}` : null
@@ -176,11 +176,11 @@
               r.sort((a, b) => a.orden - b.orden)
               r.forEach(recs => {
                 this.table2.data.push({
-                  id: recs.detalleRecorrido,
+                  '#': recs.detalleRecorrido,
                   recorrido: recs.recorrido,
                   objetivo: recs.objetivo,
                   orden: recs.orden,
-                  direccion: recs.direccion,
+                  dirección: recs.direccion,
                   localidad: recs.localidad,
                   cliente: recs.cliente
                 })
@@ -205,7 +205,7 @@
       },
       borrarRecorrido (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        if (!confirm('Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
+        if (!confirm('¿Desea eliminar a este recorrido y todos sus objetivos planificados?')) return
         api.deleteRecorrido(this, id)
           .then(res => {
             if (res) {

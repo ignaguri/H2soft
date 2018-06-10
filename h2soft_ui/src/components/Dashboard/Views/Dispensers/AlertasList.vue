@@ -91,7 +91,7 @@
         }
       },
       borrar (e) {
-        if (!confirm('¿Está seguro de que desea borrar esta alerta?')) {
+        if (!confirm('¿Desea borrar esta alerta?')) {
           return
         }
         const id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML

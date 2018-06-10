@@ -1,21 +1,20 @@
 <template>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :edit="editarUsuario" :erase="borrarUsuario" :goButton="false" :go="verUsuario" >
+  <div class="col-md-12">
+    <div class="card">
+      <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                   :columns="table1.columns" :edit="editarUsuario" :erase="borrarUsuario" :goButton="false"
+                   :go="verUsuario">
 
-          </paper-table>
-        </div>
-      </div>
+      </paper-table>
     </div>
-
+  </div>
 </template>
 <script>
   import auth from 'src/api/auth'
   import api from 'src/api/services/userServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['Nro', 'Usuario', 'Empleado', 'Rol']
+  const tableColumns = ['#', 'Usuario', 'Empleado', 'Rol']
   const dataColumns = []
 
   export default {
@@ -40,26 +39,26 @@
     methods: {
       cargarUsuarios () {
         api.getUsuarios(this)
-        .then(resUs => {
-          resUs.body.data.forEach(us => {
-            if (us.activo === 1) {
-              this.cargarEmpleado(us.idEmpleado)
-              .then(res => {
-                res = res.body.data[0]
-                this.nombreRol = this.getRol(us.idRol)
-                this.table1.data.push({
-                  nro: us.id,
-                  usuario: us.email,
-                  empleado: res === undefined ? '' : res.nombre + ' ' + res.apellido,
-                  rol: this.nombreRol
-                })
-                console.log(us)
-              })
-            }
+          .then(resUs => {
+            resUs.body.data.forEach(us => {
+              if (us.activo === 1) {
+                this.cargarEmpleado(us.idEmpleado)
+                  .then(res => {
+                    res = res.body.data[0]
+                    this.nombreRol = this.getRol(us.idRol)
+                    this.table1.data.push({
+                      '#': us.id,
+                      'usuario': us.email,
+                      'empleado': res === undefined ? '' : res.nombre + ' ' + res.apellido,
+                      'rol': this.nombreRol
+                    })
+                    console.log(us)
+                  })
+              }
+            })
+          }, error => {
+            console.log('error al cargar los usuarios ' + error)
           })
-        }, error => {
-          console.log('error al cargar los usuarios ' + error)
-        })
       },
       cargarRoles () {
         api.getRoles(this).then(res => {
@@ -83,7 +82,7 @@
         })
       },
       cargarEmpleado (idEmpleado) {
-        return this.$http.get('http://localhost:3030/empleados/?idEmpleados=' + idEmpleado, { headers: auth.getAuthHeader() })
+        return this.$http.get('http://localhost:3030/empleados/?idEmpleados=' + idEmpleado, {headers: auth.getAuthHeader()})
       },
       editarUsuario (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML

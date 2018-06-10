@@ -145,10 +145,10 @@
         }
         api.postDispenser(this, this.dispenser).then(res => {
           if (res) {
-            noti.exito(this)
+            noti.exitoConTexto(this, 'Éxito', 'Dispenser agregado con éxito!')
             this.$parent.isDispensersList = true
           } else {
-            noti.error(this)
+            noti.errorConTexto(this, 'Error', 'Error ')
           }
         })
       },
@@ -159,12 +159,12 @@
         }
         api.editDispenser(this, this.dispenser).then(res => {
           if (res) {
-            noti.exito(this)
+            noti.exitoConTexto(this, 'Éxito', 'Dispenser editado con éxito!')
             this.$parent.edit = false
             this.$parent.idDispenser = 0
             this.$parent.isDispensersList = true
           } else {
-            noti.error(this)
+            noti.errorConTexto(this, 'Error', 'Error al editar dispenser')
           }
         })
       },
