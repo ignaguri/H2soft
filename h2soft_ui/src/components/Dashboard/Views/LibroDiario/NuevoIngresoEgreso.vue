@@ -113,7 +113,7 @@
         // se idGastos seria el ID de ingresoEgreso
         ingresosEgresos: {
           idGastos: '',
-          fecha: new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'}),
+          fecha: new Date().toLocaleDateString('es-AR', {year: 'numeric', month: '2-digit', day: '2-digit'}),
           descripcion: '',
           monto: '',
           idMedioDePagoCobro: '',
