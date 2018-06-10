@@ -4,7 +4,7 @@ const API_URL = process.env.API_URL
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR
 export default {
   getAlertas (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'alertas', authHeader)
       .then(res => {
         let promesas = []
@@ -16,7 +16,7 @@ export default {
       })
   },
   getAlertasPendientes (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'alertas' + '?idEstado=' + 1, authHeader)
       .then(res => {
         let promesas = []
@@ -28,7 +28,7 @@ export default {
       })
   },
   getAlerta (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let result = {}
     return context.$http.get(API_URL + 'alertas/' + id, authHeader)
       .then(r => {
@@ -47,7 +47,7 @@ export default {
       })
   },
   getAlertasPorObjetivo (context, idObjetivo) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'alertas' + '/?idObjetivo=' + idObjetivo, authHeader)
       .then(res => {
         let promesas = []
@@ -59,7 +59,7 @@ export default {
       })
   },
   populateCamposAlerta (context, alerta) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let result = {}
     return context.$http.get(API_URL + 'objetivos-x-cliente/' + alerta.idObjetivo, authHeader)
       .then(objetivo => {
@@ -76,30 +76,43 @@ export default {
       })
       .then(estado => {
         result.estado = estado.data.nombre
-        result.notificacion = alerta.notificacion
+        result.notificación = alerta.notificacion
         result.nro = alerta.idAlertas
         result.bidones = alerta.notificacion.split(' ')[1]
         return result
       })
   },
   getTipos (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'tipos-alerta', authHeader)
-      .then(res => { return res.body.data })
+      .then(res => {
+        return res.body.data
+      })
+  },
+  getTipoAlerta (context, idTipo) {
+    const authHeader = {headers: auth.getAuthHeader()}
+    return context.$http.get(API_URL + 'tipos-alerta' + idTipo, authHeader)
+      .then(res => {
+        return res.body.data
+      })
   },
   getEstados (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'estados-alerta', authHeader)
-      .then(res => { return res.body.data })
+      .then(res => {
+        return res.body.data
+      })
   },
   getProductos (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'productos', authHeader)
-      .then(res => { return res.body.data })
+      .then(res => {
+        return res.body.data
+      })
   },
   postAlerta (context, alerta) {
     // TODO: add logica desvinculacion
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.post(API_URL + 'alertas', alerta, authHeader)
       .then(res => {
         return res
@@ -111,7 +124,7 @@ export default {
   },
   updateAlerta (context, id, alerta) {
     // TODO: add logica desvinculacion
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.put(API_URL + 'alertas/' + id, alerta, authHeader)
       .then(res => {
         return res
@@ -122,7 +135,7 @@ export default {
       })
   },
   deleteAlerta (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.delete(API_URL + 'alertas/' + id, authHeader)
       .then(res => {
         return res
@@ -133,8 +146,8 @@ export default {
       })
   },
   updateEstado (context, alerta) {
-    const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.patch(API_URL + 'alertas/' + alerta.id, { idEstado: alerta.idEstado }, authHeader)
+    const authHeader = {headers: auth.getAuthHeader()}
+    return context.$http.patch(API_URL + 'alertas/' + alerta.id, {idEstado: alerta.idEstado}, authHeader)
       .then(res => {
         return res
       })

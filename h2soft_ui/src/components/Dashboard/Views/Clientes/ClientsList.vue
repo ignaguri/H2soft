@@ -42,8 +42,8 @@
   import { modal } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['Nro', 'Nombre', 'CUIL', 'Domicilio']
-  //  let tableData = []
+  const tableColumns = ['#', 'Nombre', 'CUIL', 'Domicilio']
+
   // TODO: agregar cantidad de objetivos a la tabla
   // TODO: guardar lista en localStorage para ahorrar llamados a la api
   export default {
@@ -84,10 +84,10 @@
         api.getClientes(this).then(res => {
           res.body.data.forEach(cl => {
             this.table1.data.push({
-              nro: cl.idClientes,
-              nombre: cl.razonSocial,
-              cuil: cl.CUIL,
-              domicilio: cl.direccion
+              '#': cl.idClientes,
+              'nombre': cl.razonSocial,
+              'cuil': cl.CUIL,
+              'domicilio': cl.direccion
             })
           })
         }, error => {

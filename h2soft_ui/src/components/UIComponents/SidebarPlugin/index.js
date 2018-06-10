@@ -9,7 +9,7 @@ const SidebarStore = {
       path: '/recorridos'
     },
     {
-      name: 'Planificacion',
+      name: 'Planificación',
       icon: 'ti-map-alt',
       path: '/planificacion'
     },
@@ -37,11 +37,6 @@ const SidebarStore = {
       name: 'Clientes',
       icon: 'ti-view-list-alt',
       path: '/clientes'
-    },
-    {
-      name: 'Reportes',
-      icon: 'ti-bar-chart',
-      path: '/reportes'
     },
     {
       name: 'configuración',
