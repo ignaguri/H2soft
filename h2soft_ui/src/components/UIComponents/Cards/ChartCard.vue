@@ -53,11 +53,20 @@
             series: []
           }
         }
+      },
+      modif: {
+        type: Boolean,
+        default: true
       }
     },
     data () {
       return {
         chartId: 'no-id'
+      }
+    },
+    watch: {
+      modif () {
+        this.initChart()
       }
     },
     methods: {

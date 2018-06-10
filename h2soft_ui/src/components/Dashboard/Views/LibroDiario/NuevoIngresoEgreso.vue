@@ -63,12 +63,14 @@
             <h5>Imagen Comprobante</h5>
             <picture-input
               ref="pictureInput"
+              id="foto"
               @change="onChange"
               width="200"
               height="200"
               margin="10"
               accept="image/jpeg,image/png"
               size="5"
+              :borrar="this.limpiarImagen"
               buttonClass="btn"
               :removable=true
               :customStrings="{
@@ -126,7 +128,8 @@
           monto: ''
         },
         mediosDePagoCobro: [],
-        radioValue: null
+        radioValue: null,
+        limpiarImagen: false
       }
     },
     props: {
@@ -151,7 +154,6 @@
           if (this.radioValue === null) {
             // alert('Tiene que seleccionar un tipo de operacion')
             noti.infoConTexto(this, 'Alerta', 'Tiene que seleccionar un tipo de operación')
-
             return
           }
           if (this.radioValue === 'egreso') {
@@ -205,7 +207,7 @@
       onChange (image) {
         if (image) {
           // alert('!Nueva imagen seleccionada!')
-          noti.info(this, '', '¡Nueva imagen seleccionada!')
+          // noti.info(this, '', '¡Nueva imagen seleccionada!')
           this.ingresosEgresos.imagen = image
         } else {
           alert('FileReader API not supported: use the <form>, Luke!')
@@ -244,6 +246,7 @@
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
         this.radioValue = null
+        this.limpiarImagen = !this.limpiarImagen
       }
     }
   }

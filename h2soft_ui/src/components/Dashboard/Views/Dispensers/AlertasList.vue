@@ -38,7 +38,7 @@
   import api from 'src/api/services/alertasServices'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['Nro', 'Cliente', 'Objetivo', 'Tipo', 'Notificacion', 'Estado']
+  const tableColumns = ['#', 'Cliente', 'Objetivo', 'Tipo', 'Notificación', 'Estado']
   export default {
     components: {
       PaperTable,
@@ -69,7 +69,17 @@
       cargarAlertas () {
         this.table1.data = []
         api.getAlertas(this).then(r => {
-          this.table1.data = r
+          r.forEach(res => {
+            let al = {
+              '#': res.nro,
+              'cliente': res.cliente,
+              'objetivo': res.objetivo,
+              'tipo': res.tipo,
+              'notificación': res.notificacion,
+              'estado': res.estado
+            }
+            this.table1.data.push(al)
+          })
         })
       },
       cargarEstados () {
