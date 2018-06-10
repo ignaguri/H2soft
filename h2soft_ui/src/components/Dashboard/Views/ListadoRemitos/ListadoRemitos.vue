@@ -42,12 +42,13 @@
         api.getRemitos(this)
           .then(resUs => {
             resUs.body.data.forEach(rem => {
-              this.table1.data.push({
+              let r = {
                 '#': rem.idRemito,
-                fecha: new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
-                objetivo: this.cargarObjetivo(rem.idObjetivo),
-                empleado: this.cargarEmpleado(rem.idEmpleado)
-              })
+                'fecha': new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
+                'objetivo': this.cargarObjetivo(rem.idObjetivo),
+                'empleado': this.cargarEmpleado(rem.idEmpleado)
+              }
+              this.table1.data.push(r)
             })
           }, error => {
             console.log('error al cargar los remitos ' + error)

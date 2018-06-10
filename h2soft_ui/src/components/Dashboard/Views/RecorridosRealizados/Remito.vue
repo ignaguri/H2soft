@@ -340,7 +340,7 @@
             'firma': this.firma,
             'firmaConforme': true,
             'idObjetivo': this.idObjetivo,
-            'idEstadoRemito': null // creado
+            'idEstadoRemito': 1 // creado
           }
           apiRemito.nuevoRemito(this, remito)
           .then(rem => {

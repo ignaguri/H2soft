@@ -58,12 +58,14 @@
             <h5>Imagen comprobante</h5>
             <picture-input
               ref="pictureInput"
+              id="foto"
               @change="onChange"
               width="200"
               height="200"
               margin="10"
               accept="image/jpeg,image/png"
               size="5"
+              :borrar="this.limpiarImagen"
               buttonClass="btn"
               :removable=true
               :customStrings="{
@@ -124,6 +126,7 @@
         },
         mediosDePagoCobro: [],
         radioValue: null,
+        limpiarImagen: false,
         money: {
           decimal: ',',
           thousands: '.',
@@ -156,7 +159,6 @@
           if (this.radioValue === null) {
             // alert('Tiene que seleccionar un tipo de operacion')
             noti.infoConTexto(this, 'Alerta', 'Tiene que seleccionar un tipo de operación')
-
             return
           }
           if (this.ingresosEgresos.monto === 0) {
@@ -247,6 +249,7 @@
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
         this.radioValue = null
+        this.limpiarImagen = !this.limpiarImagen
       }
     }
   }

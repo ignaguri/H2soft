@@ -24,7 +24,7 @@
         </chart-card>
       </div>
       <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options">
+        <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
           <h4 class="title" slot="title">Ventas de bidones</h4>
           <span slot="subTitle"> Ventas realizadas por mes en el último año</span>
           <span slot="footer">
@@ -56,6 +56,7 @@
      */
     data () {
       return {
+        modif: false,
         /* reparts: {
           reps: [
             { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
@@ -108,13 +109,13 @@
         ],
         usersChart: {
           data: {
-            labels: ['Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
+            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             series: [
             ]
           },
           options: {
             low: 1,
-            high: 1000,
+            high: 100,
             showArea: true,
             // height: '245px',
             axisX: {
@@ -187,8 +188,7 @@
       cantBidonesXmes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
-            var consumo = []
-            console.log('CANTI:', resp)
+            let consumo = []
             consumo.push(resp[1])
             consumo.push(resp[2])
             consumo.push(resp[3])
@@ -202,6 +202,7 @@
             consumo.push(resp[11])
             consumo.push(resp[12])
             this.usersChart.data.series.push(consumo)
+            this.modif = !this.modif
           })
           .catch(err => {
             console.log('ERRRO:' + err)
