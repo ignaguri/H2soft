@@ -13,7 +13,7 @@
   import api from 'src/api/services/listadoRemitoServices'
   import apiObjetivos from 'src/api/services/objetivoServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  const tableColumns = ['#', 'Fecha', 'Objetivo', 'Empleado']
+  const tableColumns = ['Nro', 'Fecha', 'Objetivo', 'Empleado']
   const dataColumns = []
 
   export default {
@@ -43,7 +43,7 @@
           .then(resUs => {
             resUs.body.data.forEach(rem => {
               this.table1.data.push({
-                '#': rem.idRemito,
+                nro: rem.idRemito,
                 fecha: new Date(rem.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 objetivo: this.cargarObjetivo(rem.idObjetivo),
                 empleado: this.cargarEmpleado(rem.idEmpleado)

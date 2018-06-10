@@ -25,30 +25,25 @@
           </select>
         </div>
         <div class="col-md-6">
-          <label for="precio"><h4><span class="label label-default">Precio por unidad ($):</span></h4></label>
-          <fg-input id="precio"
-                    type="number"
-                    placeholder="Precio"
-                    v-model="detalleContrato.precioPorUnidad"
-                    pattern="[0-9]+">
-          </fg-input>
+          <label for="productos"><h4><span class="label label-default">Precio:</span></h4></label>
+          <money id="importe" v-model="detalleContrato.precioPorUnidad" v-bind="money" class="form-control" :disabled="edit"></money>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <label for="cantmin"><h4><span class="label label-default">Cant. mínima de unidades:</span></h4></label>
+          <label for="cantmin"><h4><span class="label label-default">Cant mínima de unidades:</span></h4></label>
           <fg-input id="cantmin"
                     type="number"
-                    placeholder="Cantidad mínima"
+                    placeholder="Cantidad Minima"
                     v-model="detalleContrato.cantidadMinima"
                     min="1">
           </fg-input>
         </div>
         <div class="col-md-6">
-          <label for="cantmax"><h4><span class="label label-default">Cant. máxima de unidades:</span></h4></label>
+          <label for="cantmax"><h4><span class="label label-default">Cant máxima de unidades:</span></h4></label>
           <fg-input id="cantmax"
                     type="number"
-                    placeholder="Cantidad máxima"
+                    placeholder="Cantidad Maxima"
                     v-model="detalleContrato.cantidadMaxima"
                     :min="detalleContrato.cantidadMinima">
           </fg-input>
@@ -77,13 +72,15 @@
   import api from 'src/api/services/contratosServices'
   import { modal } from 'vue-strap'
   import noti from 'src/api/notificationsService'
+  import {Money} from 'v-money'
 
   const tableColumns = ['Producto', 'Cantidad desde', 'Cantidad hasta', 'Precio']
 
   export default {
     components: {
       PaperTable,
-      modal
+      modal,
+      Money
     },
     data () {
       return {
@@ -92,9 +89,9 @@
         detalleContrato: {
           // idDetallesContrato: '',
           idProducto: '',
-          cantidadMaxima: ' ',
-          cantidadMinima: ' ',
-          precioPorUnidad: ' '
+          cantidadMaxima: 0,
+          cantidadMinima: 0,
+          precioPorUnidad: 0
         },
         productoss: {},
         table1: {
@@ -104,7 +101,15 @@
           data: []
         },
         toDeleteProducto: 0,
-        toDeleteCantidad: ''
+        toDeleteCantidad: '',
+        money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: '$ ',
+          suffix: '',
+          precision: 2,
+          masked: false
+        }
       }
     },
     props: {
@@ -134,6 +139,7 @@
         this.table1.data = []
         this.detalles.forEach(det => {
           this.table1.data.push({
+            // nro: det.idDetallesContrato,
             producto: this.cargarProducto(det.idProducto),
             cantidaddesde: det.cantidadMinima,
             cantidadhasta: det.cantidadMaxima,
@@ -148,6 +154,11 @@
           })
       },
       borrar () {
+        // let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        // let DeleteProducto = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        // let toDeleteProducto = this.buscarIdProducto(DeleteProducto)
+        // let toDeleteCantidad = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
+        // alert('prod: ' + toDeleteProducto + ', cant: ' + toDeleteCantidad)
         this.$emit('delete_detalle', this.toDeleteProducto, this.toDeleteCantidad)
         this.showCustomModalBorrar = false
       },
@@ -205,9 +216,9 @@
       },
       limpiarCampos () {
         this.detalleContrato.idProducto = ''
-        this.detalleContrato.cantidadMaxima = ''
-        this.detalleContrato.cantidadMinima = ''
-        this.detalleContrato.precioPorUnidad = ''
+        this.detalleContrato.cantidadMaxima = 0
+        this.detalleContrato.cantidadMinima = 0
+        this.detalleContrato.precioPorUnidad = 0
       }
     }
   }

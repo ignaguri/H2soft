@@ -105,7 +105,7 @@
           <h5>Productos:</h5>
           <ul>
             <li v-for="prod in remito.productos"> {{prod.producto}}: {{prod.cantidad}} {{prod.accion }}</li>
-          </ul>
+          </ul> 
         </div>
       </div>
       <div class="row">
@@ -412,7 +412,7 @@
               }
             })
             // muestro la notificacion de ok
-            noti.exito(this)
+            noti.exitoConTexto(this, 'Éxito', 'Remito guardado con éxito!')
             // vuelvo atrás
             this.$parent.current = 'DetalleRecorrido'
             this.$parent.verRemito = false

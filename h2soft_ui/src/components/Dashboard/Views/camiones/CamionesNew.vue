@@ -8,9 +8,8 @@
       <form name="new_camion_form" @submit.prevent="guardarCamion">
         <div class="row">
           <div class="col-md-6">
-            <h5>Nombre</h5>
             <fg-input type="text"
-                      label=""
+                      label="Nombre"
                       :disabled="false"
                       placeholder="Código"
                       v-model="camion.nombre"
@@ -19,9 +18,9 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <h5>Capacidad Máxima</h5>
+            <h5>Capacidad máxima</h5>
             <fg-input type="number"
-                      label=""
+                      label="Capacidad máxima"
                       :disabled="false"
                       placeholder="Número"
                       v-model="camion.capacidadMaxima"
