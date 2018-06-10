@@ -31,19 +31,19 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <label for="cantmin"><h4><span class="label label-default">Cant mínima de unidades:</span></h4></label>
+          <label for="cantmin"><h4><span class="label label-default">Cant. mínima de unidades:</span></h4></label>
           <fg-input id="cantmin"
                     type="number"
-                    placeholder="Cantidad Minima"
+                    placeholder="Cantidad mínima"
                     v-model="detalleContrato.cantidadMinima"
                     min="1">
           </fg-input>
         </div>
         <div class="col-md-6">
-          <label for="cantmax"><h4><span class="label label-default">Cant máxima de unidades:</span></h4></label>
+          <label for="cantmax"><h4><span class="label label-default">Cant. máxima de unidades:</span></h4></label>
           <fg-input id="cantmax"
                     type="number"
-                    placeholder="Cantidad Maxima"
+                    placeholder="Cantidad máxima"
                     v-model="detalleContrato.cantidadMaxima"
                     :min="detalleContrato.cantidadMinima">
           </fg-input>
@@ -89,9 +89,9 @@
         detalleContrato: {
           // idDetallesContrato: '',
           idProducto: '',
-          cantidadMaxima: 0,
-          cantidadMinima: 0,
-          precioPorUnidad: 0
+          cantidadMaxima: ' ',
+          cantidadMinima: ' ',
+          precioPorUnidad: ' '
         },
         productoss: {},
         table1: {
@@ -216,9 +216,9 @@
       },
       limpiarCampos () {
         this.detalleContrato.idProducto = ''
-        this.detalleContrato.cantidadMaxima = 0
-        this.detalleContrato.cantidadMinima = 0
-        this.detalleContrato.precioPorUnidad = 0
+        this.detalleContrato.cantidadMaxima = ''
+        this.detalleContrato.cantidadMinima = ''
+        this.detalleContrato.precioPorUnidad = ''
       }
     }
   }
