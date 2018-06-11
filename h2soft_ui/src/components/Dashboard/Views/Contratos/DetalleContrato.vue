@@ -16,22 +16,30 @@
     <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar cláusula">
       <div class="row">
         <div class="col-md-6">
-          <label for="productos"><h4><span class="label label-default">Producto:</span></h4></label>
-          <select id="productos" v-model="detalleContrato.idProducto">
-            <option value="">Seleccione un producto</option>
-            <option v-for="prod in productoss" v-bind:value="prod.idProductos">
-              {{ prod.nombre }}
-            </option>
-          </select>
+          <!--<label for="producto"><h4><span class="label label-default">Producto</span></h4></label>-->
+          <slot name="label"><label class="control-label">Producto</label></slot>
+          <p>
+
+          </p>
+          <dds id="producto" v-model="idProductos"
+               :options="productos"
+               options-value="idProductos"
+               options-label="nombre"
+               search-text="Buscar"
+               :placeholder="'Seleccione un producto'"
+               :search="true" :justified="true" required>
+          </dds>
         </div>
         <div class="col-md-6">
-          <label for="productos"><h4><span class="label label-default">Precio:</span></h4></label>
+          <!--<label for="productos"><h4><span class="label label-default">Precio</span></h4></label>-->
+          <slot name="label"><label class="control-label">Precio</label></slot>
           <money id="importe" v-model="detalleContrato.precioPorUnidad" v-bind="money" class="form-control" :disabled="edit"></money>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <label for="cantmin"><h4><span class="label label-default">Cant. mínima de unidades:</span></h4></label>
+          <!--<label for="cantmin"><h4><span class="label label-default">Cant. mínima de unidades:</span></h4></label>-->
+          <slot name="label"><label class="control-label">Cant. mínima de unidades</label></slot>
           <fg-input id="cantmin"
                     type="number"
                     placeholder="Cantidad mínima"
@@ -40,7 +48,8 @@
           </fg-input>
         </div>
         <div class="col-md-6">
-          <label for="cantmax"><h4><span class="label label-default">Cant. máxima de unidades:</span></h4></label>
+          <!--<label for="cantmax"><h4><span class="label label-default">Cant. máxima de unidades:</span></h4></label>-->
+          <slot name="label"><label class="control-label">Cant. máxima de unidades</label></slot>
           <fg-input id="cantmax"
                     type="number"
                     placeholder="Cantidad máxima"
@@ -70,7 +79,7 @@
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/contratosServices'
-  import { modal } from 'vue-strap'
+  import { modal, select } from 'vue-strap'
   import noti from 'src/api/notificationsService'
   import {Money} from 'v-money'
 
@@ -80,7 +89,9 @@
     components: {
       PaperTable,
       modal,
+      dds: select,
       Money
+
     },
     data () {
       return {
@@ -94,6 +105,7 @@
           precioPorUnidad: ' '
         },
         productoss: {},
+        productos: [],
         table1: {
           title: 'Detalle de contrato',
           subTitle: 'Lista de cláusulas por contrato',
@@ -150,7 +162,7 @@
       getProductos () {
         api.getProductosContratos(this)
           .then(res => {
-            this.productoss = res
+            this.productos = res
           })
       },
       borrar () {

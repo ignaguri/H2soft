@@ -3,25 +3,30 @@
     <form name="new_dispenser_form">
       <div class="row">
         <h5 style="margin-left: 15px;">Información útil de cada cliente para realizar la facturación</h5>
+
         <div class="col-md-3">
-          <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
+          <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
+          <slot name="label"><label class="control-label">Cliente</label></slot>
             <dds id="cliente" v-model="idClientes"
                 :options="clientes"
                 options-value="idClientes"
                 options-label="razonSocial"
                 search-text="Buscar"
-                :placeholder="'Cliente'"
+                :placeholder="'Seleccione un cliente'"
                 :search="true" :justified="true" style="width: 200PX;" >
             </dds>
         </div>
       </div>
+      </br>
       <div class="row text-line">
         <div class="col-md-3">
-          <label><h4><span class="label label-default">Desde</span></h4></label>
+          <!--<label><h4><span class="label label-default">Desde</span></h4></label>-->
+          <slot name="label"><label class="control-label">Desde</label></slot>
           <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
         </div>
         <div class="col-md-3">
-          <label><h4><span class="label label-default">Hasta</span></h4></label>
+          <!--<label><h4><span class="label label-default">Hasta</span></h4></label>-->
+          <slot name="label"><label class="control-label">Hasta</label></slot>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
         </div>
         <div class="col-md-3"  style="padding-top: 25px;" >
@@ -31,6 +36,7 @@
           <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
         </div>
       </div>
+      </br>
     </form>
   <div class="row" >
     <div class="col-md-12">
@@ -52,7 +58,7 @@
   </div>
   <div class="row" >
       <div class="col-md-12">
-        <div class="card">        
+        <div class="card">
           <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="false" :goButton="false" >
           </paper-table>
         </div>

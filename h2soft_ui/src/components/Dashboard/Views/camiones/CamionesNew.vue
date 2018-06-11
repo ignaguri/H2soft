@@ -18,7 +18,7 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <h5>Capacidad máxima</h5>
+            <!--<h5>Capacidad máxima</h5>-->
             <fg-input type="number"
                       label="Capacidad máxima"
                       :disabled="false"

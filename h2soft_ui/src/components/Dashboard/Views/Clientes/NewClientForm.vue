@@ -29,12 +29,14 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label for="tipoCliente">
-                  <h4><span class="label label-default">Tipo de cliente*</span></h4>
+                  <!--<h4><span class="label label-default">Tipo de cliente*</span></h4>-->
+                  <label>Tipo de cliente*</label>
                 </label>
+                </br>
                 <dds id="tipoCliente" v-model="cliente.idTipo"
                      :options="tiposCliente"
                      options-value="idTiposCliente" search-text="Buscar"
-                     :placeholder="'Nada seleccionado'"
+                     :placeholder="'Seleccione un tipo'"
                      options-label="nombre"
                      :search="true" :justified="true">
                 </dds>

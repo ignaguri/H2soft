@@ -30,16 +30,18 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <label for="fechaNacimiento"><h4><span class="label label-default">Fecha nacimiento:</span></h4></label>
+            <!--<label for="fechaNacimiento"><h4><span class="label label-default">Fecha nacimiento</span></h4></label>-->
+            <slot name="label"><label class="control-label">Fecha de nacimiento</label></slot>
+            <p></p>
             <datepicker v-model="empleado.fechaNacimiento" id="fechaNacimiento" :disabled-days-of-week=[0]
                         :format="'dd/MM/yyyy'"
                         :placeholder="'Fecha'" width="100%" :clear-button="true"></datepicker>
           </div>
           <div class="col-md-6">
             <fg-input type="text"
-                      label="Dni"
+                      label="DNI"
                       :disabled="false"
-                      placeholder="Dni"
+                      placeholder="DNI"
                       v-model="empleado.dni"
                       required
             >
@@ -58,14 +60,16 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <label for="id-localidad"><h4><span class="label label-default">Localidad:</span></h4></label>
+            <!--<label for="id-localidad"><h4><span class="label label-default">Localidad</span></h4></label>-->
+            <slot name="label"><label class="control-label">Localidad</label></slot>
+            </br>
             <dds id="id-localidad"
                  v-model="empleado.idLocalidad"
                  :options="localidades"
                  options-value="idLocalidad"
                  options-label="nombre"
                  search-text="Buscar"
-                 :placeholder="'Nada seleccionado'"
+                 :placeholder="'Selecciona una localidad'"
                  :search="true" :justified="true">
             </dds>
           </div>
