@@ -68,7 +68,7 @@
             }
           })
           .catch(err => {
-            console.log('error', err)
+            console.log('errorr', err)
             noti.errorConTexto(this, 'Error', 'Error al eliminar camión')
           })
       }

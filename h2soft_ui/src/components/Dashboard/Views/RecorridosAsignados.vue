@@ -8,6 +8,7 @@
     <div class="row">
       <div class="col-md-11">
         <div class="text-center">
+          </br>
           <button type="button" class="btn btn-fill btn-wd" @click="seeLista" v-if="verDetalle">
             Volver
           </button>

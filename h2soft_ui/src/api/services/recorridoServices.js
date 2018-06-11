@@ -51,7 +51,7 @@ export default {
         })
         .then(detalleInsertado => {
           console.log('inserté el detalle de recorrido', detalleInsertado)
-          return true
+          return detalle.idRecorrido
         })
         .catch(error => {
           console.log('error insertando recorrido', error)
@@ -63,7 +63,7 @@ export default {
       return context.$http.post(API_URL + 'detalle-recorrido', detalle, authHeader)
         .then(detalleInsertado => {
           console.log('updatié el detalle de recorrido', detalleInsertado)
-          return true
+          return detalle.idRecorrido
         })
         .catch(error => {
           console.log('error updating recorrido', error)

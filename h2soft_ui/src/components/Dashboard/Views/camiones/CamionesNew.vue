@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title" v-if="!edit">Agregar nuevo camión</h3>
-      <h3 class="title" v-if="edit">Editar camión</h3>
+      <h4 class="title" v-if="!edit">Agregar nuevo camión</h4>
+      <h4 class="title" v-if="edit">Editar camión</h4>
     </div>
     <div class="content">
       <form name="new_camion_form" @submit.prevent="guardarCamion">
@@ -18,7 +18,7 @@
             </fg-input>
           </div>
           <div class="col-md-6">
-            <h5>Capacidad máxima</h5>
+            <!--<h5>Capacidad máxima</h5>-->
             <fg-input type="number"
                       label="Capacidad máxima"
                       :disabled="false"

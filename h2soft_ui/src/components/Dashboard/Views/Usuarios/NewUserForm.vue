@@ -75,9 +75,6 @@
     },
     data () {
       return {
-        // id: 0, // alta
-        // id: 1, // edit
-        // edit: true,
         user: {
           idUsuarios: '',
           usuario: '',
@@ -115,15 +112,12 @@
           api.newUsuario(this, this.usuario).then(res => {
             console.log('res es ' + res)
             if (res) {
-              // noti.success(this)
               this.$parent.current = 'UsersList'
               this.$parent.isUserList = true
             } else {
-              // noti.danger(this)
             }
           })
           noti.exitoConTexto(this, 'Éxito', 'Usuario guardado con éxito!')
-         // noti.exito(this)
         } else {
           console.log(this.id)
           this.usuario = {
@@ -163,11 +157,6 @@
               this.empleados = []
             }
           })
-        // api.getEmpleados(this).then(res => {
-        //   this.empleados = res
-        // }, error => {
-        //   console.log('error ' + error)
-        // })
       },
       getUsuario () { // trae los datos de un usuario
         api.getUsuario(this, this.id).then(res => {

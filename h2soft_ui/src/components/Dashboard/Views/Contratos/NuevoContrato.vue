@@ -1,33 +1,39 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title" v-if="!edit">Agregar nuevo contrato</h3>
-      <h3 class="title" v-if="edit">Editar contrato</h3>
+      <h4 class="title" v-if="!edit">Agregar nuevo contrato</h4>
+      <h4 class="title" v-if="edit">Editar contrato</h4>
     </div>
     <div class="content">
       <form name="nuevo_contrato_form" @submit.prevent="guardarContrato">
         <div class="row">
           <div class="col-md-6">
-            <label for="clientes"><h4><span class="label label-default">Cliente:</span></h4></label>
-            <select id="clientes" v-model="contrato.idCliente" required>
-              <option :value="null">Seleccione un cliente</option>
-              <option v-for="cli in clientes" v-bind:value="cli.idClientes">
-                {{ cli.razonSocial }}
-              </option>
-            </select>
-          </div>
+            <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
+            <slot name="label"><label class="control-label">Cliente</label></slot>
+            <dds id="cliente" v-model="idClientes"
+                 :options="clientes"
+                 options-value="idClientes"
+                 options-label="razonSocial"
+                 search-text="Buscar"
+                 :placeholder="'Seleccione un cliente'"
+                 :search="true" :justified="true" required>
+            </dds>
+        </div>
           <div class="col-md-6">
-            <label for="fechaFirma"><h4><span class="label label-default">Firmado:</span></h4></label>
+            <!--<label for="fechaFirma"><h4><span class="label label-default">Firmado</span></h4></label>-->
+            <slot name="label"><label class="control-label">Firmado</label></slot>
             <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha firmado'" width="100%" :clear-button="true"></datepicker>
           </div>
         </div>
           <div class="row">
             <div class="col-md-6">
-              <label for="fechaDesde"><h4><span class="label label-default">Vigente desde:</span></h4></label>
+              <!--<label for="fechaDesde"><h4><span class="label label-default">Vigente desde</span></h4></label>-->
+              <slot name="label"><label class="control-label">Vigente desde</label></slot>
               <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha desde'" width="100%" :clear-button="true"></datepicker>
             </div>
             <div class="col-md-6">
-              <label for="fechaHasta"><h4><span class="label label-default">Vigente hasta:</span></h4></label>
+              <!--<label for="fechaHasta"><h4><span class="label label-default">Vigente hasta</span></h4></label>-->
+              <slot name="label"><label class="control-label">Vigente hasta</label></slot>
               <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha hasta'" width="100%" :clear-button="true"></datepicker>
             </div>
           </div>
@@ -54,13 +60,14 @@
   import api from 'src/api/services/contratosServices'
   import exportApi from 'src/api/export'
   import DetalleContrato from './DetalleContrato.vue'
-  import { datepicker } from 'vue-strap'
+  import { datepicker, select } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
   export default {
     components: {
       DetalleContrato,
-      datepicker
+      datepicker,
+      dds: select
     },
     data () {
       return {
@@ -70,7 +77,7 @@
           fechaVigenciaDesde: '',
           fechaVigenciaHasta: ''
         },
-        clientes: {},
+        clientes: [],
         contrat: {},
         detalles: [],
         productos: []
@@ -84,11 +91,6 @@
       this.getClientes()
       this.getProductos()
       this.cargarContratos2()
-      /*
-      if (this.id !== 0) {
-        this.cargarContratos()
-      }
-      */
     },
     methods: {
       exportar () {
@@ -181,15 +183,8 @@
       },
       captarDetalle (det) {
         this.detalles.push(det)
-       // alert('captar detale' + JSON.stringify(det))
       },
       borrarDetalle (prod, cant) {
-        // this.detalles = this.detalles.filter(dets => dets.idDetallesContrato !== parseInt(det))
-        // this.detalles = this.detalles.filter(dets => (dets.idProducto !== prod && dets.cantidadMinima !== parseInt(cant)))
-        // alert(JSON.stringify(this.detalles))
-        // alert('prod: ' + prod)
-        // this.detalles = this.detalles.filter(dets => dets.cantidadMinima === parseInt(cant))
-        // this.detalles = this.detalles.filter(dets => dets.cantidadMinima !== parseInt(cant) && dets.idProducto !== parseInt(prod))
         for (let i = 0; i < this.detalles.length; i++) {
           if (parseInt(this.detalles[i].idProducto) === parseInt(prod) && parseInt(this.detalles[i].cantidadMinima) === parseInt(cant)) {
             this.$delete(this.detalles, i)
@@ -206,7 +201,6 @@
             this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             c.detalle.forEach(dc => {
               this.detalles.push({
-                // idDetallesContrato: dc.idDetallesContrato,
                 idProducto: dc.idProducto,
                 cantidadMinima: dc.cantidadMinima,
                 cantidadMaxima: dc.cantidadMaxima,

@@ -9,7 +9,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="recorrido"><h4><span class="label label-default">Recorrido</span></h4></label>
+              <!--<label for="recorrido"><h4><span class="label label-default">Recorrido</span></h4></label>-->
+              <slot name="label"><label class="control-label">Recorrido</label></slot>
               <dds id="recorrido" v-model="idRecorrido"
               :options="recorridos"
               options-value="recorrido" search-text="Buscar"
@@ -24,49 +25,53 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="temporada"><h4><span class="label label-default">Temporada</span></h4></label>
+              <!--<label for="temporada"><h4><span class="label label-primary">Temporada</span></h4></label>-->
+              <slot name="label"><label class="control-label">Temporada</label></slot>
               <dds id="temporada" v-model="idTemporada"
                    :options="temporadas"
                    options-value="idTemporadas"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione una temporada'"
                    :search="true" :justified="true"
                    :disabled="idRecorrido !== null" required>
               </dds>
             </div>
             <div class="form-group">
-              <label for="frecuencia"><h4><span class="label label-default">Frecuencia</span></h4></label>
+              <!--<label for="frecuencia"><h4><span class="label label-default">Frecuencia</span></h4></label>-->
+              <slot name="label"><label class="control-label">Frecuencia</label></slot>
               <dds id="frecuencia" v-model="idFrecuencia"
                    :options="frecuencias"
                    options-value="idFrecuenciasRecorrido"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione una frecuencia'"
                    :search="true" :justified="true"
                    :disabled="idRecorrido !== null" required>
               </dds>
             </div>
             <div class="form-group">
-              <label for="dia"><h4><span class="label label-default">Día</span></h4></label>
+              <!--<label for="dia"><h4><span class="label label-default">Día</span></h4></label>-->
+              <slot name="label"><label class="control-label">Día</label></slot>
               <dds id="dia" v-model="idDia"
                    :options="dias"
                    options-value="idDias"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione un día'"
                    :search="true" :justified="true"
                    :disabled="idRecorrido !== null" required>
               </dds>
             </div>
             <div class="form-group">
-              <label for="turno"><h4><span class="label label-default">Turno</span></h4></label>
+              <!--<label for="turno"><h4><span class="label label-default">Turno</span></h4></label>-->
+              <slot name="label"><label class="control-label">Turno</label></slot>
               <dds id="turno" v-model="idTurno"
                    :options="turnos"
                    options-value="idTurnos"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione un turno'"
                    :search="true" :justified="true"
                    :disabled="idRecorrido !== null" required>
               </dds>
@@ -76,24 +81,26 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
+              <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
+              <slot name="label"><label class="control-label">Cliente</label></slot>
               <dds id="cliente" v-model="idClientes"
                    :options="clientes"
                    options-value="idClientes"
                    options-label="razonSocial"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione un cliente'"
                    :search="true" :justified="true" required>
               </dds>
             </div>
             <div class="form-group">
-              <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
+              <!--<label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>-->
+              <slot name="label"><label class="control-label">Objetivo</label></slot>
               <dds id="objetiv" v-model="idObjetivo"
                    :options="objetivos"
                    options-value="idObjetivosXCliente"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione un objetivo'"
                    :search="true" :justified="true" required>
               </dds>
             </div>
@@ -101,6 +108,7 @@
         </div>
         <div class="row">
           <div class="text-center">
+            </br>
             <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
               Volver
             </button>
@@ -206,12 +214,16 @@
         }
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
-            if (resp) {
+            if (resp !== false) {
               this.planificando = true
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
-              this.cambiarRecorrido(resp.idRecorridos)
+              if (this.idRecorrido === null) { // ema: agrego este if para que quede seleccionado el recorrido que acabo de crear
+                this.idRecorrido = resp
+              } else {
+                this.cambiarRecorrido(resp)
+              }
               if (this.idRecorrido) {
                 this.idClientes = null
                 this.idObjetivo = null

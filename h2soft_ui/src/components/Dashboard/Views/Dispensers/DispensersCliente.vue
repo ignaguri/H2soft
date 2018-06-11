@@ -3,20 +3,22 @@
     <form name="new_dispenser_form">
       <div class="row">
         <div class="col-md-3">
-          <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
+          <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
+          <slot name="label"><label class="control-label">Cliente</label></slot>
 
             <dds id="cliente" v-model="idClientes"
                 :options="clientes"
                 options-value="idClientes"
                 options-label="razonSocial"
                 search-text="Buscar"
-                :placeholder="'Cliente'"
+                :placeholder="'Seleccione un cliente'"
                 :search="true" :justified="true">
             </dds>
 
         </div>
           <div class="col-md-4">
-            <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
+            <!--<label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>-->
+            <slot name="label"><label class="control-label">Objetivo</label></slot>
 
             <dds id="objetiv" v-model="idObjetivo"
                 :options="objetivos"
@@ -26,11 +28,12 @@
                 :placeholder="this.objetivo_placeholder"
                 :search="true" :justified="true">
             </dds>
-
+            </br>
           </div>
+
       </div>
     </form>
-
+    </br>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -59,7 +62,7 @@
   import apiProductos from 'src/api/services/productosServices.js'
   import noti from 'src/api/notificationsService'
 
-  const table1Columns = ['Objetivo', 'Dispenser', 'Estado', 'Próx Mantenimiento']
+  const table1Columns = ['Objetivo', 'Dispenser', 'Estado', 'Próximo Mantenimiento']
   const table2Columns = ['Producto', 'Cantidad mínima', 'Cantidad máxima', 'Precio', 'Vigente hasta']
   export default {
     components: {
@@ -96,7 +99,8 @@
     },
     watch: {
       idClientes: function () {
-        this.objetivo_placeholder = 'Objetivo'
+        this.idObjetivo = null
+        this.objetivo_placeholder = 'Seleccione un objetivo'
         this.cargarObjetivos()
         this.cargarDispensers()
         this.cargarContrato()
@@ -132,7 +136,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  'próximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -153,7 +157,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  'próxmantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  'próximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {

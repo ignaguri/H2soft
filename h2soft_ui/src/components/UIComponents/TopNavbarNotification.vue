@@ -20,7 +20,7 @@
     data () {
       return {
         status: `background-color: white`,
-        message: this.notification.notificacion
+        message: this.notification.notificación
       }
     },
     methods: {
