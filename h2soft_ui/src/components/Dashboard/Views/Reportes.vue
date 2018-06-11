@@ -116,7 +116,7 @@
           },
           options: {
             low: 1,
-            high: 100,
+            high: 400,
             showArea: true,
             // height: '245px',
             axisX: {
