@@ -12,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options">
+        <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options" :modif="this.modif2">
           <h4 class="title" slot="title">Objetivos por temporada</h4>
           <span slot="subTitle">Cantidad objetivos visitados en cada día por temporada</span>
           <span slot="footer">
@@ -39,6 +39,7 @@
 </template>
 <script>
   import apiRemitos from 'src/api/services/remitoServices'
+  import apiRecHistoricos from 'src/api/services/recorridosHistoricosServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
@@ -57,18 +58,19 @@
     data () {
       return {
         modif: false,
+        modif2: false,
         /* reparts: {
-          reps: [
-            { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
-              repartidor: 'ema'
-            },
-            { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
-              repartidor: 'cami'
-            },
-            { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
-              repartidor: 'nico'
-            }
-          ]}, */
+         reps: [
+         { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
+         repartidor: 'ema'
+         },
+         { objetivos: [{nombre: 'obj4', idestado: 1, orden: 1}, {nombre: 'obj5', idestado: 1, orden: 2}, {nombre: 'obj6', idestado: 2, orden: 3}],
+         repartidor: 'cami'
+         },
+         { objetivos: [{nombre: 'obj7', idestado: 1, orden: 1}, {nombre: 'obj8', idestado: 1, orden: 2}, {nombre: 'obj9', idestado: 2, orden: 3}],
+         repartidor: 'nico'
+         }
+         ]}, */
         reparts: {
           reps: []
         },
@@ -110,12 +112,11 @@
         usersChart: {
           data: {
             labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            series: [
-            ]
+            series: []
           },
           options: {
             low: 1,
-            high: 100,
+            high: 400,
             showArea: true,
             // height: '245px',
             axisX: {
@@ -132,8 +133,6 @@
           data: {
             labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'],
             series: [
-              [8, 7, 8, 6, 10],
-              [18, 16, 15, 22, 19]
             ]
           },
           options: {
@@ -182,10 +181,11 @@
       }
     },
     mounted () {
-      this.cantBidonesXmes()
+      this.cantBidonesPorMes()
+      this.cantObjetivosPorTemporada()
     },
     methods: {
-      cantBidonesXmes () {
+      cantBidonesPorMes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
             let consumo = []
@@ -206,6 +206,33 @@
           })
           .catch(err => {
             console.log('ERRRO:' + err)
+          })
+      },
+      cantObjetivosPorTemporada () {
+        apiRecHistoricos.objetivosPorTemporada(this)
+          .then(resp => {
+            var consumoVerano = []
+            var consumoInvierno = []
+            var consumos = []
+            console.log('CANTI:', resp)
+            consumoVerano.push(resp[1])
+            consumoVerano.push(resp[2])
+            consumoVerano.push(resp[3])
+            consumoVerano.push(resp[4])
+            consumoVerano.push(resp[5])
+            consumoInvierno.push(resp[8])
+            consumoInvierno.push(resp[9])
+            consumoInvierno.push(resp[10])
+            consumoInvierno.push(resp[11])
+            consumoInvierno.push(resp[12])
+            console.log('CONSUMO INVUERNO:' + JSON.stringify(consumoInvierno))
+            console.log('CONSUMO VERANO:' + JSON.stringify(consumoVerano))
+            consumos.push(consumoInvierno)
+            consumos.push(consumoVerano)
+            console.log('CONSUMOS:' + JSON.stringify(consumos))
+            this.activityChart.data.series.push(consumoInvierno)
+            this.activityChart.data.series.push(consumoVerano)
+            this.modif2 = !this.modif2
           })
       }
     }
