@@ -21,7 +21,7 @@
           <p>
 
           </p>
-          <dds id="producto" v-model="idProductos"
+          <dds id="producto" v-model="detalleContrato.idProducto"
                :options="productos"
                options-value="idProductos"
                options-label="nombre"
@@ -57,6 +57,7 @@
                     :min="detalleContrato.cantidadMinima">
           </fg-input>
         </div>
+        {{ detalleContrato }}
       </div>
       <div slot="modal-footer" class="modal-footer">
         <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
@@ -184,7 +185,7 @@
         this.showCustomModalBorrar = true
       },
       ok () {
-        if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.precioPorUnidad === '' || this.detalleContrato.cantidadMinima === '') {
+        if (this.detalleContrato.idProducto === '' || this.detalleContrato.cantidadMaxima === '' || this.detalleContrato.cantidadMinima === '' || this.detalleContrato.precioPorUnidad === 0) {
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }

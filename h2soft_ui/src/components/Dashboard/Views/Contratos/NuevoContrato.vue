@@ -10,7 +10,7 @@
           <div class="col-md-6">
             <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
             <slot name="label"><label class="control-label">Cliente</label></slot>
-            <dds id="cliente" v-model="idClientes"
+            <dds id="cliente" v-model="contrato.idClientes"
                  :options="clientes"
                  options-value="idClientes"
                  options-label="razonSocial"
@@ -52,6 +52,7 @@
         </div>
       </form>
     </div>
+    {{ contrato }}
   </div>
 </template>
 <script>
