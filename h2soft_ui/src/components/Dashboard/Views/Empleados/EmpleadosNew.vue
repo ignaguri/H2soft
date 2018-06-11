@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title" v-if="!edit">Agregar nuevo empleado</h3>
-      <h3 class="title" v-if="edit">Editar empleado</h3>
+      <h4 class="title" v-if="!edit">Agregar nuevo empleado</h4>
+      <h4 class="title" v-if="edit">Editar empleado</h4>
     </div>
     <div class="content">
       <form name="new_camion_form" @submit.prevent="guardarEmpleado">

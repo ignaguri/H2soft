@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title" v-if="!edit">Agregar nuevo contrato</h3>
-      <h3 class="title" v-if="edit">Editar contrato</h3>
+      <h4 class="title" v-if="!edit">Agregar nuevo contrato</h4>
+      <h4 class="title" v-if="edit">Editar contrato</h4>
     </div>
     <div class="content">
       <form name="nuevo_contrato_form" @submit.prevent="guardarContrato">

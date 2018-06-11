@@ -99,6 +99,7 @@
     },
     watch: {
       idClientes: function () {
+        this.idObjetivo = null
         this.objetivo_placeholder = 'Seleccione un objetivo'
         this.cargarObjetivos()
         this.cargarDispensers()

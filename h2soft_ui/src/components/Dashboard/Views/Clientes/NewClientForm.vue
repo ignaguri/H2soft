@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <div class="header">
-      <h3 class="title" v-if="!edit">Agregar nuevo cliente</h3>
-      <h3 class="title" v-if="edit">Editar cliente</h3>
+      <h4 class="title" v-if="!edit">Agregar nuevo cliente</h4>
+      <h4 class="title" v-if="edit">Editar cliente</h4>
     </div>
     <div class="content">
       <form name="new_client_form" @submit.prevent="saveClient">

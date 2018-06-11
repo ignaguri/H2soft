@@ -157,7 +157,7 @@
                   }
                   this.total = this.total + vxp.total
                   this.table1.data.push(venta)
-                  this.exportData.totales.push([venta.producto, venta.precioporunidad, venta.cantidadvendida, venta.subtotal])
+                  this.exportData.totales.push([venta.producto, venta.cantidadvendida, venta.precioporunidad, venta.subtotal])
                   vxp.ventas.forEach(v => {
                     let detalleVenta = {
                       'fecha': v.fecha,

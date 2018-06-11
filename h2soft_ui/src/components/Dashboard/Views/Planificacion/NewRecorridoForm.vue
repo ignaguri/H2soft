@@ -214,12 +214,16 @@
         }
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
-            if (resp) {
+            if (resp !== false) {
               this.planificando = true
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
-              this.cambiarRecorrido(resp.idRecorridos)
+              if (this.idRecorrido === null) { // ema: agrego este if para que quede seleccionado el recorrido que acabo de crear
+                this.idRecorrido = resp
+              } else {
+                this.cambiarRecorrido(resp)
+              }
               if (this.idRecorrido) {
                 this.idClientes = null
                 this.idObjetivo = null
