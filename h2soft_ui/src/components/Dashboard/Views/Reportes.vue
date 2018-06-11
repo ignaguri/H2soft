@@ -39,6 +39,7 @@
 </template>
 <script>
   import apiRemitos from 'src/api/services/remitoServices'
+  import apiRecHistoricos from 'src/api/services/recorridosHistoricosServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
@@ -181,10 +182,11 @@
       }
     },
     mounted () {
-      this.cantBidonesXmes()
+      this.cantBidonesPorMes()
+      this.cantObjetivosPorTemporada()
     },
     methods: {
-      cantBidonesXmes () {
+      cantBidonesPorMes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
             var consumo = []
@@ -206,6 +208,35 @@
           .catch(err => {
             console.log('ERRRO:' + err)
           })
+      },
+      cantObjetivosPorTemporada () {
+        apiRecHistoricos.objetivosPorTemporada(this)
+            .then(resp => {
+              var consumoVerano = []
+              var consumoInvierno = []
+              var consumos = []
+              console.log('CANTI:', resp)
+              consumoVerano.push(resp[1])
+              consumoVerano.push(resp[2])
+              consumoVerano.push(resp[3])
+              consumoVerano.push(resp[4])
+              consumoVerano.push(resp[5])
+              consumoVerano.push(resp[6])
+              consumoVerano.push(resp[7])
+              consumoInvierno.push(resp[8])
+              consumoInvierno.push(resp[9])
+              consumoInvierno.push(resp[10])
+              consumoInvierno.push(resp[11])
+              consumoInvierno.push(resp[12])
+              consumoInvierno.push(resp[13])
+              consumoInvierno.push(resp[14])
+              console.log('CONSUMO INVUERNO:' + JSON.stringify(consumoInvierno))
+              console.log('CONSUMO VERANO:' + JSON.stringify(consumoVerano))
+              consumos.push(consumoInvierno)
+              consumos.push(consumoVerano)
+              console.log('CONSUMOS:' + JSON.stringify(consumos))
+              return consumos
+            })
       }
     }
   }
