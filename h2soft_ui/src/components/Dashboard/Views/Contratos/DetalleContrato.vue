@@ -21,7 +21,7 @@
           <p>
 
           </p>
-          <dds id="producto" v-model="idProductos"
+          <dds id="producto" v-model="detalleContrato.idProducto"
                :options="productos"
                options-value="idProductos"
                options-label="nombre"

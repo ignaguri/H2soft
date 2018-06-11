@@ -33,7 +33,7 @@
           .then(r => {
             if (r) {
               // TODO cambiar por noti service
-              alert('exito')
+              // alert('exito')
               location.reload()
               this.$emit('notiUpdate', { alerta: this.notification.nro })
             } else {
