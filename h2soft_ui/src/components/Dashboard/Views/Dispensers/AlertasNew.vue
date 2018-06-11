@@ -5,7 +5,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>
+              <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
+              <!--<h5>Cliente</h5>-->
+              <slot name="label"><label class="control-label">Cliente</label></slot>
               <dds id="cliente" v-model="idClientes"
                    :options="clientes"
                    options-value="idClientes"
@@ -14,7 +16,9 @@
                    :placeholder="'Seleccione un cliente'"
                    :search="true" :justified="true" required>
               </dds>
-              <label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>
+              <!--<label for="objetiv"><h4><span class="label label-default">Objetivo</span></h4></label>-->
+              <slot name="label"><label class="control-label">Objetivo</label></slot>
+              <!--<h5>Objetivo</h5>-->
               <dds id="objetiv" v-model="alerta.idObjetivo"
                    :options="objetivos"
                    options-value="idObjetivosXCliente"
@@ -30,18 +34,22 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="tipo"><h4><span class="label label-default">Tipo</span></h4></label>
+              <!--<label for="tipo"><h4><span class="label label-default">Tipo</span></h4></label>-->
+              <slot name="label"><label class="control-label">Tipo</label></slot>
+              <!--<h5>Tipo</h5>-->
               <dds id="tipo" v-model="alerta.idTipo"
                    :options="tipos"
                    options-value="idTipoAlerta"
                    options-label="nombre"
                    search-text="Buscar"
-                   :placeholder="'Nada seleccionado'"
+                   :placeholder="'Seleccione un tipo'"
                    :search="true" :min-search="4" :justified="true"
                    required>
               </dds>
               <template v-if="alerta.idTipo === 1">
-                <label for="dispenser"><h4><span class="label label-default">Dispenser</span></h4></label>
+                <!--<label for="dispenser"><h4><span class="label label-default">Dispenser</span></h4></label>-->
+                <slot name="label"><label class="control-label">Dispenser</label></slot>
+                <!--<h5>Dispenser</h5>-->
                 <dds id="dispenser" v-model="alerta.idDispenser"
                      :options="dispensers"
                      options-value="idDispensers"
@@ -53,17 +61,21 @@
                 </dds>
               </template>
               <template v-else-if="alerta.idTipo === 2">
-                <label for="producto"><h4><span class="label label-default">Producto</span></h4></label>
+                <!--<label for="producto"><h4><span class="label label-default">Producto</span></h4></label>-->
+                <slot name="label"><label class="control-label">Producto</label></slot>
+                <!--<h5>Producto</h5>-->
                   <dds id="producto" v-model="alerta.producto"
                      :options="productos"
                      options-value="idProductos"
                      options-label="nombre"
                      search-text="Buscar"
-                     :placeholder="'Tipo de producto'"
+                     :placeholder="'Seleccion un producto'"
                      :search="true" :justified="true"
                      required>
                 </dds>
-                <label for="cantidad"><h4><span class="label label-default">Cantidad</span></h4></label>
+                <!--<label for="cantidad"><h4><span class="label label-default">Cantidad</span></h4></label>-->
+                <slot name="label"><label class="control-label">Cantidad</label></slot>
+                <!--<h5>Cantidad</h5>-->
                 <dds id="cantidad" v-model="alerta.cantidad"
                      :options="cantidad"
                      options-value="index"
@@ -77,7 +89,9 @@
                        v-model="alerta.bidones" style="max-width: 100px" @input="cargarMensaje" required/> -->
               </template>
               <template v-if="alerta.idTipo === 3">
-                <label for="desvin_dispenser"><h4><span class="label label-default">Dispenser</span></h4></label>
+                <!--<label for="desvin_dispenser"><h4><span class="label label-default">Dispenser</span></h4></label>-->
+                <slot name="label"><label class="control-label">Dispenser</label></slot>
+                <!--<h5>Dispenser</h5>-->
                 <dds id="desvin_dispenser" v-model="alerta.idDispenser"
                      :options="dispensers"
                      options-value="idDispensers"

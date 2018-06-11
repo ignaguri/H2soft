@@ -25,7 +25,7 @@
               <sele id="estado" v-model="dispenser.idEstadoDispenser"
                     :options="dispensersEstados" @change="cambioEstado"
                     options-value="idEstadosDispenser"
-                    search-text="Buscar" :placeholder="'Estado'"
+                    search-text="Buscar" :placeholder="'Seleccione un estado'"
                     options-label="nombre"
                     :disabled="this.edit"
                     :search="true" :justified="true" required>

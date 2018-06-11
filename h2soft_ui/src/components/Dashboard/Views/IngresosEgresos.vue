@@ -7,6 +7,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
+          </br>
           <button type="button" class="btn btn-default btn-fill btn-wd" v-show="this.isIngresoEgresoList" @click="newGasto">
             Volver
           </button>

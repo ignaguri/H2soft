@@ -19,7 +19,7 @@
   import apiCliente from 'src/api/services/clientServices'
   import noti from 'src/api/notificationsService'
 
-  const tableColumns = ['#', 'Código', 'Estado', 'Ubicación', 'Próx Mantenimiento']
+  const tableColumns = ['#', 'Código', 'Estado', 'Ubicación', 'Próximo Mantenimiento']
   //  let tableData = []
 
   export default {
@@ -52,7 +52,7 @@
               '#': dis.idDispensers,
               código: dis.codigo,
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-              próxmantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+              próximomantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             }
             if (dis.idObjetivo === null) {
               disp.ubicación = 'En fábrica'

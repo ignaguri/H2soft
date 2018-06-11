@@ -23,7 +23,7 @@
                  options-value="idMediosDePagoCobro"
                  options-label="nombre"
                  search-text="Buscar"
-                 :placeholder="'Nada seleccionado'"
+                 :placeholder="'Seleccione un medio'"
                  :search="true" :justified="true" required>
             </dds>
           </div>

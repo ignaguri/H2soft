@@ -44,6 +44,7 @@
           <div>No podrás iniciar el recorrido si no seleccionas un camión</div>
         </div>
       </div>
+      </br>
       <div class="row">
         <div class="col-md-6">
           <sele @change="cambioCamionSeleccionado" :options="camiones" options-value="idCamiones" search-text="Seleccione" :placeholder="this.camiones_placeholder" options-label="nombre" :multiple="false" name="" :search="true" :justified="false"></sele>
@@ -99,7 +100,7 @@
         idCamion: 0,
         camionAsignado: '',
         camiones: [],
-        camiones_placeholder: 'Seleccione',
+        camiones_placeholder: 'Seleccione un camión',
         verBtIniciarFinalizar: true,
         verBtSuspReanudar: false,
         verBtAnular: false,
