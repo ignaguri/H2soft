@@ -107,7 +107,6 @@ export default {
   },
   editClientes (context, id, cliente, contacto, objetivos) {
     const authHeader = { headers: auth.getAuthHeader() }
-    console.log('llegue a edit con: \n' + JSON.stringify(cliente) + '\n' + JSON.stringify(contacto) + '\n' + JSON.stringify(objetivos))
     return context.$http.patch(API_URL + 'clientes/' + id, cliente, authHeader)
       .then(clienteUpdated => {
         return context.$http.patch(API_URL + 'contactos-x-cliente' + '/?idCliente=' + id, contacto, authHeader)

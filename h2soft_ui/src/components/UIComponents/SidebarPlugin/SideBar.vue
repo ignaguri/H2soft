@@ -137,6 +137,9 @@
   }
 
 </script>
-<style>
+<style scoped>
+  .nav > li {
+    white-space: nowrap;
+  }
 
 </style>

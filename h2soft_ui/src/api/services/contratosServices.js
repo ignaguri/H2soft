@@ -33,7 +33,7 @@ export default {
         return true
       })
       .catch(error => {
-        alert('algo falló en el insert ' + JSON.stringify(error) + '\n' + error)
+        console.log('algo falló en el insert ' + JSON.stringify(error) + '\n' + error)
         return false
       })
   },

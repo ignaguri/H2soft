@@ -10,13 +10,14 @@
           <div class="col-md-6">
             <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
             <slot name="label"><label class="control-label">Cliente</label></slot>
-            <dds id="cliente" v-model="contrato.idClientes"
+            <dds id="cliente" v-model="contrato.idCliente"
                  :options="clientes"
                  options-value="idClientes"
                  options-label="razonSocial"
                  search-text="Buscar"
                  :placeholder="'Seleccione un cliente'"
-                 :search="true" :justified="true" required>
+                 :search="true" :justified="true" required
+                  :disabled="this.edit">
             </dds>
         </div>
           <div class="col-md-6">
@@ -52,7 +53,6 @@
         </div>
       </form>
     </div>
-    {{ contrato }}
   </div>
 </template>
 <script>
@@ -197,9 +197,9 @@
           api.getContratoFull(this, this.id).then(c => {
            // alert('llegue el full con: ' + JSON.stringify(c))
             this.contrato.idCliente = c.contrato.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
             c.detalle.forEach(dc => {
               this.detalles.push({
                 idProducto: dc.idProducto,
