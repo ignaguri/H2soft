@@ -127,7 +127,8 @@ export default {
           12: 0
         }
         detallesRemitoProducto.forEach(detalles => {
-          const mes = detalles.find(d => d.mes).mes
+          // const mes = detalles.find(d => d.mes).mes
+          const mes = detalles[1].mes
           const dejadoEnCliente = detalles.find(d => d.dejadoEnCliente === 1)
           cantidades[mes + 1] += dejadoEnCliente.cantidad
         })
