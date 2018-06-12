@@ -29,10 +29,10 @@
           <slot name="label"><label class="control-label">Hasta</label></slot>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
         </div>
-        <div class="col-md-3"  style="padding-top: 25px;" >
+        <div class="col-md-3" >
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
-        <div class="col-md-3"  style="padding-top: 25px;" >
+        <div class="col-md-3" >
           <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
         </div>
       </div>

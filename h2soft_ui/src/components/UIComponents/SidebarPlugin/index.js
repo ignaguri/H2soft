@@ -19,7 +19,7 @@ const SidebarStore = {
       path: '/reportes'
     },
     {
-      name: 'Bidones y Dispensers',
+      name: 'Dispensers y Productos',
       icon: 'ti-paint-bucket',
       path: '/bidonesdispensers'
     },

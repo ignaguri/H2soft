@@ -70,12 +70,12 @@
         this.table1.data = []
         api.getAlertas(this).then(r => {
           r.forEach(res => {
-            let al = {
+            const al = {
               '#': res.nro,
               'cliente': res.cliente,
               'objetivo': res.objetivo,
               'tipo': res.tipo,
-              'notificación': res.notificacion,
+              'notificación': res.notificación,
               'estado': res.estado
             }
             this.table1.data.push(al)
