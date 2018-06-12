@@ -112,13 +112,29 @@ export default {
         return context.$http.patch(API_URL + 'contactos-x-cliente' + '/?idCliente=' + id, contacto, authHeader)
       })
       .then(contactoUpdated => {
-        return context.$http.delete(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
       })
-      .then(objsBorrados => {
+      .then(objetivosDelCliente => {
+        objetivosDelCliente = objetivosDelCliente.body.data
         let promesas = []
+        // Chequear si hay nuevos objetivos a agregar
         objetivos.forEach(objetivo => {
-          objetivo.idCliente = id
-          promesas.push(context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader))
+          const existente = objetivosDelCliente.some(o => o.nombre === objetivo.nombre && o.direccion === objetivo.direccion)
+          // console.log(objetivo.nombre, 'existe en bd?', existente)
+          if (!existente) {
+            objetivo.idCliente = id
+            // console.log('postear', objetivo)
+            promesas.push(context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader))
+          }
+        })
+        // Chequear si hay objetivos borrados
+        objetivosDelCliente.forEach(delCliente => {
+          const existente = objetivos.filter(o => o.nombre === delCliente.nombre && o.direccion === delCliente.direccion)
+          // console.log(delCliente.nombre, 'existe en front?', existente)
+          if (!existente.length) {
+            // console.log('borrar', delCliente)
+            promesas.push(context.$http.delete(API_URL + 'objetivos-x-cliente/' + delCliente.idObjetivosXCliente, authHeader))
+          }
         })
         return Promise.all(promesas)
       })
