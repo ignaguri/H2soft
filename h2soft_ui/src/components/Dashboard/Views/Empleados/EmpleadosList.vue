@@ -18,7 +18,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Domicilio', 'Localidad']
+  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Domicilio']
   //  let tableData = []
 
   export default {

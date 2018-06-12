@@ -119,8 +119,7 @@
       getAddressData (addressData, placeResultData) {
         console.log('addressData:', addressData)
         console.log('placeresultdata:', placeResultData)
-        let direc = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
-        this.dirección = direc
+        this.dirección = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
         this.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
       },
       btn_agregar () {
