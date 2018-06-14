@@ -38,8 +38,11 @@
       }
     },
     mounted () {
-      this.getClientes()
-      this.cargarContratos()
+      api.getClientesContratos(this)
+        .then(res => {
+          this.clientes = res
+          this.cargarContratos()
+        })
     },
     methods: {
       cargarContratos () {

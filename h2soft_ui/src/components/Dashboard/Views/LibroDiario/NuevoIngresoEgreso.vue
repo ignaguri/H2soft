@@ -245,7 +245,7 @@
           month: '2-digit',
           day: '2-digit'
         })
-        this.ingresosEgresos.idMedioDePagoCobro = ''
+        this.ingresosEgresos.idMedioDePagoCobro = null
         this.ingresosEgresos.descripcion = null
         this.ingresosEgresos.imagen = null
         this.radioValue = null

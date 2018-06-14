@@ -18,19 +18,19 @@
           <span slot="footer">
               <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Temporada baja
-            <i class="fa fa-circle text-danger"></i> Temporada alta
+            <i class="fa fa-circle text-info"></i> Invierno
+            <i class="fa fa-circle text-danger"></i> Verano
           </div>
         </chart-card>
       </div>
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
-          <h4 class="title" slot="title">Ventas de bidones</h4>
+          <h4 class="title" slot="title">Ventas de productos</h4>
           <span slot="subTitle"> Ventas realizadas por mes en el último año</span>
           <span slot="footer">
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Cantidad de bidones
+            <i class="fa fa-circle text-info"></i> Bidones de 20L
           </div>
         </chart-card>
       </div>
@@ -116,7 +116,7 @@
           },
           options: {
             low: 1,
-            high: 400,
+            high: 250,
             showArea: true,
             // height: '245px',
             axisX: {

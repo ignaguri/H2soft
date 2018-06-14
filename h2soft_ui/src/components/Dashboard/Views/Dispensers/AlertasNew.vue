@@ -69,7 +69,7 @@
                      options-value="idProductos"
                      options-label="nombre"
                      search-text="Buscar"
-                     :placeholder="'Seleccion un producto'"
+                     :placeholder="'Seleccione un producto'"
                      :search="true" :justified="true"
                      required>
                 </dds>

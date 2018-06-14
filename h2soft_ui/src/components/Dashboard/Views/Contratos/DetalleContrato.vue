@@ -26,14 +26,14 @@
                options-value="idProductos"
                options-label="nombre"
                search-text="Buscar"
-               :placeholder="'Seleccione un producto'"
-               :search="true" :justified="true" required>
+               placeholder="Seleccione un producto"
+               :search="true" :justified="true">
           </dds>
         </div>
         <div class="col-md-6">
           <!--<label for="productos"><h4><span class="label label-default">Precio</span></h4></label>-->
           <slot name="label"><label class="control-label">Precio</label></slot>
-          <money id="importe" v-model="detalleContrato.precioPorUnidad" v-bind="money" class="form-control" :disabled="edit"></money>
+          <money id="importe" v-model="detalleContrato.precioPorUnidad" v-bind="money" class="form-control"></money>
         </div>
       </div>
       <div class="row">
@@ -57,7 +57,6 @@
                     :min="detalleContrato.cantidadMinima">
           </fg-input>
         </div>
-        {{ detalleContrato }}
       </div>
       <div slot="modal-footer" class="modal-footer">
         <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
@@ -151,6 +150,7 @@
       cargarDetalles () {
         this.table1.data = []
         this.detalles.forEach(det => {
+          console.log('detalle', det)
           this.table1.data.push({
             // nro: det.idDetallesContrato,
             producto: this.cargarProducto(det.idProducto),
@@ -212,23 +212,23 @@
         return false
       },
       cargarProducto (idProd) {
-        for (let p = 0, len = this.productoss
+        for (let p = 0, len = this.productos
           .length; p < len; p++) {
-          if (this.productoss[p].idProductos === idProd) {
-            return this.productoss[p].nombre
+          if (this.productos[p].idProductos === idProd) {
+            return this.productos[p].nombre
           }
         }
       },
       buscarIdProducto (nombreProdu) {
-        for (let p = 0, len = this.productoss
+        for (let p = 0, len = this.productos
           .length; p < len; p++) {
-          if (this.productoss[p].nombre === nombreProdu) {
-            return this.productoss[p].idProductos
+          if (this.productos[p].nombre === nombreProdu) {
+            return this.productos[p].idProductos
           }
         }
       },
       limpiarCampos () {
-        this.detalleContrato.idProducto = ''
+        this.detalleContrato.idProducto = null
         this.detalleContrato.cantidadMaxima = ''
         this.detalleContrato.cantidadMinima = ''
         this.detalleContrato.precioPorUnidad = ''

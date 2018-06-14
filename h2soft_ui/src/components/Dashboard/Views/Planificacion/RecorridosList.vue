@@ -1,8 +1,9 @@
-  <template>
+<template>
   <div class="row">
     <div class="col-md-12">
       <div class="card" v-if="verCompleto() == true">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :erase="borrarRecorrido" :goButton="true" :go="ver">
+        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
+                     :columns="table1.columns" :editButton="false" :erase="borrarRecorrido" :goButton="true" :go="ver">
 
         </paper-table>
         <div class="text-center">
@@ -13,7 +14,8 @@
         <br>
       </div>
       <div class="card" v-if="verCompleto() == false">
-        <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :erase="borrarDetalle">
+        <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
+                     :columns="table2.columns" :editButton="false" :erase="borrarDetalle">
 
         </paper-table>
         <div class="text-center">
@@ -30,7 +32,8 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="empleado"><h4><span class="label label-default">Repartidor</span></h4></label>
+              <!--<label for="empleado"><h4><span class="label label-default">Repartidor</span></h4></label>-->
+              <slot name="label"><label class="control-label">Repartidor</label></slot>
               <dds id="empleado" v-model="idEmpleadoAsignado"
                    :options="empleados"
                    options-value="idEmpleados"
@@ -40,7 +43,8 @@
                    :search="true" :justified="true" required>
               </dds>
               <template v-if="asignado">
-                <label for="motivo"><h4><span class="label label-default">Motivo</span></h4></label>
+                <!--<label for="motivo"><h4><span class="label label-default">Motivo</span></h4></label>-->
+                <slot name="label"><label class="control-label">Motivo</label></slot>
                 <dds id="motivo" v-model="idMotivo"
                      :options="motivos"
                      options-value="idMotivoDeReasignacion"
@@ -53,15 +57,27 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="form-group">
-              <fg-input type="number"
-                        label="Cantidad de días de asignación"
-                        placeholder="Ingrese un número"
-                        v-model="diasAsignacion"
-                        disabled>
-              </fg-input>
-            </div>
+            <!--<div class="col-md-6">-->
+              <slot name="label"><label class="control-label">Desde</label></slot>
+              <dp v-model="fechaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"
+                  :placeholder="'Desde'" width="100%" :clear-button="true"></dp>
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+              <slot name="label"><label class="control-label">Hasta</label></slot>
+              <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"
+                  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
+            <!--</div>-->
           </div>
+          <!--<div class="col-md-12">-->
+          <!--<div class="form-group">-->
+          <!--<fg-input type="number"-->
+          <!--label="Cantidad de días de asignación"-->
+          <!--placeholder="Ingrese un número"-->
+          <!--v-model="diasAsignacion"-->
+          <!--disabled>-->
+          <!--</fg-input>-->
+          <!--</div>-->
+          <!--</div>-->
         </div>
         <div slot="modal-footer" class="modal-footer">
           <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
@@ -75,7 +91,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/recorridoServices'
   import noti from 'src/api/notificationsService'
-  import { modal, select } from 'vue-strap'
+  import { modal, select, datepicker } from 'vue-strap'
 
   const table1Columns = ['#', 'Temporada', 'Día', 'Turno', 'Frecuencia', 'Asignado a']
   const table2Columns = ['Orden', 'Objetivo', 'Dirección', 'Localidad', 'Cliente']
@@ -83,6 +99,7 @@
     components: {
       PaperTable,
       modal,
+      dp: datepicker,
       dds: select
     },
     data () {
@@ -105,6 +122,8 @@
         empleados: [],
         asignado: false,
         diasAsignacion: 30,
+        fechaDesde: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        fechaHasta: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         recorridos: [],
         motivos: [],
         idMotivo: null,
@@ -259,6 +278,7 @@
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
+          // TODO: cambiar dias de asignación por fecha desde - hasta
           diasAsignacion: this.diasAsignacion,
           idMotivoDeReasignacion: this.idMotivo
         })
