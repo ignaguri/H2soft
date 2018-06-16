@@ -36,7 +36,7 @@ module.exports = function (app) {
     activo: {
       type: Sequelize.BOOLEAN(),
       allowNull: false,
-      default : 1
+      default : true
     }
   }, {
     hooks: {
