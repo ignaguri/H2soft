@@ -42,6 +42,11 @@ module.exports = function (app) {
     observaciones: {
       type: Sequelize.STRING(100),
       allowNull: true
+    },
+    activo: {
+      type: Sequelize.BOOLEAN(),
+      allowNull: false,
+      default : true
     }
   }, {
     hooks: {

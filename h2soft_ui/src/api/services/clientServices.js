@@ -5,7 +5,7 @@ const API_URL = process.env.API_URL
 export default {
   getClientes (context) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'clientes', authHeader)
+    return context.$http.get(API_URL + 'clientes' + '/?activo=' + 1, authHeader)
   },
   getCliente (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
@@ -22,7 +22,7 @@ export default {
       })
       .then(cxc => {
         info['contacto'] = cxc.body.data[0]
-        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1, authHeader)
       })
       .then(oxc => {
         info['objetivos'] = oxc.body.data
@@ -36,6 +36,7 @@ export default {
   postClientes (context, cliente, contacto, objetivos) {
     const authHeader = { headers: auth.getAuthHeader() }
     console.log('llegue a post con: \n' + JSON.stringify(cliente) + '\n' + JSON.stringify(contacto) + '\n' + JSON.stringify(objetivos))
+    cliente.activo = 1
     return context.$http.post(API_URL + 'clientes', cliente, authHeader)
       .then(clienteInsertado => {
         console.log('inserté el cliente wee \n')
@@ -50,6 +51,7 @@ export default {
       console.log('inserté el contacto \n')
       let promesas = []
       objetivos.forEach(objetivo => {
+        objetivo.activo = 1
         promesas.push(context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader))
       })
       return Promise.all(promesas)
@@ -66,12 +68,22 @@ export default {
   },
   deleteClientes (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.delete(API_URL + 'contactos-x-cliente/?idCliente=' + id, authHeader)
-      .then(() => {
-        return context.$http.delete(API_URL + 'objetivos-x-cliente/?idCliente=' + id, authHeader)
+    return context.$http.get(API_URL + 'contratos/?idCliente=' + id, authHeader)
+      .then(contratos => {
+        const contrato = contratos.body.data.length ? contratos.body.data[0] : []
+        return context.$http.delete(API_URL + 'detalles-contrato' + '/?idContrato=' + contrato.idContratos, authHeader)
       })
       .then(() => {
-        return context.$http.delete(API_URL + 'clientes/' + id, authHeader)
+        return context.$http.delete(API_URL + 'contratos/?idCliente=' + id, authHeader)
+      })
+      .then(() => {
+        return context.$http.delete(API_URL + 'contactos-x-cliente/?idCliente=' + id, authHeader)
+      })
+      .then(() => {
+        return context.$http.patch(API_URL + 'objetivos-x-cliente/?idCliente=' + id, { activo: 0 }, authHeader)
+      })
+      .then(() => {
+        return context.$http.patch(API_URL + 'clientes/' + id, { activo: 0 }, authHeader)
       })
       .then(res => {
         console.log('borrado', res)
@@ -89,7 +101,7 @@ export default {
   },
   getObjetivos (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1, authHeader)
       .then(res => { return res.body.data })
   },
   getObjetivo (context, idObjetivo) {
@@ -98,6 +110,7 @@ export default {
   },
   postObjetivos (context, objetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
+    objetivo.activo = 1
     return context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader)
       .then(res => { return true })
       .catch(error => {
@@ -112,7 +125,7 @@ export default {
         return context.$http.patch(API_URL + 'contactos-x-cliente' + '/?idCliente=' + id, contacto, authHeader)
       })
       .then(contactoUpdated => {
-        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+        return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1, authHeader)
       })
       .then(objetivosDelCliente => {
         objetivosDelCliente = objetivosDelCliente.body.data
@@ -123,6 +136,7 @@ export default {
           // console.log(objetivo.nombre, 'existe en bd?', existente)
           if (!existente) {
             objetivo.idCliente = id
+            objetivo.activo = 1
             // console.log('postear', objetivo)
             promesas.push(context.$http.post(API_URL + 'objetivos-x-cliente', objetivo, authHeader))
           }
@@ -133,13 +147,13 @@ export default {
           // console.log(delCliente.nombre, 'existe en front?', existente)
           if (!existente.length) {
             // console.log('borrar', delCliente)
-            promesas.push(context.$http.delete(API_URL + 'objetivos-x-cliente/' + delCliente.idObjetivosXCliente, authHeader))
+            promesas.push(context.$http.patch(API_URL + 'objetivos-x-cliente/' + delCliente.idObjetivosXCliente, { activo: 0 }, authHeader))
           }
         })
         return Promise.all(promesas)
       })
       .then(objetivosUpdated => {
-        console.log('updatee todo bien wa8')
+        // console.log('updatee todo bien wa8', objetivosUpdated)
         return true
       })
       .catch(error => {

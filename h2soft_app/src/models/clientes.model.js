@@ -32,6 +32,11 @@ module.exports = function (app) {
         model: 'tipos-cliente',
         key: 'idTiposCliente'
       }
+    },
+    activo: {
+      type: Sequelize.BOOLEAN(),
+      allowNull: false,
+      default : 1
     }
   }, {
     hooks: {

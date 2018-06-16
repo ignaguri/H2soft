@@ -29,12 +29,12 @@ export default {
   },
   getClientes (context) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'clientes', authHeader)
+    return context.$http.get(API_URL + 'clientes' + '/?activo=' + 1, authHeader)
       .then(res => { return res.body.data })
   },
   getObjetivos (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id, authHeader)
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1, authHeader)
       .then(res => { return res.body.data })
   },
   postRecorrido (context, recorrido, detalle) {
@@ -192,7 +192,7 @@ export default {
     let objetivos = {}
     let planificados = {}
     let filtrados = {}
-    return context.$http.get(API_URL + 'objetivos-x-cliente', authHeader)
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?activo=' + 1, authHeader)
       .then(res => {
         objetivos = res.body.data
         return context.$http.get(API_URL + 'detalle-recorrido', authHeader)
