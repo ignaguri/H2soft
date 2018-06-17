@@ -136,7 +136,8 @@ export default {
     return context.$http.get(API_URL + 'tipos-cliente', authHeader)
       .then(res => { return res.body.data })
   },
-  calcularVentasPorCliente (context, cliente, fechaDesde, fechaHasta) {
+  calcularVentasPorCliente (context, cliente, fechaDesde, fechaHasta, idEstadoFacturacion) {
+    /* SI idEstadoFacturacion NO SE UTILIZA EL FILTRO */
     const authHeader = { headers: auth.getAuthHeader() }
     // PREPARO LAS FECHAS PARA SU USO
     console.log(fechaDesde, fechaHasta)
@@ -152,14 +153,17 @@ export default {
         objetivosAux = objetivos
         let promesas = []
         // POR CADA OBJETIVO, QUIERO SUS REMITOS, DENTRO DEL RANGO DE FECHAS PASADAS POR PARAMETRO
-        objetivos.forEach(o => promesas.push(context.$http.get(API_URL + 'remitos/?idObjetivo=' +
-                                            o.idObjetivosXCliente + '&fecha[$gte]=' + fechaDesde.toISOString() +
-                                            '&fecha[$lt]=' + fechaHasta.toISOString(), authHeader)
+        let filtrosConsulta = '&fecha[$gte]=' + fechaDesde.toISOString() +
+                              '&fecha[$lt]=' + fechaHasta.toISOString()
+        if (idEstadoFacturacion !== 0) {
+          filtrosConsulta = filtrosConsulta + '&idEstadoRemito=' + idEstadoFacturacion
+        }
+        objetivos.forEach(o => promesas.push(context.$http.get(API_URL + 'remitos/?idObjetivo=' + o.idObjetivosXCliente +
+                                            filtrosConsulta, authHeader)
                                             .then(res => res.body.data)))
         return Promise.all(promesas)
       })
       .then(remitosXObjetivo => {
-        console.log('remitosXObjetivo', remitosXObjetivo)
         let promesas = []
         // LOS REMITOS VIENEN AGRUPADOS POR OBJETIVO. POR CADA UNO DE ESOS REMITOS QUIERO SU DETALLE-REMITO-PRODUCTOS
         // TENIENDO EN CUENTA SOLO LOS PRODUCTOS 'DEJADOS EN CLIENTE'
@@ -172,6 +176,7 @@ export default {
                                             result.objetivo = r.idObjetivo
                                             result.fecha = r.fecha
                                             result.firmaConforme = r.firmaConforme
+                                            result.idEstadoRemito = r.idEstadoRemito
                                             return result
                                           }))
           })
@@ -194,7 +199,8 @@ export default {
                     objetivo: objetivosAux.find(o => o.idObjetivosXCliente === dXr.objetivo).nombre,
                     fecha: new Date(dXr.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                     cantidad: d.cantidad,
-                    firmadoconforme: dXr.firmaConforme === 1 ? 'Si' : 'No'
+                    firmadoconforme: dXr.firmaConforme === 1 ? 'Si' : 'No',
+                    idEstadoRemito: dXr.idEstadoRemito
                   }
                 ]
               })
@@ -204,7 +210,8 @@ export default {
                 objetivo: objetivosAux.find(o => o.idObjetivosXCliente === dXr.objetivo).nombre,
                 fecha: new Date(dXr.fecha).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 cantidad: d.cantidad,
-                firmadoconforme: dXr.firmaConforme === 1 ? 'Si' : 'No'
+                firmadoconforme: dXr.firmaConforme === 1 ? 'Si' : 'No',
+                idEstadoRemito: dXr.idEstadoRemito
               })
             }
           })

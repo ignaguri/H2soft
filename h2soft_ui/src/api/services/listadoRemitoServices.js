@@ -16,7 +16,7 @@ export default {
   },
   getProductosRemitos (context) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.get('http://localhost:3030/productos', authHeader)
+    return context.$http.get(API_URL + 'productos', authHeader)
         .then(res => { return res.body.data })
   },
   getDetallesRemitoDispensers (context, id) {

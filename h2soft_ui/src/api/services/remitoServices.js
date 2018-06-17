@@ -1,4 +1,6 @@
 import auth from '../auth'
+import apiClientes from 'src/api/services/clientServices.js'
+
 const API_URL = process.env.API_URL
 
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR PARA REMITOS
@@ -33,6 +35,34 @@ export default {
       .catch(error => {
         console.log('algo falló en el insert del remito' + JSON.stringify(error))
       })
+  },
+  getRemitosXclienteYfechas (context, idCliente, fechaDesde, fechaHasta) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    const desde = fechaDesde.split('/')
+    fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
+    const hasta = fechaHasta.split('/')
+    fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
+    fechaHasta.setDate(fechaHasta.getDate() + 1)
+    // BUSCO LOS OBJETIVOS DEL CLIENTE QUE VIENE POR PARAMETRO
+    return apiClientes.getObjetivos(context, idCliente)
+    .then(objetivos => {
+      let promesas = []
+      // POR CADA OBJETIVO, QUIERO SUS REMITOS, DENTRO DEL RANGO DE FECHAS PASADAS POR PARAMETRO
+      objetivos.forEach(o => promesas.push(context.$http.get(API_URL + 'remitos/?idObjetivo=' +
+                                          o.idObjetivosXCliente + '&fecha[$gte]=' + fechaDesde.toISOString() +
+                                          '&fecha[$lt]=' + fechaHasta.toISOString(), authHeader)
+                                          .then(res => res.body.data)))
+      return Promise.all(promesas)
+    })
+    .then(remitosXObjetivo => {
+      remitosXObjetivo = [].concat.apply([], remitosXObjetivo)
+      return remitosXObjetivo
+    })
+    .catch(error => {
+      console.error('algo falló en la busqueda de remitos por cliente ', error)
+      throw error
+      // return false
+    })
   },
   nuevoRemito (context, remito) {
     const authHeader = {headers: auth.getAuthHeader()}
