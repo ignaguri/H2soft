@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div class="row">
       <listado-remitos v-if="isRemitosList"></listado-remitos>
       <listado-detalle-remito v-if="!isRemitosList":idRemito="idRemito" ></listado-detalle-remito>
-    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
