@@ -155,7 +155,7 @@
               this.table1.data.push({
                 '#': recs.recorrido,
                 temporada: recs.temporada,
-                día: recs.dia,
+                dia: recs.dia,
                 turno: recs.turno,
                 frecuencia: recs.frecuencia,
                 asignadoa: recs.asignado ? `${recs.asignado.apellido}, ${recs.asignado.nombre}` : null
@@ -199,7 +199,7 @@
                   recorrido: recs.recorrido,
                   objetivo: recs.objetivo,
                   orden: recs.orden,
-                  dirección: recs.direccion,
+                  direccion: recs.direccion,
                   localidad: recs.localidad,
                   cliente: recs.cliente
                 })

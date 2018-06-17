@@ -57,42 +57,60 @@
     },
     methods: {
       hasValue (item, column) {
-        return item[column.toLowerCase().replace(' ', '')] !== 'undefined'
+        return item[this.normalize(column)] !== 'undefined'
       },
       itemValue (item, column) {
-        return item[column.toLowerCase().replace(' ', '')]
+        return item[this.normalize(column)]
       },
       sort (col) {
         console.log(col)
         if (col === undefined) return
+        col = this.normalize(col)
         if (!this.sortedAsc) {
           this.data = this.data.sort((item1, item2) => {
-            if (isNaN(item1[col.toLowerCase()])) {
+            if (isNaN(item1[col])) {
               // return item1[col.toLowerCase()].toLowerCase() >= item2[col.toLowerCase()].toLowerCase()
-              if (item1[col.toLowerCase()].toLowerCase() > item2[col.toLowerCase()].toLowerCase()) return 1
-              if (item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()) return -1
+              if (item1[col].toLowerCase() > item2[col].toLowerCase()) return 1
+              if (item1[col].toLowerCase() < item2[col].toLowerCase()) return -1
               return 0
             } else {
-              return item1[col.toLowerCase()] - item2[col.toLowerCase()]
+              return item1[col] - item2[col]
             }
           })
           this.sortedAsc = true
         } else {
           this.data = this.data.sort((item1, item2) => {
-            if (isNaN(item1[col.toLowerCase()])) {
+            if (isNaN(item1[col])) {
               // return item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()
-              if (item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()) return 1
-              if (item1[col.toLowerCase()].toLowerCase() > item2[col.toLowerCase()].toLowerCase()) return -1
+              if (item1[col].toLowerCase() < item2[col].toLowerCase()) return 1
+              if (item1[col].toLowerCase() > item2[col].toLowerCase()) return -1
               return 0
             } else {
-              return item2[col.toLowerCase()] - item1[col.toLowerCase()]
+              return item2[col] - item1[col]
             }
           })
           this.sortedAsc = false
         }
       },
-      prueba (elem) {
-        console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
+      normalize (cadena) {
+        // Definimos los caracteres que queremos eliminar
+        let specialChars = '!@$^&%*()+=\\-[]/{}|:<>?,'
+        // Los eliminamos todos
+        for (var i = 0; i < specialChars.length; i++) {
+          cadena = cadena.replace(new RegExp('\\' + specialChars[i], 'gi'), '')
+        }
+        // Lo queremos devolver limpio en minusculas
+        cadena = cadena.toLowerCase()
+        // Quitamos espacios y los sustituimos por _ porque nos gusta mas asi
+        cadena = cadena.replace(/ /g, '')
+        // Quitamos acentos y "ñ". Fijate en que va sin comillas el primer parametro
+        cadena = cadena.replace(/á/gi, 'a')
+        cadena = cadena.replace(/é/gi, 'e')
+        cadena = cadena.replace(/í/gi, 'i')
+        cadena = cadena.replace(/ó/gi, 'o')
+        cadena = cadena.replace(/ú/gi, 'u')
+        cadena = cadena.replace(/ñ/gi, 'n')
+        return cadena
       }
     }
   }

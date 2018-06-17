@@ -85,10 +85,10 @@
               empleado: this.cargarEmpleado(ingreEgre.idEmpleado),
               importe: '$ ' + ingreEgre.monto,
               mediodepago: this.cargarMeidoDePagoCobro(ingreEgre.idMedioDePagoCobro),
-              descripción: ingreEgre.descripcion
+              descripcion: ingreEgre.descripcion
             }
             this.table1.data.push(ie)
-            this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripción])
+            this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
           })
         })
         .catch(error => {

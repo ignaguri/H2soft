@@ -183,7 +183,7 @@
         table2: {
           title: 'Recorrido',
           subTitle: 'Estás planificando este recorrido',
-          columns: ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente'],
+          columns: ['Orden', 'Objetivo', 'Dirección', 'Localidad', 'Cliente'],
           data: []
         }
       }
@@ -285,7 +285,7 @@
                       objetivo: d.objetivo,
                       cliente: d.cliente,
                       recorrido: r.recorrido,
-                      día: r.dia,
+                      dia: r.dia,
                       turno: r.turno,
                       frecuencia: r.frecuencia,
                       temporada: r.temporada
