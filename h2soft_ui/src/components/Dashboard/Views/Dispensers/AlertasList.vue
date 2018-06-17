@@ -75,7 +75,7 @@
               'cliente': res.cliente,
               'objetivo': res.objetivo,
               'tipo': res.tipo,
-              'notificación': res.notificación,
+              'notificacion': res.notificación,
               'estado': res.estado
             }
             this.table1.data.push(al)

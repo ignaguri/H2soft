@@ -46,8 +46,8 @@
           res.forEach(camion => {
             this.table1.data.push({
               '#': camion.idCamiones,
-              camión: camion.nombre,
-              capacidadmáxima: camion.capacidadMaxima
+              camion: camion.nombre,
+              capacidadmaxima: camion.capacidadMaxima
             })
           })
         }, error => {
