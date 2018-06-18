@@ -28,7 +28,7 @@
         </div>
         <br>
       </div>
-      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" :title="modalTitle">
+      <modal effect="fade" :backdrop="false" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" :title="modalTitle">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">

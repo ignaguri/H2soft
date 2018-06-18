@@ -14,11 +14,6 @@ const SidebarStore = {
       path: '/planificacion'
     },
     {
-      name: 'Reportes',
-      icon: 'ti-bar-chart',
-      path: '/reportes'
-    },
-    {
       name: 'Dispensers y Productos',
       icon: 'ti-paint-bucket',
       path: '/bidonesdispensers'
@@ -37,6 +32,11 @@ const SidebarStore = {
       name: 'Clientes',
       icon: 'ti-view-list-alt',
       path: '/clientes'
+    },
+    {
+      name: 'Reportes',
+      icon: 'ti-bar-chart',
+      path: '/reportes'
     },
     {
       name: 'configuración',

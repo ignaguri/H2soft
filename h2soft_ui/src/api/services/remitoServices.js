@@ -131,6 +131,7 @@ export default {
           const mes = detalles[1].mes
           const dejadoEnCliente = detalles.find(d => d.dejadoEnCliente === 1)
           cantidades[mes + 1] += dejadoEnCliente.cantidad
+          console.log('MES:' + mes, 'CANT: ' + cantidades[mes + 1])
         })
         return cantidades
       })

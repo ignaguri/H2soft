@@ -26,7 +26,7 @@
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
           <h4 class="title" slot="title">Ventas de productos</h4>
-          <span slot="subTitle"> Ventas realizadas por mes en el último año</span>
+          <span slot="subTitle"> Ventas realizadas por mes en los últimos 12 meses</span>
           <span slot="footer">
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
@@ -111,7 +111,7 @@
         ],
         usersChart: {
           data: {
-            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            labels: ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
             series: []
           },
           options: {
@@ -131,7 +131,7 @@
         },
         activityChart: {
           data: {
-            labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'],
+            labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
             series: [
             ]
           },
@@ -189,18 +189,18 @@
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
             let consumo = []
-            consumo.push(resp[1])
-            consumo.push(resp[2])
-            consumo.push(resp[3])
-            consumo.push(resp[4])
-            consumo.push(resp[5])
-            consumo.push(resp[6])
             consumo.push(resp[7])
             consumo.push(resp[8])
             consumo.push(resp[9])
             consumo.push(resp[10])
             consumo.push(resp[11])
             consumo.push(resp[12])
+            consumo.push(resp[1])
+            consumo.push(resp[2])
+            consumo.push(resp[3])
+            consumo.push(resp[4])
+            consumo.push(resp[5])
+            consumo.push(resp[6])
             this.usersChart.data.series.push(consumo)
             this.modif = !this.modif
           })
