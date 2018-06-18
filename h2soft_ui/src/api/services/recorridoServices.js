@@ -293,9 +293,9 @@ export default {
         return repartidores
       })
   },
-  postAsignacion (context, asignacion) {
+  postAsignacion (context, asignacion, isReasignacion) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
+    return context.$http.post(API_URL + 'recorrido-historico/asignar', { asignacion, isReasignacion }, authHeader)
       .then(asignado => {
         console.log('asigné', asignado)
         return true

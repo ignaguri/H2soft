@@ -5,7 +5,7 @@ const hooks = require('./recorridos-historicos.hooks');
 const filters = require('./recorridos-historicos.filters');
 const logger = require('winston');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
   const Model = createModel(app);
   const paginate = app.get('paginate');
@@ -23,7 +23,7 @@ module.exports = function () {
   // Get our initialized service so that we can register hooks and filters
   const service = app.service('recorrido-historico');
   app.service('recorrido-historico/asignar', {
-    create: function (data, params, callback) {
+    create: function(data, params, callback) {
       return replicarAsignacion(app, data);
     }
   });
@@ -34,13 +34,17 @@ module.exports = function () {
   }
 };
 
-function replicarAsignacion(ap, data) {
-  console.log('Replicar asignacion', data);
+function replicarAsignacion(ap, fullData) {
+  console.log('Replicar asignacion', fullData);
+  const { asignacion: data, isReasignacion } = fullData;
   let recorrido = null;
   let detallesRecorrido = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  return ap.services['recorridos'].get(data.recorrido)
+  let fechaDesde;
+  let fechaHasta;
+  return ap.services['recorridos']
+    .get(data.recorrido)
     .then(r => {
       recorrido = {
         idDia: r.idDia,
@@ -52,7 +56,9 @@ function replicarAsignacion(ap, data) {
         fechaAsignacion: today,
         idRecorrido: data.recorrido
       };
-      return ap.services['detalle-recorrido'].find({query: {idRecorrido: data.recorrido}});
+      return ap.services['detalle-recorrido'].find({
+        query: { idRecorrido: data.recorrido }
+      });
     })
     .then(d => {
       d.data.forEach(det => {
@@ -67,12 +73,15 @@ function replicarAsignacion(ap, data) {
       let recorridos = [];
 
       const desde = data.fechaDesde.split('/');
-      const fechaDesde = new Date(desde[2], desde[1] - 1, desde[0]);
+      fechaDesde = new Date(desde[2], desde[1] - 1, desde[0]);
       const hasta = data.fechaHasta.split('/');
-      const fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0]);
+      fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0]);
 
-
-      const frecuencia = getFrecuencia(recorrido.idFrecuencia, fechaDesde, fechaHasta);
+      const frecuencia = getFrecuencia(
+        recorrido.idFrecuencia,
+        fechaDesde,
+        fechaHasta
+      );
       const aux = getDiaAsignacion(recorrido.idDia, fechaDesde);
 
       for (let i = 0; i < frecuencia; i++) {
@@ -89,9 +98,55 @@ function replicarAsignacion(ap, data) {
       return recorridos;
     })
     .then(aInsertar => {
-      return ap.services['recorrido-historico'].create(aInsertar);
+      return [
+        aInsertar,
+        ap.services['recorrido-historico'].find({
+          query: {
+            idRecorrido: data.recorrido,
+            fechaAsignacion: {
+              $lt: fechaHasta,
+              $gt: fechaDesde
+            }
+          }
+        })
+      ];
+    })
+    .then(recorridosAsignados => {
+      console.log('recorridos asignados', recorridosAsignados);
+      const actualizables = recorridosAsignados.data.filter(oldie => {
+        const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
+        return aInsertar.some(newie => {
+          const fechaNewie = new Date(newie.fechaAsignacion).toDateString();
+          return fechaNewie === fechaOldie;
+        });
+      });
+
+      const nuevos = aInsertar.filter(newie => {
+        const fechaNewie = new Date(newie.fechaAsignacion).toDateString();
+        return recorridosAsignados.data.every(oldie => {
+          const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
+          return fechaNewie !== fechaOldie;
+        });
+      });
+
+      console.log('a insertar', aInsertar.length);
+      console.log('actualizables', actualizables.length);
+      console.log('nuevis', nuevos.length);
+
+      actualizables.forEach(act =>
+        promesas.push(
+          ap.services['recorrido-historico'].patch(act.idRecorridosHistoricos, {
+            idEmpleadoAsignado: data.empleado
+          })
+        )
+      );
+      promesas.push(ap.services['recorrido-historico'].create(nuevos));
+      console.log('promesas', promesas.length);
+      return Promise.all(promesas);
+      // return ap.services['recorrido-historico'].create(aInsertar);
     })
     .then(recs => {
+      console.log('recorridos insertados', recs);
       let detallesAInsertar = [];
       recs.forEach(r => {
         //let detallesAux = Array.from(detallesRecorrido);
@@ -102,7 +157,9 @@ function replicarAsignacion(ap, data) {
           detallesAInsertar.push(aux);
         });
       });
-      return ap.services['detalle-recorrido-historico'].create(detallesAInsertar);
+      return ap.services['detalle-recorrido-historico'].create(
+        detallesAInsertar
+      );
     })
     .then(solved => {
       logger.info('Se asignaron los recorridos');
@@ -111,7 +168,6 @@ function replicarAsignacion(ap, data) {
     .catch(error => {
       logger.error(error);
     });
-
 }
 
 function getFrecuencia(idFrecuencia, fechaDesde, fechaHasta) {
@@ -131,7 +187,7 @@ function getFrecuencia(idFrecuencia, fechaDesde, fechaHasta) {
 
 function cantMesesEntre(hasta, desde) {
   let diff = (hasta.getTime() - desde.getTime()) / 1000;
-  diff /= (60 * 60 * 24 * 7 * 4);
+  diff /= 60 * 60 * 24 * 7 * 4;
   // return Math.abs(Math.round(diff));
   return Math.abs(diff);
 }
@@ -146,7 +202,7 @@ function getDiaAsignacion(dia, fechaDesde) {
     date.setDate(date.getDate() + (dia - date.getDay()));
     return date;
   } else {
-    date.setDate(date.getDate() + ((dia + 7) - date.getDay()));
+    date.setDate(date.getDate() + (dia + 7 - date.getDay()));
     return date;
   }
 }
