@@ -25,19 +25,6 @@
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
-              <!--<label for="temporada"><h4><span class="label label-primary">Temporada</span></h4></label>-->
-              <slot name="label"><label class="control-label">Temporada</label></slot>
-              <dds id="temporada" v-model="idTemporada"
-                   :options="temporadas"
-                   options-value="idTemporadas"
-                   options-label="nombre"
-                   search-text="Buscar"
-                   :placeholder="'Seleccione una temporada'"
-                   :search="true" :justified="true"
-                   :disabled="idRecorrido !== null" required>
-              </dds>
-            </div>
-            <div class="form-group">
               <!--<label for="frecuencia"><h4><span class="label label-default">Frecuencia</span></h4></label>-->
               <slot name="label"><label class="control-label">Frecuencia</label></slot>
               <dds id="frecuencia" v-model="idFrecuencia"
@@ -160,8 +147,6 @@
     data () {
       return {
         radioValue: 'planificados',
-        temporadas: [],
-        idTemporada: null,
         dias: [],
         idDia: null,
         turnos: [],
@@ -183,7 +168,7 @@
         table2: {
           title: 'Recorrido',
           subTitle: 'Estás planificando este recorrido',
-          columns: ['Orden', 'Objetivo', 'Direccion', 'Localidad', 'Cliente'],
+          columns: ['Orden', 'Objetivo', 'Cliente', 'Direccion', 'Localidad'],
           data: []
         }
       }
@@ -207,7 +192,8 @@
           idDia: this.idDia,
           idFrecuencia: this.idFrecuencia,
           idTurno: this.idTurno,
-          idTemporada: this.idTemporada
+          // TODO: sacarlo. dejado por cuestion de tiempos
+          idTemporada: 1
         }
         let detalle = {
           idObjetivo: this.idObjetivo
@@ -236,9 +222,6 @@
           })
       },
       cargarCombos () {
-        api.getTemporadas(this).then(r => {
-          this.temporadas = r
-        })
         api.getDias(this).then(r => {
           this.dias = r
         })
@@ -257,7 +240,7 @@
         api.getRecorridosFull(this).then(recs => {
           recs.sort((a, b) => a.recorrido - b.recorrido)
           recs.forEach(r => {
-            r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia}, ${r.temporada})`
+            r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia})`
           })
           this.recorridos = recs
         })
@@ -274,7 +257,7 @@
       cargarRecorridos () {
         if (this.radioValue === 'planificados') {
           this.table1.title = 'Objetivos planificados'
-          this.table1.columns = ['Recorrido', 'Objetivo', 'Cliente', 'Día', 'Turno', 'Frecuencia', 'Temporada']
+          this.table1.columns = ['Recorrido', 'Objetivo', 'Cliente', 'Día', 'Turno', 'Frecuencia']
           this.table1.data = []
           api.getRecorridosFull(this).then(rec => {
             rec.forEach(r => {
@@ -287,8 +270,7 @@
                       recorrido: r.recorrido,
                       día: r.dia,
                       turno: r.turno,
-                      frecuencia: r.frecuencia,
-                      temporada: r.temporada
+                      frecuencia: r.frecuencia
                     })
                   })
                 })
@@ -321,7 +303,6 @@
           api.getRecorrido(this, id)
             .then(r => {
               this.idTurno = r.idTurno
-              this.idTemporada = r.idTemporada
               this.idDia = r.idDia
               this.idFrecuencia = r.idFrecuencia
             })
@@ -337,7 +318,6 @@
         this.idClientes = null
         this.idObjetivo = null
         this.idTurno = null
-        this.idTemporada = null
         this.idDia = null
         this.idFrecuencia = null
       },
