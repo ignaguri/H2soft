@@ -146,7 +146,7 @@
                         '#': det.idDetalleRecorridoHistorico,
                         'orden': det.orden,
                         'objetivo': resObj.nombre,
-                        'dirección': resObj.direccion,
+                        'direccion': resObj.direccion,
                         'estado': det.entregado === 0 ? 1 : 4,
                         'bidones20l.': cant
                       })

@@ -58,7 +58,7 @@
       return {
         showCustomModal: false,
         nombre: '',
-        dirección: '',
+        direccion: '',
         localidad: '',
         obAddress: '',
         table1: {
@@ -97,7 +97,7 @@
           this.table1.data.push({
             id: ob.idObjetivosXCliente,
             nombre: ob.nombre,
-            dirección: ob.direccion,
+            direccion: ob.direccion,
             localidad: ob.localidad
           })
         })
@@ -109,22 +109,22 @@
       },
       ok () {
         // return !confirm('Ok event.\nClose Modal?')
-        if (this.nombre === '' || this.dirección === '') {
+        if (this.nombre === '' || this.direccion === '') {
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
-        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.dirección, localidad: this.localidad})
+        this.$emit('new_objetivo', {nombre: this.nombre, direccion: this.direccion, localidad: this.localidad})
         return false
       },
       getAddressData (addressData, placeResultData) {
         console.log('addressData:', addressData)
         console.log('placeresultdata:', placeResultData)
-        this.dirección = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
+        this.direccion = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
         this.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
       },
       btn_agregar () {
         this.nombre = ''
-        this.dirección = ''
+        this.direccion = ''
         this.localidad = ''
         this.$refs.obAddress.clear()
         this.showCustomModal = true

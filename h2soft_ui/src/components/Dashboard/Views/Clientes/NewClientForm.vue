@@ -188,31 +188,33 @@
       },
       cargarCliente () {
         if (this.idCliente !== -1 && this.edit) {
-          api.getClienteFull(this, this.idCliente).then(r => {
-            this.cliente.razonSocial = r.cliente.razonSocial
-            this.cliente.CUIL = r.cliente.CUIL
-            this.$refs.address.update(r.cliente.direccion)
-            this.cliente.direccion = r.cliente.direccion
-            this.cliente.idTipo = r.cliente.idTipo
-            this.contacto.nombre = r.contacto.nombre
-            this.contacto.mail = r.contacto.mail
-            this.contacto.celular = r.contacto.celular
-            this.contacto.telefono = r.contacto.telefono
-            this.contacto.observaciones = r.contacto.observaciones
-            r.objetivos.forEach(o => {
-              this.objetivos.push({
-                nombre: o.nombre,
-                direccion: o.direccion,
-                localidad: o.localidad
+          api.getClienteFull(this, this.idCliente)
+            .then(r => {
+              this.cliente.razonSocial = r.cliente.razonSocial
+              this.cliente.CUIL = r.cliente.CUIL
+              this.$refs.address.update(r.cliente.direccion)
+              this.cliente.direccion = r.cliente.direccion
+              this.cliente.idTipo = r.cliente.idTipo
+              this.contacto.nombre = r.contacto.nombre
+              this.contacto.mail = r.contacto.mail
+              this.contacto.celular = r.contacto.celular
+              this.contacto.telefono = r.contacto.telefono
+              this.contacto.observaciones = r.contacto.observaciones
+              r.objetivos.forEach(o => {
+                this.objetivos.push({
+                  nombre: o.nombre,
+                  direccion: o.direccion,
+                  localidad: o.localidad
+                })
               })
             })
-          })
         }
       },
       cargarTiposCliente () {
-        api.getTiposCliente(this).then(r => {
-          this.tiposCliente = r
-        })
+        api.getTiposCliente(this)
+          .then(r => {
+            this.tiposCliente = r
+          })
       },
       getAddressData (addressData, placeResultData) {
         console.log('addressData:', addressData)

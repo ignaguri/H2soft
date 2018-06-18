@@ -4,7 +4,7 @@
       <div class="row" >
         <div class="col-md-12">
           <div class="card">
-            <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :eraseButton="false" :goButton="false" :edit="editar"  >
+            <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="true" :eraseButton="false" :goButton="false" :edit="editar">
             </paper-table>
           </div>
         </div>
@@ -50,17 +50,17 @@
           res.forEach(dis => {
             var disp = {
               '#': dis.idDispensers,
-              código: dis.codigo,
+              codigo: dis.codigo,
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-              próximomantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+              proximomantenimiento: dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
             }
             if (dis.idObjetivo === null) {
-              disp.ubicación = 'En fábrica'
+              disp.ubicacion = 'En fábrica'
               this.table1.data.push(disp)
             } else {
               this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
-                  disp.ubicación = res1.body.data[0].nombre
+                  disp.ubicacion = res1.body.data[0].nombre
                   this.table1.data.push(disp)
                 })
             }

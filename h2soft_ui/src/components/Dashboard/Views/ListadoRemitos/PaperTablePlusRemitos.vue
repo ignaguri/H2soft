@@ -18,15 +18,20 @@
             <button type="button" class="btn btn-success" @click="filterButton">Actualizar</button>
           </span>
         </bs-input>
+        </div>
       </div>
-      </div>
+      <div class="text-right">
+        <span>Referencias:</span>
+        <span class="badge badge-pill badge-danger">Sin facturar</span>
+        <span class="badge badge-pill badge-success">Ya facturado</span>
+      </div> 
       <table class="table" :class="tableClass">
         <thead>
         <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
         </thead>
         <tbody>
-        <tr v-for="item in this.tableData">
-          <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
+        <tr v-for="item in this.tableData" @click="clickInCheck" v-bind:class="{ 'success': item['facturado'] === true, 'danger': item['facturado'] === false }">
+          <td v-for="column in columns" v-if="hasValue(item, column)" >{{itemValue(item, column)}}</td>
           <td v-if="editButton|eraseButton|goButton">
             <span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
             &nbsp;
@@ -34,20 +39,28 @@
             &nbsp;
             <span class="ti-new-window" @click="go" v-if="goButton"></span>
           </td>
+          <td>
+            <checkbox v-model="item['facturar']" :disabled="item['facturado']" type="info"></checkbox>
+          </td>
         </tr>
         </tbody>
       </table>
+      <div class="text-right">
+         <button type="button" class="btn btn-info btn-fill btn-sm" @click="marcarTodos">Seleccionar todos</button>
+      </div>  
     </div>
   </div>
 </template>
 <script>
-  import bsInput from '../UIComponents/Inputs/InputPlus'
+  import bsInput from 'src/components/UIComponents/Inputs/InputPlus'
   import Dropdown from 'vue-strap/src/Dropdown'
+  import { checkbox } from 'vue-strap'
 
   export default {
     components: {
       bsInput,
-      Dropdown
+      Dropdown,
+      checkbox
     },
     props: {
       columns: Array,
@@ -103,7 +116,8 @@
         sortedAsc: false,
         filterText: '',
         filterOption: 'Sin filtro',
-        tableData: this.data
+        tableData: this.data,
+        selected: []
       }
     },
     computed: {
@@ -112,57 +126,50 @@
       }
     },
     methods: {
+      clickInCheck (e) {
+        let id = Number(e.target.parentNode.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        // console.log('i', e, id)
+        if (this.selected.includes(id)) {
+          this.selected.splice(this.selected.findIndex(v => v === id), 1)
+        } else {
+          this.selected.push(id)
+        }
+        this.$parent.seleccionados = this.selected
+      },
       hasValue (item, column) {
-        // return item[column.toLowerCase().replace(new RegExp(' ', 'g'), '')] !== 'undefined'
-        return item[this.normalize(column)] !== 'undefined'
+        // column = column.replace(' ', '')
+        // alert(JSON.stringify(column)) // console.log('item: ' + JSON.stringify(item) + 'columna: ' + JSON.stringify(item))
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')] !== 'undefined'
       },
       itemValue (item, column) {
-        // return item[column.toLowerCase().replace(new RegExp(' ', 'g'), '')]
-        return item[this.normalize(column)]
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')]
+      },
+      prueba (elem) {
+        console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
       },
       sort (col) {
         if (col === undefined) return
-        // col = col.toLowerCase().replace(new RegExp(' ', 'g'), '')
-        col = this.normalize(col)
         if (!this.sortedAsc) {
           this.data = this.data.sort((item1, item2) => {
-            if (isNaN(item1[col])) {
-              if (item1[col].split('/').length > 1) { // es una fecha
-                let f1 = item1[col].split('/')
-                let f2 = item2[col].split('/')
-                let fecha1 = new Date(f1[2], f1[1] - 1, f1[0])
-                let fecha2 = new Date(f2[2], f2[1] - 1, f2[0])
-                if (fecha1 > fecha2) return 1
-                if (fecha1 < fecha2) return -1
-                return 0
-              } else {
-                if (item1[col].toLowerCase() > item2[col].toLowerCase()) return 1
-                if (item1[col].toLowerCase() < item2[col].toLowerCase()) return -1
-                return 0
-              }
+            if (isNaN(item1[col.toLowerCase()])) {
+              // return item1[col.toLowerCase()].toLowerCase() >= item2[col.toLowerCase()].toLowerCase()
+              if (item1[col.toLowerCase()].toLowerCase() > item2[col.toLowerCase()].toLowerCase()) return 1
+              if (item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()) return -1
+              return 0
             } else {
-              return item1[col] - item2[col]
+              return item1[col.toLowerCase()] - item2[col.toLowerCase()]
             }
           })
           this.sortedAsc = true
         } else {
           this.data = this.data.sort((item1, item2) => {
-            if (isNaN(item1[col])) {
-              if (item1[col].split('/').length > 1) { // es una fecha
-                let f1 = item1[col].split('/')
-                let f2 = item2[col].split('/')
-                let fecha1 = new Date(f1[2], f1[1] - 1, f1[0])
-                let fecha2 = new Date(f2[2], f2[1] - 1, f2[0])
-                if (fecha1 < fecha2) return 1
-                if (fecha1 > fecha2) return -1
-                return 0
-              } else {
-                if (item1[col].toLowerCase() < item2[col].toLowerCase()) return 1
-                if (item1[col].toLowerCase() > item2[col].toLowerCase()) return -1
-                return 0
-              }
+            if (isNaN(item1[col.toLowerCase()])) {
+              // return item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()
+              if (item1[col.toLowerCase()].toLowerCase() < item2[col.toLowerCase()].toLowerCase()) return 1
+              if (item1[col.toLowerCase()].toLowerCase() > item2[col.toLowerCase()].toLowerCase()) return -1
+              return 0
             } else {
-              return item2[col] - item1[col]
+              return item2[col.toLowerCase()] - item1[col.toLowerCase()]
             }
           })
           this.sortedAsc = false
@@ -185,32 +192,19 @@
           }
         })
       },
+      marcarTodos () {
+        this.data.forEach(r => {
+          r.facturar = true
+          this.selected.push(r['#'])
+        })
+        this.$parent.seleccionados = this.selected
+      },
       changeFilter (filter) {
         if (filter === 'Sin filtro') {
           // No anda ¯\_(ツ)_/¯
           // this.filterText = ''
         }
         this.filterOption = filter
-      },
-      normalize (cadena) {
-        // Definimos los caracteres que queremos eliminar
-        let specialChars = '!@$^&%*()+=\\-[]/{}|:<>?,.'
-        // Los eliminamos todos
-        for (var i = 0; i < specialChars.length; i++) {
-          cadena = cadena.replace(new RegExp('\\' + specialChars[i], 'gi'), '')
-        }
-        // Lo queremos devolver limpio en minusculas
-        cadena = cadena.toLowerCase()
-        // Quitamos espacios y los sustituimos por _ porque nos gusta mas asi
-        cadena = cadena.replace(/ /g, '')
-        // Quitamos acentos y "ñ". Fijate en que va sin comillas el primer parametro
-        cadena = cadena.replace(/á/gi, 'a')
-        cadena = cadena.replace(/é/gi, 'e')
-        cadena = cadena.replace(/í/gi, 'i')
-        cadena = cadena.replace(/ó/gi, 'o')
-        cadena = cadena.replace(/ú/gi, 'u')
-        cadena = cadena.replace(/ñ/gi, 'n')
-        return cadena
       }
     }
   }

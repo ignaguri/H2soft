@@ -26,7 +26,7 @@ export default {
   getDispensersXCliente (context, idCliente) {
     const authHeader = { headers: auth.getAuthHeader() }
     let dispensers = []
-    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + idCliente, authHeader)
+    return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + idCliente + '&activo=' + 1, authHeader)
       .then(res => {
         res = res.body.data
         res.forEach(o => {
