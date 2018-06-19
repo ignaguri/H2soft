@@ -197,7 +197,7 @@
                 })
               })
             } else {
-              noti.infoConTexto(this, 'Indo', 'No se han obtenido datos para mostrar.')
+              noti.infoConTexto(this, 'Info', 'No se han obtenido datos para mostrar.')
               this.total = 0
               this.table1.data = []
               this.table2.data = []

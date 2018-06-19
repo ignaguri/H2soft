@@ -297,7 +297,6 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
-        console.log('asigné', asignado)
         return true
       })
       .catch(error => {
@@ -315,7 +314,7 @@ export default {
           '&fechaAsignacion[$lt]=' + enUnMes.toISOString(),
           authHeader)
       .then(r => {
-        return context.$http.get(API_URL + 'empleados/' + r.body.data[r.body.data.length - 1].idEmpleadoAsignado, authHeader)
+        return context.$http.get(API_URL + 'empleados/' + r.body.data[0].idEmpleadoAsignado, authHeader)
       })
       .then(emple => {
         return { nombre: emple.body.nombre, apellido: emple.body.apellido }
