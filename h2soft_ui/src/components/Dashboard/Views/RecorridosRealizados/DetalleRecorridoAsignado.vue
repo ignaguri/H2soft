@@ -13,11 +13,6 @@
           <h5>Día: <a>{{dia}} {{fecha}} - {{turno}}</a></h5>
       </div>
     </div>
-    <div class="col-md-4 left">
-      <div class="text-line">
-        <h5> Temporada: <a>{{temporada}} </a> </h5>
-      </div>
-    </div>
   </div>
   <div class="row">
     <div v-if="true" class="col-md-3 left">
@@ -27,32 +22,36 @@
       <h5>Estado del recorrido: <a>{{estado}}</a> </h5>
     </div>
     <div class="col-md-6 left">
-      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtIniciarFinalizar" @click="btn_RecorridoIniciarFinalizar">
+      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtIniciarFinalizar" @click="btn_iniciarFinalizar">
         {{txBtIniciarFinalizar}}
       </button>
-      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtSuspReanudar" @click="recorridoSuspenderReanudar">
+      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtSuspReanudar" @click="btn_suspenderReanudar">
         {{txBtSuspReanudar}}
       </button>
-      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtAnular" @click="recorridoAnular">
+      <button type="button" class="btn btn-info btn-fill btn-sm" v-if="verBtAnular" @click="anular">
         Anular
       </button>
     </div>
-    <modal effect="fade" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = recorridoAsignarCamion()" title="Iniciar recorrido">
+    <modal effect="fade" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = recorridoAsignarCamion()" title="Camión del recorrido">
       <div class="row">
         <div class="col-md-12">
           <h5>Selecciona el camión en el que harás el recorrido</h5>
-          <div>No podrás iniciar el recorrido si no seleccionas un camión</div>
+          <div>No podrás realizar el recorrido si no seleccionas un camión</div>
         </div>
       </div>
       </br>
       <div class="row">
         <div class="col-md-6">
-          <sele @change="cambioCamionSeleccionado" :options="camiones" options-value="idCamiones" search-text="Seleccione" :placeholder="this.camiones_placeholder" options-label="nombre" :multiple="false" name="" :search="true" :justified="false"></sele>
+          <sele v-model="idCamion" :options="camionesLibres" 
+          options-value="idCamiones" search-text="Seleccione" 
+          placeholder="Seleccione un camión" 
+          options-label="nombre" :multiple="false" 
+          name="" :search="true" :justified="false"></sele>
         </div>
       </div>
       <div slot="modal-footer" class="modal-footer">
         <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
-        <button type="button" class="btn btn-success" @click="btn_recorridoIniciar()">Iniciar</button>
+        <button type="button" class="btn btn-success" @click="btn_iniciarReanudar()">Aceptar</button>
       </div>
     </modal>
   </div>
@@ -83,8 +82,8 @@
   import apiRemito from 'src/api/services/remitoServices'
   import PaperTable from 'components/UIComponents/TablaObjetivosdeRecorrido.vue'
   import noti from 'src/api/notificationsService'
-  import { modal } from 'vue-strap'
-  import sele from 'vue-strap/src/Select.vue'
+  import { modal, select } from 'vue-strap'
+  // import sele from 'vue-strap/src/Select.vue'
 
   const tableColumns = ['#', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
   const dataColumns = []
@@ -92,7 +91,7 @@
     components: {
       modal,
       PaperTable,
-      sele
+      sele: select
     },
     data () {
       return {
@@ -100,7 +99,7 @@
         idCamion: 0,
         camionAsignado: '',
         camiones: [],
-        camiones_placeholder: 'Seleccione un camión',
+        camionesLibres: [],
         verBtIniciarFinalizar: true,
         verBtSuspReanudar: false,
         verBtAnular: false,
@@ -127,45 +126,42 @@
       idEstado: Number
     },
     mounted () {
+      this.getCamiones()
       this.cargarRecorridoAsignado()
     },
     methods: {
       cargarRecorridoAsignado () {
-        apiCamiones.getCamiones(this)
-          .then(res => {
-            this.camiones = res
-            api.getDetallesRecorridoAsignado(this, this.id)
-              .then(resDet => {
-                resDet.forEach(det => {
-                  api.getObjetivoXId(this, det.idObjetivo)
-                  .then(resObj => {
-                    resObj = resObj.body.data[0]
-                    this.cantidadUltimoRemito(det.idObjetivo)
-                    .then(cant => {
-                      this.table1.data.push({
-                        '#': det.idDetalleRecorridoHistorico,
-                        'orden': det.orden,
-                        'objetivo': resObj.nombre,
-                        'direccion': resObj.direccion,
-                        'estado': det.entregado === 0 ? 1 : 4,
-                        'bidones20l.': cant
-                      })
-                      this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
-                      if (det.entregado === 0) {
-                        this.puedeFinalizar = false
-                      }
-                      if (this.camionid !== null) {
-                        this.camionAsignado = this.getCamionNombre(this.camionid)
-                      } else {
-                        this.camionAsignado = '-'
-                      }
-                    })
+        api.getDetallesRecorridoAsignado(this, this.id)
+          .then(resDet => {
+            resDet.forEach(det => {
+              api.getObjetivoXId(this, det.idObjetivo)
+              .then(resObj => {
+                resObj = resObj.body.data[0]
+                this.cantidadUltimoRemito(det.idObjetivo)
+                .then(cant => {
+                  this.table1.data.push({
+                    '#': det.idDetalleRecorridoHistorico,
+                    'orden': det.orden,
+                    'objetivo': resObj.nombre,
+                    'direccion': resObj.direccion,
+                    'estado': det.entregado === 0 ? 1 : 4,
+                    'bidones20l.': cant
                   })
+                  this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
+                  if (det.entregado === 0) {
+                    this.puedeFinalizar = false
+                  }
+                  /* if (this.camionid !== null) {
+                    this.camionAsignado = this.getCamionNombre(this.camionid)
+                  } else {
+                    this.camionAsignado = '-'
+                  } */
                 })
-                this.setearEstadoActual()
-              }, error => {
-                console.log('error al cargar los recorridos asignados ' + error)
               })
+            })
+            this.setearEstadoActual()
+          }, error => {
+            console.log('error al cargar los recorridos asignados ' + error)
           })
       },
       cantidadUltimoRemito (idObjetivo) {
@@ -200,25 +196,70 @@
           noti.infoConTexto(this, 'Alerta', 'El recorrido debe estar En Proceso para poder cargar remitos')
         }
       },
-      btn_RecorridoIniciarFinalizar () {
+      btn_iniciarFinalizar () {
         switch (this.idEstado) {
           case 1: // En estado Nuevo -> Iniciar
-            this.showCustomModal = true
-            // llenar el select con los camiones
+            api.getRecorridosIniciadosXEmpleado(this)
+            .then(res => {
+              if (res.length === 0) {
+                apiCamiones.getCamionesLibres(this)
+                .then(res => {
+                  this.idCamion = 0
+                  this.camionesLibres = res
+                  this.showCustomModal = true
+                })
+              } else {
+                noti.infoConTexto(this, 'Ya tienes recorridos iniciados.', 'Dedes finalizalos o suspenderlos para poder iniciar este.')
+              }
+            })
             break
           case 2: // En estado En procceso -> Finalizar
-            this.recorridoFinalizar()
+            this.finalizar()
             break
           default:
             alert('sadh')
         }
       },
-      btn_recorridoIniciar () {
-        if (this.idCamion !== 0) {
-          apiCamiones.asignarCamionARecorrido(this, this.id, this.idCamion)
+      btn_iniciarReanudar () {
+        switch (this.idEstado) {
+          case 1: // En estado Nuevo -> Iniciar
+            this.iniciar()
+            break
+          case 3: // En estado Suspendido -> Reanudar
+            this.reanudar()
+            break
+          default:
+            alert('sadh')
+        }
+      },
+      btn_suspenderReanudar () {
+        switch (this.idEstado) {
+          case 2: // en proceso
+            this.suspender()
+            break
+          case 3: // suspendido
+            apiCamiones.getCamionesLibres(this)
             .then(res => {
-              apiEstados.iniciarRecorrido(this, this.id)
-                .then(resObj => {
+              this.camionesLibres = res
+              // this.idCamion = 0
+              this.showCustomModal = true
+            })
+            break
+          default:
+            alert('No se puede realizar el cambio de estado')
+        }
+      },
+      iniciar () {
+        apiCamiones.asignarCamionARecorrido(this, this.id, this.idCamion)
+          .then(res => {
+            apiEstados.iniciarRecorrido(this, this.id)
+              .then(resObj => {
+                const camion = {
+                  idCamiones: this.idCamion,
+                  libre: false
+                }
+                apiCamiones.editCamion(this, camion)
+                .then(c => {
                   this.verBtSuspReanudar = true
                   this.verBtAnular = true
                   this.txBtIniciarFinalizar = 'Finalizar'
@@ -226,59 +267,85 @@
                   this.$parent.estado = 'En proceso'
                   this.$parent.idEstado = 2
                   this.camionAsignado = this.getCamionNombre(this.idCamion)
-                  noti.exitoConTexto(this, 'Éxito', 'Recorrido inicializado')
+                  this.idCamion = 0
+                  noti.exitoConTexto(this, 'Éxito', 'Recorrido iniciado')
                   this.showCustomModal = false
-                },
-                error => {
-                  console.log('error al cambiar el estado ' + error)
                 })
-            },
-            error => {
-              noti.errorConTexto(this, 'Error', 'No se pudo asignar el camión al recorrido')
-              console.log('error al asignar el camión ' + error)
-              this.showCustomModal = false
-            })
-        } else {
-          this.showCustomModal = true
-        }
+              },
+              error => {
+                console.log('error al cambiar el estado ' + error)
+              })
+          },
+          error => {
+            noti.errorConTexto(this, 'Error', 'No se pudo asignar el camión al recorrido')
+            console.log('error al asignar el camión ' + error)
+            this.showCustomModal = false
+          })
       },
-      recorridoFinalizar () {
+      finalizar () {
         if (this.puedeFinalizar === false) {
           // alert('El recorrido no se puede finalizar porque no has visitado todos los objetivos')
           noti.errorConTexto(this, 'Error', 'No se puede finalizar porque no has visitado todos los objetivos')
         } else {
           apiEstados.finalizarRecorrido(this, this.id)
             .then(resObj => {
-              this.verBtSuspReanudar = false
-              this.verBtAnular = false
-              this.verBtIniciarFinalizar = false
-              this.$parent.estado = 'Finalizado'
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido finalizado')
+              if (resObj) {
+                const camion = {
+                  idCamiones: resObj.body[0].idCamionAsignado,
+                  libre: true
+                }
+                apiCamiones.editCamion(this, camion)
+                .then(c => {
+                  this.verBtSuspReanudar = false
+                  this.verBtAnular = false
+                  this.verBtIniciarFinalizar = false
+                  this.$parent.estado = 'Finalizado'
+                  this.camionAsignado = '-'
+                  this.idCamion = 0
+                  noti.exitoConTexto(this, 'Éxito', 'Recorrido finalizado')
+                })
+              }
             },
             error => {
               console.log('error al cambiar el estado ' + error)
             })
         }
       },
-      recorridoSuspenderReanudar () {
-        switch (this.idEstado) {
-          case 2: // en proceso
-            apiEstados.suspenderRecorrido(this, this.id)
-              .then(resObj => {
-                this.verBtIniciarFinalizar = false
-                this.verBtAnular = false
-                this.txBtSuspReanudar = 'Reanudar'
-                this.$parent.estado = 'Suspendido'
-                this.$parent.idEstado = 3
-                noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
-              },
-                error => {
-                  console.log('error al cambiar el estado ' + error)
-                })
-            break
-          case 3: // suspendido
+      suspender () {
+        apiEstados.suspenderRecorrido(this, this.id)
+        .then(resObj => {
+          const camion = {
+            idCamiones: resObj.body[0].idCamionAsignado,
+            libre: true
+          }
+          apiCamiones.editCamion(this, camion)
+          .then(c => {
+            this.camionAsignado = '-'
+            this.idCamion = null
+            this.verBtIniciarFinalizar = false
+            this.verBtAnular = false
+            this.txBtSuspReanudar = 'Reanudar'
+            this.$parent.estado = 'Suspendido'
+            this.$parent.idEstado = 3
+            noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
+          })
+        },
+        error => {
+          console.log('error al cambiar el estado ' + error)
+        })
+      },
+      reanudar () {
+        apiCamiones.asignarCamionARecorrido(this, this.id, this.idCamion)
+          .then(res => {
             apiEstados.reanudarRecorrido(this, this.id)
-              .then(resObj => {
+            .then(resObj => {
+              const camion = {
+                idCamiones: resObj.body[0].idCamionAsignado,
+                libre: false
+              }
+              apiCamiones.editCamion(this, camion)
+              .then(c => {
+                this.camionAsignado = this.getCamionNombre(resObj.body[0].idCamionAsignado)
                 this.verBtIniciarFinalizar = true
                 this.txBtIniciarFinalizar = 'Finalizar'
                 this.verBtAnular = true
@@ -286,25 +353,32 @@
                 this.$parent.estado = 'En Proceso'
                 this.$parent.idEstado = 2
                 noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
-              },
-              error => {
-                console.log('error al cambiar el estado ' + error)
+                this.showCustomModal = false
               })
-            break
-          default:
-            alert('No se puede realizar el cambio de estado')
-        }
+            })
+          },
+        error => {
+          console.log('error al cambiar el estado ' + error)
+        })
       },
-      recorridoAnular () {
+      anular () {
         if (this.idEstado === 1 || this.idEstado === 2) {
           apiEstados.anularRecorrido(this, this.id)
             .then(resObj => {
-              this.$parent.estado = 'Anulado'
-              this.verBtIniciarFinalizar = false
-              this.verBtAnular = false
-              this.verBtSuspReanudar = false
-              this.$parent.idEstado = 5
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido anulado')
+              const camion = {
+                idCamiones: resObj.body[0].idCamionAsignado,
+                libre: true
+              }
+              apiCamiones.editCamion(this, camion)
+              .then(c => {
+                this.$parent.estado = 'Anulado'
+                this.verBtIniciarFinalizar = false
+                this.verBtAnular = false
+                this.verBtSuspReanudar = false
+                this.camionAsignado = '-'
+                this.$parent.idEstado = 5
+                noti.exitoConTexto(this, 'Éxito', 'Recorrido anulado')
+              })
             },
             error => {
               console.log('error al cambiar el estado ' + error)
@@ -321,6 +395,7 @@
             this.txBtIniciarFinalizar = 'Iniciar'
             this.verBtAnular = true
             this.verBtSuspReanudar = false
+            this.camionAsignado = '-'
             break
           case 2:
             this.$parent.estado = 'En Proceso'
@@ -329,6 +404,7 @@
             this.verBtAnular = true
             this.verBtSuspReanudar = true
             this.txBtSuspReanudar = 'Suspender'
+            this.camionAsignado = this.getCamionNombre(this.camionid)
             break
           case 3:
             this.$parent.estado = 'Suspendido'
@@ -336,18 +412,21 @@
             this.verBtAnular = false
             this.verBtSuspReanudar = true
             this.txBtSuspReanudar = 'Reanudar'
+            this.camionAsignado = '-'
             break
           case 4:
             this.$parent.estado = 'Finalizado'
             this.verBtIniciarFinalizar = false
             this.verBtAnular = false
             this.verBtSuspReanudar = false
+            this.camionAsignado = '-'
             break
           case 5:
             this.$parent.estado = 'Anulado'
             this.verBtIniciarFinalizar = false
             this.verBtAnular = false
             this.verBtSuspReanudar = false
+            this.camionAsignado = '-'
             break
           default:
             break

@@ -60,7 +60,7 @@
     },
     methods: {
       cargarRecorridosAsignados () {
-        var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
+        const idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
         if (idEmpleado === null) {
           this.table1.subTitle = 'Empleado no asignado al usuario logueado. No se podrán mostrar recorridos'
           return
