@@ -268,11 +268,11 @@
           fechaDesde: this.fechaDesde,
           fechaHasta: this.fechaHasta,
           idMotivoDeReasignacion: this.idMotivo
-        }, this.asignado)
+        })
         return false
       },
-      postAsignacion (asignacion, isReasignacion) {
-        api.postAsignacion(this, asignacion, isReasignacion)
+      postAsignacion (asignacion) {
+        api.postAsignacion(this, asignacion)
           .then(r => {
             if (r) {
               noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')

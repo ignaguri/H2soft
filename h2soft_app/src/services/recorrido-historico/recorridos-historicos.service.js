@@ -34,15 +34,14 @@ module.exports = function() {
   }
 };
 
-function replicarAsignacion(ap, fullData) {
-  console.log('Replicar asignacion', fullData);
-  const { asignacion: data, isReasignacion } = fullData;
+function replicarAsignacion(ap, data) {
   let recorrido = null;
   let detallesRecorrido = [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   let fechaDesde;
   let fechaHasta;
+  let aInsertar;
   return ap.services['recorridos']
     .get(data.recorrido)
     .then(r => {
@@ -74,8 +73,10 @@ function replicarAsignacion(ap, fullData) {
 
       const desde = data.fechaDesde.split('/');
       fechaDesde = new Date(desde[2], desde[1] - 1, desde[0]);
+      fechaDesde.setHours(0, 0, 0, 0);
       const hasta = data.fechaHasta.split('/');
       fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0]);
+      fechaHasta.setHours(0, 0, 0, 0);
 
       const frecuencia = getFrecuencia(
         recorrido.idFrecuencia,
@@ -97,22 +98,20 @@ function replicarAsignacion(ap, fullData) {
       }
       return recorridos;
     })
-    .then(aInsertar => {
-      return [
-        aInsertar,
-        ap.services['recorrido-historico'].find({
-          query: {
-            idRecorrido: data.recorrido,
-            fechaAsignacion: {
-              $lt: fechaHasta,
-              $gt: fechaDesde
-            }
+    .then(insertables => {
+      aInsertar = insertables;
+      return ap.services['recorrido-historico'].find({
+        query: {
+          idRecorrido: data.recorrido,
+          fechaAsignacion: {
+            $gte: fechaDesde,
+            $lte: fechaHasta
           }
-        })
-      ];
+        }
+      });
     })
     .then(recorridosAsignados => {
-      console.log('recorridos asignados', recorridosAsignados);
+      let promesas = [];
       const actualizables = recorridosAsignados.data.filter(oldie => {
         const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
         return aInsertar.some(newie => {
@@ -129,39 +128,34 @@ function replicarAsignacion(ap, fullData) {
         });
       });
 
-      console.log('a insertar', aInsertar.length);
-      console.log('actualizables', actualizables.length);
-      console.log('nuevis', nuevos.length);
-
       actualizables.forEach(act =>
         promesas.push(
           ap.services['recorrido-historico'].patch(act.idRecorridosHistoricos, {
             idEmpleadoAsignado: data.empleado
           })
-        )
-      );
+        ));
       promesas.push(ap.services['recorrido-historico'].create(nuevos));
-      console.log('promesas', promesas.length);
       return Promise.all(promesas);
-      // return ap.services['recorrido-historico'].create(aInsertar);
     })
     .then(recs => {
-      console.log('recorridos insertados', recs);
-      let detallesAInsertar = [];
-      recs.forEach(r => {
-        //let detallesAux = Array.from(detallesRecorrido);
-        let detallesAux = detallesRecorrido.slice();
-        detallesAux.forEach(d => {
-          let aux = Object.assign({}, d);
-          aux.idRecorridoHistorico = r.idRecorridosHistoricos;
-          detallesAInsertar.push(aux);
+      if (recs[recs.length - 1].length) {
+        let detallesAInsertar = [];
+        recs[recs.length - 1].forEach(r => {
+          let detallesAux = detallesRecorrido.slice();
+          detallesAux.forEach(d => {
+            let aux = Object.assign({}, d);
+            aux.idRecorridoHistorico = r.idRecorridosHistoricos;
+            detallesAInsertar.push(aux);
+          });
         });
-      });
-      return ap.services['detalle-recorrido-historico'].create(
-        detallesAInsertar
-      );
+        return ap.services['detalle-recorrido-historico'].create(
+          detallesAInsertar
+        );
+      } else {
+        return true;
+      }
     })
-    .then(solved => {
+    .then(() => {
       logger.info('Se asignaron los recorridos');
       return true;
     })
@@ -198,7 +192,7 @@ function getDiaAsignacion(dia, fechaDesde) {
   const date = new Date(fechaDesde);
 
   date.setHours(0);
-  if (date.getDay() < dia) {
+  if (date.getDay() <= dia) {
     date.setDate(date.getDate() + (dia - date.getDay()));
     return date;
   } else {
