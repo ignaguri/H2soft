@@ -40,7 +40,7 @@
             this.table1.data.push({
               '#': p.idProductos,
               'nombre': p.nombre,
-              'descripción': p.descripcion
+              'descripcion': p.descripcion
             })
           })
         }, error => {

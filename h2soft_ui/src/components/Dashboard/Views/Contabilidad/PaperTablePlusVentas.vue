@@ -7,26 +7,18 @@
       </slot>
     </div>
     <div class="content table-responsive table-full-width">
-      <div class="row">
-        <div class="col-md-5 col-md-offset-7">
-        <bs-input v-if="filter" :label="'Filtrar por:'" type="text" :placeholder="'Escriba algo'" v-model="filterText">
-          <dropdown slot="before" type="info" :text="filterOption">
-            <li><a @click="changeFilter('Sin filtro')">Sin filtro</a></li>
-            <li v-for="column in columns"><a @click="changeFilter(column)">{{column}}</a></li>
-          </dropdown>
-          <span slot="after" class="input-group-btn">
-            <button type="button" class="btn btn-success" @click="filterButton">Actualizar</button>
-          </span>
-        </bs-input>
-      </div>
-      </div>
+      <div class="text-right">
+        <span>Referencias:</span>
+        <span class="badge badge-pill badge-danger">Sin facturar</span>
+        <span class="badge badge-pill badge-success">Ya facturado</span>
+      </div> 
       <table class="table" :class="tableClass">
         <thead>
         <th v-for="column in columns"><a @click.prevent="sort(column)">{{column}}</a></th>
         </thead>
         <tbody>
-        <tr v-for="item in this.tableData">
-          <td v-for="column in columns" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
+        <tr v-for="item in this.tableData" @click="clickInCheck" v-bind:class="{ 'success': item['facturado'] === true, 'danger': item['facturado'] === false }">
+          <td v-for="column in columns" v-if="hasValue(item, column)" >{{itemValue(item, column)}}</td>
           <td v-if="editButton|eraseButton|goButton">
             <span class="ti-pencil-alt" @click="edit" v-if="editButton"></span>
             &nbsp;
@@ -36,18 +28,20 @@
           </td>
         </tr>
         </tbody>
-      </table>
+      </table>  
     </div>
   </div>
 </template>
 <script>
-  import bsInput from '../UIComponents/Inputs/InputPlus'
+  import bsInput from 'src/components/UIComponents/Inputs/InputPlus'
   import Dropdown from 'vue-strap/src/Dropdown'
+  import { checkbox } from 'vue-strap'
 
   export default {
     components: {
       bsInput,
-      Dropdown
+      Dropdown,
+      checkbox
     },
     props: {
       columns: Array,
@@ -103,7 +97,8 @@
         sortedAsc: false,
         filterText: '',
         filterOption: 'Sin filtro',
-        tableData: this.data
+        tableData: this.data,
+        selected: []
       }
     },
     computed: {
@@ -112,13 +107,26 @@
       }
     },
     methods: {
+      clickInCheck (e) {
+        let id = Number(e.target.parentNode.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML)
+        // console.log('i', e, id)
+        if (this.selected.includes(id)) {
+          this.selected.splice(this.selected.findIndex(v => v === id), 1)
+        } else {
+          this.selected.push(id)
+        }
+        this.$parent.seleccionados = this.selected
+      },
       hasValue (item, column) {
-        // return item[column.toLowerCase().replace(new RegExp(' ', 'g'), '')] !== 'undefined'
-        return item[this.normalize(column)] !== 'undefined'
+        // column = column.replace(' ', '')
+        // alert(JSON.stringify(column)) // console.log('item: ' + JSON.stringify(item) + 'columna: ' + JSON.stringify(item))
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')] !== 'undefined'
       },
       itemValue (item, column) {
-        // return item[column.toLowerCase().replace(new RegExp(' ', 'g'), '')]
-        return item[this.normalize(column)]
+        return item[column.toLowerCase().replace(' ', '').replace(' ', '')]
+      },
+      prueba (elem) {
+        console.log(elem.target.parentNode.getElementsByTagName('td')[0].innerHTML)
       },
       sort (col) {
         if (col === undefined) return
@@ -184,6 +192,13 @@
             return true
           }
         })
+      },
+      marcarTodos () {
+        this.data.forEach(r => {
+          r.facturar = true
+          this.selected.push(r['#'])
+        })
+        this.$parent.seleccionados = this.selected
       },
       changeFilter (filter) {
         if (filter === 'Sin filtro') {

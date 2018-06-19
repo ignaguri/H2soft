@@ -143,7 +143,8 @@
             r.forEach(recs => {
               this.table1.data.push({
                 '#': recs.recorrido,
-                día: recs.dia,
+                temporada: recs.temporada,
+                dia: recs.dia,
                 turno: recs.turno,
                 frecuencia: recs.frecuencia,
                 asignadoa: recs.asignado ? `${recs.asignado.apellido}, ${recs.asignado.nombre}` : null
@@ -186,7 +187,7 @@
                   recorrido: recs.recorrido,
                   objetivo: recs.objetivo,
                   orden: recs.orden,
-                  dirección: recs.direccion,
+                  direccion: recs.direccion,
                   localidad: recs.localidad,
                   cliente: recs.cliente
                 })

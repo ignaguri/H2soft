@@ -232,7 +232,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `estados-remito` WRITE;
 /*!40000 ALTER TABLE `estados-remito` DISABLE KEYS */;
-INSERT INTO `estados-remito` VALUES (1,'Creadi','Remito creado','2018-01-01 00:00:00','2018-01-01 00:00:00'),(2,'Anulado','','1970-01-01 00:00:00','1970-01-01 00:00:00');
+INSERT INTO `estados-remito` VALUES (1,'Creadi','Remito creado','2018-01-01 00:00:00','2018-01-01 00:00:00'),(2,'Anulado','','1970-01-01 00:00:00','1970-01-01 00:00:00'), (3,'Facturado','Remito marcado como ya facturado','1970-01-01 00:00:00','1970-01-01 00:00:00');
 /*!40000 ALTER TABLE `estados-remito` ENABLE KEYS */;
 UNLOCK TABLES;
 

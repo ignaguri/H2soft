@@ -136,7 +136,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  'próximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  'proximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -157,7 +157,7 @@
                   objetivo: '',
                   dispenser: dis.codigo,
                   estado: this.getEstadoDispenser(dis.idEstadoDispenser),
-                  'próximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
+                  'proximomantenimiento': dis.fechaProxMantenimiento === null ? '-' : new Date(dis.fechaProxMantenimiento).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                 }
                 this.getObjetivo(dis.idObjetivo)
                 .then(res1 => {
@@ -180,8 +180,8 @@
                   console.log('prod', p)
                   let detalle = {
                     'producto': p.nombre,
-                    'cantidadmínima': d.cantidadMinima,
-                    'cantidadmáxima': d.cantidadMaxima,
+                    'cantidadminima': d.cantidadMinima,
+                    'cantidadmaxima': d.cantidadMaxima,
                     'precio': '$ ' + d.precioPorUnidad,
                     'vigentehasta': res['contrato'].fechaVigenciaHasta === null ? '-' : new Date(res['contrato'].fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
                   }

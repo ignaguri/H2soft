@@ -268,7 +268,7 @@
                       objetivo: d.objetivo,
                       cliente: d.cliente,
                       recorrido: r.recorrido,
-                      día: r.dia,
+                      dia: r.dia,
                       turno: r.turno,
                       frecuencia: r.frecuencia
                     })

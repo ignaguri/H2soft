@@ -71,7 +71,7 @@
               let d = new Date(RxE.fechaAsignacion)
               this.table1.data.push({
                 '#': RxE.idRecorridosHistoricos,
-                'día': this.getDia(RxE.idDia),
+                'dia': this.getDia(RxE.idDia),
                 'turno': this.getTurno(RxE.idTurno),
                 'fecha': d.toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' }),
                 'temp.': this.getTemporada(RxE.idTemporada),

@@ -1,20 +1,18 @@
 <template>
   <div class="content">
-    <form name="new_dispenser_form">
       <div class="row">
         <h5 style="margin-left: 15px;">Información útil de cada cliente para realizar la facturación</h5>
-
-        <div class="col-md-3">
+         <div class="col-md-3">
           <!--<label for="cliente"><h4><span class="label label-default">Cliente</span></h4></label>-->
           <slot name="label"><label class="control-label">Cliente</label></slot>
-            <dds id="cliente" v-model="idClientes"
-                :options="clientes"
-                options-value="idClientes"
-                options-label="razonSocial"
-                search-text="Buscar"
-                :placeholder="'Seleccione un cliente'"
-                :search="true" :justified="true" style="width: 200PX;" >
-            </dds>
+          <dds id="cliente" v-model="idClientes"
+              :options="clientes"
+              options-value="idClientes"
+              options-label="razonSocial"
+              search-text="Buscar"
+              :placeholder="'Seleccione un cliente'"
+              :search="true" :justified="true" style="width: 200PX;" >
+          </dds>
         </div>
       </div>
       </br>
@@ -29,45 +27,56 @@
           <slot name="label"><label class="control-label">Hasta</label></slot>
           <dp v-model="fechaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
         </div>
-        <div class="col-md-3" >
-          <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
+        <div class="col-md-4">
+          <slot name="label"><label class="control-label">Facturación</label></slot>
+          <dds id="estado" v-model="idEstadoFacturacion"
+              :options="estadosFacturacion"
+              options-value="idEstado"
+              options-label="nombre"
+              :placeholder="'Estado de facturación'"
+              :search="false" :justified="true" style="width: 200PX;" >
+          </dds>
         </div>
-        <div class="col-md-3" >
-          <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
+        <div class="col-md-2" >
+          <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
       </div>
       </br>
-    </form>
-  <div class="row" >
-    <div class="col-md-12">
-      <div class="card">
-        <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
-        </paper-table>
-        <div class="row" >
-          <div class="col-md-9">
-            <p class="category" v-if="superaRangos">La cantidad vendida en el periodo seleccionado supera los rangos del contrato. Se considera el precio del mayor rango</p>
-          </div>
-          <div class="col-md-3">
-            <div class="text-left">
-              <h4>TOTAL ${{this.total}}</h4>
-            </div>
-          </div>
-          </div>
-      </div>
-    </div>
-  </div>
-  <div class="row" >
+    
+    <div class="row" >
       <div class="col-md-12">
         <div class="card">
-          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="false" :goButton="false" >
-          </paper-table>
+          <pt type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data" :columns="table1.columns" :editButton="false" :eraseButton="false" :goButton="false" >
+          </pt>
+          <div class="row" >
+            <div class="col-md-9">
+              <p class="category" v-if="superaRangos">La cantidad vendida en el periodo seleccionado supera los rangos del contrato. Se considera el precio del mayor rango</p>
+            </div>
+            <div class="col-md-3">
+              <div class="text-left">
+                <h4>TOTAL ${{this.total}}</h4>
+              </div>
+            </div>
+            </div>
         </div>
       </div>
+    </div>
+    <div class="row" >
+      <div class="col-md-12">
+        <div class="card">
+          <ptv type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="false" :goButton="false" >
+          </ptv>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2" >
+      <button type="button" class="btn btn-info btn-fill" @click="descargar">Exportar</button>
     </div>
   </div>
 </template>
 <script>
   import PaperTable from 'components/UIComponents/PaperTablePlusContabilidad.vue'
+  import PaperTableVentas from 'components/Dashboard/Views/Contabilidad/PaperTablePlusVentas.vue'
   import { datepicker, select } from 'vue-strap'
   import api from 'src/api/services/clientServices.js'
   import apiProducto from 'src/api/services/productosServices.js'
@@ -78,7 +87,8 @@
   const table2Columns = ['Fecha', 'Objetivo', 'Producto', 'Cantidad vendida', 'Firmado conforme']
   export default {
     components: {
-      PaperTable,
+      pt: PaperTable,
+      ptv: PaperTableVentas,
       dp: datepicker,
       dds: select
     },
@@ -107,7 +117,20 @@
         exportData: {
           remitos: [],
           totales: []
-        }
+        },
+        estadosFacturacion: [
+          {
+            idEstado: 0,
+            nombre: 'Todos'
+          }, {
+            idEstado: 1,
+            nombre: 'Solo sin facturar'
+          }, {
+            idEstado: 3,
+            nombre: 'Solo facturados'
+          }
+        ],
+        idEstadoFacturacion: 0
       }
     },
     mounted () {
@@ -131,8 +154,6 @@
       actualizar () {
         if (this.idClientes !== 0) {
           this.total = 0
-          this.table1.data = []
-          this.table2.data = []
           this.calcularValores()
         } else {
           noti.errorConTexto(this, 'Error', 'Debe seleccionar un cliente')
@@ -141,7 +162,9 @@
       calcularValores () {
         this.table1.data = []
         this.table2.data = []
-        api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta)
+        this.exportData.remitos = []
+        this.exportData.totales = []
+        api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta, this.idEstadoFacturacion)
           .then(ventasXProducto => {
             console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
@@ -164,11 +187,12 @@
                       'objetivo': v.objetivo,
                       'producto': p.nombre,
                       'cantidadvendida': v.cantidad,
-                      'firmadoconforme': 'Si'
+                      'firmadoconforme': 'Si',
+                      'facturado': v.idEstadoRemito === 3
                     }
                     this.table2.data.push(detalleVenta)
                     this.table2.data.sort((a, b) => a.fecha - b.fecha) // a medida que voy insertando, voy ordenando
-                    this.exportData.remitos.push([detalleVenta.fecha, detalleVenta.objetivo, detalleVenta.producto, detalleVenta.cantidadvendida])
+                    this.exportData.remitos.push([detalleVenta.fecha, detalleVenta.objetivo, detalleVenta.producto, detalleVenta.cantidadvendida, v.idEstadoRemito === 3 ? 'Facturado' : 'No facturado'])
                   })
                 })
               })
@@ -177,6 +201,8 @@
               this.total = 0
               this.table1.data = []
               this.table2.data = []
+              this.exportData.remitos = []
+              this.exportData.totales = []
             }
           }, error => {
             noti.errorConTexto(this, error.name, error.message)

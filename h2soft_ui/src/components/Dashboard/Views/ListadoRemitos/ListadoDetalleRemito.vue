@@ -69,7 +69,7 @@
               this.table1.data.push({
                 producto: this.cargarProducto(rem.idProducto),
                 cantidad: rem.cantidad,
-                acción: this.estaDejado(rem.dejadoEnCliente)
+                accion: this.estaDejado(rem.dejadoEnCliente)
               })
             })
           }, error => {
@@ -95,7 +95,7 @@
             resUs.body.data.forEach(remit => {
               this.table2.data.push({
                 dispenser: this.cargarDispenser(remit.idDispenser),
-                acción: this.estaDejado(remit.dejadoEnCliente)
+                accion: this.estaDejado(remit.dejadoEnCliente)
               })
             })
           }, error => {
