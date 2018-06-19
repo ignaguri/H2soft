@@ -12,7 +12,7 @@
             <button type="button" class="btn btn-info btn-fill btn-wd" @click="descargar">Exportar</button>
           </div>
       </div>
-      <modal effect="fade" width="50%" height="50%" :value="showCustomModal" title="Comprobante">
+      <modal effect="fade" width="50%" :backdrop="false" height="50%" :value="showCustomModal" title="Comprobante">
         <div class="row">
           <div class="col-md-12">
             <img class="img-responsive" v-bind:src="this.modalData.imagen" width="100%" height="100%"/>

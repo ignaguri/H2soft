@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Cambiar estado">
+    <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModal" @ok="showCustomModal = ok()" title="Cambiar estado">
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">

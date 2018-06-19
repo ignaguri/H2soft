@@ -14,7 +14,7 @@
         </button>
       </div>
     </div>
-    <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar objetivo">
+    <modal effect="fade" width="50%" :backdrop="false" :value="showCustomModal" @ok="showCustomModal = ok()" title="Agregar objetivo">
       <div class="row">
         <div class="col-md-6">
           <fg-input type="text"
