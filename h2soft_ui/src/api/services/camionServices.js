@@ -8,6 +8,11 @@ export default {
     return context.$http.get(API_URL + 'camiones', authHeader)
       .then(res => { return res.body.data })
   },
+  getCamionesLibres (context) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'camiones/?libre=1', authHeader)
+      .then(res => { return res.body.data })
+  },
   getCamion (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'camiones/' + id, authHeader)

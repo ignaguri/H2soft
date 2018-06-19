@@ -18,6 +18,10 @@ module.exports = function (app) {
     capacidadMaxima: {
       type: Sequelize.INTEGER(11),
       allowNull: true
+    },
+    libre: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true
     }
   }, {
     hooks: {
