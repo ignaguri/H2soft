@@ -5,7 +5,7 @@ const hooks = require('./recorridos-historicos.hooks');
 const filters = require('./recorridos-historicos.filters');
 const logger = require('winston');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
   const Model = createModel(app);
   const paginate = app.get('paginate');
@@ -23,7 +23,7 @@ module.exports = function () {
   // Get our initialized service so that we can register hooks and filters
   const service = app.service('recorrido-historico');
   app.service('recorrido-historico/asignar', {
-    create: function (data, params, callback){
+    create: function(data, params, callback) {
       return replicarAsignacion(app, data);
     }
   });
@@ -38,8 +38,12 @@ function replicarAsignacion(ap, data) {
   let recorrido = null;
   let detallesRecorrido = [];
   const today = new Date();
-  today.setHours(0,0,0,0);
-  return ap.services['recorridos'].get(data.recorrido)
+  today.setHours(0, 0, 0, 0);
+  let fechaDesde;
+  let fechaHasta;
+  let aInsertar;
+  return ap.services['recorridos']
+    .get(data.recorrido)
     .then(r => {
       recorrido = {
         idDia: r.idDia,
@@ -51,7 +55,9 @@ function replicarAsignacion(ap, data) {
         fechaAsignacion: today,
         idRecorrido: data.recorrido
       };
-      return ap.services['detalle-recorrido'].find({query: {idRecorrido: data.recorrido}});
+      return ap.services['detalle-recorrido'].find({
+        query: { idRecorrido: data.recorrido }
+      });
     })
     .then(d => {
       d.data.forEach(det => {
@@ -64,64 +70,133 @@ function replicarAsignacion(ap, data) {
         detallesRecorrido.push(detalle);
       });
       let recorridos = [];
-      const aux = getDiaAsignacion(recorrido.idDia);
-      for(let i = 0; i < getFrecuencia(recorrido.idFrecuencia); i++){
-        aux.setDate(aux.getDate() + (i * 7));
-        let recorridoAux = Object.assign({},recorrido);
-        recorridoAux.fechaAsignacion = aux.toISOString();
-        recorridos.push(recorridoAux);
+
+      const desde = data.fechaDesde.split('/');
+      fechaDesde = new Date(desde[2], desde[1] - 1, desde[0]);
+      fechaDesde.setHours(0, 0, 0, 0);
+      const hasta = data.fechaHasta.split('/');
+      fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0]);
+      fechaHasta.setHours(0, 0, 0, 0);
+
+      const frecuencia = getFrecuencia(
+        recorrido.idFrecuencia,
+        fechaDesde,
+        fechaHasta
+      );
+      const aux = getDiaAsignacion(recorrido.idDia, fechaDesde);
+
+      for (let i = 0; i < frecuencia; i++) {
+        if (aux < fechaHasta) {
+          let recorridoAux = Object.assign({}, recorrido);
+          recorridoAux.fechaAsignacion = aux.toISOString();
+          recorridoAux.idMotivoDeReasignacion = data.idMotivoDeReasignacion;
+          recorridos.push(recorridoAux);
+        } else {
+          break;
+        }
+        aux.setDate(aux.getDate() + 7);
       }
       return recorridos;
     })
-    .then(aInsertar => {
-      return ap.services['recorrido-historico'].create(aInsertar);
+    .then(insertables => {
+      aInsertar = insertables;
+      return ap.services['recorrido-historico'].find({
+        query: {
+          idRecorrido: data.recorrido,
+          fechaAsignacion: {
+            $gte: fechaDesde,
+            $lte: fechaHasta
+          }
+        }
+      });
     })
-    .then(recs => {
-      let detallesAInsertar = [];
-      recs.forEach(r => {
-        //let detallesAux = Array.from(detallesRecorrido);
-        let detallesAux = detallesRecorrido.slice();
-        detallesAux.forEach(d => {
-          let aux = Object.assign({},d);
-          aux.idRecorridoHistorico = r.idRecorridosHistoricos;
-          detallesAInsertar.push(aux);
+    .then(recorridosAsignados => {
+      let promesas = [];
+      const actualizables = recorridosAsignados.data.filter(oldie => {
+        const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
+        return aInsertar.some(newie => {
+          const fechaNewie = new Date(newie.fechaAsignacion).toDateString();
+          return fechaNewie === fechaOldie;
         });
       });
-      return ap.services['detalle-recorrido-historico'].create(detallesAInsertar);
+
+      const nuevos = aInsertar.filter(newie => {
+        const fechaNewie = new Date(newie.fechaAsignacion).toDateString();
+        return recorridosAsignados.data.every(oldie => {
+          const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
+          return fechaNewie !== fechaOldie;
+        });
+      });
+
+      actualizables.forEach(act =>
+        promesas.push(
+          ap.services['recorrido-historico'].patch(act.idRecorridosHistoricos, {
+            idEmpleadoAsignado: data.empleado
+          })
+        ));
+      promesas.push(ap.services['recorrido-historico'].create(nuevos));
+      return Promise.all(promesas);
     })
-    .then(solved => {
+    .then(recs => {
+      if (recs[recs.length - 1].length) {
+        let detallesAInsertar = [];
+        recs[recs.length - 1].forEach(r => {
+          let detallesAux = detallesRecorrido.slice();
+          detallesAux.forEach(d => {
+            let aux = Object.assign({}, d);
+            aux.idRecorridoHistorico = r.idRecorridosHistoricos;
+            detallesAInsertar.push(aux);
+          });
+        });
+        return ap.services['detalle-recorrido-historico'].create(
+          detallesAInsertar
+        );
+      } else {
+        return true;
+      }
+    })
+    .then(() => {
       logger.info('Se asignaron los recorridos');
       return true;
     })
     .catch(error => {
       logger.error(error);
     });
-
 }
 
-function getFrecuencia (id) {
+function getFrecuencia(idFrecuencia, fechaDesde, fechaHasta) {
   // retorna cuantas iteraciones han de hacerse según la frecuencia
   // por ej: id 1 = 1 vez por semana -> 4 iteraciones
   // el día inicial, la semana siguiente, la otra semana y la ultima semana de ese mes
-  switch (id) {
+  const meses = cantMesesEntre(fechaHasta, fechaDesde);
+  switch (idFrecuencia) {
   case 1:
-    return 4;
+    return Math.round(4 * meses);
   case 2:
-    return 2;
+    return Math.round(2 * meses);
   case 3:
-    return 1;
+    return Math.round(1 * meses);
   }
 }
 
-function getDiaAsignacion (dia) {
+function cantMesesEntre(hasta, desde) {
+  let diff = (hasta.getTime() - desde.getTime()) / 1000;
+  diff /= 60 * 60 * 24 * 7 * 4;
+  // return Math.abs(Math.round(diff));
+  return Math.abs(diff);
+}
+
+function getDiaAsignacion(dia, fechaDesde) {
   // Sunday - Saturday : 0 - 6
-  const today = new Date();
-  today.setHours(0);
-  if (today.getDay() < dia) {
-    today.setDate(today.getDate() + (dia - today.getDay()))
-    return today;
+  // const today = new Date();
+  const date = new Date(fechaDesde);
+
+  date.setHours(0);
+  if (date.getDay() <= dia) {
+    date.setDate(date.getDate() + (dia - date.getDay()));
+    return date;
   } else {
-    today.setDate(today.getDate() + ((dia + 7) - today.getDay()))
-    return today;
+    date.setDate(date.getDate() + (dia + 7 - date.getDay()));
+    return date;
   }
 }
