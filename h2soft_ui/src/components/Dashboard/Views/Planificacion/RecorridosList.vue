@@ -291,11 +291,11 @@
                   this.seeList()
                 })
                 .catch(e => {
-                  noti.errorConTexto(this, 'Error', 'Hubo un error al asignar recorrido.')
+                  noti.errorConTexto(this, 'Error', 'Error al asignar recorrido.')
                   this.seeList()
                 })
             } else {
-              noti.errorConTexto(this, 'Error', `Hubo un error al asignar recorrido. ${r.message ? r.message : ''}`)
+              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message ? r.message : ''}`)
               this.seeList()
             }
           })
