@@ -276,8 +276,14 @@
         api.postAsignacion(this, asignacion)
           .then(r => {
             console.log('post asignacion', r)
-            if (!r.restrictivo) {
-              if (!confirm(r.message + ' ¿Desea continuar de todas formas?')) return
+            if (r && r.asignado) {
+              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+              this.cargarRecorridos()
+              this.seeList()
+              return
+            }
+            if (r && !r.restrictivo) {
+              if (!confirm(`${r.message} ¿Desea continuar de todas formas?`)) return
               api.postAsignacion(this, asignacion, true)
                 .then(r => {
                   noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
@@ -285,11 +291,11 @@
                   this.seeList()
                 })
                 .catch(e => {
-                  noti.errorConTexto(this, 'Error', 'Error al asignar recorrido.')
+                  noti.errorConTexto(this, 'Error', 'Hubo un error al asignar recorrido.')
                   this.seeList()
                 })
             } else {
-              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message}`)
+              noti.errorConTexto(this, 'Error', `Hubo un error al asignar recorrido. ${r.message ? r.message : ''}`)
               this.seeList()
             }
           })
