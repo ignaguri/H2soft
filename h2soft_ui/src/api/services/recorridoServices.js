@@ -386,28 +386,33 @@ export default {
         return repartidores
       })
   },
-  postAsignacion (context, asignacion) {
-    // const authHeader = { headers: auth.getAuthHeader() }
-    return this.calcularDiasAsignacion(context, asignacion).then(
-      diasAsignacion => {
-        const isAsignable = this.checkIfAsignable(
-          context,
-          asignacion,
-          diasAsignacion
-        )
-        console.log('is asginable', isAsignable)
-        return Promise.resolve(true)
-      }
-    )
-    // return context.$http
-    //   .post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
-    //   .then(asignado => {
-    //     return true
-    //   })
-    //   .catch(error => {
-    //     console.log('error asignando el recorrido', error)
-    //     return false
-    //   })
+  postAsignacion (context, asignacion, obviarAdvertencias = false) {
+    if (obviarAdvertencias) {
+      return this.postAsignacionEfectiva(context, asignacion)
+    } else {
+      return this.calcularDiasAsignacion(context, asignacion)
+        .then(diasAsignacion => {
+          return this.checkIfAsignable(context, asignacion, diasAsignacion)
+        })
+        .then(isAsignable => {
+          if (isAsignable.noConflict) {
+            return this.postAsignacionEfectiva(context, asignacion)
+          }
+          return isAsignable
+        })
+    }
+  },
+  postAsignacionEfectiva (context, asignacion) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http
+      .post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
+      .then(asignado => {
+        return true
+      })
+      .catch(error => {
+        console.log('error asignando el recorrido', error)
+        return false
+      })
   },
   calcularDiasAsignacion (context, asignacion) {
     const authHeader = { headers: auth.getAuthHeader() }
@@ -475,87 +480,102 @@ export default {
     }
   },
   checkIfAsignable (context, asignacion, diasAsignacion) {
-    const { recorrido, empleado, fechaDesde, fechaHasta } = asignacion
-    const cantCamiones = this.checkCantidadCamiones(context, {
+    const {recorrido, empleado, fechaDesde, fechaHasta} = asignacion
+    let recorridosAsignadosDelRango
+    return this.getRecorridosCoincidentes(context, {
       recorrido,
       fechaDesde,
       fechaHasta,
       diasAsignacion
     })
-    console.log('cantidad de camiones', cantCamiones)
-    if (!cantCamiones) {
-      return { restrictivo: false, message: 'capacidad camiones colmada' }
-    }
-
-    const disponibilidadRepartidor = this.checkDisponibilidadRepartidor(
-      context,
-      {
-        empleado,
-        recorrido,
-        fechaDesde,
-        fechaHasta,
-        diasAsignacion
-      }
-    )
-    console.log('el repartidor esta ocupado', disponibilidadRepartidor)
-    if (disponibilidadRepartidor) {
-      return { restrictivo: false, message: 'repartidor ocupado' }
-    }
-
-    const objetivosYaAsignados = this.checkAsignacionObjetivos(context)
-    console.log('los objetivos ya estan asignados?', objetivosYaAsignados)
-    if (!objetivosYaAsignados) {
-      return { restrictivo: true, message: 'objetivos ya asignados' }
-    }
-    return 'todo cool'
-  },
-  checkCantidadCamiones (
-    context,
-    { recorrido, fechaDesde, fechaHasta, diasAsignacion }
-  ) {
-    const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http
-      .get(API_URL + 'recorridos/' + recorrido, authHeader)
-      .then(recorrido => {
-        const desde = fechaDesde.split('/')
-        fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
-        const hasta = fechaHasta.split('/')
-        fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
-        return Promise.all([
-          context.$http.get(
-            API_URL +
-              'recorrido-historico/' +
-              '?idDia=' +
-              recorrido.body.idDia +
-              '&idTurno=' +
-              recorrido.body.idTurno +
-              '&fechaAsignacion[$gte]=' +
-              fechaDesde.toISOString() +
-              '&fechaAsignacion[$lt]=' +
-              fechaHasta.toISOString(),
-            authHeader
-          ),
-          context.$http.get(API_URL + 'camiones', authHeader)
-        ])
+      .then(recorridosCoincidentes => {
+        recorridosAsignadosDelRango = recorridosCoincidentes
+        return this.checkAsignacionObjetivos(context, recorrido, recorridosAsignadosDelRango)
       })
-      .then(([recorridosAsignados, camiones]) => {
-        const recorridosCoincidentes = recorridosAsignados.body.data.filter(r =>
-          diasAsignacion.find(dia => r.fechaAsignacion)
-        )
-        return recorridosCoincidentes.length <= camiones.body.data.length
+      .then(objetivosYaAsignados => {
+        // console.log('los objetivos ya estan asignados?', objetivosYaAsignados)
+        if (objetivosYaAsignados) {
+          const error = {restrictivo: true, message: 'Hay objetivos ya asignados para ese rango de fechas.', data: objetivosYaAsignados}
+          throw error
+        }
+        return this.checkDisponibilidadRepartidor(empleado, recorridosAsignadosDelRango)
       })
-      .catch(err => {
-        console.error(err)
+      .then(repartidorOcupado => {
+        // console.log('el repartidor esta ocupado', repartidorOcupado)
+        if (repartidorOcupado) {
+          const error = {restrictivo: false, message: 'El repartidor ya tiene recorridos asignados para ese rango de fechas.', data: repartidorOcupado}
+          throw error
+        }
+        return this.checkCantidadCamiones(context, recorridosAsignadosDelRango)
+      })
+      .then(cantCamiones => {
+        // console.log('hay más recorridos que camiones?', cantCamiones)
+        if (cantCamiones) {
+          const error = {restrictivo: false, message: 'Los recorridos a asignar para ese día y turno exceden la cantidad de camiones disponibles.', data: cantCamiones}
+          throw error
+        }
+        return {noConflict: true}
+      })
+      .catch(error => {
+        if (error.hasOwnProperty('restrictivo')) return error
         return false
       })
   },
-  checkDisponibilidadRepartidor (
-    context,
-    { empleado, recorrido, fechaDesde, fechaHasta, diasAsignacion }
-  ) {
+  checkCantidadCamiones (context, recorridos) {
     const authHeader = { headers: auth.getAuthHeader() }
-    return context.$http
-      .get(API_URL + 'recorridos/' + recorrido, authHeader)
+    return context.$http.get(API_URL + 'camiones', authHeader)
+    .then(camiones => {
+      const recorridosPorFecha = groupBy(recorridos, 'fechaAsignacion')
+      const recorridosConflictivos = Object.values(recorridosPorFecha).filter(recorridos => {
+        // console.log('Hay', recorridos.length, 'recorridos para esta fecha y', camiones.body.data.length, 'camiones')
+        return recorridos.length > camiones.body.data.length
+      })
+      return recorridosConflictivos.length ? recorridosConflictivos : false
+    })
+    .catch(err => {
+      console.error(err)
+      throw err
+    })
+  },
+  checkDisponibilidadRepartidor (empleado, recorridos) {
+    if (recorridos.length) {
+      const recorridosDeEseEmpleado = recorridos.filter(
+        rec => rec.idEmpleadoAsignado === empleado
+      )
+      if (recorridosDeEseEmpleado.length) {
+        const recorridosEnConflicto = recorridosDeEseEmpleado.map(recorrido => ({ idRecorridosHistoricos: recorrido.idRecorridosHistoricos }))
+        return Promise.resolve(recorridosEnConflicto)
+      } else {
+        return Promise.resolve(false)
+      }
+    }
+    return Promise.resolve(false)
+  },
+  checkAsignacionObjetivos (context, idRecorrido, recorridos) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    const getObjetivosPlanificados = recorridos.map(rec => context.$http.get(API_URL + 'detalle-recorrido-historico/' + '?idRecorridoHistorico=' +
+                                    rec.idRecorridosHistoricos, authHeader)
+                                    .then(response => response.body.data))
+    const getObjetivosAPlanificar = context.$http.get(API_URL + 'detalle-recorrido/' + '?idRecorrido=' + idRecorrido, authHeader).then(response => response.body.data)
+    return Promise.all([Promise.all(getObjetivosPlanificados), getObjetivosAPlanificar])
+      .then(([objetivosPlanificados, objetivosAPlanificar]) => {
+        objetivosPlanificados = flatten(objetivosPlanificados)
+        const colisiones = objetivosAPlanificar.filter(aPlanificar => objetivosPlanificados.some(planificado => planificado.idObjetivo === aPlanificar.idObjetivo))
+        if (colisiones.length) {
+          const objetivosEnConflicto = colisiones.map(objetivo => ({ idObjetivo: objetivo.idObjetivo }))
+          return objetivosEnConflicto
+        } else {
+          return false
+        }
+      })
+      .catch(err => {
+        console.error(err)
+        throw err
+      })
+  },
+  getRecorridosCoincidentes (context, { recorrido, fechaDesde, fechaHasta, diasAsignacion }) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'recorridos/' + recorrido, authHeader)
       .then(recorrido => {
         const desde = fechaDesde.split('/')
         fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
@@ -563,36 +583,29 @@ export default {
         fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
         return context.$http.get(
           API_URL +
-            'recorrido-historico/' +
-            '?idDia=' +
-            recorrido.body.idDia +
-            '&idTurno=' +
-            recorrido.body.idTurno +
-            '&fechaAsignacion[$gte]=' +
-            fechaDesde.toISOString() +
-            '&fechaAsignacion[$lt]=' +
-            fechaHasta.toISOString(),
+          'recorrido-historico/' +
+          '?idDia=' +
+          recorrido.body.idDia +
+          '&idTurno=' +
+          recorrido.body.idTurno +
+          '&fechaAsignacion[$gte]=' +
+          fechaDesde.toISOString() +
+          '&fechaAsignacion[$lt]=' +
+          fechaHasta.toISOString(),
           authHeader
         )
       })
-      .then((recorridosAsignados) => {
+      .then(recorridosAsignados => {
         const recorridosCoincidentes = recorridosAsignados.body.data.filter(r =>
           diasAsignacion.find(dia => r.fechaAsignacion)
         )
-        return recorridosCoincidentes.find(
-          rec => {
-            console.log('is rec.idEmpleadoAsignad', rec.idEmpleadoAsignado, '= empleado', empleado, ':', rec.idEmpleadoAsignado === empleado)
-            return rec.idEmpleadoAsignado === empleado
-          }
-        )
+        // console.log('Hay', recorridosCoincidentes.length, 'recorridos para ese rango de fecha, con ese día y ese turno')
+        return recorridosCoincidentes
       })
       .catch(err => {
         console.error(err)
         return false
       })
-  },
-  checkAsignacionObjetivos (context, objetivos, fechaDesde, fechaHasta) {
-    return true
   },
   checkIfAsignado (context, id) {
     const authHeader = { headers: auth.getAuthHeader() }
@@ -633,3 +646,14 @@ export default {
       })
   }
 }
+
+const flatten = array => array.reduce((acc, val) => acc.concat(val), [])
+
+const groupBy = (xs, key) => {
+  return xs.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
+
+// const data = [{id:1, name: 'Pepe'}, {id:2, name: 'Juan'},{id:3, name: 'Pepe'},{id:4, name: 'Jose'}]
