@@ -275,12 +275,21 @@
       postAsignacion (asignacion) {
         api.postAsignacion(this, asignacion)
           .then(r => {
-            if (r) {
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
-              this.cargarRecorridos()
-              this.seeList()
+            console.log('post asignacion', r)
+            if (!r.restrictivo) {
+              if (!confirm(r.message + ' ¿Desea continuar de todas formas?')) return
+              api.postAsignacion(this, asignacion, true)
+                .then(r => {
+                  noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+                  this.cargarRecorridos()
+                  this.seeList()
+                })
+                .catch(e => {
+                  noti.errorConTexto(this, 'Error', 'Error al asignar recorrido.')
+                  this.seeList()
+                })
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
+              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message}`)
               this.seeList()
             }
           })
