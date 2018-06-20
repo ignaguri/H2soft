@@ -64,5 +64,35 @@ export default {
         console.log('error', error)
         return false
       })
+  },
+  cantidadDeMantenimientosPorMes (context) {
+    const authHeader = {headers: auth.getAuthHeader()}
+    return context.$http.get(API_URL + 'mantenimientos?$select[]=fechaRealizado', authHeader)
+      .then(mantenimientos => {
+        mantenimientos = mantenimientos.body.data
+        const cantidades = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
+          8: 0,
+          9: 0,
+          10: 0,
+          11: 0,
+          12: 0
+        }
+        mantenimientos.forEach(mantenimiento => {
+          const mes = new Date(mantenimiento.fechaRealizado).getMonth()
+          cantidades[mes + 1] += 1
+        })
+        console.log('MANTENIMIENTOS POR MES:', cantidades)
+        return cantidades
+      })
+      .catch(error => {
+        console.log('Algo falló en el get de mantenimiento' + JSON.stringify(error))
+      })
   }
 }
