@@ -28,7 +28,7 @@
         </div>
         <br>
       </div>
-      <modal effect="fade" width="50%" :value="showCustomModal" @ok="showCustomModal = ok()" :title="modalTitle">
+      <modal effect="fade" width="50%" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = ok()" :title="modalTitle">
         <div class="row">
           <div class="col-md-12">
             <div class="form-group">
@@ -68,16 +68,6 @@
                   :placeholder="'Hasta'" width="100%" :clear-button="true"></dp>
             <!--</div>-->
           </div>
-          <!--<div class="col-md-12">-->
-          <!--<div class="form-group">-->
-          <!--<fg-input type="number"-->
-          <!--label="Cantidad de días de asignación"-->
-          <!--placeholder="Ingrese un número"-->
-          <!--v-model="diasAsignacion"-->
-          <!--disabled>-->
-          <!--</fg-input>-->
-          <!--</div>-->
-          <!--</div>-->
         </div>
         <div slot="modal-footer" class="modal-footer">
           <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
@@ -93,8 +83,8 @@
   import noti from 'src/api/notificationsService'
   import { modal, select, datepicker } from 'vue-strap'
 
-  const table1Columns = ['#', 'Temporada', 'Día', 'Turno', 'Frecuencia', 'Asignado a']
-  const table2Columns = ['Orden', 'Objetivo', 'Dirección', 'Localidad', 'Cliente']
+  const table1Columns = ['#', 'Día', 'Turno', 'Frecuencia', 'Asignado a']
+  const table2Columns = ['Orden', 'Objetivo', 'Cliente', 'Dirección', 'Localidad']
   export default {
     components: {
       PaperTable,
@@ -121,7 +111,6 @@
         idEmpleadoAsignado: null,
         empleados: [],
         asignado: false,
-        diasAsignacion: 30,
         fechaDesde: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         fechaHasta: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         recorridos: [],
@@ -178,12 +167,11 @@
           })
       },
       cargarMotivosReasignacion () {
+        this.motivos = []
         api.getMotivosReasignacion(this)
           .then(e => {
             if (e) {
               this.motivos = e
-            } else {
-              this.motivos = []
             }
           })
       },
@@ -215,7 +203,7 @@
               }
             })
           const recorrido = this.recorridos.find(r => r.recorrido === Number(this.recorrido))
-          this.table2.subTitle = `Día: ${recorrido.dia} - Turno: ${recorrido.turno} - Frecuencia: ${recorrido.frecuencia} - Temporada: ${recorrido.temporada}`
+          this.table2.subTitle = `Día: ${recorrido.dia} - Turno: ${recorrido.turno} - Frecuencia: ${recorrido.frecuencia}`
         }
       },
       editar (e) {
@@ -278,8 +266,8 @@
         this.postAsignacion({
           recorrido: Number(this.recorrido),
           empleado: this.idEmpleadoAsignado,
-          // TODO: cambiar dias de asignación por fecha desde - hasta
-          diasAsignacion: this.diasAsignacion,
+          fechaDesde: this.fechaDesde,
+          fechaHasta: this.fechaHasta,
           idMotivoDeReasignacion: this.idMotivo
         })
         return false
@@ -287,12 +275,21 @@
       postAsignacion (asignacion) {
         api.postAsignacion(this, asignacion)
           .then(r => {
-            if (r) {
-              noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
-              this.cargarRecorridos()
-              this.seeList()
+            console.log('post asignacion', r)
+            if (!r.restrictivo) {
+              if (!confirm(r.message + ' ¿Desea continuar de todas formas?')) return
+              api.postAsignacion(this, asignacion, true)
+                .then(r => {
+                  noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
+                  this.cargarRecorridos()
+                  this.seeList()
+                })
+                .catch(e => {
+                  noti.errorConTexto(this, 'Error', 'Error al asignar recorrido.')
+                  this.seeList()
+                })
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al asignar recorrido')
+              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message}`)
               this.seeList()
             }
           })

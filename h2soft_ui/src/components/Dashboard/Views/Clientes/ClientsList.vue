@@ -7,7 +7,7 @@
         </paper-table>
       </div>
     </div>
-    <modal effect="fade" :value="showCustomModal" title="Resumen del cliente">
+    <modal effect="fade" :value="showCustomModal" :backdrop="false" title="Resumen del cliente">
       <div class="row">
         <div class="col-md-12">
           <h2><span class="label label-default">Cliente</span></h2>
