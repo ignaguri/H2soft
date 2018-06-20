@@ -227,7 +227,6 @@
           .then(resp => {
             let consumoOrdenadoP1 = []
             let consumoOrdenadoP2 = []
-            console.log('RESPPPP:' + JSON.stringify(resp))
             let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
             const mes = new Date().getMonth()
             // console.log('?MESSS:' + mes)
@@ -249,9 +248,9 @@
                 consumoOrdenadoP2[i - 6] = resp[i + 13]
               }
             }
-            console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
-            console.log('Consumo ORDENADOS P1:' + JSON.stringify(consumoOrdenadoP1))
-            console.log('Consumo ORDENADOS P2:' + JSON.stringify(consumoOrdenadoP2))
+            // console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
+            // console.log('Consumo ORDENADOS P1:' + JSON.stringify(consumoOrdenadoP1))
+            // console.log('Consumo ORDENADOS P2:' + JSON.stringify(consumoOrdenadoP2))
             this.usersChart.data.labels = (cantMeses)
             this.usersChart.data.series.push(consumoOrdenadoP1)
             this.usersChart.data.series.push(consumoOrdenadoP2)
@@ -291,7 +290,6 @@
       cantMantenimientosPorMes () {
         apiMantenimientos.cantidadDeMantenimientosPorMes(this)
           .then(resp => {
-            console.log('REPS;' + JSON.stringify(resp))
             let consumoMantenimiento = []
             let consumoOrdenadoMantenimiento = []
             let mesesMantenimiento = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
@@ -308,7 +306,6 @@
             consumoMantenimiento.push(resp[11])
             consumoMantenimiento.push(resp[12])
             const mes = new Date().getMonth()
-            console.log('?MESSS:' + mes)
             let cantMeses = []
             let i
             for (i = 0; i < 12; i++) {
@@ -320,8 +317,8 @@
                 consumoOrdenadoMantenimiento[i - 6] = resp[i + 1]
               }
             }
-            console.log('MESES ORDENADOS MANTENIMIENTO:' + JSON.stringify(cantMeses))
-            console.log('Consumo ORDENADOS MANTENIMIENTO:' + JSON.stringify(consumoOrdenadoMantenimiento))
+            // console.log('MESES ORDENADOS MANTENIMIENTO:' + JSON.stringify(cantMeses))
+            // console.log('Consumo ORDENADOS MANTENIMIENTO:' + JSON.stringify(consumoOrdenadoMantenimiento))
             this.mantenimientosChart.data.labels = (cantMeses)
             this.mantenimientosChart.data.series.push(consumoOrdenadoMantenimiento)
             this.modif3 = !this.modif3

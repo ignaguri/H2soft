@@ -178,7 +178,6 @@ export default {
             cantidades[mes + 8] += dejadoEnCliente.cantidad
           }
         })
-        console.log('CANTIDADES PRD:' + JSON.stringify(cantidades))
         return cantidades
       })
       .catch(error => {
