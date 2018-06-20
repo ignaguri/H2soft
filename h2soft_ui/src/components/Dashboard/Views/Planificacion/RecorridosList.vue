@@ -280,6 +280,7 @@
               noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
               this.cargarRecorridos()
               this.seeList()
+              this.limpiarCampos()
               return
             }
             if (r && !r.restrictivo) {
@@ -289,14 +290,17 @@
                   noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
                   this.cargarRecorridos()
                   this.seeList()
+                  this.limpiarCampos()
                 })
                 .catch(e => {
                   noti.errorConTexto(this, 'Error', 'Error al asignar recorrido.')
                   this.seeList()
+                  this.limpiarCampos()
                 })
             } else {
               noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message ? r.message : ''}`)
               this.seeList()
+              this.limpiarCampos()
             }
           })
       },
@@ -307,6 +311,12 @@
         } else {
           this.modalTitle = this.$refs.btn_asignar.innerText = 'Asignar recorrido'
         }
+      },
+      limpiarCampos () {
+        this.idEmpleadoAsignado = null
+        this.fechaDesde = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        this.fechaHasta = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        this.idMotivo = null
       }
     }
   }
