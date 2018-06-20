@@ -31,6 +31,7 @@
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
             <i class="fa fa-circle text-info"></i> Bidones de 20L
+            <i class="fa fa-circle text-danger"></i> Bidones de 10L
           </div>
         </chart-card>
       </div>
@@ -224,38 +225,36 @@
       cantBidonesPorMes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
-            let consumo = []
-            let consumoOrdenado = []
+            let consumoOrdenadoP1 = []
+            let consumoOrdenadoP2 = []
+            console.log('RESPPPP:' + JSON.stringify(resp))
             let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-            consumo.push(resp[1])
-            consumo.push(resp[2])
-            consumo.push(resp[3])
-            consumo.push(resp[4])
-            consumo.push(resp[5])
-            consumo.push(resp[6])
-            consumo.push(resp[7])
-            consumo.push(resp[8])
-            consumo.push(resp[9])
-            consumo.push(resp[10])
-            consumo.push(resp[11])
-            consumo.push(resp[12])
             const mes = new Date().getMonth()
             // console.log('?MESSS:' + mes)
             let cantMeses = []
             let i
             for (i = 0; i < 12; i++) {
-              if (i <= mes) {
+              if (i <= mes && i < 12) {
                 cantMeses[i + 6] = meses[i]
-                consumoOrdenado[i + 6] = resp[i + 1]
+                consumoOrdenadoP1[i + 6] = resp[i + 1]
               } else {
                 cantMeses[i - 6] = meses[i]
-                consumoOrdenado[i - 6] = resp[i + 1]
+                consumoOrdenadoP1[i - 6] = resp[i + 1]
               }
             }
-            // console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
-            // console.log('Consumo ORDENADOS:' + JSON.stringify(consumoOrdenado))
+            for (i = 0; i < 12; i++) {
+              if (i <= mes) {
+                consumoOrdenadoP2[i + 6] = resp[i + 13]
+              } else {
+                consumoOrdenadoP2[i - 6] = resp[i + 13]
+              }
+            }
+            console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
+            console.log('Consumo ORDENADOS P1:' + JSON.stringify(consumoOrdenadoP1))
+            console.log('Consumo ORDENADOS P2:' + JSON.stringify(consumoOrdenadoP2))
             this.usersChart.data.labels = (cantMeses)
-            this.usersChart.data.series.push(consumoOrdenado)
+            this.usersChart.data.series.push(consumoOrdenadoP1)
+            this.usersChart.data.series.push(consumoOrdenadoP2)
             this.modif = !this.modif
           })
           .catch(err => {

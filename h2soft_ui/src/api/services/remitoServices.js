@@ -37,7 +37,7 @@ export default {
       })
   },
   getRemitosXclienteYfechas (context, idCliente, fechaDesde, fechaHasta) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     const desde = fechaDesde.split('/')
     fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
     const hasta = fechaHasta.split('/')
@@ -45,24 +45,24 @@ export default {
     fechaHasta.setDate(fechaHasta.getDate() + 1)
     // BUSCO LOS OBJETIVOS DEL CLIENTE QUE VIENE POR PARAMETRO
     return apiClientes.getObjetivos(context, idCliente)
-    .then(objetivos => {
-      let promesas = []
-      // POR CADA OBJETIVO, QUIERO SUS REMITOS, DENTRO DEL RANGO DE FECHAS PASADAS POR PARAMETRO
-      objetivos.forEach(o => promesas.push(context.$http.get(API_URL + 'remitos/?idObjetivo=' +
-                                          o.idObjetivosXCliente + '&fecha[$gte]=' + fechaDesde.toISOString() +
-                                          '&fecha[$lt]=' + fechaHasta.toISOString(), authHeader)
-                                          .then(res => res.body.data)))
-      return Promise.all(promesas)
-    })
-    .then(remitosXObjetivo => {
-      remitosXObjetivo = [].concat.apply([], remitosXObjetivo)
-      return remitosXObjetivo
-    })
-    .catch(error => {
-      console.error('algo falló en la busqueda de remitos por cliente ', error)
-      throw error
-      // return false
-    })
+      .then(objetivos => {
+        let promesas = []
+        // POR CADA OBJETIVO, QUIERO SUS REMITOS, DENTRO DEL RANGO DE FECHAS PASADAS POR PARAMETRO
+        objetivos.forEach(o => promesas.push(context.$http.get(API_URL + 'remitos/?idObjetivo=' +
+          o.idObjetivosXCliente + '&fecha[$gte]=' + fechaDesde.toISOString() +
+          '&fecha[$lt]=' + fechaHasta.toISOString(), authHeader)
+          .then(res => res.body.data)))
+        return Promise.all(promesas)
+      })
+      .then(remitosXObjetivo => {
+        remitosXObjetivo = [].concat.apply([], remitosXObjetivo)
+        return remitosXObjetivo
+      })
+      .catch(error => {
+        console.error('algo falló en la busqueda de remitos por cliente ', error)
+        throw error
+        // return false
+      })
   },
   nuevoRemito (context, remito) {
     const authHeader = {headers: auth.getAuthHeader()}
@@ -154,13 +154,31 @@ export default {
           9: 0,
           10: 0,
           11: 0,
-          12: 0
+          12: 0,
+          13: 0,
+          14: 0,
+          15: 0,
+          16: 0,
+          17: 0,
+          18: 0,
+          19: 0,
+          20: 0,
+          21: 0,
+          22: 0,
+          23: 0,
+          24: 0
         }
         detallesRemitoProducto.forEach(detalles => {
           const mes = detalles.find(d => d.mes).mes
           const dejadoEnCliente = detalles.find(d => d.dejadoEnCliente === 1)
-          cantidades[mes + 1] += dejadoEnCliente.cantidad
+          const idProducto = detalles.find(d => d.idProducto)
+          if (idProducto === 1) {
+            cantidades[mes + 1] += dejadoEnCliente.cantidad
+          } else {
+            cantidades[mes + 8] += dejadoEnCliente.cantidad
+          }
         })
+        console.log('CANTIDADES PRD:' + JSON.stringify(cantidades))
         return cantidades
       })
       .catch(error => {
