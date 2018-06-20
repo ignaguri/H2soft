@@ -57,11 +57,11 @@ export default {
     if (recorrido.idRecorridos === null) {
       delete recorrido.idRecorridos
       recorrido.activo = true
-      console.log('recorrido sin id', recorrido)
+      // console.log('recorrido sin id', recorrido)
       return context.$http
         .post(API_URL + 'recorridos', recorrido, authHeader)
         .then(recorridoInsertado => {
-          console.log('inserté el recorrido', recorridoInsertado)
+          // console.log('inserté el recorrido', recorridoInsertado)
           detalle.idRecorrido = recorridoInsertado.body.idRecorridos
           return context.$http.post(
             API_URL + 'detalle-recorrido',
@@ -70,7 +70,7 @@ export default {
           )
         })
         .then(detalleInsertado => {
-          console.log('inserté el detalle de recorrido', detalleInsertado)
+          // console.log('inserté el detalle de recorrido', detalleInsertado)
           return detalle.idRecorrido
         })
         .catch(error => {
@@ -78,12 +78,19 @@ export default {
           return false
         })
     } else {
-      console.log('recorrido con id', recorrido)
-      detalle.idRecorrido = recorrido.idRecorridos
-      return context.$http
-        .post(API_URL + 'detalle-recorrido', detalle, authHeader)
+      // console.log('agregando un objetivo al recorrido', recorrido)
+      return context.$http.get(API_URL + 'detalle-recorrido' + '?idRecorrido=' + recorrido.idRecorridos +
+                              '&idObjetivo=' + detalle.idObjetivo, authHeader)
+        .then(detalleExistente => {
+          // console.log('ya existe ese objetivo en el recorrido?', detalleExistente.body.data)
+          if (detalleExistente.body.data.length) {
+            throw new Error('Objetivo ya existente en el recorrido')
+          }
+          detalle.idRecorrido = recorrido.idRecorridos
+          return context.$http.post(API_URL + 'detalle-recorrido', detalle, authHeader)
+        })
         .then(detalleInsertado => {
-          console.log('updatié el detalle de recorrido', detalleInsertado)
+          // console.log('updatié el detalle de recorrido', detalleInsertado)
           return detalle.idRecorrido
         })
         .catch(error => {
@@ -556,8 +563,12 @@ export default {
   },
   checkAsignacionObjetivos (context, idRecorrido, recorridos) {
     const authHeader = { headers: auth.getAuthHeader() }
-    const getObjetivosPlanificados = recorridos.map(rec => context.$http.get(API_URL + 'detalle-recorrido-historico/' + '?idRecorridoHistorico=' +
-                                    rec.idRecorridosHistoricos, authHeader)
+    // console.log('recorridos coincidentes', recorridos)
+    // console.log('recorrido a (re)asignar', idRecorrido)
+    const recorridosFiltered = recorridos.filter(rec => rec.idRecorrido !== idRecorrido)
+    // console.log('recorridos coincidente en fechas sin incluir los del recorrido a asignar', recorridosFiltered)
+    const getObjetivosPlanificados = recorridosFiltered.map(rec => context.$http.get(API_URL + 'detalle-recorrido-historico/' + '?idRecorridoHistorico=' +
+                                    rec.idRecorridosHistoricos, authHeader) // estos son los que se reasignarian
                                     .then(response => response.body.data))
     const getObjetivosAPlanificar = context.$http.get(API_URL + 'detalle-recorrido/' + '?idRecorrido=' + idRecorrido, authHeader).then(response => response.body.data)
     return Promise.all([Promise.all(getObjetivosPlanificados), getObjetivosAPlanificar])
@@ -658,5 +669,3 @@ const groupBy = (xs, key) => {
     return rv
   }, {})
 }
-
-// const data = [{id:1, name: 'Pepe'}, {id:2, name: 'Juan'},{id:3, name: 'Pepe'},{id:4, name: 'Jose'}]
