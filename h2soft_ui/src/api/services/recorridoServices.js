@@ -400,6 +400,10 @@ export default {
           }
           return isAsignable
         })
+        .catch(err => {
+          console.log('Error en post asignacion', err)
+          return false
+        })
     }
   },
   postAsignacionEfectiva (context, asignacion) {
@@ -407,7 +411,7 @@ export default {
     return context.$http
       .post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
-        return true
+        return { asignado: true }
       })
       .catch(error => {
         console.log('error asignando el recorrido', error)
@@ -495,7 +499,7 @@ export default {
       .then(objetivosYaAsignados => {
         // console.log('los objetivos ya estan asignados?', objetivosYaAsignados)
         if (objetivosYaAsignados) {
-          const error = {restrictivo: true, message: 'Hay objetivos ya asignados para ese rango de fechas.', data: objetivosYaAsignados}
+          const error = {restrictivo: true, message: 'Ya existen objetivos asignados para ese rango de fechas.', data: objetivosYaAsignados}
           throw error
         }
         return this.checkDisponibilidadRepartidor(empleado, recorridosAsignadosDelRango)
@@ -518,7 +522,7 @@ export default {
       })
       .catch(error => {
         if (error.hasOwnProperty('restrictivo')) return error
-        return false
+        throw error
       })
   },
   checkCantidadCamiones (context, recorridos) {
@@ -533,7 +537,6 @@ export default {
       return recorridosConflictivos.length ? recorridosConflictivos : false
     })
     .catch(err => {
-      console.error(err)
       throw err
     })
   },
