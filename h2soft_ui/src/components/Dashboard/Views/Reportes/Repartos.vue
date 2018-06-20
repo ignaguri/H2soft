@@ -9,8 +9,8 @@
           </div>
           <objetivos v-for="reparto in reps" :reparto="reparto"></objetivos>
           <div slot="legend">
-            <i class="fa fa-circle text-danger"></i> No visitado
-            <i class="fa fa-circle" style="color:green;"></i> Visitado
+            <i class="fa fa-circle-o text-danger"></i> No visitado
+            <i class="fa fa-circle-o" style="color:green;"></i> Visitado
             <i class="fa fa-truck" style="color:green;" ></i> Último objetivo visitado
           </div>
         </div>
