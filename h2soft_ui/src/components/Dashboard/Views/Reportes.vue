@@ -35,11 +35,26 @@
         </chart-card>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6 col-xs-12">
+        <chart-card :chart-data="mantenimientosChart.data" :chart-options="mantenimientosChart.options"
+                    :modif="this.modif3">
+          <h4 class="title" slot="title">Mantenimientos de dispensers</h4>
+          <span slot="subTitle"> Mantenimientos realizados por mes en el último año</span>
+          <span slot="footer">
+            <i class="ti-check"></i> Información actualizada</span>
+          <div slot="legend">
+            <i class="fa fa-circle text-info"></i> Manteniemientos
+          </div>
+        </chart-card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
   import apiRemitos from 'src/api/services/remitoServices'
   import apiRecHistoricos from 'src/api/services/recorridosHistoricosServices'
+  import apiMantenimientos from 'src/api/services/mantenimientoServices'
   import StatsCard from 'components/UIComponents/Cards/StatsCard.vue'
   import ChartCard from 'components/UIComponents/Cards/ChartCard.vue'
   import repartos from 'components/Dashboard/Views/Reportes/Repartos.vue'
@@ -59,6 +74,7 @@
       return {
         modif: false,
         modif2: false,
+        modif3: false,
         /* reparts: {
          reps: [
          { objetivos: [{nombre: 'obj1', idestado: 1, orden: 1}, {nombre: 'obj2', idestado: 1, orden: 2}, {nombre: 'obj3', idestado: 2, orden: 3}],
@@ -111,7 +127,7 @@
         ],
         usersChart: {
           data: {
-            labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            labels: [],
             series: []
           },
           options: {
@@ -129,11 +145,30 @@
             showPoint: false
           }
         },
+        mantenimientosChart: {
+          data: {
+            labels: [],
+            series: []
+          },
+          options: {
+            low: 0,
+            high: 10,
+            showArea: true,
+            // height: '245px',
+            axisX: {
+              showGrid: true
+            },
+            lineSmooth: this.$Chartist.Interpolation.simple({
+              divisor: 3
+            }),
+            showLine: true,
+            showPoint: false
+          }
+        },
         activityChart: {
           data: {
             labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'],
-            series: [
-            ]
+            series: []
           },
           options: {
             seriesBarDistance: 10,
@@ -183,12 +218,15 @@
     mounted () {
       this.cantBidonesPorMes()
       this.cantObjetivosPorTemporada()
+      this.cantMantenimientosPorMes()
     },
     methods: {
       cantBidonesPorMes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
             let consumo = []
+            let consumoOrdenado = []
+            let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
             consumo.push(resp[1])
             consumo.push(resp[2])
             consumo.push(resp[3])
@@ -201,7 +239,23 @@
             consumo.push(resp[10])
             consumo.push(resp[11])
             consumo.push(resp[12])
-            this.usersChart.data.series.push(consumo)
+            const mes = new Date().getMonth()
+            // console.log('?MESSS:' + mes)
+            let cantMeses = []
+            let i
+            for (i = 0; i < 12; i++) {
+              if (i <= mes) {
+                cantMeses[i + 6] = meses[i]
+                consumoOrdenado[i + 6] = resp[i + 1]
+              } else {
+                cantMeses[i - 6] = meses[i]
+                consumoOrdenado[i - 6] = resp[i + 1]
+              }
+            }
+            // console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
+            // console.log('Consumo ORDENADOS:' + JSON.stringify(consumoOrdenado))
+            this.usersChart.data.labels = (cantMeses)
+            this.usersChart.data.series.push(consumoOrdenado)
             this.modif = !this.modif
           })
           .catch(err => {
@@ -214,7 +268,7 @@
             var consumoVerano = []
             var consumoInvierno = []
             var consumos = []
-            console.log('CANTI:', resp)
+            // console.log('CANTI:', resp)
             consumoVerano.push(resp[1])
             consumoVerano.push(resp[2])
             consumoVerano.push(resp[3])
@@ -225,14 +279,56 @@
             consumoInvierno.push(resp[10])
             consumoInvierno.push(resp[11])
             consumoInvierno.push(resp[12])
-            console.log('CONSUMO INVUERNO:' + JSON.stringify(consumoInvierno))
-            console.log('CONSUMO VERANO:' + JSON.stringify(consumoVerano))
+            // console.log('CONSUMO INVUERNO:' + JSON.stringify(consumoInvierno))
+            // console.log('CONSUMO VERANO:' + JSON.stringify(consumoVerano))
             consumos.push(consumoInvierno)
             consumos.push(consumoVerano)
-            console.log('CONSUMOS:' + JSON.stringify(consumos))
+            // console.log('CONSUMOS:' + JSON.stringify(consumos))
             this.activityChart.data.series.push(consumoInvierno)
             this.activityChart.data.series.push(consumoVerano)
             this.modif2 = !this.modif2
+          })
+      },
+      cantMantenimientosPorMes () {
+        apiMantenimientos.cantidadDeMantenimientosPorMes(this)
+          .then(resp => {
+            console.log('REPS;' + JSON.stringify(resp))
+            let consumoMantenimiento = []
+            let consumoOrdenadoMantenimiento = []
+            let mesesMantenimiento = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            consumoMantenimiento.push(resp[1])
+            consumoMantenimiento.push(resp[2])
+            consumoMantenimiento.push(resp[3])
+            consumoMantenimiento.push(resp[4])
+            consumoMantenimiento.push(resp[5])
+            consumoMantenimiento.push(resp[6])
+            consumoMantenimiento.push(resp[7])
+            consumoMantenimiento.push(resp[8])
+            consumoMantenimiento.push(resp[9])
+            consumoMantenimiento.push(resp[10])
+            consumoMantenimiento.push(resp[11])
+            consumoMantenimiento.push(resp[12])
+            const mes = new Date().getMonth()
+            console.log('?MESSS:' + mes)
+            let cantMeses = []
+            let i
+            for (i = 0; i < 12; i++) {
+              if (i <= mes) {
+                cantMeses[i + 6] = mesesMantenimiento[i]
+                consumoOrdenadoMantenimiento[i + 6] = resp[i + 1]
+              } else {
+                cantMeses[i - 6] = mesesMantenimiento[i]
+                consumoOrdenadoMantenimiento[i - 6] = resp[i + 1]
+              }
+            }
+            console.log('MESES ORDENADOS MANTENIMIENTO:' + JSON.stringify(cantMeses))
+            console.log('Consumo ORDENADOS MANTENIMIENTO:' + JSON.stringify(consumoOrdenadoMantenimiento))
+            this.mantenimientosChart.data.labels = (cantMeses)
+            this.mantenimientosChart.data.series.push(consumoOrdenadoMantenimiento)
+            this.modif3 = !this.modif3
+          })
+          .catch(err => {
+            console.log('ERRRO:' + err)
           })
       }
     }
