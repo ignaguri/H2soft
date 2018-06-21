@@ -658,11 +658,27 @@ export default {
       .then(res => {
         return res.body.data
       })
+  },
+  getRecorridosHistoricosPorMes (context, mes, year) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    const primeroDelMes = new Date(year || new Date().getFullYear(), mes, 1)
+    const enUnMes = new Date(primeroDelMes)
+    enUnMes.setDate(primeroDelMes.getDate() + 30)
+    return context.$http.get(API_URL + 'recorrido-historico/' +
+      '?fechaAsignacion[$gte]=' +
+      primeroDelMes.toISOString() +
+      '&fechaAsignacion[$lt]=' +
+      enUnMes.toISOString(), authHeader)
+      .then(recorridos => {
+        // return groupBy(recorridos.body.data, 'fechaAsignacion')
+        return recorridos.body.data
+      })
   }
 }
 
 const flatten = array => array.reduce((acc, val) => acc.concat(val), [])
 
+// TODO: mejorar esto para que devuelva arreglos u otra key
 const groupBy = (xs, key) => {
   return xs.reduce((rv, x) => {
     (rv[x[key]] = rv[x[key]] || []).push(x)

@@ -7,6 +7,9 @@
 
         </paper-table>
         <div class="text-center">
+          <button type="button" class="btn btn-primary btn-fill btn-wd" @click="calendario">
+            Ver calendario
+          </button>
           <button type="button" class="btn btn-info btn-fill btn-wd" @click="planificar">
             Planificar recorrido
           </button>
@@ -248,7 +251,10 @@
       },
       planificar () {
         this.$parent.edit = false
-        this.$parent.isRecorridoList = false
+        this.$parent.show = 'form'
+      },
+      calendario () {
+        this.$parent.show = 'calendar'
       },
       asignar () {
         this.showCustomModal = true
