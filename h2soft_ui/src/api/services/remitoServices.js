@@ -175,9 +175,10 @@ export default {
           if (idProducto === 1) {
             cantidades[mes + 1] += dejadoEnCliente.cantidad
           } else {
-            cantidades[mes + 8] += dejadoEnCliente.cantidad
+            cantidades[mes + 13] += dejadoEnCliente.cantidad
           }
         })
+        console.log('cantidades:' + JSON.stringify(cantidades))
         return cantidades
       })
       .catch(error => {

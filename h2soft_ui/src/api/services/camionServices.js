@@ -27,6 +27,7 @@ export default {
   },
   postCamiones (context, camion) {
     const authHeader = { headers: auth.getAuthHeader() }
+    camion.libre = 1
     return context.$http.post(API_URL + 'camiones', camion, authHeader)
       .then(res => { return res })
       .catch(err => {
