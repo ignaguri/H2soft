@@ -659,7 +659,7 @@ export default {
         return res.body.data
       })
   },
-  getRecorridosHistoricosPorMes (context, mes, year) {
+  getVisitasObjetivosPorMes (context, mes, year) {
     const authHeader = { headers: auth.getAuthHeader() }
     const primeroDelMes = new Date(year || new Date().getFullYear(), mes, 1)
     const enUnMes = new Date(primeroDelMes)
@@ -671,7 +671,17 @@ export default {
       enUnMes.toISOString(), authHeader)
       .then(recorridos => {
         // return groupBy(recorridos.body.data, 'fechaAsignacion')
-        return recorridos.body.data
+        const promesas = recorridos.body.data.map(recorrido => context.$http.get(API_URL + 'detalle-recorrido-historico' +
+                                                '?idRecorridoHistorico=' + recorrido.idRecorridosHistoricos, authHeader)
+                                                .then(res => res.body.data.map(objetivo => Object.assign({}, objetivo, { fechaAsignacion: recorrido.fechaAsignacion }))))
+        return Promise.all(promesas)
+      })
+      .then(detalles => {
+        return flatten(detalles)
+      })
+      .catch(err => {
+        console.error(err)
+        throw err
       })
   }
 }
