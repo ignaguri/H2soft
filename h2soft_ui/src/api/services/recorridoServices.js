@@ -670,10 +670,18 @@ export default {
       '&fechaAsignacion[$lt]=' +
       enUnMes.toISOString(), authHeader)
       .then(recorridos => {
-        // return groupBy(recorridos.body.data, 'fechaAsignacion')
         const promesas = recorridos.body.data.map(recorrido => context.$http.get(API_URL + 'detalle-recorrido-historico' +
                                                 '?idRecorridoHistorico=' + recorrido.idRecorridosHistoricos, authHeader)
-                                                .then(res => res.body.data.map(objetivo => Object.assign({}, objetivo, { fechaAsignacion: recorrido.fechaAsignacion }))))
+                                                .then(res => res.body.data.map(objetivo => Object.assign({},
+                                                  {
+                                                    idRecorrido: recorrido.idRecorrido,
+                                                    fechaAsignacion: recorrido.fechaAsignacion,
+                                                    idTurno: recorrido.idTurno,
+                                                    idEmpleado: recorrido.idEmpleadoAsignado,
+                                                    idObjetivo: objetivo.idObjetivo,
+                                                    entregado: objetivo.entregado
+                                                  }
+                                                  ))))
         return Promise.all(promesas)
       })
       .then(detalles => {
@@ -686,8 +694,14 @@ export default {
           .then(res => Object.assign({}, d, { nombre: res.body.nombre })))
         return Promise.all(promesas)
       })
-      .then(detallesPopulated => {
-        return detallesPopulated
+      .then(detallesConNombre => {
+        const promesas = detallesConNombre.map(d => context.$http.get(API_URL + 'empleados/' +
+                                                d.idEmpleado, authHeader)
+                                      .then(res => Object.assign({}, d, { empleado: `${res.body.apellido}, ${res.body.nombre}` })))
+        return Promise.all(promesas)
+      })
+      .then(detallesConEmpleado => {
+        return detallesConEmpleado
       })
       .catch(err => {
         console.error(err)

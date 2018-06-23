@@ -129,15 +129,19 @@ export default {
     this.cargarEventos()
   },
   methods: {
-    cargarEventos (mes) {
+    cargarEventos (fecha) {
       this.events = []
-      mes = mes ? new Date(mes).getMonth() : new Date().getMonth()
-      api.getVisitasObjetivosPorMes(this, mes)
+      const mes = fecha ? new Date(fecha).getMonth() : new Date().getMonth()
+      const year = fecha ? new Date(fecha).getFullYear() : new Date().getFullYear()
+      api.getVisitasObjetivosPorMes(this, mes, year)
         .then(r => {
           const eventos = r.map(visita => ({
             startDate: new Date(visita.fechaAsignacion),
-            title: visita.nombre
-//            style: `color: rgb(${visita.idObjetivo},${visita.idObjetivo},${visita.idObjetivo})`
+            title: visita.nombre,
+            classes: `${visita.idTurno === 1 ? 'orange' : 'blueish'}`,
+            realizado: visita.entregado,
+            idRecorrido: visita.idRecorrido,
+            empleado: visita.empleado
           }))
           this.events = eventos
         })
@@ -194,8 +198,16 @@ export default {
 .theme-default .cv-header {
   align-self: center;
 }
-.theme-default .cv-event.tomato {
-  background-color: #ff6357;
-  border-color: #ff6360;
+.theme-default .cv-event.blueish {
+  background-color: rgba(76, 193, 255, 0.5);
+  border-color: rgba(69, 166, 224, 0.5);
+}
+.currentPeriod {
+  visibility: hidden;
+}
+.currentPeriod:after {
+  content: 'Hoy';
+  visibility: visible;
+  margin-left: -30px;
 }
 </style>
