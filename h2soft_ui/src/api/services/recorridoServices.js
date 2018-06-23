@@ -702,11 +702,61 @@ export default {
       .then(res => {
         return res.body.data
       })
+  },
+  getVisitasObjetivosPorMes (context, mes, year) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    const primeroDelMes = new Date(year || new Date().getFullYear(), mes, 1)
+    const enUnMes = new Date(primeroDelMes)
+    enUnMes.setDate(primeroDelMes.getDate() + 30)
+    return context.$http.get(API_URL + 'recorrido-historico/' +
+      '?fechaAsignacion[$gte]=' +
+      primeroDelMes.toISOString() +
+      '&fechaAsignacion[$lt]=' +
+      enUnMes.toISOString(), authHeader)
+      .then(recorridos => {
+        const promesas = recorridos.body.data.map(recorrido => context.$http.get(API_URL + 'detalle-recorrido-historico' +
+                                                '?idRecorridoHistorico=' + recorrido.idRecorridosHistoricos, authHeader)
+                                                .then(res => res.body.data.map(objetivo => Object.assign({},
+                                                  {
+                                                    idRecorrido: recorrido.idRecorrido,
+                                                    fechaAsignacion: recorrido.fechaAsignacion,
+                                                    idTurno: recorrido.idTurno,
+                                                    idEmpleado: recorrido.idEmpleadoAsignado,
+                                                    idObjetivo: objetivo.idObjetivo,
+                                                    entregado: objetivo.entregado
+                                                  }
+                                                  ))))
+        return Promise.all(promesas)
+      })
+      .then(detalles => {
+        const flattedDetalles = flatten(detalles)
+        return flattedDetalles
+      })
+      .then(detallesRaw => {
+        const promesas = detallesRaw.map(d => context.$http.get(API_URL + 'objetivos-x-cliente/' +
+                                              d.idObjetivo, authHeader)
+          .then(res => Object.assign({}, d, { nombre: res.body.nombre })))
+        return Promise.all(promesas)
+      })
+      .then(detallesConNombre => {
+        const promesas = detallesConNombre.map(d => context.$http.get(API_URL + 'empleados/' +
+                                                d.idEmpleado, authHeader)
+                                      .then(res => Object.assign({}, d, { empleado: `${res.body.apellido}, ${res.body.nombre}` })))
+        return Promise.all(promesas)
+      })
+      .then(detallesConEmpleado => {
+        return detallesConEmpleado
+      })
+      .catch(err => {
+        console.error(err)
+        throw err
+      })
   }
 }
 
 const flatten = array => array.reduce((acc, val) => acc.concat(val), [])
 
+// TODO: mejorar esto para que devuelva arreglos u otra key
 const groupBy = (xs, key) => {
   return xs.reduce((rv, x) => {
     (rv[x[key]] = rv[x[key]] || []).push(x)
