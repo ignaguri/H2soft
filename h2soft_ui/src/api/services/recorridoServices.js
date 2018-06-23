@@ -493,23 +493,33 @@ export default {
   checkIfAsignable (context, asignacion, diasAsignacion) {
     const {recorrido, empleado, fechaDesde, fechaHasta} = asignacion
     let recorridosAsignadosDelRango
-    return this.getRecorridosCoincidentes(context, {
+    return this.getRecorridosCoincidentesSinTurno(context, {
       recorrido,
       fechaDesde,
       fechaHasta,
       diasAsignacion
     })
-      .then(recorridosCoincidentes => {
-        recorridosAsignadosDelRango = recorridosCoincidentes
+      .then(recorridosCoincidentesSinTurno => {
+        recorridosAsignadosDelRango = recorridosCoincidentesSinTurno
         return this.checkAsignacionObjetivos(context, recorrido, recorridosAsignadosDelRango)
       })
       .then(objetivosYaAsignados => {
         // console.log('los objetivos ya estan asignados?', objetivosYaAsignados)
         if (objetivosYaAsignados) {
-          const error = {restrictivo: true, message: 'Ya existen objetivos asignados para ese rango de fechas.', data: objetivosYaAsignados}
+          const error = {restrictivo: true, message: 'Ya existen recorridos asignados que visitan alguno de los objetivos para ese rango de fechas.', data: objetivosYaAsignados}
           throw error
         }
+        return this.getRecorridosCoincidentes(context, {
+          recorrido,
+          fechaDesde,
+          fechaHasta,
+          diasAsignacion
+        }) // return this.checkDisponibilidadRepartidor(empleado, recorridosAsignadosDelRango)
+      })
+      .then(recorridosCoincidentes => {
+        recorridosAsignadosDelRango = recorridosCoincidentes
         return this.checkDisponibilidadRepartidor(empleado, recorridosAsignadosDelRango)
+        // return this.checkAsignacionObjetivos(context, recorrido, recorridosAsignadosDelRango)
       })
       .then(repartidorOcupado => {
         // console.log('el repartidor esta ocupado', repartidorOcupado)
@@ -615,6 +625,40 @@ export default {
         )
         // console.log('Hay', recorridosCoincidentes.length, 'recorridos para ese rango de fecha, con ese día y ese turno')
         return recorridosCoincidentes
+      })
+      .catch(err => {
+        console.error(err)
+        return false
+      })
+  },
+  getRecorridosCoincidentesSinTurno (context, { recorrido, fechaDesde, fechaHasta, diasAsignacion }) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'recorridos/' + recorrido, authHeader)
+      .then(recorrido => {
+        const desde = fechaDesde.split('/')
+        fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
+        const hasta = fechaHasta.split('/')
+        fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
+        return context.$http.get(
+          API_URL +
+          'recorrido-historico/' +
+          '?idDia=' +
+          recorrido.body.idDia +
+          // '&idTurno=' +
+          // recorrido.body.idTurno +
+          '&fechaAsignacion[$gte]=' +
+          fechaDesde.toISOString() +
+          '&fechaAsignacion[$lt]=' +
+          fechaHasta.toISOString(),
+          authHeader
+        )
+      })
+      .then(recorridosAsignados => {
+        const recorridosCoincidentesSinTurno = recorridosAsignados.body.data.filter(r =>
+          diasAsignacion.find(dia => r.fechaAsignacion)
+        )
+        // console.log('Hay', recorridosCoincidentes.length, 'recorridos para ese rango de fecha, con ese día y ese turno')
+        return recorridosCoincidentesSinTurno
       })
       .catch(err => {
         console.error(err)
