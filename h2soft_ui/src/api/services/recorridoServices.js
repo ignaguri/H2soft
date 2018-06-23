@@ -677,7 +677,17 @@ export default {
         return Promise.all(promesas)
       })
       .then(detalles => {
-        return flatten(detalles)
+        const flattedDetalles = flatten(detalles)
+        return flattedDetalles
+      })
+      .then(detallesRaw => {
+        const promesas = detallesRaw.map(d => context.$http.get(API_URL + 'objetivos-x-cliente/' +
+                                              d.idObjetivo, authHeader)
+          .then(res => Object.assign({}, d, { nombre: res.body.nombre })))
+        return Promise.all(promesas)
+      })
+      .then(detallesPopulated => {
+        return detallesPopulated
       })
       .catch(err => {
         console.error(err)

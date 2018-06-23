@@ -1,31 +1,35 @@
 <template>
-<div
+  <div
     :key="e.event.id"
-    :class="e.event.classes"
+    :class="getClasses(e)"
     :title="e.event.title"
+    :style="`top:${getEventTop(e)};${e.event.originalEvent.style}`"
     class="cv-event"
     @click.stop="onClickEvent(e)"
-    v-html="getEventTitle(e)"/>
+    v-html="getEventTitle(e)">
+  </div>
 </template>
 <script>
 export default {
-  components: {},
   props: [
     'e'
   ],
   data () {
     return {}
   },
-  computed: {},
-  mounted () {
-    console.log('Rendering event with info:', this.e)
-  },
   methods: {
     onClickEvent (e) {
-      return `clicked ${e.event.title}`
+      return `${e.event.title}`
     },
     getEventTitle (e) {
       return `${e.event.title}`
+    },
+    getEventTop (e) {
+      return `${e.top}`
+    },
+    getClasses (e) {
+      const classesWithoutSpan = e.event.classes.filter(c => !c.startsWith('span'))
+      return classesWithoutSpan
     }
   }
 }

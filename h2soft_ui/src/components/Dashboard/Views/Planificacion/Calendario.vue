@@ -19,10 +19,6 @@
           @show-date-change="setShowDate"
         >
         <Event slot="event" slot-scope="props" :e="props" />
-          <!--<span slot="event" slot-scope="props"-->
-                <!--:class="props.event.classes"-->
-                <!--:key="props.event.id"-->
-                <!--v-html="props.event.title"/>-->
         </calendar-view>
       </div>
       <div class="text-center">
@@ -58,56 +54,56 @@ export default {
       showEventTimes: false,
       useDefaultTheme: true,
       events: [
-        {
-          id: 'e0',
-          startDate: '2018-01-05'
-        },
-        {
-          id: 'e1',
-          startDate: this.thisMonth(15, 18, 30)
-        },
-        {
-          id: 'e2',
-          startDate: this.thisMonth(15),
-          title: 'Single-day event with a long title'
-        },
-        {
-          id: 'e3',
-          startDate: this.thisMonth(7, 9, 25),
-          endDate: this.thisMonth(10, 16, 30),
-          title: 'Multi-day event with a long title and times'
-        },
-        {
-          id: 'e4',
-          startDate: this.thisMonth(20),
-          title: 'My Birthday!',
-          classes: 'birthday',
-          url: 'https://en.wikipedia.org/wiki/Birthday'
-        },
-        {
-          id: 'e5',
-          startDate: this.thisMonth(5),
-          endDate: this.thisMonth(12),
-          title: 'Multi-day event',
-          classes: 'purple'
-        },
-        {
-          id: 'foo',
-          startDate: this.thisMonth(29),
-          title: 'Same day 1'
-        },
-        {
-          id: 'e6',
-          startDate: this.thisMonth(29),
-          title: 'Same day 2',
-          classes: 'orange'
-        },
-        {
-          id: 'gura',
-          startDate: this.thisMonth(17),
-          title: 'Recorrido 74',
-          classes: 'tomato'
-        }
+//        {
+//          id: 'e0',
+//          startDate: '2018-01-05'
+//        },
+//        {
+//          id: 'e1',
+//          startDate: this.thisMonth(15, 18, 30)
+//        },
+//        {
+//          id: 'e2',
+//          startDate: this.thisMonth(15),
+//          title: 'Single-day event with a long title'
+//        },
+//        {
+//          id: 'e3',
+//          startDate: this.thisMonth(7, 9, 25),
+//          endDate: this.thisMonth(10, 16, 30),
+//          title: 'Multi-day event with a long title and times'
+//        },
+//        {
+//          id: 'e4',
+//          startDate: this.thisMonth(20),
+//          title: 'My Birthday!',
+//          classes: 'birthday',
+//          url: 'https://en.wikipedia.org/wiki/Birthday'
+//        },
+//        {
+//          id: 'e5',
+//          startDate: this.thisMonth(5),
+//          endDate: this.thisMonth(12),
+//          title: 'Multi-day event',
+//          classes: 'purple'
+//        },
+//        {
+//          id: 'foo',
+//          startDate: this.thisMonth(29),
+//          title: 'Same day 1'
+//        },
+//        {
+//          id: 'e6',
+//          startDate: this.thisMonth(29),
+//          title: 'Same day 2',
+//          classes: 'orange'
+//        },
+//        {
+//          id: 'gura',
+//          startDate: this.thisMonth(17),
+//          title: 'Recorrido 74',
+//          classes: 'tomato'
+//        }
       ]
     }
   },
@@ -125,21 +121,23 @@ export default {
     }
   },
   watch: {
-    message: function () {
-      console.log(this.message)
-    }
+//    message: function () {
+//      console.log(this.message)
+//    }
   },
   mounted () {
     this.cargarEventos()
   },
   methods: {
-    cargarEventos () {
+    cargarEventos (mes) {
       this.events = []
-      api.getVisitasObjetivosPorMes(this, new Date().getMonth())
+      mes = mes ? new Date(mes).getMonth() : new Date().getMonth()
+      api.getVisitasObjetivosPorMes(this, mes)
         .then(r => {
           const eventos = r.map(visita => ({
             startDate: new Date(visita.fechaAsignacion),
-            title: `Objetivo ${visita.idObjetivo}`
+            title: visita.nombre
+//            style: `color: rgb(${visita.idObjetivo},${visita.idObjetivo},${visita.idObjetivo})`
           }))
           this.events = eventos
         })
@@ -157,6 +155,7 @@ export default {
     setShowDate (d) {
       this.message = `Changing calendar view to ${d.toLocaleDateString()}`
       this.showDate = d
+      this.cargarEventos(d)
     },
     volver () {
       this.$parent.show = 'list'
@@ -174,7 +173,7 @@ export default {
   overflow-y: hidden;
   max-height: 70vh;
   height: 400px;
-  background-color: white;
+  margin-bottom: 10px;
 }
 /* For long calendars, ensure each week gets sufficient height. The body of the calendar will scroll if needed */
 .cv-wrapper.period-month.periodCount-2 .cv-week,
