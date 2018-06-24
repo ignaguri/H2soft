@@ -1,26 +1,28 @@
 <template>
   <div>
     <div class="row">
-      <recorridos-list v-if="isRecorridoList" @emitted="capturarEvento" :idRecorrido="idRecorrido"></recorridos-list>
-      <new-recorrido-form v-if="!isRecorridoList" :edit="edit" :idRecorrido="idRecorrido"></new-recorrido-form>
+      <recorridos-list v-if="show === 'list'" @emitted="capturarEvento" :idRecorrido="idRecorrido"></recorridos-list>
+      <new-recorrido-form v-if="show === 'form'" :edit="edit" :idRecorrido="idRecorrido"></new-recorrido-form>
+      <calendario v-if="show === 'calendar'"></calendario>
     </div>
     <div class="row">
     </div>
   </div>
 </template>
 <script>
-  // TODO: poner los botones en cada componente
   import RecorridosList from './Planificacion/RecorridosList.vue'
   import NewRecorridoForm from './Planificacion/NewRecorridoForm.vue'
+  import Calendario from './Planificacion/Calendario.vue'
 
   export default {
     components: {
       RecorridosList,
-      NewRecorridoForm
+      NewRecorridoForm,
+      Calendario
     },
     data () {
       return {
-        isRecorridoList: true,
+        show: 'list', // list, form, calendar
         edit: false,
         idRecorrido: 0
       }
@@ -28,17 +30,17 @@
     methods: {
       addClient () {
         this.edit = false
-        this.isRecorridoList = false
+        this.show = 'form'
       },
       seeList () {
-        this.isRecorridoList = true
+        this.show = 'list'
       },
       capturarEvento (e) {
         switch (e.action) {
           case 'edit':
             this.edit = true
             this.idRecorrido = parseInt(e.client)
-            this.isRecorridoList = false
+            this.show = 'form'
             break
           case 'ver':
             console.log('ver cliente: ', e.client)
