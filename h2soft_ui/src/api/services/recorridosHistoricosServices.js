@@ -41,7 +41,6 @@ export default {
   getRecorridosIniciadosXEmpleado (context) {
     const idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
     const authHeader = {headers: auth.getAuthHeader()}
-    const hoy = new Date()
     let inicioSemana = new Date()
     inicioSemana.setDate(inicioSemana.getDate() - 7)
     return context.$http.get(API_URL + 'recorrido-historico/?idEstado=2&idEmpleadoAsignado=' + idEmpleado + '&fechaAsignacion[$gte]=' + inicioSemana.toISOString(), authHeader)
