@@ -280,7 +280,7 @@ export default {
       })
   },
   deleteObjetivoFromRecorrido (context, objetivo, recorrido) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     // TODO: agregar el nombre del cliente como parametro por si 2 objetivos se llaman igual
     return context.$http
       .get(API_URL + 'objetivos-x-cliente' + '/?nombre=' + objetivo, authHeader)
@@ -289,13 +289,37 @@ export default {
         if (idObjetivo !== undefined) {
           return context.$http.delete(
             API_URL +
-              'detalle-recorrido' +
-              '/?idObjetivo=' +
-              idObjetivo +
-              '&idRecorrido=' +
-              recorrido,
+            'detalle-recorrido' +
+            '/?idObjetivo=' +
+            idObjetivo +
+            '&idRecorrido=' +
+            recorrido,
             authHeader
           )
+            .then(o => {
+              const hoy = new Date()
+              hoy.setDate(hoy.getDate() - 1)
+              return context.$http.get(API_URL + 'recorrido-historico/?fechaAsignacion[$gte]=' + hoy.toISOString() + '&idEstado=1', authHeader)
+                .then(hist => {
+                  hist = hist.body.data
+                  hist.forEach(historicos => {
+                    let idHistorico = historicos.idRecorridosHistoricos
+                    return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRecorridoHistorico=' + idHistorico, authHeader)
+                      .then(detallesHistorico => {
+                        detallesHistorico = detallesHistorico.body.data
+                        detallesHistorico.forEach(detalleHistorico => {
+                          if (detalleHistorico.idObjetivo === idObjetivo) {
+                            return context.$http.delete(API_URL + 'detalle-recorrido-historico' + '/?idDetalleRecorridoHistorico=' + detalleHistorico.idDetalleRecorridoHistorico, authHeader)
+                              .then(r => {
+                                console.log('BORRADO DETALLE' + detalleHistorico.idDetalleRecorridoHistorico)
+                              })
+                              .catch('ERROR AL BORRAR DETALLE:' + detalleHistorico.idDetalleRecorridoHistorico)
+                          }
+                        })
+                      })
+                  })
+                })
+            })
         } else {
           console.log('No se encontró el id del objetivo buscado')
           return false
