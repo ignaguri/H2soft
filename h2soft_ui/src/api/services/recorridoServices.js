@@ -91,7 +91,13 @@ export default {
         })
         .then(detalleInsertado => {
           // console.log('updatié el detalle de recorrido', detalleInsertado)
-          return detalle.idRecorrido
+          return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' +
+            recorrido.idRecorridos + '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+        })
+        .then(recorridosAsignados => {
+          // console.log('hay recorridos asignados de este recorrido?', recorridosAsignados.body.data)
+          const hayRecorridosAsignados = Boolean(recorridosAsignados.body.data.length)
+          return [detalle.idRecorrido, hayRecorridosAsignados]
         })
         .catch(error => {
           console.log('error updating recorrido', error)
