@@ -203,12 +203,13 @@
             if (resp) {
               this.planificando = true
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
+              if (resp[1]) noti.infoConTexto(this, 'Info', 'El recorrido tiene asignaciones futuras. Para que este objetivo se incluya deberá reasignarlo')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
               if (this.idRecorrido === null) {
-                this.idRecorrido = resp
+                this.idRecorrido = resp[0]
               } else {
-                this.cambiarRecorrido(resp)
+                this.cambiarRecorrido(resp[0])
               }
               if (this.idRecorrido) {
                 this.idClientes = null
