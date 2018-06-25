@@ -97,6 +97,7 @@
     },
     watch: {
       idClientes: function () {
+        this.table1.data = []
         this.cargarRemitos()
       }
     },
