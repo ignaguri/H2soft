@@ -69,7 +69,7 @@ const routes = [
       },
       {
         path: 'bidonesdispensers',
-        name: 'Bidones y Dispensers',
+        name: 'Dispensers y Productos',
         component: BidonesDispensers,
         meta: {requiresAuth: true}
       },
