@@ -68,7 +68,9 @@
           <div class="col-md-4 left">
             <h5>Dispensers retirados</h5>
             <div class="btn-group btn-group-justified">
-              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo" options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersDelObjetivo_placeholder" options-label="codigo" :multiple="true" name=""  :search="true" :justified="true"></sele>
+              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo" 
+              options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersDelObjetivo_placeholder"
+               options-label="codigo" :multiple="true" name="" :search="true" :justified="true"></sele>
             </div>
           </div>
         </div>
@@ -76,7 +78,9 @@
           <div class="col-md-4 left">
             <h5>Dispensers a mantenimiento</h5>
             <div class="btn-group btn-group-justified">
-              <sele :options="dispensersAMantenimiento" options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersAMantenimiento_placeholder" options-label="codigo" :multiple="true" name=""  :search="true" :justified="true"></sele>
+              <sele v-model="dispensersAMantenimientoSeleccionados" :options="dispensersAMantenimiento" options-value="idDispensers" search-text="Buscar" 
+              :placeholder="this.dispensersAMantenimiento_placeholder" options-label="codigo" 
+              :multiple="true" name="" :search="true" :justified="true"></sele>
             </div>
           </div>
         </div>
@@ -188,15 +192,14 @@
   import PaperTable from 'components/UIComponents/PaperTablePlusRemito.vue'
   import firma from '../Firma.vue'
   import noti from 'src/api/notificationsService'
-  import sele from 'vue-strap/src/Select.vue'
-  import { modal } from 'vue-strap'
+  import { modal, select } from 'vue-strap'
   import check from 'vue-strap/src/Checkbox.vue'
   const tableColumns = ['Nro', 'Producto', 'Cantidad dejada', 'Cantidad retirada']
   const dataColumns = []
   export default {
     components: {
       PaperTable,
-      sele,
+      sele: select,
       firma,
       check,
       modal
@@ -217,6 +220,7 @@
         dispensersSinObjetivo: [],
         dispensersDelObjetivo: [],
         dispensersAMantenimiento: [],
+        dispensersAMantenimientoSeleccionados: [],
         dispensersSinObjetivo_placeholder: 'Seleccione',
         dispensersDelObjetivo_placeholder: 'Seleccione',
         dispensersAMantenimiento_placeholder: 'Ninguno',
@@ -377,7 +381,6 @@
               apiDispensers.setObjetivoADispenser(this, disC, this.idObjetivo)
             })
             // Guardo los dispensers retirados del cliente
-            const idDispensersAMantenimiento = this.dispensersAMantenimiento.map(x => x.idDispensers)
             this.dispensersRetirados.forEach(disR => {
               let detalleRemitoDispensersLlevado = {
                 'idRemito': rem.idRemito,
@@ -391,7 +394,7 @@
                 'idEstadoDispenser': null // estado limpio y en fabrica
               }
               // Guardo los mantenimientos de dispensers
-              if (idDispensersAMantenimiento.includes(disR)) {
+              if (this.dispensersAMantenimientoSeleccionados.includes(disR)) {
                 dispenser.idEstadoDispenser = 4 // a mantenimiento
                 detalleRemitoDispensersLlevado.requiereMantenimiento = true
                 apiDispensers.editDispenser(this, dispenser)
