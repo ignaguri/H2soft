@@ -26,7 +26,11 @@
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
           <h4 class="title" slot="title">Ventas de productos</h4>
+<<<<<<< HEAD
           <span slot="subTitle"> Ventas realizadas en los últimos 12 meses</span>
+=======
+          <span slot="subTitle"> Ventas realizadas por mes en los últimos 12 meses</span>
+>>>>>>> dd8949060d2ec5b0e749de2c7471f360f9f3f1cd
           <span slot="footer">
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
@@ -128,7 +132,11 @@
         ],
         usersChart: {
           data: {
+<<<<<<< HEAD
             labels: [],
+=======
+            labels: ['Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+>>>>>>> dd8949060d2ec5b0e749de2c7471f360f9f3f1cd
             series: []
           },
           options: {
@@ -225,6 +233,7 @@
       cantBidonesPorMes () {
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
+<<<<<<< HEAD
             let consumoOrdenadoP1 = []
             let consumoOrdenadoP2 = []
             let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
@@ -254,6 +263,22 @@
             this.usersChart.data.labels = (cantMeses)
             this.usersChart.data.series.push(consumoOrdenadoP1)
             this.usersChart.data.series.push(consumoOrdenadoP2)
+=======
+            let consumo = []
+            consumo.push(resp[7])
+            consumo.push(resp[8])
+            consumo.push(resp[9])
+            consumo.push(resp[10])
+            consumo.push(resp[11])
+            consumo.push(resp[12])
+            consumo.push(resp[1])
+            consumo.push(resp[2])
+            consumo.push(resp[3])
+            consumo.push(resp[4])
+            consumo.push(resp[5])
+            consumo.push(resp[6])
+            this.usersChart.data.series.push(consumo)
+>>>>>>> dd8949060d2ec5b0e749de2c7471f360f9f3f1cd
             this.modif = !this.modif
           })
           .catch(err => {
