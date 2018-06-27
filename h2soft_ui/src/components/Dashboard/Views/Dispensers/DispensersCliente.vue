@@ -45,8 +45,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <!--<paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="false" :goButton="false"  >-->
-          <!--</paper-table>-->
+          <!--npm run<!--</paper-table>-->
         </div>
       </div>
     </div>

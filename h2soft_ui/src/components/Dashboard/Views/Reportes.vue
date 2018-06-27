@@ -26,7 +26,7 @@
       <div class="col-md-6 col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
           <h4 class="title" slot="title">Ventas de productos</h4>
-          <span slot="subTitle"> Ventas realizadas por mes en el último año</span>
+          <span slot="subTitle"> Ventas realizadas en los últimos 12 meses</span>
           <span slot="footer">
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
@@ -168,7 +168,7 @@
         },
         activityChart: {
           data: {
-            labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'],
+            labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
             series: []
           },
           options: {
