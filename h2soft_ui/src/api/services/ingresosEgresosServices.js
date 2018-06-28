@@ -55,5 +55,26 @@ export default {
     }
     return context.$http.get(API_URL + 'gastos/?idEmpleado=' + user.idEmpleado + '&$select[]=monto&$select[]=idEmpleado&$select[]=idMedioDePagoCobro&$select[]=fecha&$select[]=descripcion&$select[]=idGastos', authHeader)
       .then(res => { return res })
+  },
+  getTotalPorTipoDePagoCobro (context) {
+    const authHeader = {headers: auth.getAuthHeader()}
+    let totales = {}
+    totales.efectivo = 0
+    totales.cheque = 0
+    totales.transferencia = 0
+    return context.$http.get(API_URL + 'gastos/?&$select[]=monto&$select[]=idEmpleado&$select[]=idMedioDePagoCobro&$select[]=fecha&$select[]=descripcion&$select[]=idGastos', authHeader)
+      .then(res => {
+        res.body.data.forEach(ct => {
+          console.log('IE:' + JSON.stringify(res))
+          if (ct.idMedioDePagoCobro === 1) {
+            totales.efectivo += ct.monto
+          } else if (ct.idMedioDePagoCobro === 2) {
+            totales.cheque += ct.monto
+          } else if (ct.idMedioDePagoCobro === 3) {
+            totales.transferencia += ct.monto
+          }
+        })
+        return totales
+      })
   }
 }
