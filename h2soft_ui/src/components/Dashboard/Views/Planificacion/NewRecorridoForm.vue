@@ -116,8 +116,8 @@
           <div class="text-right">
             Ver objetivos
             <button-group v-model="radioValue" type="info">
-              <radio selected-value="planificados">Planificados</radio>
               <radio selected-value="sin_planificar">Sin planificar</radio>
+              <radio selected-value="planificados">Planificados</radio>
             </button-group>
           </div>
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
@@ -146,7 +146,7 @@
     },
     data () {
       return {
-        radioValue: 'planificados',
+        radioValue: 'sin_planificar',
         dias: [],
         idDia: null,
         turnos: [],
@@ -168,7 +168,7 @@
         table2: {
           title: 'Recorrido',
           subTitle: 'Estás planificando este recorrido',
-          columns: ['Orden', 'Objetivo', 'Cliente', 'Direccion', 'Localidad'],
+          columns: ['Objetivo', 'Cliente', 'Direccion', 'Localidad'],
           data: []
         }
       }
@@ -327,13 +327,16 @@
         this.table2.title = 'Recorrido n° ' + idRecorrido
         api.getDetalleRecorridosFull(this, idRecorrido)
           .then(r => {
-            r.sort((a, b) => a.orden - b.orden)
+            r.sort((a, b) => {
+              if (a.objetivo.toLowerCase() > b.objetivo.toLowerCase()) return 1
+              if (a.objetivo.toLowerCase() < b.objetivo.toLowerCase()) return -1
+              return 0
+            })
             r.forEach(recs => {
               this.table2.data.push({
                 id: recs.detalleRecorrido,
                 recorrido: recs.recorrido,
                 objetivo: recs.objetivo,
-                orden: recs.orden,
                 direccion: recs.direccion,
                 localidad: recs.localidad,
                 cliente: recs.cliente
