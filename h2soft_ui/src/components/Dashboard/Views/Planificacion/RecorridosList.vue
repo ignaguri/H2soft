@@ -290,7 +290,7 @@
               return
             }
             if (r && !r.restrictivo) {
-              if (!confirm(`${r.message} ¿Desea continuar de todas formas?`)) return
+              if (!confirm(`${r.message} ${r.data.toString()} ¿Desea continuar de todas formas?`)) return
               api.postAsignacion(this, asignacion, true)
                 .then(r => {
                   noti.exitoConTexto(this, 'Éxito', 'Recorrido asignado con éxito!')
@@ -304,7 +304,7 @@
                   this.limpiarCampos()
                 })
             } else {
-              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message ? r.message : ''}`)
+              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message ? r.message + ' ' + r.data.toString() : ''}`)
               this.seeList()
               this.limpiarCampos()
             }

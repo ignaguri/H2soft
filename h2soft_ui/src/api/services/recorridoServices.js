@@ -4,29 +4,29 @@ const API_URL = process.env.API_URL
 // LISTA DE TODOS LAS LLAMADAS AL SERVIDOR
 export default {
   test () {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     console.log('api de recorridos', API_URL, authHeader)
   },
   getTemporadas (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'temporada', authHeader).then(res => {
       return res.body.data
     })
   },
   getDias (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'dias', authHeader).then(res => {
       return res.body.data
     })
   },
   getTurnos (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'turnos', authHeader).then(res => {
       return res.body.data
     })
   },
   getFrecuencias (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'frecuencia-recorridos', authHeader)
       .then(res => {
@@ -34,7 +34,7 @@ export default {
       })
   },
   getClientes (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'clientes' + '/?activo=' + 1, authHeader)
       .then(res => {
@@ -42,7 +42,7 @@ export default {
       })
   },
   getObjetivos (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(
         API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1,
@@ -53,7 +53,7 @@ export default {
       })
   },
   postRecorrido (context, recorrido, detalle) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     if (recorrido.idRecorridos === null) {
       delete recorrido.idRecorridos
       recorrido.activo = true
@@ -80,7 +80,7 @@ export default {
     } else {
       // console.log('agregando un objetivo al recorrido', recorrido)
       return context.$http.get(API_URL + 'detalle-recorrido' + '?idRecorrido=' + recorrido.idRecorridos +
-                              '&idObjetivo=' + detalle.idObjetivo, authHeader)
+        '&idObjetivo=' + detalle.idObjetivo, authHeader)
         .then(detalleExistente => {
           // console.log('ya existe ese objetivo en el recorrido?', detalleExistente.body.data)
           if (detalleExistente.body.data.length) {
@@ -106,13 +106,13 @@ export default {
     }
   },
   getRecorridos (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'recorridos', authHeader).then(r => {
       return r.body.data
     })
   },
   getRecorrido (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'recorridos/' + id, authHeader)
       .then(r => {
@@ -120,7 +120,7 @@ export default {
       })
   },
   getRecorridosFull (context, soloActivos = true) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     // TODO: guardar dia, freq, turno y temp en una variable y comparar con eso
     let info = {}
     let total = []
@@ -151,7 +151,7 @@ export default {
       })
   },
   populateCamposRecorrido (context, info) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let res = {}
     res.recorrido = info.recorrido
     return context.$http
@@ -188,7 +188,7 @@ export default {
       })
   },
   getDetalleRecorrido (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'detalle-recorrido' + '/?idRecorrido=' + id, authHeader)
       .then(r => {
@@ -196,7 +196,7 @@ export default {
       })
   },
   getDetalleRecorridosFull (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let info = {}
     let total = []
     let promesas = []
@@ -222,7 +222,7 @@ export default {
       })
   },
   populateCamposDetalleRecorrido (context, info) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let res = {}
     res.detalleRecorrido = info.detalleRecorrido
     res.recorrido = info.recorrido
@@ -248,7 +248,7 @@ export default {
       })
   },
   getObjetivosSinPlanificar (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     let objetivos = {}
     let planificados = {}
     let filtrados = {}
@@ -340,17 +340,17 @@ export default {
       })
   },
   deleteRecorrido (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .delete(API_URL + 'detalle-recorrido' + '?idRecorrido=' + id, authHeader)
       .then(() => {
         return context.$http.get(
           API_URL +
-            'recorrido-historico' +
-            '?idRecorrido=' +
-            id +
-            '&fechaAsignacion[$gte]=' +
-            new Date().toISOString(),
+          'recorrido-historico' +
+          '?idRecorrido=' +
+          id +
+          '&fechaAsignacion[$gte]=' +
+          new Date().toISOString(),
           authHeader
         )
       })
@@ -362,9 +362,9 @@ export default {
             context.$http
               .delete(
                 API_URL +
-                  'detalle-recorrido-historico' +
-                  '?idRecorridoHistorico=' +
-                  r.idRecorridosHistoricos,
+                'detalle-recorrido-historico' +
+                '?idRecorridoHistorico=' +
+                r.idRecorridosHistoricos,
                 authHeader
               )
               .then(() => {
@@ -383,7 +383,7 @@ export default {
       .then(historicosBorrados => {
         return context.$http.patch(
           API_URL + 'recorridos/' + id,
-          { activo: 0 },
+          {activo: 0},
           authHeader
         )
       })
@@ -396,13 +396,13 @@ export default {
       })
   },
   getEmpleados (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'empleados', authHeader).then(res => {
       return res.body.data
     })
   },
   getRepartidores (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'users', authHeader)
       .then(users => {
@@ -444,11 +444,11 @@ export default {
     }
   },
   postAsignacionEfectiva (context, asignacion) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .post(API_URL + 'recorrido-historico/asignar', asignacion, authHeader)
       .then(asignado => {
-        return { asignado: true }
+        return {asignado: true}
       })
       .catch(error => {
         console.log('error asignando el recorrido', error)
@@ -456,7 +456,7 @@ export default {
       })
   },
   calcularDiasAsignacion (context, asignacion) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     const desde = asignacion.fechaDesde.split('/')
     const fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
     fechaDesde.setHours(0, 0, 0, 0)
@@ -536,7 +536,22 @@ export default {
       .then(objetivosYaAsignados => {
         // console.log('los objetivos ya estan asignados?', objetivosYaAsignados)
         if (objetivosYaAsignados) {
-          const error = {restrictivo: true, message: 'Ya existen recorridos asignados que visitan alguno de los objetivos para ese rango de fechas.', data: objetivosYaAsignados}
+          const error = {
+            restrictivo: true,
+            message: 'Ya existen recorridos asignados que visitan alguno de los objetivos para ese rango de fechas. Objetivos:',
+            data: objetivosYaAsignados.map(o => o.idObjetivo)
+          }
+          throw error
+        }
+        return this.checkVigenciaContratos(context, recorrido, diasAsignacion)
+      })
+      .then(vigenciaContratos => {
+        if (!vigenciaContratos[0]) {
+          const error = {
+            restrictivo: true,
+            message: vigenciaContratos[1],
+            data: vigenciaContratos[2]
+          }
           throw error
         }
         return this.getRecorridosCoincidentes(context, {
@@ -554,7 +569,11 @@ export default {
       .then(repartidorOcupado => {
         // console.log('el repartidor esta ocupado', repartidorOcupado)
         if (repartidorOcupado) {
-          const error = {restrictivo: false, message: 'El repartidor ya tiene recorridos asignados para ese rango de fechas.', data: repartidorOcupado}
+          const error = {
+            restrictivo: false,
+            message: 'El repartidor ya tiene recorridos asignados para ese rango de fechas. Recorridos:',
+            data: [...repartidorOcupado]
+          }
           throw error
         }
         return this.checkCantidadCamiones(context, recorridosAsignadosDelRango)
@@ -562,7 +581,11 @@ export default {
       .then(cantCamiones => {
         // console.log('hay más recorridos que camiones?', cantCamiones)
         if (cantCamiones) {
-          const error = {restrictivo: false, message: 'Los recorridos a asignar para ese día y turno exceden la cantidad de camiones disponibles.', data: cantCamiones}
+          const error = {
+            restrictivo: false,
+            message: 'Los recorridos a asignar para ese día y turno exceden la cantidad de camiones disponibles. Recorridos:',
+            data: cantCamiones.map(c => c.idRecorrido)
+          }
           throw error
         }
         return {noConflict: true}
@@ -573,19 +596,16 @@ export default {
       })
   },
   checkCantidadCamiones (context, recorridos) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'camiones', authHeader)
-    .then(camiones => {
-      const recorridosPorFecha = groupBy(recorridos, 'fechaAsignacion')
-      const recorridosConflictivos = Object.values(recorridosPorFecha).filter(recorridos => {
-        // console.log('Hay', recorridos.length, 'recorridos para esta fecha y', camiones.body.data.length, 'camiones')
-        return recorridos.length > camiones.body.data.length
+      .then(camiones => {
+        const recorridosPorFecha = groupBy(recorridos, 'fechaAsignacion')
+        const recorridosConflictivos = Object.values(recorridosPorFecha).filter(recorridos => recorridos.length >= camiones.body.data.length)
+        return recorridosConflictivos.length ? flatten(recorridosConflictivos) : false
       })
-      return recorridosConflictivos.length ? recorridosConflictivos : false
-    })
-    .catch(err => {
-      throw err
-    })
+      .catch(err => {
+        throw err
+      })
   },
   checkDisponibilidadRepartidor (empleado, recorridos) {
     if (recorridos.length) {
@@ -593,7 +613,7 @@ export default {
         rec => rec.idEmpleadoAsignado === empleado
       )
       if (recorridosDeEseEmpleado.length) {
-        const recorridosEnConflicto = recorridosDeEseEmpleado.map(recorrido => ({ idRecorridosHistoricos: recorrido.idRecorridosHistoricos }))
+        const recorridosEnConflicto = new Set(recorridosDeEseEmpleado.map(recorrido => recorrido.idRecorrido))
         return Promise.resolve(recorridosEnConflicto)
       } else {
         return Promise.resolve(false)
@@ -602,21 +622,21 @@ export default {
     return Promise.resolve(false)
   },
   checkAsignacionObjetivos (context, idRecorrido, recorridos) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     // console.log('recorridos coincidentes', recorridos)
     // console.log('recorrido a (re)asignar', idRecorrido)
     const recorridosFiltered = recorridos.filter(rec => rec.idRecorrido !== idRecorrido)
     // console.log('recorridos coincidente en fechas sin incluir los del recorrido a asignar', recorridosFiltered)
     const getObjetivosPlanificados = recorridosFiltered.map(rec => context.$http.get(API_URL + 'detalle-recorrido-historico/' + '?idRecorridoHistorico=' +
-                                    rec.idRecorridosHistoricos, authHeader) // estos son los que se reasignarian
-                                    .then(response => response.body.data))
+      rec.idRecorridosHistoricos, authHeader) // estos son los que se reasignarian
+      .then(response => response.body.data))
     const getObjetivosAPlanificar = context.$http.get(API_URL + 'detalle-recorrido/' + '?idRecorrido=' + idRecorrido, authHeader).then(response => response.body.data)
     return Promise.all([Promise.all(getObjetivosPlanificados), getObjetivosAPlanificar])
       .then(([objetivosPlanificados, objetivosAPlanificar]) => {
         objetivosPlanificados = flatten(objetivosPlanificados)
         const colisiones = objetivosAPlanificar.filter(aPlanificar => objetivosPlanificados.some(planificado => planificado.idObjetivo === aPlanificar.idObjetivo))
         if (colisiones.length) {
-          const objetivosEnConflicto = colisiones.map(objetivo => ({ idObjetivo: objetivo.idObjetivo }))
+          const objetivosEnConflicto = colisiones.map(objetivo => ({idObjetivo: objetivo.idObjetivo}))
           return objetivosEnConflicto
         } else {
           return false
@@ -627,8 +647,59 @@ export default {
         throw err
       })
   },
-  getRecorridosCoincidentes (context, { recorrido, fechaDesde, fechaHasta, diasAsignacion }) {
-    const authHeader = { headers: auth.getAuthHeader() }
+  checkVigenciaContratos (context, idRecorrido, diasAsignacion) {
+    const authHeader = {headers: auth.getAuthHeader()}
+    let clientes
+    return context.$http.get(API_URL + 'detalle-recorrido/' + '?idRecorrido=' + idRecorrido + '&$select[]=idObjetivo', authHeader)
+      .then(objetivos => {
+        objetivos = objetivos.body.data
+        const promesas = objetivos.map(o => context.$http.get(API_URL + 'objetivos-x-cliente/' + o.idObjetivo + '?$select[]=idCliente', authHeader)
+          .then(res => res.body))
+        return Promise.all(promesas)
+      })
+      .then(clientesBD => {
+        clientes = clientesBD.reduce((acc, cur) => {
+          if (!acc.find(c => c.idCliente === cur.idCliente)) {
+            acc.push(cur)
+          }
+          return acc
+        }, [])
+        const promesas = clientes.map(c => context.$http.get(API_URL + 'contratos/' + '?idCliente=' + c.idCliente, authHeader)
+          .then(res => res.body.data))
+        return Promise.all(promesas)
+      })
+      .then(contratos => {
+        const clientesSinContrato = contratos.reduce((acc, cur, i) => {
+          if (!cur.length) acc.push(clientes[i].idCliente)
+          return acc
+        }, [])
+        if (clientesSinContrato.length) {
+          return [false, 'Cliente/s sin contrato firmado:', clientesSinContrato]
+        }
+        const contratosLimpios = contratos.reduce((acc, cur) => {
+          if (cur.length) acc.push(cur)
+          return acc
+        }, [])
+        const contratosFueraDeVigencia = contratosLimpios.filter(contratosPorCliente => {
+          const fueraDeVigencia = contratosPorCliente.filter(c => diasAsignacion.some(fecha => fecha > c.fechaVigenciaHasta))
+          return fueraDeVigencia.length === contratosPorCliente.length
+        })
+        if (contratosFueraDeVigencia.length) {
+          const clientesFallutos = flatten(contratosFueraDeVigencia).map(c => c.idCliente)
+          return [false, 'Hay contratos no vigentes para ese rango de fechas, cliente/s:', clientesFallutos]
+        }
+        return [true]
+      })
+      .then(resultado => {
+        return resultado
+      })
+      .catch(err => {
+        // console.error(err)
+        throw err
+      })
+  },
+  getRecorridosCoincidentes (context, {recorrido, fechaDesde, fechaHasta, diasAsignacion}) {
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'recorridos/' + recorrido, authHeader)
       .then(recorrido => {
         const desde = fechaDesde.split('/')
@@ -661,8 +732,8 @@ export default {
         return false
       })
   },
-  getRecorridosCoincidentesSinTurno (context, { recorrido, fechaDesde, fechaHasta, diasAsignacion }) {
-    const authHeader = { headers: auth.getAuthHeader() }
+  getRecorridosCoincidentesSinTurno (context, {recorrido, fechaDesde, fechaHasta, diasAsignacion}) {
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'recorridos/' + recorrido, authHeader)
       .then(recorrido => {
         const desde = fechaDesde.split('/')
@@ -696,20 +767,20 @@ export default {
       })
   },
   checkIfAsignado (context, id) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     const hoy = new Date()
     const enUnMes = new Date(hoy)
     enUnMes.setDate(hoy.getDate() + 30)
     return context.$http
       .get(
         API_URL +
-          'recorrido-historico/' +
-          '?idRecorrido=' +
-          id +
-          '&fechaAsignacion[$gte]=' +
-          hoy.toISOString() +
-          '&fechaAsignacion[$lt]=' +
-          enUnMes.toISOString(),
+        'recorrido-historico/' +
+        '?idRecorrido=' +
+        id +
+        '&fechaAsignacion[$gte]=' +
+        hoy.toISOString() +
+        '&fechaAsignacion[$lt]=' +
+        enUnMes.toISOString(),
         authHeader
       )
       .then(r => {
@@ -719,14 +790,14 @@ export default {
         )
       })
       .then(emple => {
-        return { nombre: emple.body.nombre, apellido: emple.body.apellido }
+        return {nombre: emple.body.nombre, apellido: emple.body.apellido}
       })
       .catch(() => {
         return false
       })
   },
   getMotivosReasignacion (context) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
       .get(API_URL + 'motivos-de-reasignacion', authHeader)
       .then(res => {
@@ -734,7 +805,7 @@ export default {
       })
   },
   getVisitasObjetivosPorMes (context, mes, year) {
-    const authHeader = { headers: auth.getAuthHeader() }
+    const authHeader = {headers: auth.getAuthHeader()}
     const primeroDelMes = new Date(year || new Date().getFullYear(), mes, 1)
     const enUnMes = new Date(primeroDelMes)
     enUnMes.setDate(primeroDelMes.getDate() + 30)
@@ -745,17 +816,17 @@ export default {
       enUnMes.toISOString(), authHeader)
       .then(recorridos => {
         const promesas = recorridos.body.data.map(recorrido => context.$http.get(API_URL + 'detalle-recorrido-historico' +
-                                                '?idRecorridoHistorico=' + recorrido.idRecorridosHistoricos, authHeader)
-                                                .then(res => res.body.data.map(objetivo => Object.assign({},
-                                                  {
-                                                    idRecorrido: recorrido.idRecorrido,
-                                                    fechaAsignacion: recorrido.fechaAsignacion,
-                                                    idTurno: recorrido.idTurno,
-                                                    idEmpleado: recorrido.idEmpleadoAsignado,
-                                                    idObjetivo: objetivo.idObjetivo,
-                                                    entregado: objetivo.entregado
-                                                  }
-                                                  ))))
+          '?idRecorridoHistorico=' + recorrido.idRecorridosHistoricos, authHeader)
+          .then(res => res.body.data.map(objetivo => Object.assign({},
+            {
+              idRecorrido: recorrido.idRecorrido,
+              fechaAsignacion: recorrido.fechaAsignacion,
+              idTurno: recorrido.idTurno,
+              idEmpleado: recorrido.idEmpleadoAsignado,
+              idObjetivo: objetivo.idObjetivo,
+              entregado: objetivo.entregado
+            }
+          ))))
         return Promise.all(promesas)
       })
       .then(detalles => {
@@ -764,14 +835,14 @@ export default {
       })
       .then(detallesRaw => {
         const promesas = detallesRaw.map(d => context.$http.get(API_URL + 'objetivos-x-cliente/' +
-                                              d.idObjetivo, authHeader)
-          .then(res => Object.assign({}, d, { nombre: res.body.nombre })))
+          d.idObjetivo, authHeader)
+          .then(res => Object.assign({}, d, {nombre: res.body.nombre})))
         return Promise.all(promesas)
       })
       .then(detallesConNombre => {
         const promesas = detallesConNombre.map(d => context.$http.get(API_URL + 'empleados/' +
-                                                d.idEmpleado, authHeader)
-                                      .then(res => Object.assign({}, d, { empleado: `${res.body.apellido}, ${res.body.nombre}` })))
+          d.idEmpleado, authHeader)
+          .then(res => Object.assign({}, d, {empleado: `${res.body.apellido}, ${res.body.nombre}`})))
         return Promise.all(promesas)
       })
       .then(detallesConEmpleado => {
