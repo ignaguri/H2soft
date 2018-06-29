@@ -13,7 +13,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/productosServices'
 
-  const tableColumns = ['#', 'Nombre', 'Descripción']
+  const tableColumns = ['#', 'Nombre', 'Descripción', 'Tamaño']
   export default {
     components: {
       PaperTable
@@ -37,10 +37,12 @@
         api.getProductos(this)
         .then(res => {
           res.forEach(p => {
+            console.log('prod', p)
             this.table1.data.push({
               '#': p.idProductos,
               'nombre': p.nombre,
-              'descripcion': p.descripcion
+              'descripcion': p.descripcion,
+              'tamaño': p.tamanio + ' Litros'
             })
           })
         }, error => {
