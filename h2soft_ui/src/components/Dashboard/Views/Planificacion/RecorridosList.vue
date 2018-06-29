@@ -21,6 +21,10 @@
                      :columns="table2.columns" :editButton="false" :erase="borrarDetalle">
 
         </paper-table>
+        <paper-table type="hover" :title="asignacionesT.title" :sub-title="asignacionesT.subTitle" :data="asignacionesT.data"
+                     :columns="asignacionesT.columns" :editButton="false" :eraseButton="false" :filter="false">
+
+        </paper-table>
         <div class="text-center">
           <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
             Volver
@@ -88,6 +92,7 @@
 
   const table1Columns = ['#', 'Día', 'Turno', 'Frecuencia', 'Asignado a']
   const table2Columns = ['Orden', 'Objetivo', 'Cliente', 'Dirección', 'Localidad']
+  const asignacionesTColumns = ['Empleado', 'Fecha desde', 'Fecha hasta']
   export default {
     components: {
       PaperTable,
@@ -109,13 +114,19 @@
           columns: [...table2Columns],
           data: []
         },
+        asignacionesT: {
+          title: 'Próximas asignaciones para este recorrido',
+          subTitle: '',
+          columns: [...asignacionesTColumns],
+          data: []
+        },
         recorrido: this.idRecorrido,
         showCustomModal: false,
         idEmpleadoAsignado: null,
         empleados: [],
         asignado: false,
         fechaDesde: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-        fechaHasta: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        fechaHasta: '', // new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         recorridos: [],
         motivos: [],
         idMotivo: null,
@@ -196,11 +207,17 @@
                 })
               })
             })
-          api.checkIfAsignado(this, this.recorrido)
+          api.getAsignacionesFuturas(this, this.recorrido)
             .then(r => {
               if (r) {
-                this.asignado = r
-                this.table2.title = this.table2.title + ' asignado a ' + r.nombre + ' ' + r.apellido
+                this.asignado = r[0].empleado
+                this.table2.title = this.table2.title + ' asignado a ' + r[0].empleado.nombre + ' ' + r[0].empleado.apellido
+                r.forEach(a => this.asignacionesT.data.push({
+                  empleado: `${a.empleado.apellido}, ${a.empleado.nombre}`,
+                  fechadesde: new Date(a.first.fechaAsignacion).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+                  fechahasta: new Date(a.last.fechaAsignacion).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                }))
+                this.fechaDesde = new Date(r[r.length - 1].last.fechaAsignacion).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
               } else {
                 this.asignado = false
               }
@@ -261,7 +278,6 @@
         this.showCustomModal = true
       },
       ok () {
-        // return !confirm('Ok event.\nClose Modal?')
         if (this.idEmpleadoAsignado === null) {
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
@@ -270,11 +286,21 @@
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
         }
-        if (this.fechaDesde < new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })) {
+        if (!this.fechaDesde || !this.fechaHasta) {
+          noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
+          return true
+        }
+        const desde = this.fechaDesde.split('/')
+        const fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
+        fechaDesde.setHours(0, 0, 0, 0)
+        const hasta = this.fechaHasta.split('/')
+        const fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
+        fechaHasta.setHours(0, 0, 0, 0)
+        if (fechaDesde < new Date()) {
           noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser menor a hoy')
           return true
         }
-        if (this.fechaDesde >= this.fechaHasta) {
+        if (fechaDesde >= fechaHasta) {
           noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser mayor o igual a la fecha hasta')
           return true
         }
@@ -330,7 +356,7 @@
       limpiarCampos () {
         this.idEmpleadoAsignado = null
         this.fechaDesde = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
-        this.fechaHasta = new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        this.fechaHasta = '' // new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
         this.idMotivo = null
       }
     }

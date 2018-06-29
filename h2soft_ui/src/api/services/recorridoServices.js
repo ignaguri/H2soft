@@ -796,6 +796,26 @@ export default {
         return false
       })
   },
+  getAsignacionesFuturas (context, id) {
+    const authHeader = {headers: auth.getAuthHeader()}
+    return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' +
+        id + '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+      .then(recorridos => {
+        recorridos = recorridos.body.data
+        const agrupados = groupBy(recorridos, 'idEmpleadoAsignado')
+        let promesas = []
+        Object.keys(agrupados).forEach(k => {
+          let {0: first, length: l, [l - 1]: last} = agrupados[k]
+          promesas.push(context.$http.get(API_URL + 'empleados/' + k, authHeader)
+            .then(emple => Object.assign({}, { first }, { last }, { empleado: {nombre: emple.body.nombre, apellido: emple.body.apellido} })))
+        })
+        return Promise.all(promesas)
+      })
+      .then(recorridosFuturos => recorridosFuturos)
+      .catch(() => {
+        return false
+      })
+  },
   getMotivosReasignacion (context) {
     const authHeader = {headers: auth.getAuthHeader()}
     return context.$http
