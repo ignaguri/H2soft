@@ -115,7 +115,7 @@
         empleados: [],
         asignado: false,
         fechaDesde: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
-        fechaHasta: new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        fechaHasta: new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
         recorridos: [],
         motivos: [],
         idMotivo: null,
