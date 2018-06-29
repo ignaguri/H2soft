@@ -39,10 +39,10 @@
       },
       getTooltipContent (e) {
         const turno = e.event.originalEvent.classes === 'orange' ? 'Mañana' : 'Tarde'
-        const visitado = e.event.originalEvent.entregado ? 'Sí' : 'No'
+        const visitado = e.event.originalEvent.realizado ? 'Sí' : 'No'
         const recorrido = e.event.originalEvent.idRecorrido
         const empleado = e.event.originalEvent.empleado
-        return `Turno: ${turno} - Asignado a: ${empleado} - Visitado: ${visitado} - Recorrido: ${recorrido}`
+        return `Recorrido: ${recorrido} - Turno: ${turno} - Asignado a: ${empleado} - Visitado: ${visitado}`
       }
     }
   }

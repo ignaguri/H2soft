@@ -32,15 +32,15 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
-        path: 'reportes',
-        name: 'Reportes',
-        component: Reporte,
-        meta: {requiresAuth: true}
-      },
-      {
         path: 'notifications',
         name: 'Work-in-Progress',
         component: WorkInProgress,
+        meta: {requiresAuth: true}
+      },
+      {
+        path: 'reportes',
+        name: 'Reportes',
+        component: Reporte,
         meta: {requiresAuth: true}
       },
       {
@@ -69,7 +69,7 @@ const routes = [
       },
       {
         path: 'bidonesdispensers',
-        name: 'Bidones y Dispensers',
+        name: 'Dispensers y Productos',
         component: BidonesDispensers,
         meta: {requiresAuth: true}
       },

@@ -176,7 +176,7 @@ export default {
   overflow-x: hidden;
   overflow-y: hidden;
   max-height: 70vh;
-  height: 400px;
+  height: 600px;
   margin-bottom: 10px;
 }
 /* For long calendars, ensure each week gets sufficient height. The body of the calendar will scroll if needed */
