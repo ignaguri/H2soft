@@ -228,6 +228,7 @@
       },
       borrarDetalle (e) {
         let id = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
+        if (!confirm('¿Desea eliminar a este objetivo del recorrido? Se eliminarán también todas las asignaciones futuras que tenga')) return
         api.deleteObjetivoFromRecorrido(this, id, this.recorrido)
           .then(r => {
             if (r) {
@@ -267,6 +268,14 @@
         }
         if (this.asignado && !this.idMotivo) {
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
+          return true
+        }
+        if (this.fechaDesde < new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })) {
+          noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser menor a hoy')
+          return true
+        }
+        if (this.fechaDesde >= this.fechaHasta) {
+          noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser mayor o igual a la fecha hasta')
           return true
         }
         this.postAsignacion({
@@ -321,7 +330,7 @@
       limpiarCampos () {
         this.idEmpleadoAsignado = null
         this.fechaDesde = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
-        this.fechaHasta = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        this.fechaHasta = new Date(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
         this.idMotivo = null
       }
     }
