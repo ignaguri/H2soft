@@ -184,6 +184,7 @@
         this.objetivos.push(ob)
       },
       borrarObjetivo (ob) {
+        if (!confirm('¿Desea eliminar a este objetivo? Se lo eliminará de los recorridos y de todas las asignaciones futuras que tenga')) return
         this.objetivos = this.objetivos.filter(objs => objs.nombre !== ob)
       },
       cargarCliente () {

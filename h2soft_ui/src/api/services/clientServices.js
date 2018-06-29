@@ -153,7 +153,39 @@ export default {
         return Promise.all(promesas)
       })
       .then(objetivosUpdated => {
-        // console.log('updatee todo bien wa8', objetivosUpdated)
+        const objetivosDesactivados = objetivosUpdated.filter(response => response.statusText === 'OK').map(response => response.body)
+        let promesas = []
+        objetivosDesactivados.forEach(o => {
+          promesas.push(context.$http.get(API_URL + 'detalle-recorrido-historico' + '/?idObjetivo=' + o.idObjetivosXCliente, authHeader)
+                        .then(detallesHistoricos => {
+                          detallesHistoricos = detallesHistoricos.body.data
+                          const promesas1 = detallesHistoricos.map(d => context.$http.get(API_URL + 'recorrido-historico/' + d.idRecorridoHistorico, authHeader)
+                            .then(res => res.body))
+                          return Promise.all(promesas1)
+                        })
+                        .then(recorridosHistoricos => {
+                          const recorridosFuturos = recorridosHistoricos.filter(r => r.fechaAsignacion > new Date().toISOString())
+                          const promesas2 = recorridosFuturos.map(r => context.$http.delete(API_URL + 'detalle-recorrido-historico' +
+                                                              '/?idObjetivo=' + o.idObjetivosXCliente +
+                                                              '&idRecorridoHistorico=' + r.idRecorridosHistoricos, authHeader)
+                                                              .then(res => res.body.data))
+                          return Promise.all(promesas2)
+                        })
+                        .then(detallesBorrados => detallesBorrados)
+                      )
+          promesas.push(context.$http.get(API_URL + 'detalle-recorrido' + '/?idObjetivo=' + o.idObjetivosXCliente, authHeader)
+            .then(detalles => {
+              detalles = detalles.body.data
+              const promesas3 = detalles.map(d => context.$http.delete(API_URL + 'detalle-recorrido/' + d.idDetalleRecorrido, authHeader).then(r => r.body))
+              return Promise.all(promesas3)
+            })
+            .then(detallesBorrados => detallesBorrados)
+          )
+        })
+        return Promise.all(promesas)
+      })
+      .then(todoHecho => {
+        console.log('editClientes. detalles borrados:', todoHecho)
         return true
       })
       .catch(error => {
