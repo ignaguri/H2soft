@@ -125,6 +125,33 @@ export default {
         console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))
       })
   },
+  getCantidadesUltimoRemito (context, idObjetivo) {
+    let cantidades = []
+    return this.getUltimoRemitoXObjetivo(context, idObjetivo)
+    .then(rem => {
+      if (rem.length > 0) {
+        rem = rem[rem.length - 1]
+        return this.getDetalleRemitoProducto(context, rem.idRemito)
+      } else {
+        return cantidades
+      }
+    })
+    .then(remDet => {
+      if (remDet.length === 0) return cantidades
+      remDet.body.data.forEach(r => {
+        let cantidad = {
+          idProducto: 0,
+          cantidad: 0
+        }
+        if (r.dejadoEnCliente === 1) {
+          cantidad.idProducto = r.idProducto
+          cantidad.cantidad = r.cantidad
+          cantidades.push(cantidad)
+        }
+      })
+      return cantidades
+    })
+  },
   cantidadDeBidonesPorMes (context) {
     const authHeader = {headers: auth.getAuthHeader()}
     return context.$http.get(API_URL + 'remitos?$select[]=fecha&$select[]=idRemito', authHeader)

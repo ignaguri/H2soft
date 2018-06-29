@@ -23,6 +23,14 @@
                       required>
             </fg-input>
           </div>
+          <div class="col-md-4">
+            <fg-input type="text"
+                      label="Tamaño (Litros)"
+                      placeholder="Tamaño en litros"
+                      v-model="producto.tamanio"
+                      required>
+            </fg-input>
+          </div>
         </div>
         <hr>
         <div class="row">
@@ -90,6 +98,7 @@
             r = r[0]
             this.producto.nombre = r.nombre
             this.producto.descripcion = r.descripcion
+            this.producto.tamanio = r.tamanio
           })
         }
       }

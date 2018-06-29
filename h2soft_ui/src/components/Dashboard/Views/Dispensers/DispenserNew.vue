@@ -65,7 +65,7 @@
           <div class="col-md-6"  >
             <h5>Fecha de instalación</h5>
             <div v-if="this.edit">{{this.dispenser.fechaProxMantenimiento}}</div>
-            <dp v-if="!this.edit" v-model="fechaInstalacion" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  placeholder="Fecha" width="100%" :clear-button="true" ></dp>
+            <dp v-if="!this.edit" v-model="fechaInstalacion" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  placeholder="Fecha" width="100%" required :disabled="true" :clear-button="true" ></dp>
           </div>
         </div>
         <hr>
@@ -137,6 +137,10 @@
         })
       },
       newDisp () {
+        if (this.fechaInstalacion === '' && this.requiereObjetivo) {
+          noti.infoConTexto(this, 'Alerta', 'Debe ingresar una fecha de instalación en el objetivo')
+          return
+        }
         if (this.fechaInstalacion !== '') {
           const proxMant = this.fechaInstalacion.split('/')
           const date = new Date(proxMant[2], proxMant[1] - 1, proxMant[0])

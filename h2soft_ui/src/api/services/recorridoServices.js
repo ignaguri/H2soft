@@ -230,6 +230,7 @@ export default {
     return context.$http
       .get(API_URL + 'objetivos-x-cliente/' + info.objetivo, authHeader)
       .then(objetivo => {
+        res.idObjetivo = objetivo.body.idObjetivosXCliente
         res.objetivo = objetivo.body.nombre
         res.direccion = objetivo.body.direccion
         res.localidad = objetivo.body.localidad

@@ -18,7 +18,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/camionServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Camión', 'Capacidad máxima']
+  const tableColumns = ['#', 'Camión', 'Capacidad máxima', 'Estado']
   //  let tableData = []
 
   export default {
@@ -47,7 +47,8 @@
             this.table1.data.push({
               '#': camion.idCamiones,
               camion: camion.nombre,
-              capacidadmaxima: camion.capacidadMaxima
+              capacidadmaxima: camion.capacidadMaxima,
+              estado: camion.libre === 1 ? 'Libre' : 'Ocupado'
             })
           })
         }, error => {
