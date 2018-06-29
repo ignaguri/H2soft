@@ -207,7 +207,7 @@
               this.cargarRecorridos()
               this.cargarComboRecorridos()
               if (this.idRecorrido === null) {
-                this.idRecorrido = resp[0]
+                this.idRecorrido = resp
               } else {
                 this.cambiarRecorrido(resp[0])
               }
@@ -238,13 +238,14 @@
         this.cargarComboRecorridos()
       },
       cargarComboRecorridos () {
-        api.getRecorridosFull(this).then(recs => {
-          recs.sort((a, b) => a.recorrido - b.recorrido)
-          recs.forEach(r => {
-            r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia})`
+        api.getRecorridosFull(this)
+          .then(recs => {
+            recs.sort((a, b) => a.recorrido - b.recorrido)
+            recs.forEach(r => {
+              r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia})`
+            })
+            this.recorridos = recs
           })
-          this.recorridos = recs
-        })
       },
       cargarObjetivos () {
         if (this.idClientes !== null) {
@@ -298,8 +299,7 @@
         this.$parent.show = 'list'
       },
       cambiarRecorrido (e) {
-        const id = e // e.target.value
-        console.log('id', id)
+        const id = e
         if (id) {
           api.getRecorrido(this, id)
             .then(r => {
