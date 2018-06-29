@@ -17,35 +17,41 @@
                  search-text="Buscar"
                  :placeholder="'Seleccione un cliente'"
                  :search="true" :justified="true" required
-                  :disabled="this.edit">
+                 :disabled="this.edit">
             </dds>
-        </div>
+          </div>
           <div class="col-md-6">
             <!--<label for="fechaFirma"><h4><span class="label label-default">Firmado</span></h4></label>-->
             <slot name="label"><label class="control-label">Firmado</label></slot>
-            <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha firmado'" width="100%" :clear-button="true"></datepicker>
+            <datepicker v-model="contrato.fechaFirma" id="fechaFirma" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"
+                        :placeholder="'Fecha firmado'" width="100%" :clear-button="true"></datepicker>
           </div>
         </div>
-          <div class="row">
-            <div class="col-md-6">
-              <!--<label for="fechaDesde"><h4><span class="label label-default">Vigente desde</span></h4></label>-->
-              <slot name="label"><label class="control-label">Vigente desde</label></slot>
-              <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha desde'" width="100%" :clear-button="true"></datepicker>
-            </div>
-            <div class="col-md-6">
-              <!--<label for="fechaHasta"><h4><span class="label label-default">Vigente hasta</span></h4></label>-->
-              <slot name="label"><label class="control-label">Vigente hasta</label></slot>
-              <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0] :format="'dd/MM/yyyy'"  :placeholder="'Fecha hasta'" width="100%" :clear-button="true"></datepicker>
-            </div>
+        <div class="row">
+          <div class="col-md-6">
+            <!--<label for="fechaDesde"><h4><span class="label label-default">Vigente desde</span></h4></label>-->
+            <slot name="label"><label class="control-label">Vigente desde</label></slot>
+            <datepicker v-model="contrato.fechaVigenciaDesde" id="fechaDesde" :disabled-days-of-week=[0]
+                        :format="'dd/MM/yyyy'" :placeholder="'Fecha desde'" width="100%"
+                        :clear-button="true"></datepicker>
           </div>
-          <hr>
-        <detalle-contrato :detalles="detalles" :edit="edit" :idContrato="id" @nuevo_detalle="captarDetalle" @delete_detalle="borrarDetalle"></detalle-contrato>
+          <div class="col-md-6">
+            <!--<label for="fechaHasta"><h4><span class="label label-default">Vigente hasta</span></h4></label>-->
+            <slot name="label"><label class="control-label">Vigente hasta</label></slot>
+            <datepicker v-model="contrato.fechaVigenciaHasta" id="fechaHasta" :disabled-days-of-week=[0]
+                        :format="'dd/MM/yyyy'" :placeholder="'Fecha hasta'" width="100%"
+                        :clear-button="true"></datepicker>
+          </div>
+        </div>
+        <hr>
+        <detalle-contrato :detalles="detalles" :edit="edit" :idContrato="id" @nuevo_detalle="captarDetalle"
+                          @delete_detalle="borrarDetalle"></detalle-contrato>
         <div class="row">
           <div class="text-center">
             <button type="button" v-if="edit" class="btn btn-info btn-fill btn-wd" @click="exportar">
               Exportar a PDF
             </button>
-            <button type="submit"  class="btn btn-success btn-fill btn-wd">
+            <button type="submit" class="btn btn-success btn-fill btn-wd">
               Guardar contrato
             </button>
           </div>
@@ -61,7 +67,7 @@
   import api from 'src/api/services/contratosServices'
   import exportApi from 'src/api/export'
   import DetalleContrato from './DetalleContrato.vue'
-  import { datepicker, select } from 'vue-strap'
+  import {datepicker, select} from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
   export default {
@@ -81,7 +87,8 @@
         clientes: [],
         contrat: {},
         detalles: [],
-        productos: []
+        productos: [],
+        esValido: null
       }
     },
     props: {
@@ -128,6 +135,13 @@
           noti.infoConTexto(this, 'Alerta', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
+        // Validacion para ver si la fecha desde es mayor a la fecha hasta del contrato que esta vigente
+        this.laFechaDesdeEsValida()
+          .then(res => {
+            if (!res) {
+              noti.infoConTexto(this, 'Alerta', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta del contrato vigente')
+            }
+          })
         if (this.id === 0 && !this.edit) {
           let firmado = this.contrato.fechaFirma.split('/')
           let fechaDesde = this.contrato.fechaVigenciaDesde.split('/')
@@ -195,11 +209,23 @@
       cargarContratos2 () {
         if (this.id !== 0 && this.edit) {
           api.getContratoFull(this, this.id).then(c => {
-           // alert('llegue el full con: ' + JSON.stringify(c))
+            // alert('llegue el full con: ' + JSON.stringify(c))
             this.contrato.idCliente = c.contrato.idCliente // Cambiar por el nombre del ciente
-            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
-            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
-            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+            this.contrato.fechaFirma = new Date(c.contrato.fechaFirma).toLocaleDateString('es-AR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })
+            this.contrato.fechaVigenciaDesde = new Date(c.contrato.fechaVigenciaDesde).toLocaleDateString('es-AR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })
+            this.contrato.fechaVigenciaHasta = new Date(c.contrato.fechaVigenciaHasta).toLocaleDateString('es-AR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            })
             c.detalle.forEach(dc => {
               this.detalles.push({
                 idProducto: dc.idProducto,
@@ -220,15 +246,26 @@
           noti.errorConTexto(this, 'Error', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return true
         }
+      },
+      laFechaDesdeEsValida (contrato) {
+        api.nuevoContratoMayorAlVigente(this, contrato)
+          .then(res => {
+            if (res) {
+              return true
+            } else {
+              return false
+            }
+          })
       }
     }
   }
 </script>
 <style>
-valid {
-   border: 3px solid green;
+  valid {
+    border: 3px solid green;
   }
-invalid {
-   border: 3px solid red;
- }
+
+  invalid {
+    border: 3px solid red;
+  }
 </style>
