@@ -242,7 +242,6 @@
       IdDetalleRecorridoAsignado: String
     },
     mounted () {
-      this.cargarProductos()
       this.cargarDetalleRecorridoHistorico()
     },
     methods: {
@@ -256,6 +255,7 @@
                 obj = obj.body.data[0]
                 this.idObjetivo = resDet.idObjetivo
                 this.objetivo = obj.nombre
+                this.cargarProductos()
               })
             this.cargarDispensers(resDet.idObjetivo)
             if (this.idRemito !== null) {
@@ -484,10 +484,23 @@
             }
           })
       },
-      cargarProductos () {
-        apiContratos.getProductosContratos(this)
+      cargarProductos () { // se buscan los productos del contrato y luego se cargan en el combo
+        let productosEnContrato
+        productosEnContrato = []
+        apiProductos.getProductosEnContratos(this, this.idObjetivo)
         .then(res => {
-          this.productos = res
+          productosEnContrato = res
+          return apiContratos.getProductosContratos(this)
+        })
+        .then(res => {
+          res.forEach(p => {
+            if (productosEnContrato.includes(p.idProductos)) {
+              console.log('p.idProductos', p.idProductos)
+              this.productos.push(p)
+            } else {
+              console.log('false')
+            }
+          })
         })
       },
       verdetalle () {

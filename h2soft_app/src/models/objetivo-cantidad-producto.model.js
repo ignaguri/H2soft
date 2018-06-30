@@ -4,26 +4,33 @@ const Sequelize = require('sequelize');
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const productos = sequelizeClient.define('productos', {
-    idProductos: {
+  const objetivoCantidadProducto = sequelizeClient.define('objetivo-cantidad-producto', {
+    idObjetivoCantidadProducto: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
     },
-    nombre: {
-      type: Sequelize.STRING(45),
-      allowNull: false
-    },
-    descripcion: {
-      type: Sequelize.STRING(45),
-      allowNull: true
-    },
-	tamanio: {
+	idObjetivo: {
       type: Sequelize.INTEGER(11),
       allowNull: false,
-      default: null
+      references: {
+        model: 'objetivos-x-cliente',
+        key: 'idObjetivosXCliente'
+      }
     },
+	idProducto: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      references: {
+        model: 'productos',
+        key: 'idProductos'
+      }
+    },
+	cantidad: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false
+    }
   }, {
     hooks: {
       beforeCount(options) {
@@ -32,10 +39,10 @@ module.exports = function (app) {
     }
   });
 
-  productos.associate = function (models) { // eslint-disable-line no-unused-vars
+  objetivoCantidadProducto.associate = function (models) { // eslint-disable-line no-unused-vars
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
-  return productos;
+  return objetivoCantidadProducto;
 };
