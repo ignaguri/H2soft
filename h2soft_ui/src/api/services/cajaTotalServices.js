@@ -1,9 +1,10 @@
 import auth from '../auth'
+const API_URL = process.env.API_URL
 
 export default {
   postCajaTotal (context, cajaTotal) {
     const authHeader = {headers: auth.getAuthHeader()}
-    return context.$http.post('http://localhost:3030/caja-total', cajaTotal, authHeader)
+    return context.$http.post(API_URL + 'caja-total', cajaTotal, authHeader)
       .then(ieinsert => {
         return true
       })
@@ -18,7 +19,7 @@ export default {
     totales.efectivo = 0
     totales.cheque = 0
     totales.transferencia = 0
-    return context.$http.get('http://localhost:3030/caja-total', authHeader)
+    return context.$http.get(API_URL + 'caja-total', authHeader)
       .then(res => {
         res.body.data.forEach(ct => {
           if (ct.idMedioDePago === 1) {

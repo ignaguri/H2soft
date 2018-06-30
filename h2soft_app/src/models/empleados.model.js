@@ -27,18 +27,18 @@ module.exports = function (app) {
       type: Sequelize.DATE,
       allowNull: false
     },
-    domicilio: {
+    direccion: {
       type: Sequelize.STRING(45),
       allowNull: true
     },
-    idLocalidad: {
-      type: Sequelize.INTEGER(11),
+    localidad: {
+      type: Sequelize.STRING(45),
       allowNull: true,
-      references: {
-        model: 'localidades',
-        key: 'idLocalidad'
-      }
     },
+    telefono: {
+      type: Sequelize.INTEGER(30),
+      allowNull: true,
+    }
   }, {
     hooks: {
       beforeCount(options) {
