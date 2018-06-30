@@ -135,25 +135,6 @@
           noti.infoConTexto(this, 'Alerta', 'La fecha de vigencia desde no puede ser mayor a la fecha de vigencia hasta')
           return
         }
-        // Validacion para ver si la fecha desde es mayor a la fecha hasta del contrato que esta vigente//
-        /*
-         async validarFechaDesde (this.contrato) {
-         this.esValido = await this.laFechaDesdeEsValida(this.contrato)
-         }
-         if (!this.esValido) {
-         noti.infoConTexto(this, 'Alerta', 'ia hasta')
-         return
-         }
-         */
-
-        /*
-         this.laFechaDesdeEsValida(this.contrato)
-         console.log('ESVALIDO?:' + this.esValido)
-         if (!this.esValido) {
-         noti.infoConTexto(this, 'Alerta', 'ia hasta')
-         return
-         }
-         */
         if (this.id === 0 && !this.edit) {
           let firmado = this.contrato.fechaFirma.split('/')
           let fechaDesde = this.contrato.fechaVigenciaDesde.split('/')
