@@ -19,6 +19,10 @@
           </button>
           <login v-if="!seen"></login>
         </div>
+        <div class="col-md-12 text-center">
+          <br>
+          <a @click="showMessage">¿Olvidó su contraseña?</a>
+        </div>
         <div class="col-md-12">
           <img class="img-responsive" alt="background" src="../../../static/img/fondo3_cutted.jpg"/>
         </div>
@@ -47,6 +51,7 @@
 
 <script>
   import Login from '../UIComponents/Inputs/Login.vue'
+  import noti from 'src/api/notificationsService'
   export default {
     components: {
       Login
@@ -59,6 +64,9 @@
     methods: {
       btn_login_click () {
         this.seen = false
+      },
+      showMessage () {
+        noti.infoConTexto(this, 'ATENCIÓN', 'Comiunicarse con el gerente para que le genere una nueva contraseña')
       }
     }
   }
