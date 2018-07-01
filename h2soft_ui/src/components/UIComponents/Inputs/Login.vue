@@ -4,6 +4,9 @@
     <div class="alert alert-danger" v-if="error">
       <p>{{ error }}</p>
     </div>
+    <div class="alert alert-warning" v-if="info">
+      <p>{{ info }}</p>
+    </div>
     <div class="form-group">
       <input
         type="text"
@@ -22,7 +25,12 @@
         @keyup.enter="submit"
       />
     </div>
+    <div class="col-md-12 text-center">
     <button class="btn btn-info btn-fill" @click="submit()">Entrar</button>
+      <br/>
+      <br/>
+      <a style="cursor: pointer" @click="showMessage">¿Olvidó su contraseña?</a>
+    </div>
   </div>
 </template>
 
@@ -54,7 +62,8 @@
           email: '',
           password: ''
         },
-        error: ''
+        error: '',
+        info: ''
       }
     },
     methods: {
@@ -66,6 +75,9 @@
         }
         auth.login(this, credentials, 'planificacion')
         // alert(JSON.stringify(credentials))
+      },
+      showMessage () {
+        this.info = 'Comuníquese con el administrador/gerente para que le genere una nueva contraseña'
       }
     },
     directives: {
