@@ -32,7 +32,7 @@
                   <!--<h4><span class="label label-default">Tipo de cliente*</span></h4>-->
                   <label>Tipo de cliente*</label>
                 </label>
-                </br>
+                <br/>
                 <dds id="tipoCliente" v-model="cliente.idTipo"
                      :options="tiposCliente"
                      options-value="idTiposCliente" search-text="Buscar"

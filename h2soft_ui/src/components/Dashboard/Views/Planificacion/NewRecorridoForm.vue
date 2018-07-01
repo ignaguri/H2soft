@@ -95,7 +95,7 @@
         </div>
         <div class="row">
           <div class="text-center">
-            </br>
+            <br/>
             <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
               Volver
             </button>

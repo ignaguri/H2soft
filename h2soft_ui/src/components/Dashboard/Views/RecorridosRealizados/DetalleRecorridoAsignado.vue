@@ -39,13 +39,13 @@
           <div>No podrás realizar el recorrido si no seleccionas un camión</div>
         </div>
       </div>
-      </br>
+      <br/>
       <div class="row">
         <div class="col-md-6">
-          <sele v-model="idCamion" :options="camionesLibres" 
-          options-value="idCamiones" search-text="Seleccione" 
-          placeholder="Seleccione un camión" 
-          options-label="nombre" :multiple="false" 
+          <sele v-model="idCamion" :options="camionesLibres"
+          options-value="idCamiones" search-text="Seleccione"
+          placeholder="Seleccione un camión"
+          options-label="nombre" :multiple="false"
           name="" :search="true" :justified="false"></sele>
         </div>
       </div>

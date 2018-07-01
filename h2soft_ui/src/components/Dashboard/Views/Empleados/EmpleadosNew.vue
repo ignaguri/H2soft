@@ -62,7 +62,7 @@
           <div class="col-md-6">
             <!--<label for="id-localidad"><h4><span class="label label-default">Localidad</span></h4></label>-->
             <slot name="label"><label class="control-label">Localidad</label></slot>
-            </br>
+            <br/>
             <dds id="id-localidad"
                  v-model="empleado.idLocalidad"
                  :options="localidades"
