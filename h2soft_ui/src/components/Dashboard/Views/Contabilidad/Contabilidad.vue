@@ -166,7 +166,7 @@
         this.exportData.totales = []
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta, this.idEstadoFacturacion)
           .then(ventasXProducto => {
-            console.log(ventasXProducto)
+//            console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
               ventasXProducto.forEach(vxp => {
                 apiProducto.getProductoXId(this, vxp.idProducto)

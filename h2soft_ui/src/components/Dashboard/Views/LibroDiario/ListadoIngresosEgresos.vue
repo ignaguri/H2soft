@@ -102,7 +102,7 @@
           })
       },
       cargarEmpleado (idEmpleado) {
-        for (var i = 0, len = this.empleados.length; i < len; i++) {
+        for (let i = 0, len = this.empleados.length; i < len; i++) {
           if (this.empleados[i].idEmpleados === idEmpleado) {
             return this.empleados[i].nombre + ' ' + this.empleados[i].apellido
           }
@@ -115,7 +115,7 @@
           })
       },
       cargarMeidoDePagoCobro  (idMedioDePago) {
-        for (var i = 0, len = this.tipoDePago.length; i < len; i++) {
+        for (let i = 0, len = this.tipoDePago.length; i < len; i++) {
           if (this.tipoDePago[i].idMediosDePagoCobro === idMedioDePago) {
             return this.tipoDePago[i].nombre
           }
@@ -155,7 +155,7 @@
         const columns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
         // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
         const total = this.exportData.reduce((a, b) => {
-          const subtotal = Number(b[3].replace(/[^-*\d]/g, ''))
+          const subtotal = Number(b[3].replace(/[^-*\d]/g, '')) // le borramos el $ de adelante
           return a + subtotal
         }, 0)
         const columnaTotal = ['Total', null, null, total]
