@@ -133,7 +133,7 @@
           },
           options: {
             low: 1,
-            high: 250,
+            high: 450,
             showArea: true,
             // height: '245px',
             axisX: {
@@ -223,41 +223,30 @@
     },
     methods: {
       cantBidonesPorMes () {
+        let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
         apiRemitos.cantidadDeBidonesPorMes(this)
           .then(resp => {
-            let consumoOrdenadoP1 = []
-            let consumoOrdenadoP2 = []
-            let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-            const mes = new Date().getMonth()
-            // console.log('?MESSS:' + mes)
-            let cantMeses = []
-            let i
-            for (i = 0; i < 12; i++) {
-              if (i <= mes && i < 12) {
-                cantMeses[i + 6] = meses[i]
-                consumoOrdenadoP1[i + 6] = resp[i + 1]
-              } else {
-                cantMeses[i - 6] = meses[i]
-                consumoOrdenadoP1[i - 6] = resp[i + 1]
+            resp.forEach(producto => {
+              const mes = new Date().getMonth()
+              // console.log('?MESSS:' + mes)
+              let mesesOrdenados = []
+              let consumoOrdenado = []
+              for (let i = 0; i < 12; i++) {
+                if (i <= mes) {
+                  mesesOrdenados[i + 6] = meses[i]
+                  consumoOrdenado[i + 6] = producto.cantidades[i + 1]
+                } else {
+                  mesesOrdenados[i - 6] = meses[i]
+                  consumoOrdenado[i - 6] = producto.cantidades[i + 1]
+                }
               }
-            }
-            for (i = 0; i < 12; i++) {
-              if (i <= mes) {
-                consumoOrdenadoP2[i + 6] = resp[i + 13]
-              } else {
-                consumoOrdenadoP2[i - 6] = resp[i + 13]
-              }
-            }
-            // console.log('MESES ORDENADOS:' + JSON.stringify(cantMeses))
-            // console.log('Consumo ORDENADOS P1:' + JSON.stringify(consumoOrdenadoP1))
-            // console.log('Consumo ORDENADOS P2:' + JSON.stringify(consumoOrdenadoP2))
-            this.usersChart.data.labels = (cantMeses)
-            this.usersChart.data.series.push(consumoOrdenadoP1)
-            this.usersChart.data.series.push(consumoOrdenadoP2)
+              this.usersChart.data.labels = mesesOrdenados
+              this.usersChart.data.series.push(consumoOrdenado)
+            })
             this.modif = !this.modif
           })
           .catch(err => {
-            console.log('ERRRO:' + err)
+            console.log('ERROR:' + err)
           })
       },
       cantObjetivosPorTemporada () {

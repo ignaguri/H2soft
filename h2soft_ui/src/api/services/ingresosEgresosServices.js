@@ -65,7 +65,6 @@ export default {
     return context.$http.get(API_URL + 'gastos/?&$select[]=monto&$select[]=idEmpleado&$select[]=idMedioDePagoCobro&$select[]=fecha&$select[]=descripcion&$select[]=idGastos', authHeader)
       .then(res => {
         res.body.data.forEach(ct => {
-          console.log('IE:' + JSON.stringify(res))
           if (ct.idMedioDePagoCobro === 1) {
             totales.efectivo += ct.monto
           } else if (ct.idMedioDePagoCobro === 2) {
