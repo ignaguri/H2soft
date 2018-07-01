@@ -238,14 +238,14 @@
         }
         api.postRecorrido(this, recorrido, detalle)
           .then(resp => {
-            if (resp) {
+            if (resp[0]) {
               this.planificando = true
               noti.exitoConTexto(this, 'Éxito', 'Recorrido guardado con éxito!')
               if (resp[1]) noti.infoConTexto(this, 'Info', 'El recorrido tiene asignaciones futuras. Para que este objetivo se incluya deberá reasignarlo')
               this.cargarRecorridos()
               this.cargarComboRecorridos()
               if (this.idRecorrido === null) {
-                this.idRecorrido = resp
+                this.idRecorrido = resp[0]
               } else {
                 this.cambiarRecorrido(resp[0])
               }
@@ -256,7 +256,7 @@
                 this.limpiarCampos()
               }
             } else {
-              noti.errorConTexto(this, 'Error', 'Error al guardar recorrido')
+              noti.errorConTexto(this, 'Error', 'Error al guardar recorrido. ' + resp[1])
             }
           })
       },

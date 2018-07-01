@@ -71,11 +71,11 @@ export default {
         })
         .then(detalleInsertado => {
           // console.log('inserté el detalle de recorrido', detalleInsertado)
-          return detalle.idRecorrido
+          return [detalle.idRecorrido]
         })
         .catch(error => {
           console.log('error insertando recorrido', error)
-          return false
+          return [false, error]
         })
     } else {
       // console.log('agregando un objetivo al recorrido', recorrido)
@@ -101,7 +101,7 @@ export default {
         })
         .catch(error => {
           console.log('error updating recorrido', error)
-          return false
+          return [false, error.message]
         })
     }
   },
