@@ -108,11 +108,9 @@
       },
       borrar (e) {
         let toDelete = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
-        console.log('borrar name: ' + toDelete)
         this.$emit('delete_objetivo', toDelete)
       },
       ok () {
-        // return !confirm('Ok event.\nClose Modal?')
         if (this.nombre === '' || this.direccion === '') {
           noti.infoConTexto(this, 'Alerta', 'Debe completar todos los campos')
           return true
@@ -121,8 +119,6 @@
         return false
       },
       getAddressData (addressData, placeResultData) {
-        console.log('addressData:', addressData)
-        console.log('placeresultdata:', placeResultData)
         this.direccion = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
         this.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
       },

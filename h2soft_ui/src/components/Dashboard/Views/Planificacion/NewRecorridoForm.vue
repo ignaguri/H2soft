@@ -95,7 +95,7 @@
         </div>
         <div class="row">
           <div class="text-center">
-            </br>
+            <br/>
             <button type="button" class="btn btn-default btn-fill btn-wd" @click="seeList">
               Volver
             </button>
@@ -133,7 +133,7 @@
               <ul>
                 <li v-for="cam in camionesSuperado">{{cam}}</li>
               </ul>
-            </div>  
+            </div>
             </div>
           </div>
         </div>
@@ -141,8 +141,8 @@
           <div class="text-right">
             Ver objetivos
             <button-group v-model="radioValue" type="info">
-              <radio selected-value="planificados">Planificados</radio>
               <radio selected-value="sin_planificar">Sin planificar</radio>
+              <radio selected-value="planificados">Planificados</radio>
             </button-group>
           </div>
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
@@ -176,7 +176,7 @@
     },
     data () {
       return {
-        radioValue: 'planificados',
+        radioValue: 'sin_planificar',
         dias: [],
         idDia: null,
         turnos: [],
@@ -204,7 +204,7 @@
         table2: {
           title: 'Recorrido',
           subTitle: 'Estás planificando este recorrido',
-          columns: ['Orden', 'Objetivo', 'Cliente', 'Dirección', 'Localidad', 'Bidón 20L.', 'Bidón 10L.'],
+          columns: ['Objetivo', 'Cliente', 'Dirección', 'Localidad', 'Bidón 20L.', 'Bidón 10L.'],
           data: []
         }
       }
@@ -245,7 +245,7 @@
               this.cargarRecorridos()
               this.cargarComboRecorridos()
               if (this.idRecorrido === null) {
-                this.idRecorrido = resp[0]
+                this.idRecorrido = resp
               } else {
                 this.cambiarRecorrido(resp[0])
               }
@@ -276,13 +276,14 @@
         this.cargarComboRecorridos()
       },
       cargarComboRecorridos () {
-        api.getRecorridosFull(this).then(recs => {
-          recs.sort((a, b) => a.recorrido - b.recorrido)
-          recs.forEach(r => {
-            r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia})`
+        api.getRecorridosFull(this)
+          .then(recs => {
+            recs.sort((a, b) => a.recorrido - b.recorrido)
+            recs.forEach(r => {
+              r.datos = `${r.recorrido} (${r.dia}, ${r.turno}, ${r.frecuencia})`
+            })
+            this.recorridos = recs
           })
-          this.recorridos = recs
-        })
       },
       cargarObjetivos () {
         if (this.idClientes !== null) {
@@ -336,8 +337,7 @@
         this.$parent.show = 'list'
       },
       cambiarRecorrido (e) {
-        const id = e // e.target.value
-        console.log('id', id)
+        const id = e
         if (id) {
           api.getRecorrido(this, id)
             .then(r => {
@@ -381,13 +381,16 @@
         this.table2.title = 'Recorrido n° ' + idRecorrido
         api.getDetalleRecorridosFull(this, idRecorrido)
           .then(r => {
-            r.sort((a, b) => a.orden - b.orden)
+            r.sort((a, b) => {
+              if (a.objetivo.toLowerCase() > b.objetivo.toLowerCase()) return 1
+              if (a.objetivo.toLowerCase() < b.objetivo.toLowerCase()) return -1
+              return 0
+            })
             r.forEach(recs => {
               let recorrido = {
                 id: recs.detalleRecorrido,
                 recorrido: recs.recorrido,
                 objetivo: recs.objetivo,
-                orden: recs.orden,
                 direccion: recs.direccion,
                 localidad: recs.localidad,
                 cliente: recs.cliente,

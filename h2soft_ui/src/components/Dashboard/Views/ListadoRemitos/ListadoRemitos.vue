@@ -14,7 +14,7 @@
           </dds>
       </div>
     </div>
-    </br>
+    <br/>
     <div class="row text-line">
       <div class="col-md-3">
         <!--<label><h4><span class="label label-default">Desde</span></h4></label>-->
@@ -30,7 +30,7 @@
         <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
       </div>
     </div>
-    </br>
+    <br/>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
@@ -38,7 +38,7 @@
           </paper-table>
         </div>
       </div>
-    </div>  
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div class="text-center">
@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </template>
 <script>
 //  import auth from 'src/api/auth'

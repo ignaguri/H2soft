@@ -28,12 +28,12 @@
                 :placeholder="this.objetivo_placeholder"
                 :search="true" :justified="true">
             </dds>
-            </br>
+            <br/>
           </div>
 
       </div>
     </form>
-    </br>
+    <br/>
     <div class="row">
       <div class="col-md-12">
         <div class="card">
