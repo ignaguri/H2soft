@@ -49,9 +49,6 @@
   import dds from 'vue-strap/src/Select.vue'
   import api from 'src/api/services/clientServices.js'
   import apiDispensers from 'src/api/services/dispensersServices.js'
-  import apiContratos from 'src/api/services/contratosServices.js'
-  import apiProductos from 'src/api/services/productosServices.js'
-  import noti from 'src/api/notificationsService'
 
   const table1Columns = ['Objetivo', 'Dispenser', 'Estado', 'Próximo Mantenimiento']
   export default {
