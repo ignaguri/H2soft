@@ -34,7 +34,7 @@
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
+  const tableColumns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -76,7 +76,7 @@
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
             const ie = {
-              id: ingreEgre.idGastos,
+              '#': ingreEgre.idGastos,
               fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', {
                 year: '2-digit',
                 month: '2-digit',

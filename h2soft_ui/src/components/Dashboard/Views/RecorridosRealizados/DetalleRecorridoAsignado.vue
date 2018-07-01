@@ -164,7 +164,7 @@
             console.log('error al cargar los recorridos asignados ' + error)
           })
       },
-      cantidadUltimoRemito (idObjetivo) {
+      /* cantidadUltimoRemito2 (idObjetivo) {
         return new Promise((resolve, reject) => {
           apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
           .then(rem => {
@@ -183,6 +183,27 @@
               resolve(0)
             }
           })
+        })
+      }, */
+      cantidadUltimoRemito (idObjetivo) {
+        return apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
+        .then(rem => {
+          if (rem.length > 0) {
+            rem = rem[rem.length - 1]
+            return apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
+          } else {
+            return 0
+          }
+        })
+        .then(remDet => {
+          console.log('remDet', remDet)
+          if (!remDet) return 0
+          remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
+          if (remDet.length > 0) {
+            return remDet[0].cantidad
+          } else {
+            return 0
+          }
         })
       },
       verdetalle (e) {

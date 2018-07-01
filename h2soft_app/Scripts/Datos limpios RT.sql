@@ -173,7 +173,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'Emanuel','Perroud','34805349','1990-01-25 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'Camila','Visconti','12345678','1990-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(3,'Camila','Belloni','12345678','1990-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(4,'Ignacio','Guri','12345678','1990-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(5,'Nicolas','Vecchiet','12345678','1990-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(6,'Joaquin','Gomez','1234556','1990-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(7,'Francisco','Arriague','1234556','1970-01-01 00:00:00','calle 123',NULL,'1970-01-01 00:00:00','1970-01-01 00:00:00');
+INSERT INTO `empleados` VALUES (1,'Emanuel','Perroud','34805349','1990-01-25 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'Camila','Visconti','12345678','1990-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(3,'Camila','Belloni','12345678','1990-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(4,'Ignacio','Guri','12345678','1990-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(5,'Nicolas','Vecchiet','12345678','1990-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(6,'Joaquin','Gomez','1234556','1990-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(7,'Francisco','Arriague','1234556','1970-01-01 00:00:00','calle 123','cba',1234,'1970-01-01 00:00:00','1970-01-01 00:00:00');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `estados-recorrido` WRITE;
 /*!40000 ALTER TABLE `estados-recorrido` DISABLE KEYS */;
-INSERT INTO `estados-recorrido` VALUES (1,'Nuevo','Recién creado','1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'En Proceso','Se están visitando los objetivos','1970-01-01 00:00:00','1970-01-01 00:00:00'),(3,'Suspendido','Por algún motivo no se puede continuar','1970-01-01 00:00:00','1970-01-01 00:00:00'),(4,'Finalizado','Se visitaron todos los objetivos','1970-01-01 00:00:00','1970-01-01 00:00:00');
+INSERT INTO `estados-recorrido` VALUES (1,'Nuevo','Recién creado','1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'En Proceso','Se están visitando los objetivos','1970-01-01 00:00:00','1970-01-01 00:00:00'),(3,'Suspendido','Por algún motivo no se puede continuar','1970-01-01 00:00:00','1970-01-01 00:00:00'),(4,'Finalizado','Se visitaron todos los objetivos','1970-01-01 00:00:00','1970-01-01 00:00:00'),(5,'Anulado','Se anula el recorrido y no se puede continuar. No se borra lo cargado','1970-01-01 00:00:00','1970-01-01 00:00:00');
 /*!40000 ALTER TABLE `estados-recorrido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,8 +349,18 @@ UNLOCK TABLES;
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'Bidón de agua 20 L','Bidón de agua de 20 litros','1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'Bidón de agua 10 L','Bidón de agua de 10 litros','1970-01-01 00:00:00','1970-01-01 00:00:00');
+INSERT INTO `productos` VALUES (1,'Bidón de agua 20 L','Bidón de agua de 20 litros', 20,'1970-01-01 00:00:00','1970-01-01 00:00:00'),(2,'Bidón de agua 10 L','Bidón de agua de 10 litros', 10, '1970-01-01 00:00:00','1970-01-01 00:00:00');
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `objetivo-cantidad-producto`
+--
+
+LOCK TABLES `objetivo-cantidad-producto` WRITE;
+/*!40000 ALTER TABLE `objetivo-cantidad-producto` DISABLE KEYS */;
+INSERT INTO `objetivo-cantidad-producto` VALUES (1, 3, 1, 20,'1970-01-01 00:00:00','1970-01-01 00:00:00'), (2, 3, 2, 20,'1970-01-01 00:00:00','1970-01-01 00:00:00');
+/*!40000 ALTER TABLE `objetivo-cantidad-producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

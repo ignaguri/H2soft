@@ -106,11 +106,36 @@
           <div class="clearfix"></div>
         </div>
         <hr>
-        <div class="row" v-if="planificando">
-          <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
-                       :columns="table2.columns" :editButton="false" :eraseButton="false" :filter="false">
-          </paper-table>
+        <div v-if="planificando">
+          <div class="row">
+            <paper-table type="hover" :title="table2.title" :sub-title="table2.subTitle" :data="table2.data"
+                        :columns="table2.columns" :editButton="false" :eraseButton="false" :filter="false">
+            </paper-table>
+          </div>
           <hr>
+          <div class="content">
+            <div class="row">
+            <h5 class="title">Litros totales en el recorrido: {{this.cantidadTotal}} Litros</h5>
+            <div class="col-md-1">
+              <p class="category text-right">0 Litros</p>
+            </div>
+            <div class="col-md-10">
+              <div class="progress">
+                <progressbar :now="((cantidadTotal * 100) / camionCapacidadMaxima).toFixed(1)" label type="success"></progressbar>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <p class="category">{{this.camionCapacidadMaxima}} Litros</p>
+              <p class="category">Cap. máx camión mas grande</p>
+            </div>
+            <div v-if="isCamionSuperado">
+              <h5 class="title">¡Alerta! Has superado la capacidad máxima de los camiones:</h5>
+              <ul>
+                <li v-for="cam in camionesSuperado">{{cam}}</li>
+              </ul>
+            </div>
+            </div>
+          </div>
         </div>
         <div class="row">
           <div class="text-right">
@@ -130,8 +155,12 @@
 </template>
 <script>
   import api from 'src/api/services/recorridoServices'
+  import apiRemito from 'src/api/services/remitoServices'
+  import apiCliente from 'src/api/services/clientServices'
+  import apiContratos from 'src/api/services/contratosServices'
+  import apiCamiones from 'src/api/services/camionServices'
   import PaperTable from '../../../UIComponents/PaperTablePlus.vue'
-  import { buttonGroup, radio, select } from 'vue-strap'
+  import { buttonGroup, radio, select, progressbar } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
   export default {
@@ -139,7 +168,8 @@
       PaperTable,
       buttonGroup,
       radio,
-      dds: select
+      dds: select,
+      progressbar
     },
     props: {
       edit: Boolean
@@ -160,6 +190,12 @@
         recorridos: [],
         idRecorrido: null,
         planificando: false,
+        cantidadTotal: 0,
+        camionCapacidadMaxima: 1,
+        isCamionSuperado: false,
+        camionesSuperado: [],
+        camiones: [],
+        productos: [],
         table1: {
           title: 'Objetivos planificados',
           columns: [],
@@ -168,12 +204,14 @@
         table2: {
           title: 'Recorrido',
           subTitle: 'Estás planificando este recorrido',
-          columns: ['Objetivo', 'Cliente', 'Direccion', 'Localidad'],
+          columns: ['Objetivo', 'Cliente', 'Dirección', 'Localidad', 'Bidón 20L.', 'Bidón 10L.'],
           data: []
         }
       }
     },
     mounted () {
+      this.getCamionCapacidadMaxima()
+      this.cargarProductos()
       this.cargarCombos()
       this.cargarRecorridos()
     },
@@ -322,7 +360,23 @@
         this.idDia = null
         this.idFrecuencia = null
       },
+      cargarProductos () { // se buscan los productos del contrato y luego se cargan en el combo
+        apiContratos.getProductosContratos(this)
+        .then(res => {
+          this.productos = res
+        })
+      },
+      getCamionCapacidadMaxima () {
+        apiCamiones.getCamiones(this)
+        .then(c => {
+          this.camiones = c.sort((a, b) => { return b.capacidadMaxima - a.capacidadMaxima })
+          this.camionCapacidadMaxima = c[0].capacidadMaxima
+        })
+      },
       cargarPlanificando (idRecorrido) {
+        this.cantidadTotal = 0
+        this.isCamionSuperado = false
+        this.camionesSuperado = []
         this.table2.data = []
         this.table2.title = 'Recorrido n° ' + idRecorrido
         api.getDetalleRecorridosFull(this, idRecorrido)
@@ -333,14 +387,53 @@
               return 0
             })
             r.forEach(recs => {
-              this.table2.data.push({
+              let recorrido = {
                 id: recs.detalleRecorrido,
                 recorrido: recs.recorrido,
                 objetivo: recs.objetivo,
                 direccion: recs.direccion,
                 localidad: recs.localidad,
-                cliente: recs.cliente
+                cliente: recs.cliente,
+                'bidon20l': 0,
+                'bidon10l': 0
+              }
+              let cantidad20l = 0
+              let cantidad10l = 0
+              apiCliente.getObjetivoCantidadProducto(this, recs.idObjetivo)
+              .then(ocp => {
+                if (ocp) {
+                  if (ocp.find(x => x.idProducto === 1) !== undefined) {
+                    cantidad20l = ocp.find(x => x.idProducto === 1).cantidad
+                    recorrido.bidon20l = cantidad20l + ' (1ra. vez)'
+                  }
+                  if (ocp.find(x => x.idProducto === 2) !== undefined) {
+                    cantidad10l = ocp.find(x => x.idProducto === 2).cantidad
+                    recorrido.bidon10l = cantidad10l + ' (1ra. vez)'
+                  }
+                }
+                return apiRemito.getCantidadesUltimoRemito(this, recs.idObjetivo)
               })
+              .then(cant => {
+                if (cant.length > 0) {
+                  if (cant.find(x => x.idProducto === 1) !== undefined) {
+                    cantidad20l = cant.find(x => x.idProducto === 1).cantidad
+                    recorrido.bidon20l = cantidad20l + ' (últ. remito)'
+                  } else recorrido.bidon20l = 0 + ' (últ. remito)'
+                  if (cant.find(x => x.idProducto === 2) !== undefined) {
+                    cantidad10l = cant.find(x => x.idProducto === 2).cantidad
+                    recorrido.bidon10l = cantidad10l + ' (últ. remito)'
+                  } else recorrido.bidon10l = 0 + ' (últ. remito)'
+                }
+                this.cantidadTotal = this.cantidadTotal + (cantidad20l * (this.productos.find(x => x.idProductos === 1).tamanio)) + (cantidad10l * (this.productos.find(x => x.idProductos === 2).tamanio))
+                this.camionesSuperado = []
+                this.camiones.forEach(c => {
+                  if (this.cantidadTotal > c.capacidadMaxima) {
+                    this.isCamionSuperado = true
+                    this.camionesSuperado.push(c.nombre + ' ( cap. máxima: ' + c.capacidadMaxima + ' L. )')
+                  }
+                })
+              })
+              this.table2.data.push(recorrido)
             })
           })
         api.checkIfAsignado(this, idRecorrido)

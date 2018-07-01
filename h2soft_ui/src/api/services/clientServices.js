@@ -26,6 +26,26 @@ export default {
       })
       .then(oxc => {
         info['objetivos'] = oxc.body.data
+        let promesas = []
+        oxc.body.data.forEach(o => {
+          console.log('o', o)
+          promesas.push(context.$http.get(API_URL + 'objetivo-cantidad-producto' + '/?idObjetivo=' + o.idObjetivosXCliente, authHeader))
+        })
+        return Promise.all(promesas)
+      })
+      .then(oxpxc => {
+        let array = []
+        oxpxc.forEach(objprod => {
+          objprod.body.data.forEach(objprodcant => {
+            const opc = {
+              'idObjetivo': objprodcant.idObjetivo,
+              'idProducto': objprodcant.idProducto,
+              'cantidad': objprodcant.cantidad
+            }
+            array.push(opc)
+          })
+        })
+        info['objetivosProductosCantidad'] = array
         return info
       })
       .catch(error => {
@@ -33,13 +53,13 @@ export default {
         return false
       })
   },
-  postClientes (context, cliente, contacto, objetivos) {
+  postClientes (context, cliente, contacto, objetivos, productos) {
     const authHeader = { headers: auth.getAuthHeader() }
     console.log('llegue a post con: \n' + JSON.stringify(cliente) + '\n' + JSON.stringify(contacto) + '\n' + JSON.stringify(objetivos))
     cliente.activo = 1
     return context.$http.post(API_URL + 'clientes', cliente, authHeader)
       .then(clienteInsertado => {
-        console.log('inserté el cliente wee \n')
+        console.log('inserté el cliente: ', clienteInsertado)
         contacto.idCliente = clienteInsertado.body.idClientes
         // objetivo.idCliente = clienteInsertado.body.idClientes
         objetivos.forEach(ob => {
@@ -57,7 +77,21 @@ export default {
       return Promise.all(promesas)
     })
     .then(objetivoInsertado => {
-      console.log('inserté los objetivos \n' + JSON.stringify(objetivoInsertado))
+      console.log('inserté los objetivos: ', objetivoInsertado)
+      let promesas = []
+      productos.forEach(prod => {
+        const objetivo = objetivoInsertado.find(x => x.body.nombre === prod.objetivo)
+        const objCantProd = {
+          idObjetivo: objetivo.body.idObjetivosXCliente,
+          idProducto: prod.idProducto,
+          cantidad: prod.cantidad
+        }
+        promesas.push(context.$http.post(API_URL + 'objetivo-cantidad-producto', objCantProd, authHeader))
+      })
+      return Promise.all(promesas)
+    })
+    .then(productosInsertados => {
+      console.log('inserté los productos: ', productosInsertados)
       console.log('inserte todo bien wa8')
       return true
     })
@@ -78,6 +112,16 @@ export default {
       })
       .then(() => {
         return context.$http.delete(API_URL + 'contactos-x-cliente/?idCliente=' + id, authHeader)
+      })
+      .then(() => {
+        return context.$http.get(API_URL + 'objetivos-x-cliente/?idCliente=' + id, authHeader)
+      })
+      .then(objetivos => {
+        let promesas = []
+        objetivos.body.data.forEach(o => {
+          promesas.push(context.$http.delete(API_URL + 'objetivo-cantidad-producto/?idObjetivo=' + o.idObjetivosXCliente, authHeader))
+        })
+        return Promise.all(promesas)
       })
       .then(() => {
         return context.$http.patch(API_URL + 'objetivos-x-cliente/?idCliente=' + id, { activo: 0 }, authHeader)
@@ -108,6 +152,15 @@ export default {
     const authHeader = { headers: auth.getAuthHeader() }
     return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idObjetivosXCliente=' + idObjetivo, authHeader) //     .then(res => { return res })
   },
+  getObjetivoCantidadProducto (context, idObjetivo) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'objetivo-cantidad-producto' + '/?idObjetivo=' + idObjetivo, authHeader)
+    .then(res => { return res.body.data })
+    .catch(error => {
+      console.log(error)
+      return false
+    })
+  },
   postObjetivos (context, objetivo) {
     const authHeader = { headers: auth.getAuthHeader() }
     objetivo.activo = 1
@@ -118,8 +171,9 @@ export default {
         return false
       })
   },
-  editClientes (context, id, cliente, contacto, objetivos) {
+  editClientes (context, id, cliente, contacto, objetivos, productos) {
     const authHeader = { headers: auth.getAuthHeader() }
+    let objetivosDelCliente
     return context.$http.patch(API_URL + 'clientes/' + id, cliente, authHeader)
       .then(clienteUpdated => {
         return context.$http.patch(API_URL + 'contactos-x-cliente' + '/?idCliente=' + id, contacto, authHeader)
@@ -127,8 +181,8 @@ export default {
       .then(contactoUpdated => {
         return context.$http.get(API_URL + 'objetivos-x-cliente' + '/?idCliente=' + id + '&activo=' + 1, authHeader)
       })
-      .then(objetivosDelCliente => {
-        objetivosDelCliente = objetivosDelCliente.body.data
+      .then(objetivosCliente => {
+        objetivosDelCliente = objetivosCliente.body.data
         let promesas = []
         // Chequear si hay nuevos objetivos a agregar
         objetivos.forEach(objetivo => {

@@ -18,7 +18,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Domicilio']
+  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Teléfono', 'Dirección', 'Localidad']
   //  let tableData = []
 
   export default {
@@ -68,8 +68,9 @@
                 month: '2-digit',
                 day: '2-digit'
               }),
-              domicilio: empleado.domicilio,
-              localidad: this.cargarLocalidades(empleado.idLocalidad)
+              direccion: empleado.direccion,
+              localidad: empleado.localidad,
+              telefono: empleado.telefono
             })
           })
         }, error => {

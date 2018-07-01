@@ -42,16 +42,20 @@
   </div>
 </template>
 <script>
+  
+  // import apiClientes from 'src/api/services/clientServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
-  import { modal } from 'vue-strap'
+  import { modal, select } from 'vue-strap'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
   import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nombre', 'Dirección', 'Localidad']
+  
   export default {
     components: {
       PaperTable,
       modal,
+      sele: select,
       vga: VueGoogleAutocomplete
     },
     data () {
@@ -130,5 +134,4 @@
 
 </script>
 <style>
-
 </style>

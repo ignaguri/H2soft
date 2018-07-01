@@ -103,6 +103,50 @@
         </div>
         <objetivos-list :objetivos="objetivos" :edit="edit" @new_objetivo="captarObjetivo" @delete_objetivo="borrarObjetivo"></objetivos-list>
         <div class="row">
+          <div class="header">
+            <h4 class="title">Productos en cada Objetivo</h4>
+            <label>Indique los productos y cantidades que desea llevar a cada objetivo</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <label>Objetivo</label>
+            <div class="btn-group btn-group-justified">
+              <dds v-model="productoCantidad.objetivo" :options="objetivos" options-value="nombre" search-text="Buscar" placeholder="Seleccione" options-label="nombre" :multiple="false" :search="true" :justified="true" ></dds>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label>Producto</label>
+            <div class="btn-group btn-group-justified">
+              <dds v-model="productoCantidad.idproducto" :options="productos" options-value="idProductos" search-text="Buscar" placeholder="Seleccione" options-label="nombre" :multiple="false" :search="true" :justified="true" ></dds>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <fg-input type="number"
+                      min="0"
+                      label="Cantidad"
+                      placeholder="Cantidad a llevar"
+                      v-model="productoCantidad.cantidad">
+            </fg-input>
+          </div>
+          <div class="col-md-2 col-xs-2 ">
+            <div class="" style="margin-top: 30px;">
+              <button type="button" class="btn btn-info btn-fill btn-sm" @click="agregar">
+                Agregar
+              </button>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <pt type="hover" :title="table2.title" :data="table2.data" :columns="table2.columns" :editButton="false" :eraseButton="true" :goButton="false" :erase="quitar" >
+            </pt>
+          </div>
+        </div>
+      </div>
+        
+        <div class="row">
           <div class="text-center">
             <button type="submit" class="btn btn-success btn-fill btn-wd">
               Guardar cliente
@@ -117,13 +161,18 @@
 <script>
   import api from 'src/api/services/clientServices'
   import ObjetivosList from './ObjetivosList.vue'
+  import apiContratos from 'src/api/services/contratosServices'
+  import PaperTableProductos from 'components/UIComponents/PaperTablePlusRemito.vue'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
   import { select } from 'vue-strap'
   import noti from 'src/api/notificationsService'
 
+  const table2Columns = ['Objetivo', 'Producto', 'Cantidad']
+
   export default {
     components: {
       ObjetivosList,
+      pt: PaperTableProductos,
       vga: VueGoogleAutocomplete,
       dds: select
     },
@@ -148,10 +197,24 @@
         },
         objetivos: [],
         tiposCliente: [],
-        address: ''
+        address: '',
+        productos: [],
+        objetivosProducto: [],
+        productoCantidad: {
+          objetivo: '',
+          idproducto: 0,
+          cantidad: 0
+        },
+        table2: {
+          title: '',
+          subTitle: '',
+          columns: [...table2Columns],
+          data: []
+        }
       }
     },
     mounted () {
+      this.cargarProductos()
       this.cargarTiposCliente()
       this.cargarCliente()
     },
@@ -161,8 +224,12 @@
           noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos 1 objetivo')
           return
         }
+        if (this.objetivos.length <= 0) {
+          noti.infoConTexto(this, 'Alerta', 'Debe agregar al menos 1 objetivo')
+          return
+        }
         if (!this.edit) {
-          api.postClientes(this, this.cliente, this.contacto, this.objetivos).then(res => {
+          api.postClientes(this, this.cliente, this.contacto, this.objetivos, this.table2.data).then(res => {
             if (res) {
               noti.exitoConTexto(this, 'Éxito', 'Cliente guardado con éxito!')
             } else {
@@ -170,7 +237,7 @@
             }
           })
         } else {
-          api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos).then(res => {
+          api.editClientes(this, this.idCliente, this.cliente, this.contacto, this.objetivos, this.table2.data).then(res => {
             if (res) {
               noti.exitoConTexto(this, 'Éxito', 'Cliente editado con éxito!')
             } else {
@@ -182,10 +249,13 @@
       },
       captarObjetivo (ob) {
         this.objetivos.push(ob)
+        this.objetivosProducto.push(ob)
       },
       borrarObjetivo (ob) {
         if (!confirm('¿Desea eliminar a este objetivo? Se lo eliminará de los recorridos y de todas las asignaciones futuras que tenga')) return
         this.objetivos = this.objetivos.filter(objs => objs.nombre !== ob)
+        this.objetivosProducto = this.objetivos.filter(objs => objs.nombre !== ob)
+        this.table2.data = this.table2.data.filter(objs => objs.objetivo !== ob)
       },
       cargarCliente () {
         if (this.idCliente !== -1 && this.edit) {
@@ -208,6 +278,19 @@
                   localidad: o.localidad
                 })
               })
+              if (r.objetivosProductosCantidad.length > 0) {
+                r.objetivosProductosCantidad.forEach(opc => {
+                  let obj = r.objetivos.find(o => { return o.idObjetivosXCliente === opc.idObjetivo })
+                  let prod = this.productos.find(p => { return p.idProductos === opc.idProducto })
+                  let objprodcant = {
+                    objetivo: obj.nombre,
+                    producto: prod.nombre,
+                    idProducto: prod.idProductos,
+                    cantidad: opc.cantidad
+                  }
+                  this.table2.data.push(objprodcant)
+                })
+              }
             })
         }
       },
@@ -222,6 +305,44 @@
         console.log('placeresultdata:', placeResultData)
         // let dirAcortada = addressData.route + ', ' + addressData.street_number + ', ' + addressData.locality
         this.cliente.direccion = placeResultData.formatted_address
+      },
+      agregar () {
+        const existe = this.table2.data.find(x => { return (x.nro === this.productoCantidad.idproducto && x.objetivo === this.productoCantidad.objetivo) })
+        if (this.productoCantidad.idproducto === 0) {
+          noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un producto')
+        } else if (this.productoCantidad.cantidad === 0) {
+          noti.infoConTexto(this, 'Alerta', 'Debe ingresar la cantidad a dejar')
+        } else if (this.productoCantidad.objetivo === '') {
+          noti.infoConTexto(this, 'Alerta', 'Debe seleccionar un objetivo')
+        } else if (existe !== undefined) {
+          noti.infoConTexto(this, 'Alerta', 'El producto seleccionado ya se cargó para el objetivo')
+        } else {
+          const prod = this.productos.find(p => { return p.idProductos === this.productoCantidad.idproducto })
+          const prodSeleccionado = {
+            'nro': prod.idProductos,
+            'objetivo': this.productoCantidad.objetivo,
+            'producto': prod.nombre,
+            'cantidad': this.productoCantidad.cantidad,
+            'idProducto': prod.idProductos
+          }
+          this.table2.data.push(prodSeleccionado)
+          // this.productosSeleccionados.push({objetivo: this.productoCantidad.objetivo, idProducto: prod.idProductos, nombre: prod.nombre, cantidad: this.productoCantidad.cantidad})
+          this.productoCantidad.idproducto = null
+          this.productoCantidad.cantidad = 0
+          this.productoCantidad.objetivo = null
+        }
+      },
+      quitar (e) {
+        let obj = e.target.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML
+        let prod = e.target.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML
+        const pos = this.table2.data.findIndex(x => x.objetivo === obj && x.producto === prod)
+        this.table2.data.splice(pos, 1)
+      },
+      cargarProductos () {
+        apiContratos.getProductosContratos(this)
+        .then(res => {
+          this.productos = res
+        })
       }
     }
   }

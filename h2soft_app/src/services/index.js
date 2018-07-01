@@ -50,6 +50,8 @@ const cajaTotal = require('./caja-total/caja-total.service.js');
 
 const motivosDeReasignacion = require('./motivos-de-reasignacion/motivos-de-reasignacion.service.js');
 
+const objetivoCantidadProducto = require('./objetivo-cantidad-producto/objetivo-cantidad-producto.service.js');
+
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(roles);
@@ -100,4 +102,5 @@ module.exports = function () {
   app.configure(historialXDispenser);
   app.configure(tiposAlerta);
   app.configure(motivosDeReasignacion);
+  app.configure(objetivoCantidadProducto);
 };

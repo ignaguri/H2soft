@@ -159,6 +159,7 @@
         }
       },
       calcularValores () {
+        this.total = 0
         this.table1.data = []
         this.table2.data = []
         this.exportData.remitos = []
