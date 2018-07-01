@@ -36,7 +36,7 @@ module.exports = function (app) {
       allowNull: false
     },
     observaciones: {
-      type: Sequelize.STRING(45),
+      type: Sequelize.STRING(500),
       allowNull: true
     }
   }, {
