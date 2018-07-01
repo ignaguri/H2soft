@@ -43,6 +43,7 @@
     methods: {
       cargarCamiones () {
         api.getCamiones(this).then(res => {
+          res.sort((a, b) => a.idCamiones - b.idCamiones)
           res.forEach(camion => {
             this.table1.data.push({
               '#': camion.idCamiones,

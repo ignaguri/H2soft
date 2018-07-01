@@ -67,6 +67,7 @@
         }
         api.getRecorridosAsignadosUltimaSemanaXEmpleado(this, idEmpleado)
           .then(resRxE => {
+            resRxE.sort((a, b) => a.idRecorridosHistoricos - b.idRecorridosHistoricos)
             resRxE.forEach(RxE => {
               let d = new Date(RxE.fechaAsignacion)
               this.table1.data.push({

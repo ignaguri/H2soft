@@ -256,7 +256,7 @@ export default {
     /* SI idEstadoFacturacion NO SE UTILIZA EL FILTRO */
     const authHeader = { headers: auth.getAuthHeader() }
     // PREPARO LAS FECHAS PARA SU USO
-    console.log(fechaDesde, fechaHasta)
+    // console.log(fechaDesde, fechaHasta)
     const desde = fechaDesde.split('/')
     fechaDesde = new Date(desde[2], desde[1] - 1, desde[0])
     const hasta = fechaHasta.split('/')
@@ -335,7 +335,7 @@ export default {
         return productos
       })
       .then(ventas => {
-        return this.calcularTotalPorVenta(context, cliente, ventas)
+        return this.calcularTotalPorVenta2(context, cliente, ventas)
       })
       .catch(error => {
         console.error('algo falló en el calculo de ventas por cliente ', error)
@@ -354,6 +354,50 @@ export default {
           return context.$http.get(API_URL + 'detalles-contrato/' + '?idContrato=' + contratoVigente.idContratos, authHeader)
         } else {
           throw new Error('No se encontraron contratos vigentes para el cliente seleccionado')
+        }
+      })
+      .then(detalles => {
+        detalles = detalles.body.data
+        const detallesPorProducto = ventas.reduce((acc, obj) => {
+          const key = obj.idProducto
+          acc[key] = detalles.filter(d => d.idProducto === key)
+          return acc
+        }, {})
+        Object.keys(detallesPorProducto).forEach(p => {
+          const venta = ventas.find(v => v.idProducto === Number(p))
+          detallesPorProducto[p].sort((a, b) => a.cantidadMaxima - b.cantidadMaxima)
+          let detalleAlQueAplica
+          detallesPorProducto[p].forEach((d, i) => {
+            if (venta.cantidad >= d.cantidadMinima && venta.cantidad <= d.cantidadMaxima) {
+              detalleAlQueAplica = d
+            }
+            if (venta.cantidad > d.cantidadMaxima) {
+              if (i === detallesPorProducto[p].length - 1) {
+                detalleAlQueAplica = d
+              }
+            }
+          })
+          venta.precioPorUnidad = detalleAlQueAplica.precioPorUnidad
+          venta.total = venta.cantidad * detalleAlQueAplica.precioPorUnidad
+        })
+        return ventas
+      })
+      .catch(error => {
+        throw error
+        // console.error('Error en calcularTotalPorVenta', error)
+        // return false
+      })
+  },
+  calcularTotalPorVenta2 (context, cliente, ventas) {
+    const authHeader = { headers: auth.getAuthHeader() }
+    return context.$http.get(API_URL + 'contratos' + '/?idCliente=' + cliente, authHeader)
+      .then(contratos => {
+        contratos = contratos.body.data
+        if (contratos.length) {
+          const contratoVigente = contratos[contratos.length - 1] // ultimo contrato vigente y chau
+          return context.$http.get(API_URL + 'detalles-contrato/' + '?idContrato=' + contratoVigente.idContratos, authHeader)
+        } else {
+          throw new Error('No se encontraron contratos para el cliente seleccionado')
         }
       })
       .then(detalles => {

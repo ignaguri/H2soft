@@ -40,6 +40,7 @@
       cargarUsuarios () {
         api.getUsuarios(this)
           .then(resUs => {
+            resUs.body.data.sort((a, b) => a.id - b.id)
             resUs.body.data.forEach(us => {
               if (us.activo === 1) {
                 this.cargarEmpleado(us.idEmpleado)
@@ -52,7 +53,6 @@
                       'empleado': res === undefined ? '' : res.nombre + ' ' + res.apellido,
                       'rol': this.nombreRol
                     })
-                    console.log(us)
                   })
               }
             })

@@ -110,7 +110,7 @@
       cargarRemitos () {
         apiRemitos.getRemitosXclienteYfechas(this, this.idClientes, this.fechaDesde, this.fechaHasta)
           .then(resUs => {
-            console.log('remitos', resUs)
+            resUs.sort((a, b) => a.idRemito - b.idRemito)
             resUs.forEach(rem => {
               let r = {
                 '#': rem.idRemito,

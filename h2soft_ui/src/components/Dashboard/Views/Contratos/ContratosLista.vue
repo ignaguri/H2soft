@@ -47,6 +47,7 @@
     methods: {
       cargarContratos () {
       api.getContratos(this).then(res => {
+            res.body.data.sort((a, b) => a.idContratos - b.idContratos)
             res.body.data.forEach(contrat => {
               this.table1.data.push({
                 '#': contrat.idContratos,

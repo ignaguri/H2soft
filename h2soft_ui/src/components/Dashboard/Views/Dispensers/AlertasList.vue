@@ -68,19 +68,21 @@
     methods: {
       cargarAlertas () {
         this.table1.data = []
-        api.getAlertas(this).then(r => {
-          r.forEach(res => {
-            const al = {
-              '#': res.nro,
-              'cliente': res.cliente,
-              'objetivo': res.objetivo,
-              'tipo': res.tipo,
-              'notificacion': res.notificación,
-              'estado': res.estado
-            }
-            this.table1.data.push(al)
+        api.getAlertas(this)
+          .then(r => {
+            r.sort((a, b) => a.nro - b.nro)
+            r.forEach(res => {
+              const al = {
+                '#': res.nro,
+                'cliente': res.cliente,
+                'objetivo': res.objetivo,
+                'tipo': res.tipo,
+                'notificacion': res.notificación,
+                'estado': res.estado
+              }
+              this.table1.data.push(al)
+            })
           })
-        })
       },
       cargarEstados () {
         if (this.estados.length <= 0) {

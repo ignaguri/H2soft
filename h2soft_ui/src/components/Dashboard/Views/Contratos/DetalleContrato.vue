@@ -150,7 +150,7 @@
       cargarDetalles () {
         this.table1.data = []
         this.detalles.forEach(det => {
-          console.log('detalle', det)
+//          console.log('detalle', det)
           this.table1.data.push({
             // nro: det.idDetallesContrato,
             producto: this.cargarProducto(det.idProducto),
