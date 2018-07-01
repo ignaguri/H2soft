@@ -71,7 +71,7 @@
                      search-text="Buscar"
                      :placeholder="'Seleccione un producto'"
                      :search="true" :justified="true"
-                     required>
+                     @input="cargarMensaje" required>
                 </dds>
                 <!--<label for="cantidad"><h4><span class="label label-default">Cantidad</span></h4></label>-->
                 <slot name="label"><label class="control-label">Cantidad</label></slot>
@@ -212,6 +212,7 @@
           apiDispensers.getDispensersXObjetivo(this, this.alerta.idObjetivo)
             .then(r => {
               this.dispensers = r
+              this.cargarMensaje()
             })
         } else {
           this.dispensers = null
@@ -241,7 +242,9 @@
             break
           case 2:
             if (producto) {
-              this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${producto.nombre} a ${objetivo.nombre}`
+              let nombre = producto.nombre
+              if (this.alerta.cantidad > 1) nombre = nombre.replace('Bidón', 'Bidones')
+              this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${nombre} a ${objetivo.nombre}`
             } else {
               this.alerta.notificacion = ''
             }
