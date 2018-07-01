@@ -36,8 +36,8 @@
       cargarProductos () {
         api.getProductos(this)
         .then(res => {
+          res.sort((a, b) => a.idProductos - b.idProductos)
           res.forEach(p => {
-            console.log('prod', p)
             this.table1.data.push({
               '#': p.idProductos,
               'nombre': p.nombre,

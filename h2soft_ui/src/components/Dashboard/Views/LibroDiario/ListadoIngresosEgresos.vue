@@ -74,6 +74,7 @@
         this.table1.data = []
         this.exportData = []
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
+          res.body.data.sort((a, b) => a.idGastos - b.idGastos)
           res.body.data.forEach(ingreEgre => {
             const ie = {
               '#': ingreEgre.idGastos,

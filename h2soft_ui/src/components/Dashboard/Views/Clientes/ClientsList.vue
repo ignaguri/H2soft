@@ -82,6 +82,7 @@
     methods: {
       cargarClientes () {
         api.getClientes(this).then(res => {
+          res.body.data.sort((a, b) => a.idClientes - b.idClientes)
           res.body.data.forEach(cl => {
             this.table1.data.push({
               '#': cl.idClientes,

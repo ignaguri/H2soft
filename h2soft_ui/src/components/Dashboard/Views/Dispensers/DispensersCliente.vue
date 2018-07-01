@@ -42,14 +42,6 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <!--npm run<!--</paper-table>-->
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 <script>
@@ -62,7 +54,6 @@
   import noti from 'src/api/notificationsService'
 
   const table1Columns = ['Objetivo', 'Dispenser', 'Estado', 'Próximo Mantenimiento']
-  const table2Columns = ['Producto', 'Cantidad mínima', 'Cantidad máxima', 'Precio', 'Vigente hasta']
   export default {
     components: {
       PaperTable,
@@ -74,12 +65,6 @@
           title: 'Dispensers',
           subTitle: 'Dispensers instalados en el cliente',
           columns: [...table1Columns],
-          data: []
-        },
-        table2: {
-          title: 'Bidones',
-          subTitle: 'Bidones según el último contrato con el cliente',
-          columns: [...table2Columns],
           data: []
         },
         dispensers: [],
@@ -102,7 +87,6 @@
         this.objetivo_placeholder = 'Seleccione un objetivo'
         this.cargarObjetivos()
         this.cargarDispensers()
-        this.cargarContrato()
       },
       idObjetivo: function () {
         this.cargarDispensersDelObjetivo()
@@ -141,6 +125,11 @@
                 .then(res1 => {
                   disp.objetivo = res1.body.data[0].nombre
                   this.table1.data.push(disp)
+                  this.table1.data.sort((a, b) => {
+                    if (a.dispenser.toLowerCase() > b.dispenser.toLowerCase()) return 1
+                    if (a.dispenser.toLowerCase() < b.dispenser.toLowerCase()) return -1
+                    return 0
+                  })
                 })
               })
             })
@@ -162,38 +151,17 @@
                 .then(res1 => {
                   disp.objetivo = res1.body.data[0].nombre
                   this.table1.data.push(disp)
+                  this.table1.data.sort((a, b) => {
+                    if (a.dispenser.toLowerCase() > b.dispenser.toLowerCase()) return 1
+                    if (a.dispenser.toLowerCase() < b.dispenser.toLowerCase()) return -1
+                    return 0
+                  })
                 })
               })
             })
       },
-      cargarContrato () {
-        this.table2.data = []
-        apiContratos.getContratoXCliente(this, this.idClientes)
-          .then(res => {
-            if (res) {
-              console.log('contrato', res)
-              res['detalle'].forEach(d => {
-                apiProductos.getProductoXId(this, d.idProducto)
-                .then(p => {
-                  p = p[0]
-                  console.log('prod', p)
-                  let detalle = {
-                    'producto': p.nombre,
-                    'cantidadminima': d.cantidadMinima,
-                    'cantidadmaxima': d.cantidadMaxima,
-                    'precio': '$ ' + d.precioPorUnidad,
-                    'vigentehasta': res['contrato'].fechaVigenciaHasta === null ? '-' : new Date(res['contrato'].fechaVigenciaHasta).toLocaleDateString('es-AR', { year: '2-digit', month: '2-digit', day: '2-digit' })
-                  }
-                  this.table2.data.push(detalle)
-                })
-              })
-            } else {
-              noti.infoConTexto(this, 'Error', 'No se ha encontrado un contrato para el cliente seleccionado')
-            }
-          })
-      },
       getEstadoDispenser (idEstado) {
-        for (var i = 0, len = this.estados.length; i < len; i++) {
+        for (let i = 0, len = this.estados.length; i < len; i++) {
           if (this.estados[i].idEstadosDispenser === idEstado) {
             return this.estados[i].nombre
           }

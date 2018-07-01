@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-  
+
   // import apiClientes from 'src/api/services/clientServices'
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import { modal, select } from 'vue-strap'
@@ -50,7 +50,7 @@
   import noti from 'src/api/notificationsService'
 
   const tableColumns = ['Nombre', 'Dirección', 'Localidad']
-  
+
   export default {
     components: {
       PaperTable,

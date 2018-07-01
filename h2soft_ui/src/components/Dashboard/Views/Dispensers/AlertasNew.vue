@@ -242,6 +242,10 @@
             break
           case 2:
             if (producto) {
+              if (!this.alerta.cantidad) {
+                this.alerta.notificacion = 'Ingrese una cantidad'
+                break
+              }
               let nombre = producto.nombre
               if (this.alerta.cantidad > 1) nombre = nombre.replace('Bidón', 'Bidones')
               this.alerta.notificacion = `Llevar ${this.alerta.cantidad} ${nombre} a ${objetivo.nombre}`

@@ -92,8 +92,9 @@
       getMantenimientosTodos () {
         api.getMantenimientos(this)
           .then(res => {
+            res.sort((a, b) => a.idMantenimientos - b.idMantenimientos)
             res.forEach(mant => {
-              var mantenimiento = {
+              let mantenimiento = {
                 '#': mant.idMantenimientos,
                 cliente: '',
                 objetivo: '',
