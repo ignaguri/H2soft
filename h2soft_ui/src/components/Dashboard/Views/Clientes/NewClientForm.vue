@@ -32,7 +32,7 @@
                   <!--<h4><span class="label label-default">Tipo de cliente*</span></h4>-->
                   <label>Tipo de cliente*</label>
                 </label>
-                </br>
+                <br/>
                 <dds id="tipoCliente" v-model="cliente.idTipo"
                      :options="tiposCliente"
                      options-value="idTiposCliente" search-text="Buscar"
@@ -252,6 +252,7 @@
         this.objetivosProducto.push(ob)
       },
       borrarObjetivo (ob) {
+        if (!confirm('¿Desea eliminar a este objetivo? Se lo eliminará de los recorridos y de todas las asignaciones futuras que tenga')) return
         this.objetivos = this.objetivos.filter(objs => objs.nombre !== ob)
         this.objetivosProducto = this.objetivos.filter(objs => objs.nombre !== ob)
         this.table2.data = this.table2.data.filter(objs => objs.objetivo !== ob)

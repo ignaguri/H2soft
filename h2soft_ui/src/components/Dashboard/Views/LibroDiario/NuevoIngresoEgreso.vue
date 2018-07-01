@@ -94,7 +94,6 @@
   import {datepicker, buttonGroup, radio, select} from 'vue-strap'
   import apiMPC from 'src/api/services/medioDePagoCobroService'
   import apiIE from 'src/api/services/ingresosEgresosServices'
-  import apiCT from 'src/api/services/cajaTotalServices'
   import pictureInput from 'vue-picture-input'
   import noti from 'src/api/notificationsService'
   import {Money} from 'v-money'
@@ -118,11 +117,6 @@
           monto: '',
           idMedioDePagoCobro: '',
           imagen: ''
-        },
-        cajaTotal: {
-          fecha: '',
-          idMedioDePago: '',
-          monto: ''
         },
         mediosDePagoCobro: [],
         radioValue: null,
@@ -175,19 +169,6 @@
             .then(res => {
               if (res) {
                 noti.exitoConTexto(this, 'Éxito', 'Ingreso/Egreso guardado con éxito!')
-                // alert('ingresosEgresos guardado con éxito.')
-                this.cajaTotal.idMedioDePago = this.ingresosEgresos.idMedioDePagoCobro
-                this.cajaTotal.monto = this.ingresosEgresos.monto
-                this.cajaTotal.fecha = this.ingresosEgresos.fecha
-                apiCT.postCajaTotal(this, this.cajaTotal)
-                  .then(res => {
-                    if (res) {
-                      console.log('devolvió true en cajaTotal')
-                    } else {
-                      console.log('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-                      // alert('Error al guardar el cajaTotal. ' + JSON.stringify(this.cajaTotal))
-                    }
-                  })
                 this.limpiarCampos()
               } else {
                 noti.errorConTexto(this, 'Error', 'Error al guardar Ingreso/Egreso')

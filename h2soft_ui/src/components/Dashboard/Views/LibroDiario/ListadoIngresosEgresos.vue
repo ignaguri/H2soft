@@ -34,7 +34,7 @@
   import apiExport from 'src/api/export'
   import { modal } from 'vue-strap'
 
-  const tableColumns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
+  const tableColumns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
 
   export default{
     // TODO: hacer que el ID del empleado se tome solo de la sesion
@@ -76,7 +76,7 @@
         apiIE.getIngresoEgresoSinImagenPorUsuario(this).then(res => {
           res.body.data.forEach(ingreEgre => {
             const ie = {
-              id: ingreEgre.idGastos,
+              '#': ingreEgre.idGastos,
               fecha: new Date(ingreEgre.fecha).toLocaleDateString('es-AR', {
                 year: '2-digit',
                 month: '2-digit',
@@ -88,7 +88,7 @@
               descripcion: ingreEgre.descripcion
             }
             this.table1.data.push(ie)
-            this.exportData.push([ie.id, ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
+            this.exportData.push([ie['#'], ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
           })
         })
         .catch(error => {
@@ -152,9 +152,12 @@
       descargar () {
         const today = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
         const title = `Resumen de Ingresos y Egresos al día ${today}`
-        const columns = ['Id', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
+        const columns = ['#', 'Fecha', 'Empleado', 'Importe', 'Medio de pago', 'Descripción']
         // Acá se suman todos los importes, que estan en la posición 3 del arreglo por cada ingreso/egreso
-        const total = this.exportData.reduce((a, b) => a + b[3], 0)
+        const total = this.exportData.reduce((a, b) => {
+          const subtotal = Number(b[3].replace(/[^-*\d]/g, ''))
+          return a + subtotal
+        }, 0)
         const columnaTotal = ['Total', null, null, total]
         apiExport.exportToExcel(title, columns, this.exportData, columnaTotal)
       }

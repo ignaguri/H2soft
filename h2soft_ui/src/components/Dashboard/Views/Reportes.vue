@@ -11,19 +11,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-xs-12">
-        <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options" :modif="this.modif2">
-          <h4 class="title" slot="title">Objetivos por temporada</h4>
-          <span slot="subTitle">Cantidad objetivos visitados en cada día por temporada</span>
-          <span slot="footer">
-              <i class="ti-check"></i> Información actualizada</span>
-          <div slot="legend">
-            <i class="fa fa-circle text-info"></i> Invierno
-            <i class="fa fa-circle text-danger"></i> Verano
-          </div>
-        </chart-card>
-      </div>
-      <div class="col-md-6 col-xs-12">
+      <div class="col-md-12 col-xs-12">
         <chart-card :chart-data="usersChart.data" :chart-options="usersChart.options" :modif="this.modif">
           <h4 class="title" slot="title">Ventas de productos</h4>
           <span slot="subTitle"> Ventas realizadas en los últimos 12 meses</span>
@@ -46,6 +34,18 @@
             <i class="ti-check"></i> Información actualizada</span>
           <div slot="legend">
             <i class="fa fa-circle text-info"></i> Manteniemientos
+          </div>
+        </chart-card>
+      </div>
+      <div class="col-md-6 col-xs-12">
+        <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options" :modif="this.modif2">
+          <h4 class="title" slot="title">Objetivos por temporada</h4>
+          <span slot="subTitle">Cantidad objetivos visitados en cada día por temporada</span>
+          <span slot="footer">
+              <i class="ti-check"></i> Información actualizada</span>
+          <div slot="legend">
+            <i class="fa fa-circle text-info"></i> Invierno
+            <i class="fa fa-circle text-danger"></i> Verano
           </div>
         </chart-card>
       </div>

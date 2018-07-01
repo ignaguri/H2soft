@@ -50,28 +50,23 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <fg-input type="text"
-                      label="Domicilio"
-                      :disabled="false"
-                      placeholder="Domicilio"
-                      v-model="empleado.domicilio"
-                      required
-            >
-            </fg-input>
+            <label>Domicilio</label>
+            <vga ref="obAddress"
+                 id="objetiv"
+                 classname="form-control border-input"
+                 placeholder="Ingrese el domicilio"
+                 v-on:placechanged="getAddressData"
+                 country="ar">
+            </vga>
           </div>
-          <div class="col-md-6">
-            <!--<label for="id-localidad"><h4><span class="label label-default">Localidad</span></h4></label>-->
-            <slot name="label"><label class="control-label">Localidad</label></slot>
-            </br>
-            <dds id="id-localidad"
-                 v-model="empleado.idLocalidad"
-                 :options="localidades"
-                 options-value="idLocalidad"
-                 options-label="nombre"
-                 search-text="Buscar"
-                 :placeholder="'Selecciona una localidad'"
-                 :search="true" :justified="true">
-            </dds>
+            <div class="col-md-6">
+              <fg-input type="number"
+                        label="Teléfono"
+                        :disabled="false"
+                        placeholder="Teléfono"
+                        v-model="empleado.telefono"
+              >
+              </fg-input>
           </div>
         </div>
         <hr>
@@ -91,13 +86,15 @@
   import noti from 'src/api/notificationsService'
   import sele from 'vue-strap/src/Select.vue'
   import check from 'vue-strap/src/Checkbox.vue'
+  import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
   export default {
     components: {
       sele,
       check,
       datepicker,
-      dds: select
+      dds: select,
+      vga: VueGoogleAutocomplete
     },
     data () {
       return {
@@ -107,8 +104,11 @@
           apellido: '',
           dni: '',
           fechaNacimiento: new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'}),
-          domicilio: '',
-          idLocalidad: null
+          idLocalidad: null,
+          obAddress: '',
+          direccion: '',
+          localidad: '',
+          telefono: ''
         },
         localidades: []
       }
@@ -164,8 +164,9 @@
             this.empleado.apellido = empleado.apellido
             this.empleado.dni = empleado.dni
             this.empleado.fechaNacimiento = new Date(empleado.fechaNacimiento).toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
-            this.empleado.domicilio = empleado.domicilio
-            this.empleado.idLocalidad = empleado.idLocalidad
+            this.empleado.direccion = empleado.direccion
+            this.empleado.localidad = empleado.localidad
+            this.empleado.telefono = empleado.telefono
           })
         }
       },
@@ -175,8 +176,16 @@
         this.empleado.apellido = null
         this.empleado.dni = null
         this.empleado.fechaNacimiento = new Date().toLocaleDateString('es-AR', {year: '2-digit', month: '2-digit', day: '2-digit'})
-        this.empleado.domicilio = null
-        this.empleado.idLocalidad = null
+        this.empleado.direccion = null
+        this.empleado.localidad = null
+        this.empleado.telefono = null
+        this.$refs.obAddress.clear()
+      },
+      getAddressData (addressData, placeResultData) {
+        console.log('addressData:', addressData)
+        console.log('placeresultdata:', placeResultData)
+        this.empleado.direccion = addressData.route.concat(addressData.street_number !== undefined ? ' ' + addressData.street_number : ' ' + 'S/N')
+        this.empleado.localidad = addressData.locality !== undefined ? addressData.locality : addressData.administrative_area_level_1
       }
     }
   }
