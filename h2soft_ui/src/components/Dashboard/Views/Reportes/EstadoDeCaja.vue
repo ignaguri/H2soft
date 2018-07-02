@@ -30,7 +30,7 @@
   </div>
 </template>
 <script>
-  import cajaTotal from 'src/api/services/cajaTotalServices'
+  import apiIngresoEgreso from 'src/api/services/ingresosEgresosServices'
 
   export default {
     components: {},
@@ -47,7 +47,7 @@
     props: {},
     methods: {
       getTotales () {
-        cajaTotal.getTotalPorTipoDePago(this)
+        apiIngresoEgreso.getTotalPorTipoDePagoCobro(this)
           .then(totales => {
             this.efectivoo = totales.efectivo
             this.chequee = totales.cheque

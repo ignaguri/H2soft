@@ -18,7 +18,7 @@
   import PaperTable from 'components/UIComponents/PaperTablePlus.vue'
   import api from 'src/api/services/empleadoServices'
   import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Domicilio']
+  const tableColumns = ['#', 'Nombre', 'DNI', 'Fecha nacimiento', 'Teléfono', 'Dirección', 'Localidad']
   //  let tableData = []
 
   export default {
@@ -50,7 +50,7 @@
           })
       },
       cargarLocalidades (idLocalidades) {
-        for (var i = 0, len = this.localidades.length; i < len; i++) {
+        for (let i = 0, len = this.localidades.length; i < len; i++) {
           if (this.localidades[i].idLocalidad === idLocalidades) {
             return this.localidades[i].nombre
           }
@@ -58,6 +58,7 @@
       },
       cargarEmpleados () {
         api.getEmpleados(this).then(res => {
+          res.sort((a, b) => a.idEmpleados - b.idEmpleados)
           res.forEach(empleado => {
             this.table1.data.push({
               '#': empleado.idEmpleados,
@@ -68,8 +69,9 @@
                 month: '2-digit',
                 day: '2-digit'
               }),
-              domicilio: empleado.domicilio,
-              localidad: this.cargarLocalidades(empleado.idLocalidad)
+              direccion: empleado.direccion,
+              localidad: empleado.localidad,
+              telefono: empleado.telefono
             })
           })
         }, error => {

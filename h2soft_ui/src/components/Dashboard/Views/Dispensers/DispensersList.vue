@@ -47,8 +47,9 @@
     methods: {
       cargarDispensers () {
         api.getDispensers(this).then(res => {
+          res.sort((a, b) => a.idDispensers - b.idDispensers)
           res.forEach(dis => {
-            var disp = {
+            let disp = {
               '#': dis.idDispensers,
               codigo: dis.codigo,
               estado: this.getEstadoDispenser(dis.idEstadoDispenser),

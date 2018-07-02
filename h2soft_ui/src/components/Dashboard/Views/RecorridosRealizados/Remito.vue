@@ -68,7 +68,7 @@
           <div class="col-md-4 left">
             <h5>Dispensers retirados</h5>
             <div class="btn-group btn-group-justified">
-              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo" 
+              <sele @change="cambioDispensersRetirados" :options="dispensersDelObjetivo"
               options-value="idDispensers" search-text="Buscar" :placeholder="this.dispensersDelObjetivo_placeholder"
                options-label="codigo" :multiple="true" name="" :search="true" :justified="true"></sele>
             </div>
@@ -78,8 +78,8 @@
           <div class="col-md-4 left">
             <h5>Dispensers a mantenimiento</h5>
             <div class="btn-group btn-group-justified">
-              <sele v-model="dispensersAMantenimientoSeleccionados" :options="dispensersAMantenimiento" options-value="idDispensers" search-text="Buscar" 
-              :placeholder="this.dispensersAMantenimiento_placeholder" options-label="codigo" 
+              <sele v-model="dispensersAMantenimientoSeleccionados" :options="dispensersAMantenimiento" options-value="idDispensers" search-text="Buscar"
+              :placeholder="this.dispensersAMantenimiento_placeholder" options-label="codigo"
               :multiple="true" name="" :search="true" :justified="true"></sele>
             </div>
           </div>
@@ -109,7 +109,7 @@
           <h5>Productos:</h5>
           <ul>
             <li v-for="prod in remito.productos"> {{prod.producto}}: {{prod.cantidad}} {{prod.accion }}</li>
-          </ul> 
+          </ul>
         </div>
       </div>
       <div class="row">
@@ -337,8 +337,8 @@
           noti.infoConTexto(this, 'Alerta', 'Debe firmar el remito')
         } else {
           // guardar Remito
-          var idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
-          var remito = {
+          let idEmpleado = JSON.parse(sessionStorage.getItem('user')).idEmpleado
+          let remito = {
             'fecha': Date.now(),
             'idEmpleado': idEmpleado,
             'firma': this.firma,
@@ -349,7 +349,7 @@
           apiRemito.nuevoRemito(this, remito)
           .then(rem => {
             // actualizo el detalle del recorrido historico
-            var detalle = {
+            let detalle = {
               'idDetalleRecorridoHistorico': this.IdDetalleRecorridoAsignado,
               'idRemito': rem.idRemito,
               'entregado': true
