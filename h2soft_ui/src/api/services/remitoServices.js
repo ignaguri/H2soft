@@ -128,29 +128,29 @@ export default {
   getCantidadesUltimoRemito (context, idObjetivo) {
     let cantidades = []
     return this.getUltimoRemitoXObjetivo(context, idObjetivo)
-    .then(rem => {
-      if (rem.length > 0) {
-        rem = rem[rem.length - 1]
-        return this.getDetalleRemitoProducto(context, rem.idRemito)
-      } else {
-        return cantidades
-      }
-    })
-    .then(remDet => {
-      if (remDet.length === 0) return cantidades
-      remDet.body.data.forEach(r => {
-        let cantidad = {
-          idProducto: 0,
-          cantidad: 0
-        }
-        if (r.dejadoEnCliente === 1) {
-          cantidad.idProducto = r.idProducto
-          cantidad.cantidad = r.cantidad
-          cantidades.push(cantidad)
+      .then(rem => {
+        if (rem.length > 0) {
+          rem = rem[rem.length - 1]
+          return this.getDetalleRemitoProducto(context, rem.idRemito)
+        } else {
+          return cantidades
         }
       })
-      return cantidades
-    })
+      .then(remDet => {
+        if (remDet.length === 0) return cantidades
+        remDet.body.data.forEach(r => {
+          let cantidad = {
+            idProducto: 0,
+            cantidad: 0
+          }
+          if (r.dejadoEnCliente === 1) {
+            cantidad.idProducto = r.idProducto
+            cantidad.cantidad = r.cantidad
+            cantidades.push(cantidad)
+          }
+        })
+        return cantidades
+      })
   },
   cantidadDeBidonesPorMes (context) {
     const authHeader = {headers: auth.getAuthHeader()}
@@ -162,54 +162,46 @@ export default {
           const mes = new Date(remito.fecha).getMonth()
           promesas.push(context.$http.get(API_URL + 'detalle-remito-productos/?idRemito=' + remito.idRemito, authHeader)
             .then(detRem => {
-              detRem.body.data.push({mes: mes})
-              return detRem.body.data
+              const result = detRem.body.data.map(d => Object.assign({}, d, {mes: mes}))
+              return result
             }))
         })
         return Promise.all(promesas)
       })
-      .then(detallesRemitoProducto => {
-        const cantidades = {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0,
-          6: 0,
-          7: 0,
-          8: 0,
-          9: 0,
-          10: 0,
-          11: 0,
-          12: 0,
-          13: 0,
-          14: 0,
-          15: 0,
-          16: 0,
-          17: 0,
-          18: 0,
-          19: 0,
-          20: 0,
-          21: 0,
-          22: 0,
-          23: 0,
-          24: 0
-        }
-        detallesRemitoProducto.forEach(detalles => {
-          // const mes = detalles.find(d => d.mes).mes
-          const mes = detalles[1].mes
-          const dejadoEnCliente = detalles.find(d => d.dejadoEnCliente === 1)
-          const idProducto = detalles.find(d => d.idProducto)
-          if (idProducto === 1) {
-            cantidades[mes + 1] += dejadoEnCliente.cantidad
+      .then(detallesXRemito => {
+        const productos = []
+        flatten(detallesXRemito).forEach(detalle => {
+          // const dejadoEnCliente = dXr.find(d => d.dejadoEnCliente === 1)
+          const cantidades = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0,
+            9: 0,
+            10: 0,
+            11: 0,
+            12: 0
+          }
+          const mes = detalle.mes
+          const idProducto = detalle.idProducto
+          const aux = productos.findIndex(p => p.idProducto === idProducto)
+          if (aux < 0) {
+            const nuevoProducto = Object.assign({}, { idProducto }, { cantidades })
+            nuevoProducto.cantidades[mes + 1] = detalle.cantidad
+            productos.push(nuevoProducto)
           } else {
-            cantidades[mes + 13] += dejadoEnCliente.cantidad
+            productos[aux].cantidades[mes + 1] += detalle.cantidad
           }
         })
-        console.log('cantidades:' + JSON.stringify(cantidades))
-        return cantidades
+        console.log('PRODUCTOS POSTA:', productos)
+        return productos
       })
       .catch(error => {
+        console.error(error)
         console.log('algo falló en el get del detalle del remito' + JSON.stringify(error))
       })
   },
@@ -232,3 +224,5 @@ export default {
       })
   }
 }
+
+const flatten = array => array.reduce((acc, val) => acc.concat(val), [])
