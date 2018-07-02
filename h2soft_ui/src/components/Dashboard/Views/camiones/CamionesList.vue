@@ -47,7 +47,7 @@
             this.table1.data.push({
               '#': camion.idCamiones,
               camion: camion.nombre,
-              capacidadmaxima: camion.capacidadMaxima,
+              capacidadmaxima: camion.capacidadMaxima + ' Litros  ',
               estado: camion.libre === 1 ? 'Libre' : 'Ocupado'
             })
           })

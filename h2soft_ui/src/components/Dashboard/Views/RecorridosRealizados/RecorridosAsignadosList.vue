@@ -18,7 +18,7 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import PaperTable from 'components/UIComponents/TablaRecorridos.vue'
   // import noti from 'src/api/notificationsService'
-  const tableColumns = ['#', 'Día', 'Turno', 'Fecha', 'Temp.']
+  const tableColumns = ['#', 'Día', 'Turno', 'Fecha']
   const dataColumns = []
 
   export default {

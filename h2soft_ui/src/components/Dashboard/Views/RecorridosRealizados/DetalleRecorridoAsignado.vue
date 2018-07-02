@@ -16,8 +16,13 @@
   </div>
   <div class="row">
     <div v-if="true" class="col-md-3 left">
+      <h5>Cantidad total: <a>{{cantidadTotal}} Litros</a> </h5>
+    </div>
+    <div v-if="true" class="col-md-3 left">
       <h5>Camión asignado: <a>{{camionAsignado}}</a> </h5>
     </div>
+  </div>
+  <div class="row">
     <div class="col-md-3 left">
       <h5>Estado del recorrido: <a>{{estado}}</a> </h5>
     </div>
@@ -32,29 +37,29 @@
         Anular
       </button>
     </div>
-    <modal effect="fade" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = recorridoAsignarCamion()" title="Camión del recorrido">
-      <div class="row">
-        <div class="col-md-12">
-          <h5>Selecciona el camión en el que harás el recorrido</h5>
-          <div>No podrás realizar el recorrido si no seleccionas un camión</div>
-        </div>
+  </div>  
+  <modal effect="fade" :value="showCustomModal" :backdrop="false" @ok="showCustomModal = recorridoAsignarCamion()" title="Camión del recorrido">
+    <div class="row">
+      <div class="col-md-12">
+        <h5>Selecciona el camión en el que harás el recorrido</h5>
+        <div>No podrás realizar el recorrido si no seleccionas un camión</div>
       </div>
-      </br>
-      <div class="row">
-        <div class="col-md-6">
-          <sele v-model="idCamion" :options="camionesLibres" 
-          options-value="idCamiones" search-text="Seleccione" 
-          placeholder="Seleccione un camión" 
-          options-label="nombre" :multiple="false" 
-          name="" :search="true" :justified="false"></sele>
-        </div>
+    </div>
+    </br>
+    <div class="row">
+      <div class="col-md-6">
+        <sele v-model="idCamion" :options="camionesLibres" 
+        options-value="idCamiones" search-text="Seleccione" 
+        placeholder="Seleccione un camión" 
+        options-label="nombreCapacidad" :multiple="false" 
+        name="" :search="true" :justified="false"></sele>
       </div>
-      <div slot="modal-footer" class="modal-footer">
-        <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
-        <button type="button" class="btn btn-success" @click="btn_iniciarReanudar()">Aceptar</button>
-      </div>
-    </modal>
-  </div>
+    </div>
+    <div slot="modal-footer" class="modal-footer">
+      <button type="button" class="btn btn-default" @click="showCustomModal = false">Salir</button>
+      <button type="button" class="btn btn-success" @click="btn_iniciarReanudar()">Aceptar</button>
+    </div>
+  </modal>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -80,12 +85,14 @@
   import apiEstados from 'src/api/services/estadosDeRecorridosServices'
   import apiCamiones from 'src/api/services/camionServices'
   import apiRemito from 'src/api/services/remitoServices'
+  import apiContratos from 'src/api/services/contratosServices'
+  import apiCliente from 'src/api/services/clientServices'
   import PaperTable from 'components/UIComponents/TablaObjetivosdeRecorrido.vue'
   import noti from 'src/api/notificationsService'
   import { modal, select } from 'vue-strap'
   // import sele from 'vue-strap/src/Select.vue'
 
-  const tableColumns = ['#', 'Orden', 'Objetivo', 'Dirección', 'Bidones 20L.']
+  const tableColumns = ['#', 'Orden', 'Objetivo', 'Dirección', 'Bidón 20L.', 'Bidón 10L.']
   const dataColumns = []
   export default {
     components: {
@@ -106,7 +113,7 @@
         txBtIniciarFinalizar: 'Iniciar',
         txBtSuspReanudar: 'Suspender',
         puedeFinalizar: true,
-        // idEstado: 0,
+        cantidadTotal: 0,
         table1: {
           title: 'Objetivos del recorrido',
           subTitle: '',
@@ -127,6 +134,7 @@
     },
     mounted () {
       this.getCamiones()
+      this.cargarProductos()
       this.cargarRecorridoAsignado()
     },
     methods: {
@@ -137,26 +145,49 @@
               api.getObjetivoXId(this, det.idObjetivo)
               .then(resObj => {
                 resObj = resObj.body.data[0]
-                this.cantidadUltimoRemito(det.idObjetivo)
-                .then(cant => {
-                  this.table1.data.push({
-                    '#': det.idDetalleRecorridoHistorico,
-                    'orden': det.orden,
-                    'objetivo': resObj.nombre,
-                    'direccion': resObj.direccion,
-                    'estado': det.entregado === 0 ? 1 : 4,
-                    'bidones20l.': cant
-                  })
-                  this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
-                  if (det.entregado === 0) {
-                    this.puedeFinalizar = false
+                let recorrido = {
+                  '#': det.idDetalleRecorridoHistorico,
+                  'orden': det.orden,
+                  'objetivo': resObj.nombre,
+                  'direccion': resObj.direccion,
+                  'estado': det.entregado === 0 ? 1 : 4,
+                  'bidon20l': 0,
+                  'bidon10l': 0
+                }
+                this.table1.data.sort((a, b) => a.orden - b.orden) // a medida que voy insertando, voy ordenando
+                if (det.entregado === 0) {
+                  this.puedeFinalizar = false
+                }
+                let cantidad20l = 0
+                let cantidad10l = 0
+                apiCliente.getObjetivoCantidadProducto(this, det.idObjetivo)
+                .then(ocp => {
+                  if (ocp) {
+                    if (ocp.find(x => x.idProducto === 1) !== undefined) {
+                      cantidad20l = ocp.find(x => x.idProducto === 1).cantidad
+                      recorrido.bidon20l = cantidad20l + ' (1ra. vez)'
+                    }
+                    if (ocp.find(x => x.idProducto === 2) !== undefined) {
+                      cantidad10l = ocp.find(x => x.idProducto === 2).cantidad
+                      recorrido.bidon10l = cantidad10l + ' (1ra. vez)'
+                    }
                   }
-                  /* if (this.camionid !== null) {
-                    this.camionAsignado = this.getCamionNombre(this.camionid)
-                  } else {
-                    this.camionAsignado = '-'
-                  } */
+                  return apiRemito.getCantidadesUltimoRemito(this, det.idObjetivo)
                 })
+                .then(cant => {
+                  if (cant.length > 0) {
+                    if (cant.find(x => x.idProducto === 1) !== undefined) {
+                      cantidad20l = cant.find(x => x.idProducto === 1).cantidad
+                      recorrido.bidon20l = cantidad20l + ' (últ. remito)'
+                    } else recorrido.bidon20l = 0 + ' (últ. remito)'
+                    if (cant.find(x => x.idProducto === 2) !== undefined) {
+                      cantidad10l = cant.find(x => x.idProducto === 2).cantidad
+                      recorrido.bidon10l = cantidad10l + ' (últ. remito)'
+                    } else recorrido.bidon10l = 0 + ' (últ. remito)'
+                  }
+                  this.cantidadTotal = this.cantidadTotal + (cantidad20l * (this.productos.find(x => x.idProductos === 1).tamanio)) + (cantidad10l * (this.productos.find(x => x.idProductos === 2).tamanio))
+                })
+                this.table1.data.push(recorrido)
               })
             })
             this.setearEstadoActual()
@@ -164,46 +195,10 @@
             console.log('error al cargar los recorridos asignados ' + error)
           })
       },
-      /* cantidadUltimoRemito2 (idObjetivo) {
-        return new Promise((resolve, reject) => {
-          apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
-          .then(rem => {
-            if (rem.length > 0) {
-              rem = rem[rem.length - 1]
-              apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
-              .then(remDet => {
-                remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
-                if (remDet.length > 0) {
-                  resolve(remDet[0].cantidad)
-                } else {
-                  resolve(0)
-                }
-              })
-            } else {
-              resolve(0)
-            }
-          })
-        })
-      }, */
-      cantidadUltimoRemito (idObjetivo) {
-        return apiRemito.getUltimoRemitoXObjetivo(this, idObjetivo)
-        .then(rem => {
-          if (rem.length > 0) {
-            rem = rem[rem.length - 1]
-            return apiRemito.getDetalleRemitoProducto(this, rem.idRemito)
-          } else {
-            return 0
-          }
-        })
-        .then(remDet => {
-          console.log('remDet', remDet)
-          if (!remDet) return 0
-          remDet = remDet.body.data.filter(x => { return x.dejadoEnCliente === 1 })
-          if (remDet.length > 0) {
-            return remDet[0].cantidad
-          } else {
-            return 0
-          }
+      cargarProductos () { // se buscan los productos del contrato y luego se cargan en el combo
+        apiContratos.getProductosContratos(this)
+        .then(res => {
+          this.productos = res
         })
       },
       verdetalle (e) {
@@ -225,8 +220,18 @@
               if (res.length === 0) {
                 apiCamiones.getCamionesLibres(this)
                 .then(res => {
+                  let camLib = []
+                  res.forEach(c => {
+                    camLib.push({
+                      'idCamiones': c.idCamiones,
+                      'nombre': c.nombre,
+                      'capacidadMaxima': c.capacidadMaxima,
+                      'nombreCapacidad': c.nombre + ' (' + c.capacidadMaxima + 'L.)',
+                      'libre': c.libre
+                    })
+                  })
+                  this.camionesLibres = camLib
                   this.idCamion = 0
-                  this.camionesLibres = res
                   this.showCustomModal = true
                 })
               } else {
@@ -261,7 +266,17 @@
           case 3: // suspendido
             apiCamiones.getCamionesLibres(this)
             .then(res => {
-              this.camionesLibres = res
+              let camLib = []
+              res.forEach(c => {
+                camLib.push({
+                  'idCamiones': c.idCamiones,
+                  'nombre': c.nombre,
+                  'capacidadMaxima': c.capacidadMaxima,
+                  'libre': c.libre,
+                  'nombreCapacidad': c.nombre + ' (' + c.capacidadMaxima + 'L.)'
+                })
+              })
+              this.camionesLibres = camLib
               // this.idCamion = 0
               this.showCustomModal = true
             })
@@ -373,7 +388,7 @@
                 this.txBtSuspReanudar = 'Suspender'
                 this.$parent.estado = 'En Proceso'
                 this.$parent.idEstado = 2
-                noti.exitoConTexto(this, 'Éxito', 'Recorrido suspendido')
+                noti.exitoConTexto(this, 'Éxito', 'Recorrido reanudado')
                 this.showCustomModal = false
               })
             })
@@ -456,7 +471,15 @@
       getCamiones () {
         apiCamiones.getCamiones(this)
           .then(res => {
-            this.camiones = res
+            res.forEach(c => {
+              this.camiones.push({
+                'idCamiones': c.idCamiones,
+                'nombre': c.nombre,
+                'capacidadMaxima': c.capacidadMaxima,
+                'nombreCapacidad': c.nombre + ' (' + c.capacidadMaxima + 'L.)',
+                'libre': c.libre
+              })
+            })
           })
       },
       cambioCamionSeleccionado (value) {
