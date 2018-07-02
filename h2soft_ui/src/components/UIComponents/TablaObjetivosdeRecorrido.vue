@@ -94,7 +94,7 @@
       },
       normalize (cadena) {
         // Definimos los caracteres que queremos eliminar
-        let specialChars = '!@$^&%*()+=\\-[]/{}|:<>?,'
+        let specialChars = '!@$^&%*()+=\\-[]/{}|:<>?,.'
         // Los eliminamos todos
         for (var i = 0; i < specialChars.length; i++) {
           cadena = cadena.replace(new RegExp('\\' + specialChars[i], 'gi'), '')
