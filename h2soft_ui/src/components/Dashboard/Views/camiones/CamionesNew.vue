@@ -20,9 +20,9 @@
           <div class="col-md-6">
             <!--<h5>Capacidad máxima</h5>-->
             <fg-input type="number"
-                      label="Capacidad máxima"
+                      label="Capacidad máxima (Litros)"
                       :disabled="false"
-                      placeholder="Número"
+                      placeholder="Capacidad máxima en litros"
                       v-model="camion.capacidadMaxima"
                       required
             >
@@ -58,7 +58,7 @@
         camion: {
           idCamiones: '',
           nombre: '',
-          capacidadMaxima: 0
+          capacidadMaxima: null
         }
       }
     },
@@ -92,6 +92,7 @@
               }
             })
         }
+        this.$parent.isCamionesList = true
       },
       cargarCamion () {
         console.log('ID CAMION:' + JSON.stringify(this.id))
