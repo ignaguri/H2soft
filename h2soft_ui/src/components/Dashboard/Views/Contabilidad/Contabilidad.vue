@@ -15,7 +15,7 @@
           </dds>
         </div>
       </div>
-      </br>
+    <br/>
       <div class="row text-line">
         <div class="col-md-3">
           <!--<label><h4><span class="label label-default">Desde</span></h4></label>-->
@@ -41,8 +41,7 @@
           <button type="button" class="btn btn-info btn-fill" @click="this.actualizar">Actualizar</button>
         </div>
       </div>
-      </br>
-    
+    <br/>
     <div class="row" >
       <div class="col-md-12">
         <div class="card">
@@ -167,7 +166,7 @@
         this.exportData.totales = []
         api.calcularVentasPorCliente(this, this.idClientes, this.fechaDesde, this.fechaHasta, this.idEstadoFacturacion)
           .then(ventasXProducto => {
-            console.log(ventasXProducto)
+//            console.log(ventasXProducto)
             if (ventasXProducto && ventasXProducto.length) {
               ventasXProducto.forEach(vxp => {
                 apiProducto.getProductoXId(this, vxp.idProducto)
@@ -188,7 +187,7 @@
                       'objetivo': v.objetivo,
                       'producto': p.nombre,
                       'cantidadvendida': v.cantidad,
-                      'firmadoconforme': 'Si',
+                      'firmadoconforme': 'Sí',
                       'facturado': v.idEstadoRemito === 3
                     }
                     this.table2.data.push(detalleVenta)

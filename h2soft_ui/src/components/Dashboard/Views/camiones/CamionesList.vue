@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="card">
           <paper-table type="hover" :title="table1.title" :sub-title="table1.subTitle" :data="table1.data"
-                       :columns="table1.columns" :editButton="true" :eraseButton="true"
+                       :columns="table1.columns" :editButton="true" :eraseButton="false"
                        :erase="borrarCamion" :goButton="false"
                        :edit="editar">
           </paper-table>
@@ -43,6 +43,7 @@
     methods: {
       cargarCamiones () {
         api.getCamiones(this).then(res => {
+          res.sort((a, b) => a.idCamiones - b.idCamiones)
           res.forEach(camion => {
             this.table1.data.push({
               '#': camion.idCamiones,

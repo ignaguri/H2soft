@@ -136,12 +136,15 @@
           return
         }
         // Validacion para ver si la fecha desde es mayor a la fecha hasta del contrato que esta vigente
+
+        /*
         this.esValido = this.laFechaDesdeEsValida(this.contrato)
         console.log('ESVALIDO:' + this.esValido)
         if (!this.esValido) {
           noti.infoConTexto(this, 'Alerta', 'lalala')
           return
         }
+        */
         if (this.id === 0 && !this.edit) {
           let firmado = this.contrato.fechaFirma.split('/')
           let fechaDesde = this.contrato.fechaVigenciaDesde.split('/')

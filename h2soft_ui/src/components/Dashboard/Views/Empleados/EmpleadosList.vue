@@ -50,7 +50,7 @@
           })
       },
       cargarLocalidades (idLocalidades) {
-        for (var i = 0, len = this.localidades.length; i < len; i++) {
+        for (let i = 0, len = this.localidades.length; i < len; i++) {
           if (this.localidades[i].idLocalidad === idLocalidades) {
             return this.localidades[i].nombre
           }
@@ -58,6 +58,7 @@
       },
       cargarEmpleados () {
         api.getEmpleados(this).then(res => {
+          res.sort((a, b) => a.idEmpleados - b.idEmpleados)
           res.forEach(empleado => {
             this.table1.data.push({
               '#': empleado.idEmpleados,
