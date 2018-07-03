@@ -63,6 +63,9 @@
                 .then(res1 => {
                   disp.ubicacion = res1.body.data[0].nombre
                   this.table1.data.push(disp)
+                  this.table1.data.sort((a, b) => {
+                    return a['#'] - b['#']
+                  })
                 })
             }
           })
