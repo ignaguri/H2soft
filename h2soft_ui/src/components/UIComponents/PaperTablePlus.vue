@@ -169,14 +169,19 @@
         }
       },
       filterButton () {
+        const filter = this.normalize(this.filterOption)
+        if (filter === 'sinfiltro') {
+          this.tableData = this.data
+          return
+        }
         this.tableData = this.data.filter(item => {
-          if (item[this.filterOption.toLowerCase()]) {
-            if (isNaN(item[this.filterOption.toLowerCase()])) {
-              const itemAux = item[this.filterOption.toLowerCase()].toLowerCase()
+          if (item[filter]) {
+            if (isNaN(item[filter])) {
+              const itemAux = item[filter].toLowerCase()
               const filterAux = this.filterText.toLowerCase()
               return itemAux.includes(filterAux)
             } else {
-              const itemAux = Number(item[this.filterOption.toLowerCase()])
+              const itemAux = Number(item[filter])
               const filterAux = Number(this.filterText)
               return itemAux === filterAux
             }
@@ -186,10 +191,10 @@
         })
       },
       changeFilter (filter) {
-        if (filter === 'Sin filtro') {
-          // No anda ¯\_(ツ)_/¯
-          // this.filterText = ''
-        }
+//        if (filter === 'Sin filtro') {
+//          // No anda ¯\_(ツ)_/¯
+//          // this.filterText = ''
+//        }
         this.filterOption = filter
       },
       normalize (cadena) {
