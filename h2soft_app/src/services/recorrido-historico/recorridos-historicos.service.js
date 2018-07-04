@@ -122,7 +122,7 @@ function replicarAsignacion(ap, data) {
 
       let nuevos = [];
       for (let i = 0; i < aInsertar.length; i++) {
-        let isNuevo = false;
+        let isNuevo = true;
         const fechaNewie = new Date(aInsertar[i].fechaAsignacion).toDateString();
         for (let j = 0; j < recorridosAsignados.data.length; j++) {
           const fechaOldie = new Date(recorridosAsignados.data[j].fechaAsignacion).toDateString();

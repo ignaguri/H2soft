@@ -5,7 +5,7 @@
     <side-bar type="navbar" :sidebar-links="$sidebar.sidebarLinks">
       <ul class="nav navbar-nav">
         <li>
-          <a href="Fecha de hoy" class="btn-magnify" @click.prevent="">
+          <a href="Fecha de hoy" class="btn-magnify" @click.prevent="false">
             {{new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}
           </a>
         </li>
