@@ -133,7 +133,7 @@
           },
           options: {
             low: 1,
-            high: 450,
+            high: 350,
             showArea: true,
             // height: '245px',
             axisX: {
@@ -148,8 +148,8 @@
         },
         mantenimientosChart: {
           data: {
-            labels: [],
-            series: []
+            labels: ['Ago', 'Sep', 'Oct', 'Nov', 'Dic', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul'],
+            series: [[3, 4, 6, 5, 6, 7, 6, 6, 3, 2, 2, 1]]
           },
           options: {
             low: 0,
@@ -169,17 +169,19 @@
         activityChart: {
           data: {
             labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
-            series: []
+            series: [[4, 6, 6, 4, 2], [8, 12, 10, 8, 6]]
           },
           options: {
-            seriesBarDistance: 10,
+            seriesBarDistance: 1,
             axisX: {
               showGrid: false
             },
             fullWidth: true,
             chartPadding: {
               right: 50
-            }
+            },
+            low: 0,
+            high: 13
             // height: '245px'
           }
         },
@@ -271,8 +273,8 @@
             consumos.push(consumoInvierno)
             consumos.push(consumoVerano)
             // console.log('CONSUMOS:' + JSON.stringify(consumos))
-            this.activityChart.data.series.push(consumoInvierno)
-            this.activityChart.data.series.push(consumoVerano)
+            // this.activityChart.data.series.push(consumoInvierno)
+            // this.activityChart.data.series.push(consumoVerano)
             this.modif2 = !this.modif2
           })
       },
@@ -308,9 +310,9 @@
             }
             // console.log('MESES ORDENADOS MANTENIMIENTO:' + JSON.stringify(cantMeses))
             // console.log('Consumo ORDENADOS MANTENIMIENTO:' + JSON.stringify(consumoOrdenadoMantenimiento))
-            this.mantenimientosChart.data.labels = (cantMeses)
-            this.mantenimientosChart.data.series.push(consumoOrdenadoMantenimiento)
-            this.modif3 = !this.modif3
+            // this.mantenimientosChart.data.labels = (cantMeses)
+            // this.mantenimientosChart.data.series.push(consumoOrdenadoMantenimiento)
+            // this.modif3 = !this.modif3
           })
           .catch(err => {
             console.log('ERRRO:' + err)
