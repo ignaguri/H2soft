@@ -5,7 +5,6 @@ import Landing from '../components/GeneralViews/Landing'
 
 // Admin pages
 import Clientes from 'src/components/Dashboard/Views/Clientes'
-import WorkInProgress from 'src/components/GeneralViews/WorkInProgress'
 import RecorridosAsignados from 'src/components/Dashboard/Views/RecorridosAsignados'
 import Planificacion from 'src/components/Dashboard/Views/Planificacion'
 import Reporte from 'src/components/Dashboard/Views/Reportes'
@@ -25,18 +24,6 @@ const routes = [
     component: DashboardLayout,
     redirect: 'planificacion',
     children: [
-      {
-        path: 'overview',
-        name: 'overview',
-        component: WorkInProgress,
-        meta: {requiresAuth: true}
-      },
-      {
-        path: 'notifications',
-        name: 'Work-in-Progress',
-        component: WorkInProgress,
-        meta: {requiresAuth: true}
-      },
       {
         path: 'reportes',
         name: 'Reportes',

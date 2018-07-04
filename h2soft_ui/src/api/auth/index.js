@@ -7,7 +7,7 @@ export default {
     authenticated: false
   },
   // Send a request to the login URL and save the returned JWT
-  login (context, creds, redirect) {
+  login (context, creds) {
     context.$http.post(LOGIN_URL, creds).then(response => {
       sessionStorage.setItem('user', JSON.stringify(response.body.user))
       sessionStorage.setItem('access_token', response.body.accessToken)
@@ -19,8 +19,11 @@ export default {
             response.body.user.apellido = r.body.apellido
             sessionStorage.setItem('user', JSON.stringify(response.body.user))
             // Redirect to a specified route
-            if (redirect) {
-              context.$router.push(redirect)
+            const rol = response.body.user.idRol
+            if (rol === 3) {
+              context.$router.push('recorridos')
+            } else {
+              context.$router.push('planificacion')
             }
           })
       }

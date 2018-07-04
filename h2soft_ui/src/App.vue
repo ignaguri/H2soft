@@ -2,10 +2,10 @@
   <div :class="{'nav-open': $sidebar.showSidebar}">
     <router-view></router-view>
     <!--This sidebar appears only for screens smaller than 992px-->
-    <side-bar type="navbar" :sidebar-links="$sidebar.sidebarLinks">
+    <side-bar type="navbar" :sidebar-links="this.$sidebar.sidebarLinks">
       <ul class="nav navbar-nav">
         <li>
-          <a href="Fecha de hoy" class="btn-magnify" @click.prevent="">
+          <a href="Fecha de hoy" class="btn-magnify" @click.prevent="false">
             {{new Date().toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}}
           </a>
         </li>
@@ -43,7 +43,8 @@
       return {
         cantNotificaciones: '0 Notificaciones',
         notifications: [],
-        notiColor: null
+        notiColor: null,
+        sidebarLinks: []
       }
     },
     mounted () {
