@@ -73,7 +73,7 @@
           email: this.credentials.email,
           password: this.credentials.password
         }
-        auth.login(this, credentials, 'planificacion')
+        auth.login(this, credentials)
         // alert(JSON.stringify(credentials))
       },
       showMessage () {
