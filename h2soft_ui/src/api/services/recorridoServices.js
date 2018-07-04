@@ -509,7 +509,6 @@ export default {
   },
   getDiaAsignacion (dia, fechaDesde) {
     // Sunday - Saturday : 0 - 6
-    // const today = new Date();
     const date = new Date(fechaDesde)
 
     date.setHours(0)
@@ -585,7 +584,7 @@ export default {
           const error = {
             restrictivo: false,
             message: 'Los recorridos a asignar para ese día y turno exceden la cantidad de camiones disponibles. Recorridos:',
-            data: cantCamiones.map(c => c.idRecorrido)
+            data: [...cantCamiones] // cantCamiones = recorridos conflictivos
           }
           throw error
         }
@@ -602,7 +601,8 @@ export default {
       .then(camiones => {
         const recorridosPorFecha = groupBy(recorridos, 'fechaAsignacion')
         const recorridosConflictivos = Object.values(recorridosPorFecha).filter(recorridos => recorridos.length >= camiones.body.data.length)
-        return recorridosConflictivos.length ? flatten(recorridosConflictivos) : false
+        const result = flatten(recorridosConflictivos).map(c => c.idRecorrido)
+        return recorridosConflictivos.length ? new Set(result) : false
       })
       .catch(err => {
         throw err
@@ -799,8 +799,11 @@ export default {
   },
   getAsignacionesFuturas (context, id) {
     const authHeader = {headers: auth.getAuthHeader()}
+    const ayer = new Date()
+    ayer.setDate(ayer.getDate() - 1)
+
     return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' +
-        id + '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+      id + '&fechaAsignacion[$gt]=' + ayer.toISOString(), authHeader)
       .then(recorridos => {
         recorridos = recorridos.body.data
         const agrupados = groupBy(recorridos, 'idEmpleadoAsignado')
@@ -808,7 +811,12 @@ export default {
         Object.keys(agrupados).forEach(k => {
           let {0: first, length: l, [l - 1]: last} = agrupados[k]
           promesas.push(context.$http.get(API_URL + 'empleados/' + k, authHeader)
-            .then(emple => Object.assign({}, { first }, { last }, { empleado: {nombre: emple.body.nombre, apellido: emple.body.apellido} })))
+            .then(emple => Object.assign({}, {first}, {last}, {
+              empleado: {
+                nombre: emple.body.nombre,
+                apellido: emple.body.apellido
+              }
+            })))
         })
         return Promise.all(promesas)
       })
