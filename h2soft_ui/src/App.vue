@@ -43,8 +43,7 @@
       return {
         cantNotificaciones: '0 Notificaciones',
         notifications: [],
-        notiColor: null,
-        sidebarLinks: []
+        notiColor: null
       }
     },
     mounted () {
