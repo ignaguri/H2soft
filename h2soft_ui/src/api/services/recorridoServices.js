@@ -507,9 +507,9 @@ export default {
     // return Math.abs(Math.round(diff));
     return Math.abs(diff)
   },
-  getDiaAsignacion (dia, date) {
+  getDiaAsignacion (dia, fechaDesde) {
     // Sunday - Saturday : 0 - 6
-    // const date = new Date(fechaDesde)
+    const date = new Date(fechaDesde)
 
     date.setHours(0)
     if (date.getDay() <= dia) {
@@ -803,7 +803,7 @@ export default {
     ayer.setDate(ayer.getDate() - 1)
 
     return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' +
-        id + '&fechaAsignacion[$gt]=' + ayer.toISOString(), authHeader)
+      id + '&fechaAsignacion[$gt]=' + ayer.toISOString(), authHeader)
       .then(recorridos => {
         recorridos = recorridos.body.data
         const agrupados = groupBy(recorridos, 'idEmpleadoAsignado')
@@ -811,7 +811,12 @@ export default {
         Object.keys(agrupados).forEach(k => {
           let {0: first, length: l, [l - 1]: last} = agrupados[k]
           promesas.push(context.$http.get(API_URL + 'empleados/' + k, authHeader)
-            .then(emple => Object.assign({}, { first }, { last }, { empleado: {nombre: emple.body.nombre, apellido: emple.body.apellido} })))
+            .then(emple => Object.assign({}, {first}, {last}, {
+              empleado: {
+                nombre: emple.body.nombre,
+                apellido: emple.body.apellido
+              }
+            })))
         })
         return Promise.all(promesas)
       })
