@@ -769,9 +769,10 @@ export default {
   },
   checkIfAsignado (context, id) {
     const authHeader = {headers: auth.getAuthHeader()}
-    const hoy = new Date()
-    const enUnMes = new Date(hoy)
-    enUnMes.setDate(hoy.getDate() + 30)
+    const ayer = new Date()
+    ayer.setDate(ayer.getDate() - 1)
+    const enUnMes = new Date(ayer)
+    enUnMes.setDate(ayer.getDate() + 30)
     return context.$http
       .get(
         API_URL +
@@ -779,7 +780,7 @@ export default {
         '?idRecorrido=' +
         id +
         '&fechaAsignacion[$gte]=' +
-        hoy.toISOString() +
+        ayer.toISOString() +
         '&fechaAsignacion[$lt]=' +
         enUnMes.toISOString(),
         authHeader
