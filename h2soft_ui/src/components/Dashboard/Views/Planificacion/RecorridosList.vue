@@ -299,8 +299,8 @@
         const fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
         fechaHasta.setHours(0, 0, 0, 0)
         const now = new Date()
-        const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
-        if (fechaDesde < today) {
+        now.setHours(0, 0, 0, 0)
+        if (fechaDesde < now) {
           noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser menor a hoy')
           return true
         }
