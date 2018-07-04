@@ -47,7 +47,7 @@
       return {
         table1: {
           title: 'Ingresos/Egresos',
-          subTitle: 'Listado de todas las transacciones de dinero realizadas',
+          subTitle: 'Listado de las últimas transacciones de dinero realizadas',
           columns: [...tableColumns],
           data: []
         },
@@ -89,6 +89,16 @@
               descripcion: ingreEgre.descripcion
             }
             this.table1.data.push(ie)
+            // Ordeno los registros para que esten ordenados por fecha decreciente
+            this.table1.data.sort((a, b) => {
+              let f1 = a.fecha.split('/')
+              let f2 = b.fecha.split('/')
+              let fecha1 = new Date(f1[2], f1[1] - 1, f1[0])
+              let fecha2 = new Date(f2[2], f2[1] - 1, f2[0])
+              if (fecha1 < fecha2) return 1
+              if (fecha1 > fecha2) return -1
+              return 0
+            })
             this.exportData.push([ie['#'], ie.fecha, ie.empleado, ie.importe, ie.mediodepago, ie.descripcion])
           })
         })
