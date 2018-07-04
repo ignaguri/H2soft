@@ -120,14 +120,17 @@ function replicarAsignacion(ap, data) {
         });
       });
 
-      const nuevos = aInsertar.filter(newie => {
-        const fechaNewie = new Date(newie.fechaAsignacion).toDateString();
-        return recorridosAsignados.data.every(oldie => {
-          const fechaOldie = new Date(oldie.fechaAsignacion).toDateString();
-          return fechaNewie !== fechaOldie;
-        });
-      });
-
+      let nuevos = [];
+      for (let i = 0; i < aInsertar.length; i++) {
+        let isNuevo = false;
+        const fechaNewie = new Date(aInsertar[i].fechaAsignacion).toDateString();
+        for (let j = 0; j < recorridosAsignados.data.length; j++) {
+          const fechaOldie = new Date(recorridosAsignados.data[j].fechaAsignacion).toDateString();
+          isNuevo = fechaNewie !== fechaOldie;
+          if (!isNuevo) break;
+        }
+        if (isNuevo) nuevos.push(aInsertar[i]);
+      }
       actualizables.forEach(act =>
         promesas.push(
           ap.services['recorrido-historico'].patch(act.idRecorridosHistoricos, {
@@ -188,7 +191,6 @@ function cantMesesEntre(hasta, desde) {
 
 function getDiaAsignacion(dia, fechaDesde) {
   // Sunday - Saturday : 0 - 6
-  // const today = new Date();
   const date = new Date(fechaDesde);
 
   date.setHours(0);

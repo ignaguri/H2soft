@@ -507,10 +507,9 @@ export default {
     // return Math.abs(Math.round(diff));
     return Math.abs(diff)
   },
-  getDiaAsignacion (dia, fechaDesde) {
+  getDiaAsignacion (dia, date) {
     // Sunday - Saturday : 0 - 6
-    // const today = new Date();
-    const date = new Date(fechaDesde)
+    // const date = new Date(fechaDesde)
 
     date.setHours(0)
     if (date.getDay() <= dia) {
@@ -585,7 +584,7 @@ export default {
           const error = {
             restrictivo: false,
             message: 'Los recorridos a asignar para ese día y turno exceden la cantidad de camiones disponibles. Recorridos:',
-            data: cantCamiones.map(c => c.idRecorrido)
+            data: [...cantCamiones] // cantCamiones = recorridos conflictivos
           }
           throw error
         }
@@ -602,7 +601,8 @@ export default {
       .then(camiones => {
         const recorridosPorFecha = groupBy(recorridos, 'fechaAsignacion')
         const recorridosConflictivos = Object.values(recorridosPorFecha).filter(recorridos => recorridos.length >= camiones.body.data.length)
-        return recorridosConflictivos.length ? flatten(recorridosConflictivos) : false
+        const result = flatten(recorridosConflictivos).map(c => c.idRecorrido)
+        return recorridosConflictivos.length ? new Set(result) : false
       })
       .catch(err => {
         throw err
@@ -799,8 +799,11 @@ export default {
   },
   getAsignacionesFuturas (context, id) {
     const authHeader = {headers: auth.getAuthHeader()}
+    const ayer = new Date()
+    ayer.setDate(ayer.getDate() - 1)
+
     return context.$http.get(API_URL + 'recorrido-historico/' + '?idRecorrido=' +
-        id + '&fechaAsignacion[$gte]=' + new Date().toISOString(), authHeader)
+        id + '&fechaAsignacion[$gt]=' + ayer.toISOString(), authHeader)
       .then(recorridos => {
         recorridos = recorridos.body.data
         const agrupados = groupBy(recorridos, 'idEmpleadoAsignado')
