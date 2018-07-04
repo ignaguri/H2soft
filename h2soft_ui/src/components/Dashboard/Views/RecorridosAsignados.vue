@@ -45,6 +45,15 @@
 
       }
     },
+    beforeRouteEnter (to, from, next) {
+      if (from.path.includes('login')) {
+        next(vm => {
+          location.reload()
+        })
+      } else {
+        next()
+      }
+    },
     methods: {
       seeLista () {
         this.verLista = true
