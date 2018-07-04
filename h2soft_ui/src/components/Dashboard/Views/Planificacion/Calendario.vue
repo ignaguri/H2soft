@@ -21,6 +21,11 @@
         <Event slot="event" slot-scope="props" :e="props" />
         </calendar-view>
       </div>
+    <div>
+      <i class="fa fa-circle" style="color:lavender;"></i> Turno mañana
+      <br>
+      <i class="fa fa-circle" style="color:lightblue;"></i> Turno tarde
+    </div>
       <div class="text-center">
         <button type="button" class="btn btn-default btn-fill btn-wd" @click="volver">
           Volver
@@ -138,7 +143,7 @@ export default {
           const eventos = r.map(visita => ({
             startDate: new Date(visita.fechaAsignacion),
             title: visita.nombre,
-            classes: `${visita.idTurno === 1 ? 'orange' : 'blueish'}`,
+            classes: `${visita.idTurno === 1 ? 'pink' : 'blueish'}`,
             realizado: visita.entregado,
             idRecorrido: visita.idRecorrido,
             empleado: visita.empleado

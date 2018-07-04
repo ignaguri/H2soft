@@ -207,9 +207,10 @@
                 })
               })
             })
+          this.asignacionesT.data = []
           api.getAsignacionesFuturas(this, this.recorrido)
             .then(r => {
-              if (r) {
+              if (r.length) {
                 this.asignado = r[0].empleado
                 this.table2.title = this.table2.title + ' asignado a ' + r[0].empleado.nombre + ' ' + r[0].empleado.apellido
                 r.forEach(a => this.asignacionesT.data.push({
@@ -266,6 +267,7 @@
       },
       seeList () {
         this.recorrido = 0
+        this.limpiarCampos()
       },
       planificar () {
         this.$parent.edit = false
@@ -296,7 +298,9 @@
         const hasta = this.fechaHasta.split('/')
         const fechaHasta = new Date(hasta[2], hasta[1] - 1, hasta[0])
         fechaHasta.setHours(0, 0, 0, 0)
-        if (fechaDesde < new Date()) {
+        const now = new Date()
+        now.setHours(0, 0, 0, 0)
+        if (fechaDesde < now) {
           noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser menor a hoy')
           return true
         }
@@ -339,7 +343,7 @@
                   this.limpiarCampos()
                 })
             } else {
-              noti.errorConTexto(this, 'Error', `Error al asignar recorrido. ${r.message ? r.message + ' ' + r.data.toString() : ''}`)
+              noti.errorConTexto(this, 'Error', `${r.message ? r.message + ' ' + r.data.toString() : ''}`)
               this.seeList()
               this.limpiarCampos()
             }
@@ -348,9 +352,9 @@
       cambioAsignacion () {
         if (this.asignado) {
           this.cargarMotivosReasignacion()
-          this.modalTitle = this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
-        } else {
-          this.modalTitle = this.$refs.btn_asignar.innerText = 'Asignar recorrido'
+//          this.modalTitle = this.$refs.btn_asignar.innerText = 'Reasignar recorrido'
+//        } else {
+//          this.modalTitle = this.$refs.btn_asignar.innerText = 'Asignar recorrido'
         }
       },
       limpiarCampos () {

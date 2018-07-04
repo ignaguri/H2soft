@@ -37,7 +37,7 @@ module.exports = function (app) {
       }
     },
     notificacion: {
- 	  type: Sequelize.STRING(50),
+ 	  type: Sequelize.STRING(250),
  	  allowNull: false
     },
      idDispenser: {

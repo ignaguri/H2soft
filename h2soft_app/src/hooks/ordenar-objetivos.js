@@ -1,5 +1,4 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+const logger = require('winston');
 
 module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
   return function ordenarObjetivos (hook) {
@@ -9,7 +8,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
         .then(r => {
           //console.log('Ordename esto, Nestor', r);
           ordenar(r.data, elRecorrido, hook);
-        })
+        });
     }
     return Promise.resolve(hook);
   };
@@ -17,8 +16,14 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
 
 function ordenar(objetivos, recorrido, hook) {
   if (objetivos.length <= 1){
-    // ponerle el orden 1 a ese objetivo
-    return;
+    return hook.app.services['detalle-recorrido'].patch(null, {orden: 1},
+      {query: {idObjetivo: objetivos[0].idObjetivo, idRecorrido: recorrido}, ordenamiento: true })
+      .then(r => {
+        logger.info('Orden updated', r);
+      })
+      .catch(error => {
+        logger.error('error updating orden', error);
+      });
   }
   let ordenados = [];
   let promesas = [];
@@ -37,7 +42,7 @@ function ordenar(objetivos, recorrido, hook) {
         })
     );
   });
-  Promise.all(promesas)
+  return Promise.all(promesas)
     .then(r => {
       const maps = require('@google/maps').createClient({
         key: 'AIzaSyCObbBpnMALUeTO-BFhVm5w64F7hm8g6e4',
@@ -46,33 +51,33 @@ function ordenar(objetivos, recorrido, hook) {
       let visitar = ['optimize:true'];
       ordenados.forEach(o => {
         visitar.push(o.direccion + ', ' + o.localidad);
-      })
+      });
       maps.directions({
         origin: ['Abreu de Albornoz 467, Córdoba'],
         waypoints: visitar,
         destination: ['Abreu de Albornoz 467, Córdoba']
       }).asPromise()
         .then((response) => {
-          console.log('status OK:', response.status);
-          let orden = response.json.routes[0].waypoint_order;
-          actualizarOrden(ordenados, orden, hook);
+          logger.info('gmaps - status OK:', response.status);
+          const orden = response.json.routes[0].waypoint_order;
+          return actualizarOrden(ordenados, orden, hook);
         })
         .catch((err) => {
-          console.log('ERROR', err);
+          logger.error('ERROR al solicitar direcciones a gmaps', err);
         });
     });
 }
 
 function actualizarOrden(objetivos, orden, hook) {
-  if (objetivos.length == orden.length) {
-    for (var i = 0; i < orden.length; i++){
+  if (objetivos.length === orden.length) {
+    for (let i = 0; i < orden.length; i++){
       hook.app.services['detalle-recorrido'].patch(null, {orden: orden[i]+1},
         {query: {idObjetivo: objetivos[i].idObjetivo, idRecorrido: objetivos[i].idRecorrido}, ordenamiento: true })
         .then(r => {
-          console.log('Orden updated');
+          logger.info('Orden updated', r);
         })
         .catch(error => {
-          console.log('error updating orden', error);
+          logger.error('error updating orden', error);
         });
     }
   }
