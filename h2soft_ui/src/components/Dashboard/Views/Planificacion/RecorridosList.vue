@@ -304,8 +304,8 @@
           noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser menor a hoy')
           return true
         }
-        if (fechaDesde >= fechaHasta) {
-          noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser mayor o igual a la fecha hasta')
+        if (fechaDesde > fechaHasta) {
+          noti.infoConTexto(this, 'Alerta', 'La fecha desde no puede ser mayor a la fecha hasta')
           return true
         }
         this.postAsignacion({
