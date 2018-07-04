@@ -211,6 +211,7 @@
           api.getAsignacionesFuturas(this, this.recorrido)
             .then(r => {
               if (r.length) {
+                r.sort((a, b) => a.first.fechaAsignacion > b.first.fechaAsignacion)
                 this.asignado = r[0].empleado
                 this.table2.title = this.table2.title + ' asignado a ' + r[0].empleado.nombre + ' ' + r[0].empleado.apellido
                 r.forEach(a => this.asignacionesT.data.push({

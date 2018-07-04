@@ -171,7 +171,9 @@ function getFrecuencia(idFrecuencia, fechaDesde, fechaHasta) {
   // retorna cuantas iteraciones han de hacerse según la frecuencia
   // por ej: id 1 = 1 vez por semana -> 4 iteraciones
   // el día inicial, la semana siguiente, la otra semana y la ultima semana de ese mes
-  const meses = cantMesesEntre(fechaHasta, fechaDesde);
+  let meses = cantMesesEntre(fechaHasta, fechaDesde);
+  if (meses < 0.5) meses = 0.5
+
   switch (idFrecuencia) {
   case 1:
     return Math.round(4 * meses);
