@@ -2,7 +2,7 @@
   <div :class="{'nav-open': $sidebar.showSidebar}">
     <router-view></router-view>
     <!--This sidebar appears only for screens smaller than 992px-->
-    <side-bar type="navbar" :sidebar-links="this.$sidebar.sidebarLinks">
+    <side-bar type="navbar" :sidebar-links="$sidebar.sidebarLinks">
       <ul class="nav navbar-nav">
         <li>
           <a href="Fecha de hoy" class="btn-magnify" @click.prevent="false">
