@@ -16,6 +16,7 @@ module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
 
 function ordenar(objetivos, recorrido, hook) {
   if (objetivos.length <= 1){
+    logger.info('Sólo queda un objetivo en el recorrido. Asignando orden 1...');
     return hook.app.services['detalle-recorrido'].patch(null, {orden: 1},
       {query: {idObjetivo: objetivos[0].idObjetivo, idRecorrido: recorrido}, ordenamiento: true })
       .then(r => {
@@ -42,7 +43,7 @@ function ordenar(objetivos, recorrido, hook) {
         })
     );
   });
-  return Promise.all(promesas)
+  Promise.all(promesas)
     .then(r => {
       const maps = require('@google/maps').createClient({
         key: 'AIzaSyCObbBpnMALUeTO-BFhVm5w64F7hm8g6e4',
@@ -60,7 +61,7 @@ function ordenar(objetivos, recorrido, hook) {
         .then((response) => {
           logger.info('gmaps - status OK:', response.status);
           const orden = response.json.routes[0].waypoint_order;
-          return actualizarOrden(ordenados, orden, hook);
+          actualizarOrden(ordenados, orden, hook);
         })
         .catch((err) => {
           logger.error('ERROR al solicitar direcciones a gmaps', err);
