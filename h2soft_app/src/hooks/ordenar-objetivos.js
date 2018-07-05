@@ -53,6 +53,7 @@ function ordenar(objetivos, recorrido, hook) {
       ordenados.forEach(o => {
         visitar.push(o.direccion + ', ' + o.localidad);
       });
+      logger.info('objetivos a visitar', visitar);
       maps.directions({
         origin: ['Abreu de Albornoz 467, Córdoba'],
         waypoints: visitar,
@@ -60,7 +61,9 @@ function ordenar(objetivos, recorrido, hook) {
       }).asPromise()
         .then((response) => {
           logger.info('gmaps - status OK:', response.status);
-          const orden = response.json.routes[0].waypoint_order;
+          logger.info('gmaps - response:', JSON.stringify(response.json));
+          let orden = ordenados.map(o => -1);
+          if (response.json.routes.length) orden = response.json.routes[0].waypoint_order;
           actualizarOrden(ordenados, orden, hook);
         })
         .catch((err) => {
