@@ -538,8 +538,8 @@ export default {
         if (objetivosYaAsignados) {
           const error = {
             restrictivo: true,
-            message: 'Ya existen recorridos asignados que visitan alguno de los objetivos para ese rango de fechas. Objetivos:',
-            data: objetivosYaAsignados.map(o => o.idObjetivo)
+            message: 'Ya existen recorridos que visitan alguno de los objetivos en esas fechas. Objetivos:',
+            data: objetivosYaAsignados.map(o => o.nombre)
           }
           throw error
         }
@@ -642,6 +642,18 @@ export default {
         } else {
           return false
         }
+      })
+      .then(objetivos => {
+        console.log('obj en conflicto', objetivos)
+        if (!objetivos.length) return false
+        const promesas = objetivos.map(o => context.$http.get(API_URL + 'objetivos-x-cliente/' + o.idObjetivo + '?$select[]=nombre', authHeader)
+          .then(res => res.body))
+        return Promise.all(promesas)
+      })
+      .then(nombres => {
+        console.log('nombres de lso obj', nombres)
+        if (!nombres) return false
+        return nombres
       })
       .catch(err => {
         console.error(err)

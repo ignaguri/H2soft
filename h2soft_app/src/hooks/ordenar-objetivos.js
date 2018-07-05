@@ -61,7 +61,7 @@ function ordenar(objetivos, recorrido, hook) {
       }).asPromise()
         .then((response) => {
           logger.info('gmaps - status OK:', response.status);
-          logger.info('gmaps - response:', JSON.stringify(response.json));
+          logger.info('gmaps - response:', JSON.stringify(response.json.routes));
           let orden = ordenados.map(o => -1);
           if (response.json.routes.length) orden = response.json.routes[0].waypoint_order;
           actualizarOrden(ordenados, orden, hook);
