@@ -1,8 +1,8 @@
 {
   "name": "h2softapp",
   "description": "Proyecto backend de h2soft",
-  "version": "0.0.0",
-  "homepage": "",
+  "version": "0.1.0",
+  "homepage": "http://www.h2soft.com.ar",
   "main": "src",
   "keywords": [
     "feathers"
@@ -30,7 +30,6 @@
   "dependencies": {
     "@google/maps": "^0.4.5",
     "body-parser": "^1.17.2",
-    "cls-bluebird": "^2.1.0",
     "compression": "^1.7.0",
     "cors": "^2.8.3",
     "feathers": "^2.1.4",

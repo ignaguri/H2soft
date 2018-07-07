@@ -123,9 +123,13 @@ function replicarAsignacion(ap, data) {
       let nuevos = [];
       for (let i = 0; i < aInsertar.length; i++) {
         let isNuevo = true;
-        const fechaNewie = new Date(aInsertar[i].fechaAsignacion).toDateString();
+        const fechaNewie = new Date(
+          aInsertar[i].fechaAsignacion
+        ).toDateString();
         for (let j = 0; j < recorridosAsignados.data.length; j++) {
-          const fechaOldie = new Date(recorridosAsignados.data[j].fechaAsignacion).toDateString();
+          const fechaOldie = new Date(
+            recorridosAsignados.data[j].fechaAsignacion
+          ).toDateString();
           isNuevo = fechaNewie !== fechaOldie;
           if (!isNuevo) break;
         }
@@ -136,7 +140,8 @@ function replicarAsignacion(ap, data) {
           ap.services['recorrido-historico'].patch(act.idRecorridosHistoricos, {
             idEmpleadoAsignado: data.empleado
           })
-        ));
+        )
+      );
       promesas.push(ap.services['recorrido-historico'].create(nuevos));
       return Promise.all(promesas);
     })
@@ -172,7 +177,7 @@ function getFrecuencia(idFrecuencia, fechaDesde, fechaHasta) {
   // por ej: id 1 = 1 vez por semana -> 4 iteraciones
   // el día inicial, la semana siguiente, la otra semana y la ultima semana de ese mes
   let meses = cantMesesEntre(fechaHasta, fechaDesde);
-  if (meses < 0.5) meses = 0.5
+  if (meses < 0.5) meses = 0.5;
 
   switch (idFrecuencia) {
   case 1:
