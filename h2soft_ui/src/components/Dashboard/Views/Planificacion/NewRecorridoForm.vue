@@ -294,7 +294,7 @@
         }
       },
       seeList () {
-        this.$parent.isRecorridoList = true
+        this.$parent.show = 'list'
       },
       cambiarRecorrido (e) {
         const id = e // e.target.value
