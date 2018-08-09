@@ -282,13 +282,11 @@ export default {
   deleteObjetivoFromRecorrido (context, objetivo, recorrido) {
     const authHeader = {headers: auth.getAuthHeader()}
     // TODO: agregar el nombre del cliente como parametro por si 2 objetivos se llaman igual
-    console.log('ENTRO A BORRAR OBJETIVO inicio')
     return context.$http
       .get(API_URL + 'objetivos-x-cliente' + '/?nombre=' + objetivo, authHeader)
       .then(obj => {
         let idObjetivo = obj.body.data[0].idObjetivosXCliente
         if (idObjetivo !== undefined) {
-          console.log('BORRANDO OBJETIVO')
           return context.$http.delete(
             API_URL +
             'detalle-recorrido' +
@@ -299,31 +297,23 @@ export default {
             authHeader
           )
             .then(o => {
-              console.log('ENTRO A BORRAR OBJETIVO')
               const hoy = new Date()
               hoy.setDate(hoy.getDate() - 1)
               return context.$http.get(API_URL + 'recorrido-historico/?fechaAsignacion[$gte]=' + hoy.toISOString() + '&idEstado=1', authHeader)
                 .then(hist => {
                   hist = hist.body.data
-                  console.log('RECORRIDOS HISTORICOS:' + JSON.stringify(hist))
                   hist.forEach(historicos => {
                     let idHistorico = historicos.idRecorridosHistoricos
                     return context.$http.get(API_URL + 'detalle-recorrido-historico/?idRecorridoHistorico=' + idHistorico, authHeader)
                       .then(detallesHistorico => {
-                        console.log('ENTRO A BORRAR OBJETIVO, detalle rec historicos')
                         detallesHistorico = detallesHistorico.body.data
-                        console.log('DETALLES RECORRIDOS HISTORICOS:' + JSON.stringify(detallesHistorico))
                         detallesHistorico.forEach(detalleHistorico => {
-                          console.log('DETALLE RECORRIDOS HISTORICOS:' + JSON.stringify(detalleHistorico))
-                          console.log('IDOBJETIVO:' + idObjetivo)
                           if (detalleHistorico.idObjetivo === idObjetivo) {
                             return context.$http.delete(API_URL + 'detalle-recorrido-historico' + '/?idDetalleRecorridoHistorico=' + detalleHistorico.idDetalleRecorridoHistorico, authHeader)
                               .then(r => {
                                 console.log('BORRADO DETALLE' + detalleHistorico.idDetalleRecorridoHistorico)
                               })
                               .catch('ERROR AL BORRAR DETALLE:' + detalleHistorico.idDetalleRecorridoHistorico)
-                          } else {
-                            console.log('NO concide el id')
                           }
                         })
                       })
